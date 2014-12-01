@@ -9,28 +9,26 @@ import unicodedata
 #Possible exception handling should be done in higher level.
 def extractPersonNameAndBirthday(text):
     text = ' '.join(text.split())   #remove excess whitespace and linebreaks
-    p = re.compile(ur'\A([A-ZÄ-Öl -]{3,}), {0,100}([A-ZÄ-Öa-zä-ö ]{0,}),',re.UNICODE)    # {0,100}([0-9]{1,2} {0,3}\.[0-9]{1,2} {0,3}\.[0-9]{1,2})
+    p = re.compile(ur'\A(?P<surname>[A-ZÄ-Öl -]{3,})(:?,|.) {0,100}(?P<firstnames>[A-ZÄ-Öa-zä-ö ]{0,}),',re.UNICODE)    # {0,100}([0-9]{1,2} {0,3}\.[0-9]{1,2} {0,3}\.[0-9]{1,2})
     m = p.match(unicode(text))
-
-    #print m.span()
 
     dateguess = text[m.span()[1]:m.span()[1]+16]    #take substring which probably contains the date.
     dateguess = dateguess.replace(" ","")                       #remove all whitespace in the substring
 
     try:
         #try to find the date in modified string with regexp
-        dp = re.compile(ur'.*(?:s|S|5)(?:(\d{1,2}\.\d{1,2}\.\d{2,4})|(\d{2,4}))',re.UNICODE)
+        dp = re.compile(ur'.*(?:s|S|5)(?:(?P<fulldate>\d{1,2}\.\d{1,2}\.\d{2,4})|(?P<yearonly>\d{2,4}))',re.UNICODE)
         date = dp.match(unicode(dateguess))
 
         #get the result from correct capturegroup. If there is full date (12.7.18) it is in 1, if only year it is in 2.
         #could probably be written better in regexp, which uses only one group?
         dob = ""
-        if date.group(1) == None:
-            dob = date.group(2)
+        if date.group("fulldate") == None:
+            dob = date.group("yearonly")
         else:
-            dob = date.group(1)
+            dob = date.group("fulldate")
 
-        return {"surname": m.group(1), "firstnames": m.group(2), "birthday": dob}    #, "birthday": m.group(3)
+        return {"surname": m.group("surname"), "firstnames": m.group("firstnames"), "birthday": dob}    #, "birthday": m.group(3)
     except Exception as e:
         print "---------------------"
         print m.group()
