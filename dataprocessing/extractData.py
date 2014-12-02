@@ -41,10 +41,10 @@ def extractPersonNameAndBirthday(text):
 
 errors = 0
 count = 0
-root = readData.getXMLroot("rintamamiehet8_newtags.xml")
+root = readData.getXMLroot("rintamamiehet7_tags.xml")
 #save the extract4ed info to a csv file:
-with open("soldiers.csv", "wb") as results:
-    with open("errors.csv", "wb") as errorcsv:
+with open("soldiers2.csv", "wb") as results:
+    with open("errors2.csv", "wb") as errorcsv:
         writer = unicodecsv.writer(results, delimiter=";")
         writer.writerow(["surname", "first names", "birthday"])
 
