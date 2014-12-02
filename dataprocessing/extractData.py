@@ -9,7 +9,7 @@ import unicodedata
 #Possible exception handling should be done in higher level.
 def extractPersonNameAndBirthday(text):
     text = ' '.join(text.split())   #remove excess whitespace and linebreaks
-    p = re.compile(ur'\A(?P<surname>[A-ZÄ-Öl -]{3,})(:?,|.) {0,100}(?P<firstnames>[A-ZÄ-Öa-zä-ö ]{0,}),',re.UNICODE)    # {0,100}([0-9]{1,2} {0,3}\.[0-9]{1,2} {0,3}\.[0-9]{1,2})
+    p = re.compile(ur'\A(?P<surname>[A-ZÄ-Öl() -]{3,})(:?,|.) {0,100}(?P<firstnames>[A-ZÄ-Öa-zä-ö() ]{0,})(:?,|.)',re.UNICODE)    # {0,100}([0-9]{1,2} {0,3}\.[0-9]{1,2} {0,3}\.[0-9]{1,2})
     m = p.match(unicode(text))
 
     dateguess = text[m.span()[1]:m.span()[1]+16]    #take substring which probably contains the date.
