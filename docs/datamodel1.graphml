@@ -18,7 +18,7 @@
       <data key="d4"/>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="213.0" width="172.0" x="39.0" y="-6.5"/>
+          <y:Geometry height="256.0" width="172.0" x="39.0" y="-49.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" modelName="custom" textColor="#000000" visible="true" width="48.07177734375" x="61.964111328125" y="3.0">Person<y:LabelModel>
@@ -40,7 +40,10 @@ spouse (Person)
 children (Array&lt;Person&gt;)
 lifestory (string)
 livingPlaces (array&lt;Location&gt;)
-errors (Array&lt;Error&gt;)</y:AttributeLabel>
+errors (Array&lt;Error&gt;)
+suspiciouslyYoung (bool)
+book (string)
+page (int)</y:AttributeLabel>
             <y:MethodLabel/>
           </y:UML>
         </y:UMLClassNode>
@@ -50,7 +53,7 @@ errors (Array&lt;Error&gt;)</y:AttributeLabel>
       <data key="d4"/>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="80.0" width="100.0" x="275.0" y="60.0"/>
+          <y:Geometry height="80.0" width="100.0" x="275.0" y="38.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" modelName="custom" textColor="#000000" visible="true" width="58.16455078125" x="20.917724609375" y="3.0">Location<y:LabelModel>
@@ -166,10 +169,9 @@ Date (Date)</y:AttributeLabel>
     </node>
     <node id="n6">
       <data key="d4"/>
-      <data key="d5"/>
       <data key="d6">
         <y:UMLClassNode>
-          <y:Geometry height="66.0" width="100.0" x="-207.0" y="67.0"/>
+          <y:Geometry height="66.0" width="100.0" x="-207.0" y="45.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" modelName="custom" textColor="#000000" visible="true" width="35.7890625" x="32.10546875" y="3.0">Error<y:LabelModel>
@@ -191,7 +193,7 @@ Message (string)</y:AttributeLabel>
       <data key="d8"/>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="-62.5" tx="0.0" ty="106.5"/>
+          <y:Path sx="0.0" sy="-62.5" tx="0.0" ty="128.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="white_delta"/>
           <y:BendStyle smoothed="false"/>
@@ -262,7 +264,6 @@ Message (string)</y:AttributeLabel>
       </data>
     </edge>
     <edge id="e7" source="n0" target="n6">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
