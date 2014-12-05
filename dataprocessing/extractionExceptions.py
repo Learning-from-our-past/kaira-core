@@ -10,7 +10,7 @@ class ExtractionException(Exception):
         return self.message
 
 class BirthdayException(ExtractionException):
-    message = u"ERROR in birthday extraction: "
+    message = "ERROR in birthday extraction: "
     details = u""
 
     def __init__(self, dateguess):
@@ -20,7 +20,7 @@ class BirthdayException(ExtractionException):
         return repr(self.message)
 
 class BirthplaceException(ExtractionException):
-    message = u"ERROR in birthplace extraction: "
+    message = "ERROR in birthplace extraction: "
     details = u""
 
     def __init__(self, dateguess):
@@ -30,7 +30,7 @@ class BirthplaceException(ExtractionException):
         return repr(self.message)
 
 class NameException(ExtractionException):
-    message = u"ERROR in name extraction: "
+    message = "ERROR in name extraction: "
     details = u""
 
     def __init__(self, text):
