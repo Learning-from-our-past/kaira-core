@@ -73,7 +73,7 @@ class DataExtraction:
     def extractSpouseInformation(self, text, cursorLocation):
         text2 = text[cursorLocation:cursorLocation+80]
         foundSpouse = False
-        findSpouseRE = re.compile(ur'(?P<spouseExists>\bPso\b)',re.UNICODE)  #first find out if there is spouse:
+        findSpouseRE = re.compile(ur'(?P<spouseExists>\b(?:P|p)so\b)',re.UNICODE)  #first find out if there is spouse:
         findSpouseREm = findSpouseRE.search(unicode(text2))
         if findSpouseREm != None:
             foundSpouse = True      #found Pso which suggests there is spouse information available.
@@ -87,11 +87,10 @@ class DataExtraction:
                 weddingYear = int(m.group("weddingYear"))
                 spouseName = m.group("spouseName")
                 spouseBirthYear = self.extractBirthday(text2[m.end():], 0)
-                print text2[m.end() + spouseBirthYear["cursorLocation"]:]
-                #birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]:], 0)
+                birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]:], 0)
 
 
-                return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear}
+                return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseBirthLocation": birthPlace["birthLocation"]}
 
             except Exception as e:
                 raise SpouseException(text2)
@@ -99,7 +98,7 @@ class DataExtraction:
 
 
         else:
-            return {"hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""}}
+            return {"hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""}, "spouseBirthLocation": ""}
 
 
 
