@@ -15,7 +15,8 @@ extractor = DataExtraction()
 with open("soldiers.csv", "wb") as results:
     with open("errors.csv", "wb") as errorcsv:
         writer = unicodecsv.writer(results, delimiter=";")
-        writer.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation"])
+        writer.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation", "hasSpouse", "weddingYear",
+                         "spouseName", "spouseBirthDay", "spouseBirthMonth","spouseBirthYear"])
 
         ewriter = unicodecsv.writer(errorcsv, delimiter=";")
         ewriter.writerow(["Exception","Details", "Entry text"])
@@ -23,7 +24,9 @@ with open("soldiers.csv", "wb") as results:
         for child in root:
             try:
                 d = extractor.extraction(child.text)
-                writer.writerow([d["surname"], d["firstnames"], d["birthDay"], d["birthMonth"], d["birthYear"], d["birthLocation"]])
+                writer.writerow([d["surname"], d["firstnames"], d["birthDay"], d["birthMonth"], d["birthYear"], d["birthLocation"], d["hasSpouse"], d["weddingYear"], d["spouseName"],
+                                 d["spouseBirthData"]["birthDay"], d["spouseBirthData"]["birthMonth"], d["spouseBirthData"]["birthYear"]])
+
                 count +=1
             except ExtractionException as e:
                 ewriter.writerow([e.message, e.details, child.text])

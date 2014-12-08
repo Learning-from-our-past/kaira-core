@@ -39,4 +39,12 @@ class NameException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
+class SpouseException(ExtractionException):
+    message = "ERROR in spouse extraction: "
+    details = u""
 
+    def __init__(self, text):
+        self.details = text
+
+    def __unicode__(self):
+        return repr(self.message)

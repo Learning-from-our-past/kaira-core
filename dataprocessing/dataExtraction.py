@@ -63,11 +63,46 @@ class DataExtraction:
     def extractBirthLocation(self, text, cursorLocation):
         text2 = text[cursorLocation:cursorLocation+24]
         try:
-            p = re.compile(ur'.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö -]{1,})(,|\.)',re.UNICODE)    # {0,100}([0-9]{1,2} {0,3}\.[0-9]{1,2} {0,3}\.[0-9]{1,2})
+            p = re.compile(ur'.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö -]{1,})(,|\.)',re.UNICODE)
             m = p.match(unicode(text2))
-            return { "birthLocation": m.group("location")}
+            return { "birthLocation": m.group("location"), "cursorLocation": cursorLocation + m.end()}
         except Exception as e:
             raise BirthplaceException(text)
+
+    #find possible spouse and all relevant information
+    def extractSpouseInformation(self, text, cursorLocation):
+        text2 = text[cursorLocation:cursorLocation+80]
+        foundSpouse = False
+        findSpouseRE = re.compile(ur'(?P<spouseExists>\bPso\b)',re.UNICODE)  #first find out if there is spouse:
+        findSpouseREm = findSpouseRE.search(unicode(text2))
+        if findSpouseREm != None:
+            foundSpouse = True      #found Pso which suggests there is spouse information available.
+
+
+        if foundSpouse:
+            try:
+                p = re.compile(ur'\bvsta\b (?P<weddingYear>\d{1,2}) (?P<spouseName>[A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
+                m = p.search(unicode(text2))
+
+                weddingYear = int(m.group("weddingYear"))
+                spouseName = m.group("spouseName")
+                spouseBirthYear = self.extractBirthday(text2[m.end():], 0)
+                print text2[m.end() + spouseBirthYear["cursorLocation"]:]
+                #birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]:], 0)
+
+
+                return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear}
+
+            except Exception as e:
+                raise SpouseException(text2)
+
+
+
+        else:
+            return {"hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""}}
+
+
+
 
 
 
@@ -78,4 +113,6 @@ class DataExtraction:
         personData = self.extractPersonNameAndBirthday(text)
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
         personLocation= self.extractBirthLocation(text, personBirthday["cursorLocation"])
-        return dict(personData.items() + personBirthday.items() + personLocation.items())
+        spouse = self.extractSpouseInformation(text, personLocation["cursorLocation"])
+        print spouse
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + spouse.items())
