@@ -78,22 +78,32 @@ class DataExtraction:
         if findSpouseREm != None:
             foundSpouse = True      #found Pso which suggests there is spouse information available.
 
-
         if foundSpouse:
+            p = re.compile(ur'\bvsta\b (?P<weddingYear>\d{1,2}) (?P<spouseName>[A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
+            m = p.search(unicode(text2))
             try:
-                p = re.compile(ur'\bvsta\b (?P<weddingYear>\d{1,2}) (?P<spouseName>[A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
-                m = p.search(unicode(text2))
-
                 weddingYear = int(m.group("weddingYear"))
-                spouseName = m.group("spouseName")
-                spouseBirthYear = self.extractBirthday(text2[m.end():], 0)
-                birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]:], 0)
-
-
-                return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseBirthLocation": birthPlace["birthLocation"]}
-
             except Exception as e:
-                raise SpouseException(text2)
+                raise SpouseException(text2, "WEDDINGYEAR")
+
+            try:
+                spouseName = m.group("spouseName")
+            except Exception as e:
+                raise SpouseException(text2, "SPOUSENAME")
+
+            try:
+                spouseBirthYear = self.extractBirthday(text2[m.end():], 0)
+            except Exception as e:
+                raise SpouseException(text2, "SPOUSEBIRTHDAY")
+
+            try:
+                birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]:], 0)
+            except Exception as e:
+                raise SpouseException(text2, "BIRTHPLACE")
+
+            return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseBirthLocation": birthPlace["birthLocation"]}
+
+
 
 
 

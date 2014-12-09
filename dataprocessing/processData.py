@@ -19,7 +19,7 @@ with open("soldiers.csv", "wb") as results:
                          "spouseName", "spouseBirthDay", "spouseBirthMonth","spouseBirthYear","spouseBirthLocation"])
 
         ewriter = unicodecsv.writer(errorcsv, delimiter=";")
-        ewriter.writerow(["Exception","Details", "Entry text"])
+        ewriter.writerow(["Exception","Details", "type", "Entry text"])
 
         for child in root:
             try:
@@ -30,7 +30,7 @@ with open("soldiers.csv", "wb") as results:
 
                 count +=1
             except ExtractionException as e:
-                ewriter.writerow([e.message, e.details, child.text])
+                ewriter.writerow([e.message, e.details, e.eType, child.text])
                 errors +=1
                 count +=1
                 continue

@@ -3,6 +3,7 @@
 class ExtractionException(Exception):
     message = u""
     details = u""
+    eType = u""
     def __init__(self):
        pass
 
@@ -42,9 +43,12 @@ class NameException(ExtractionException):
 class SpouseException(ExtractionException):
     message = "ERROR in spouse extraction: "
     details = u""
+    eType = u""
 
-    def __init__(self, text):
+    def __init__(self, text, type):
         self.details = text
+        self.eType = type
 
     def __unicode__(self):
         return repr(self.message)
+
