@@ -23,11 +23,11 @@ class DataExtraction:
         return {"surname": m.group("surname"), "firstnames": m.group("firstnames"), "cursorLocation": m.end()}
 
 
-    def extractBirthday(self, text, cursorLocation):
+    def extractBirthday(self, text, cursorLocation, windowWidth = 16):
 
         try:
             #try to find the date in modified string with regexp
-            dateguess = text[cursorLocation:cursorLocation+16]    #take substring which probably contains the date.
+            dateguess = text[cursorLocation:cursorLocation+windowWidth]    #take substring which probably contains the date.
             dateguess = dateguess.replace(" ","")           #remove all whitespace in the substring
             dp = re.compile(ur'.*(?:s|S|5)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d))',re.UNICODE)
             date = dp.match(unicode(dateguess))
@@ -79,10 +79,14 @@ class DataExtraction:
             foundSpouse = True      #found Pso which suggests there is spouse information available.
 
         if foundSpouse:
-            p = re.compile(ur'\bvsta\b (?P<weddingYear>\d{1,2}) (?P<spouseName>[A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
+            #try to find wedding year and the name of the spouse. Wedding year is optional.
+            p = re.compile(ur'\b(?:P|p)so\b(?: \bvst?l?a ?(?P<weddingYear>\d{1,2}))? ?(?P<spouseName>[A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
             m = p.search(unicode(text2))
             try:
-                weddingYear = int(m.group("weddingYear"))
+                if m.group("weddingYear") != None:
+                    weddingYear = int(m.group("weddingYear"))
+                else:
+                    weddingYear = ""
             except Exception as e:
                 raise SpouseException(text2, "WEDDINGYEAR")
 
@@ -92,14 +96,14 @@ class DataExtraction:
                 raise SpouseException(text2, "SPOUSENAME")
 
             try:
-                spouseBirthYear = self.extractBirthday(text2[m.end():], 0)
-            except Exception as e:
-                raise SpouseException(text2, "SPOUSEBIRTHDAY")
+                spouseBirthYear = self.extractBirthday(text2[m.end():], 0, 64)
+            except ExtractionException as e:
+                raise SpouseException(e.details, "SPOUSEBIRTHDAY")
 
             try:
                 birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]:], 0)
             except Exception as e:
-                raise SpouseException(text2, "BIRTHPLACE")
+                raise SpouseException(text2, "SPOUSEBIRTHPLACE")
 
             return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseBirthLocation": birthPlace["birthLocation"]}
 
