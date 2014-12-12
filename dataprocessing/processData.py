@@ -33,7 +33,7 @@ with open("soldiers.csv", "wb") as results:
                 ewriter.writerow([e.message, e.details, e.eType, child.text])
                 errors +=1
                 count +=1
-                continue
+            continue
 
 
 print "Errors encountered: " + str(errors) + "/" + str(count)
