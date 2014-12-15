@@ -59,6 +59,46 @@ class DataExtraction:
         return {"birthDay": date.group("day"),"birthMonth": date.group("month"), "birthYear": year, "cursorLocation": cursorLocation + date.end()}    #, "birthday": m.group(3)
 
 
+    def extractDeath(self, text, cursorLocation, windowWidth = 16 , forMan=True):
+
+
+        if forMan:
+            #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
+            f = text.find("Pso")
+            if f != -1:
+                text = text[0:f]
+
+        try:
+            #try to find the date in modified string with regexp
+            dateguess = text[cursorLocation:cursorLocation+windowWidth]    #take substring which probably contains the date.
+            dateguess = dateguess.replace(" ","")           #remove all whitespace in the substring
+            if forMan == False:
+                print dateguess
+            dp = re.compile(ur'.*k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
+            date = dp.search(unicode(dateguess))
+
+            #get the result from correct capturegroup. If there is full date (12.7.18) it is in 1, if only year it is in 2.
+            #could probably be written better in regexp, which uses only one group?
+            year = ""
+            if date.group("year") == None:
+                year = date.group("yearOnly")
+            else:
+                year = date.group("year")
+
+
+            year = "19" + year
+
+
+        except Exception as e:
+            #print "----BIRTHDAY----"
+            #print dateguess
+            #print "---------------------"
+            return {"deathDay": "","deathMonth": "", "deathYear": "", "cursorLocation": cursorLocation}
+            #raise BirthdayException(dateguess)
+
+        return {"deathDay": date.group("day"),"deathMonth": date.group("month"), "deathYear": year, "cursorLocation": cursorLocation + date.end()}
+
+
 
     #try to extract the location of the birth. Later the results could be compared to the list of locations
     def extractBirthLocation(self, text, cursorLocation, forMan=True):
@@ -71,8 +111,6 @@ class DataExtraction:
             f = text2.find("Pso")
             if f != -1:
                 text2 = text2[0:f]
-
-
 
         try:
             p = re.compile(ur'\d+(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
@@ -115,15 +153,17 @@ class DataExtraction:
                 spouseBirthYear = {"birthDay": "","birthMonth": "", "birthYear": "", "cursorLocation": m.end()-birthYearWindowLeftOffset + 64}
 
             try:
-                print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
+                #print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
                 birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
             except ExtractionException as e:
                 #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
                 birthPlace= {"birthLocation": ""}
 
-            return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseBirthLocation": birthPlace["birthLocation"]}
+            deathData = self.extractDeath(text2, m.end(), 40, False)
+
+            return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["birthLocation"]}
         else:
-            return {"hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""}, "spouseBirthLocation": ""}
+            return {"hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""},  "spouseDeathData": {"deathDay": "","deathMonth": "", "deathYear": ""}, "spouseBirthLocation": ""}
 
 
 
@@ -137,6 +177,7 @@ class DataExtraction:
         personData = self.extractPersonNameAndBirthday(text)
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
         personLocation= self.extractBirthLocation(text, personBirthday["cursorLocation"])
+        personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 32)
         spouse = self.extractSpouseInformation(text, personLocation["cursorLocation"])
         #print spouse
-        return dict(personData.items() + personBirthday.items() + personLocation.items() + spouse.items())
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouse.items())
