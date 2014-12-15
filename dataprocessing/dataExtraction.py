@@ -62,13 +62,13 @@ class DataExtraction:
 
     #try to extract the location of the birth. Later the results could be compared to the list of locations
     def extractBirthLocation(self, text, cursorLocation):
-        text2 = text[cursorLocation:cursorLocation+24]
+        text2 = text[cursorLocation-4:cursorLocation+24]
         try:
-            p = re.compile(ur'.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö -]{1,})(,|\.)',re.UNICODE)
-            m = p.match(unicode(text2))
+            p = re.compile(ur'\.\d+(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
+            m = p.search(unicode(text2))
             return { "birthLocation": m.group("location"), "cursorLocation": cursorLocation + m.end()}
         except Exception as e:
-            raise BirthplaceException(text)
+            raise BirthplaceException(text2)
 
     #find possible spouse and all relevant information
     def extractSpouseInformation(self, text, cursorLocation):
