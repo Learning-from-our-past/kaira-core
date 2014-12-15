@@ -61,12 +61,23 @@ class DataExtraction:
 
 
     #try to extract the location of the birth. Later the results could be compared to the list of locations
-    def extractBirthLocation(self, text, cursorLocation):
-        text2 = text[cursorLocation-4:cursorLocation+24]
+    def extractBirthLocation(self, text, cursorLocation, forMan=True):
+
+        if forMan:
+            text2 = text[cursorLocation-4:cursorLocation+24]
+        else:
+            #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
+            text2 = text[0:cursorLocation+24]
+            f = text2.find("Pso")
+            if f != -1:
+                text2 = text2[0:f]
+
+
+
         try:
-            p = re.compile(ur'\.\d+(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
+            p = re.compile(ur'\d+(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
             m = p.search(unicode(text2))
-            return { "birthLocation": m.group("location"), "cursorLocation": cursorLocation + m.end()}
+            return {"birthLocation": m.group("location"), "cursorLocation": cursorLocation + m.end()}
         except Exception as e:
             raise BirthplaceException(text2)
 
@@ -104,9 +115,10 @@ class DataExtraction:
                 spouseBirthYear = {"birthDay": "","birthMonth": "", "birthYear": "", "cursorLocation": m.end()-birthYearWindowLeftOffset + 64}
 
             try:
-                birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0)
-            except Exception as e:
-                #raise SpouseException(piece, "SPOUSEBIRTHPLACE")
+                print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
+                birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
+            except ExtractionException as e:
+                #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
                 birthPlace= {"birthLocation": ""}
 
             return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseBirthLocation": birthPlace["birthLocation"]}
