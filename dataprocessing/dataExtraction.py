@@ -95,12 +95,12 @@ class DataExtraction:
 
 
             year = "19" + year
-            if not forMan:
-                print text
-                print text[cursorLocation+date.end():]
-                print "----"
-                d = self.extractBirthLocation(text, cursorLocation+date.end())
-                deathLocation = d["birthLocation"]  #a misnomer since we use birthlocation function to find the deathlocation. Refactor.
+
+            print text
+            print text[cursorLocation+date.end():]
+            print "----"
+            d = self.extractBirthLocation(text, cursorLocation+date.end())
+            deathLocation = d["birthLocation"]  #a misnomer since we use birthlocation function to find the deathlocation. Refactor.
             #try to find the death place:
             #self.extractBirthLocation(text, )
 
