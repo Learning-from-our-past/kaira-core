@@ -61,21 +61,29 @@ class DataExtraction:
 
     def extractDeath(self, text, cursorLocation, windowWidth = 16 , forMan=True):
 
-
+        regexPattern = ur'.*k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
+        kaatunut = False
         if forMan:
             #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
             f = text.find("Pso")
             if f != -1:
                 text = text[0:f]
 
+            #check if man has died in war
+            k = text.find(" kaat ")
+            if k != -1:
+                kaatunut = True
+                regexPattern = ur'.*kaat(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
+
         try:
             #try to find the date in modified string with regexp
+            deathLocation = ""
             dateguess = text[cursorLocation:cursorLocation+windowWidth]    #take substring which probably contains the date.
             dateguess = dateguess.replace(" ","")           #remove all whitespace in the substring
-            if forMan == False:
-                print dateguess
-            dp = re.compile(ur'.*k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
+            dp = re.compile(regexPattern,re.UNICODE)
             date = dp.search(unicode(dateguess))
+
+
 
             #get the result from correct capturegroup. If there is full date (12.7.18) it is in 1, if only year it is in 2.
             #could probably be written better in regexp, which uses only one group?
@@ -87,16 +95,24 @@ class DataExtraction:
 
 
             year = "19" + year
+            if not forMan:
+                print text
+                print text[cursorLocation+date.end():]
+                print "----"
+                d = self.extractBirthLocation(text, cursorLocation+date.end())
+                deathLocation = d["birthLocation"]  #a misnomer since we use birthlocation function to find the deathlocation. Refactor.
+            #try to find the death place:
+            #self.extractBirthLocation(text, )
 
 
         except Exception as e:
             #print "----BIRTHDAY----"
             #print dateguess
             #print "---------------------"
-            return {"deathDay": "","deathMonth": "", "deathYear": "", "cursorLocation": cursorLocation}
+            return {"deathDay": "","deathMonth": "", "deathYear": "", "kaatunut": "", "deathLocation": deathLocation, "cursorLocation": cursorLocation}
             #raise BirthdayException(dateguess)
 
-        return {"deathDay": date.group("day"),"deathMonth": date.group("month"), "deathYear": year, "cursorLocation": cursorLocation + date.end()}
+        return {"deathDay": date.group("day"),"deathMonth": date.group("month"), "deathYear": year, "kaatunut": kaatunut, "deathLocation": deathLocation, "cursorLocation": cursorLocation + date.end()}
 
 
 
@@ -105,6 +121,9 @@ class DataExtraction:
 
         if forMan:
             text2 = text[cursorLocation-4:cursorLocation+24]
+            f = text2.find("Pso")
+            if f != -1:
+                text2 = text2[0:f]
         else:
             #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
             text2 = text[0:cursorLocation+24]
@@ -160,10 +179,9 @@ class DataExtraction:
                 birthPlace= {"birthLocation": ""}
 
             deathData = self.extractDeath(text2, m.end(), 40, False)
-
             return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["birthLocation"]}
         else:
-            return {"hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""},  "spouseDeathData": {"deathDay": "","deathMonth": "", "deathYear": ""}, "spouseBirthLocation": ""}
+            return {"hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""},  "spouseDeathData": {"deathDay": "","deathMonth": "", "deathYear": "", "deathLocation": ""}, "spouseBirthLocation": ""}
 
 
 
