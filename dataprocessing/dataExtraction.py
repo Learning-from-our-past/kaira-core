@@ -96,10 +96,8 @@ class DataExtraction:
 
             year = "19" + year
 
-            print text
-            print text[cursorLocation+date.end():]
-            print "----"
-            d = self.extractBirthLocation(text, cursorLocation+date.end())
+
+            d = self.extractLocation(text, cursorLocation+date.end())
             deathLocation = d["birthLocation"]  #a misnomer since we use birthlocation function to find the deathlocation. Refactor.
             #try to find the death place:
             #self.extractBirthLocation(text, )
@@ -117,7 +115,7 @@ class DataExtraction:
 
 
     #try to extract the location of the birth. Later the results could be compared to the list of locations
-    def extractBirthLocation(self, text, cursorLocation, forMan=True):
+    def extractLocation(self, text, cursorLocation, forMan=True):
 
         if forMan:
             text2 = text[cursorLocation-4:cursorLocation+24]
@@ -131,6 +129,8 @@ class DataExtraction:
             if f != -1:
                 text2 = text2[0:f]
 
+
+
         try:
             p = re.compile(ur'\d+(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
             m = p.search(unicode(text2))
@@ -140,7 +140,7 @@ class DataExtraction:
 
     #find possible spouse and all relevant information
     def extractSpouseInformation(self, text, cursorLocation):
-        text2 = text[cursorLocation:cursorLocation+120]
+        text2 = text[cursorLocation-5:cursorLocation+120]
         birthYearWindowLeftOffset = 10
         foundSpouse = False
         findSpouseRE = re.compile(ur'(?P<spouseExists>\b(?:P|p)so\b)',re.UNICODE)  #first find out if there is spouse:
@@ -173,7 +173,7 @@ class DataExtraction:
 
             try:
                 #print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
-                birthPlace = self.extractBirthLocation(text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
+                birthPlace = self.extractLocation(text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
             except ExtractionException as e:
                 #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
                 birthPlace= {"birthLocation": ""}
@@ -194,8 +194,11 @@ class DataExtraction:
         self.parsingLocation = 0
         personData = self.extractPersonNameAndBirthday(text)
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
-        personLocation= self.extractBirthLocation(text, personBirthday["cursorLocation"])
+        personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 32)
         spouse = self.extractSpouseInformation(text, personLocation["cursorLocation"])
+        #if personData["firstnames"] == "Oiva Ludvig":
+        #    raise Exception("asd")
+
         #print spouse
         return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouse.items())
