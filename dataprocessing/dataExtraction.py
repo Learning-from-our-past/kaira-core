@@ -97,7 +97,8 @@ class DataExtraction:
             year = "19" + year
 
 
-            d = self.extractLocation(text, cursorLocation+date.end())
+
+            d = self.extractLocation(text, cursorLocation+date.end(), forMan, True)
             deathLocation = d["birthLocation"]  #a misnomer since we use birthlocation function to find the deathlocation. Refactor.
             #try to find the death place:
             #self.extractBirthLocation(text, )
@@ -115,7 +116,7 @@ class DataExtraction:
 
 
     #try to extract the location of the birth. Later the results could be compared to the list of locations
-    def extractLocation(self, text, cursorLocation, forMan=True):
+    def extractLocation(self, text, cursorLocation, forMan=True, forDeath=False):
 
         if forMan:
             text2 = text[cursorLocation-4:cursorLocation+24]
@@ -124,16 +125,28 @@ class DataExtraction:
                 text2 = text2[0:f]
         else:
             #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
-            text2 = text[0:cursorLocation+24]
+            text2 = text[cursorLocation:cursorLocation+24]
             f = text2.find("Pso")
+
             if f != -1:
                 text2 = text2[0:f]
-
-
 
         try:
             p = re.compile(ur'\d+(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
             m = p.search(unicode(text2))
+
+            #check if the string has data on death. If it is before the location, be careful to not
+            #put the death location to birth location.
+
+            checkDeathp = re.compile(ur'(\bk\b|\bkaat\b)',re.UNICODE)
+            checkDeathm = checkDeathp.search(unicode(text2))
+            if checkDeathm != None and forDeath == False:
+                if checkDeathm.end() < m.end():
+                    print text2
+                    #there is entry of death before the matched location. Discard the result:
+                    return {"birthLocation": "", "cursorLocation": cursorLocation + m.end()}
+
+
             return {"birthLocation": m.group("location"), "cursorLocation": cursorLocation + m.end()}
         except Exception as e:
             raise BirthplaceException(text2)
@@ -177,6 +190,7 @@ class DataExtraction:
             except ExtractionException as e:
                 #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
                 birthPlace= {"birthLocation": ""}
+
 
             deathData = self.extractDeath(text2, m.end(), 40, False)
             return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["birthLocation"]}
