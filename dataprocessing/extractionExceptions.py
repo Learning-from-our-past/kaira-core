@@ -52,3 +52,12 @@ class SpouseException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
+class ChildrenException(ExtractionException):
+    message = "ERROR in child extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+    def __unicode__(self):
+        return repr(self.message)

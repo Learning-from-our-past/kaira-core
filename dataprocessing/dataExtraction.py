@@ -3,6 +3,7 @@ import readData
 import re
 import unicodecsv
 import unicodedata
+import nltk
 from extractionExceptions import *
 
 #use regex to extract the person's names and birthday from given text
@@ -99,6 +100,7 @@ class DataExtraction:
 
 
             d = self.extractLocation(text, cursorLocation+date.end(), forMan, True)
+            cursorLocation = d["cursorLocation"]
             deathLocation = d["birthLocation"]  #a misnomer since we use birthlocation function to find the deathlocation. Refactor.
             #try to find the death place:
             #self.extractBirthLocation(text, )
@@ -193,11 +195,36 @@ class DataExtraction:
 
 
             deathData = self.extractDeath(text2, m.end(), 40, False)
-            return {"hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["birthLocation"]}
+            return {"cursorLocation": deathData["cursorLocation"], "hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["birthLocation"]}
         else:
-            return {"hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""},  "spouseDeathData": {"deathDay": "","deathMonth": "", "deathYear": "", "deathLocation": ""}, "spouseBirthLocation": ""}
+            return {"cursorLocation": cursorLocation, "hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""},  "spouseDeathData": {"deathDay": "","deathMonth": "", "deathYear": "", "deathLocation": ""}, "spouseBirthLocation": ""}
 
 
+    #try to find the list of children from the soldier and return it as a single string.
+    def findChildren(self, text, cursorLocation):
+        text = text[cursorLocation:]
+        print "-----"
+        print text
+        text = re.sub(ur'[:;\!\?\+~¨\^\'\"]', '', text)
+        print text
+
+        p = re.compile(ur'(?:Lapset|Tytär|Poika)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osall))|(?=pso)))',re.UNICODE | re.IGNORECASE)
+        m = p.search(unicode(text))
+
+        if m != None:
+            children = m.group("children")
+            #naive implementation TODO: MAKE BETTER
+            childList1 = children.split(",")
+            childList2 = []
+            for c in childList1:
+                c = ' '.join(c.split())
+                if len(c) > 2:
+                    childList2.append(c)
+
+            return {"children": m.group("children"), "childCount" : len(childList2),"cursorLocation" : cursorLocation + m.end()}
+        else:
+            raise ChildrenException(text)
+            return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
 
 
 
@@ -211,8 +238,9 @@ class DataExtraction:
         personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 32)
         spouse = self.extractSpouseInformation(text, personLocation["cursorLocation"])
+        children = self.findChildren(text,spouse["cursorLocation"])
         #if personData["firstnames"] == "Oiva Ludvig":
         #    raise Exception("asd")
 
         #print spouse
-        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouse.items())
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouse.items() + children.items())
