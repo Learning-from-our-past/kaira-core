@@ -180,7 +180,7 @@ class DataExtraction:
 
                 wives.append(self.extractSpouse(text2[spouseCount[i].start():endPos], 0))
 
-            if len(wives) > 1:
+            if len(wives) > 2:
                 print "Vaimot: " + str(len(wives)) +" " + text2
 
 
@@ -253,7 +253,7 @@ class DataExtraction:
 
             return {"children": m.group("children"), "childCount" : len(childList2),"cursorLocation" : cursorLocation + m.end()}
         else:
-            raise ChildrenException(text)
+            #raise ChildrenException(text)
             return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
 
 
