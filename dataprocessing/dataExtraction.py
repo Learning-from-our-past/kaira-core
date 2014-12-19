@@ -153,60 +153,90 @@ class DataExtraction:
         except Exception as e:
             raise BirthplaceException(text2)
 
-    #find possible spouse and all relevant information
-    def extractSpouseInformation(self, text, cursorLocation):
-        text2 = text[cursorLocation-5:cursorLocation+120]
-        birthYearWindowLeftOffset = 10
+    #find possible spouses and then call function to extract the data.
+    def findSpouses(self, text, cursorLocation):
+        text2 = text[cursorLocation-5:]
+        spouseWindow = 120
         foundSpouse = False
         findSpouseRE = re.compile(ur'(?P<spouseExists>\b(?:P|p)so\b)',re.UNICODE)  #first find out if there is spouse:
         findSpouseREm = findSpouseRE.search(unicode(text2))
+
+        spouseCount = findSpouseRE.finditer(text2)
+        spouseCount = tuple(spouseCount)
+
         if findSpouseREm != None:
             foundSpouse = True      #found Pso which suggests there is spouse information available.
 
         if foundSpouse:
-            #try to find wedding year and the name of the spouse. Wedding year is optional.
-            p = re.compile(ur'\b(?:P|p)so\b(?: \bvst?l?a ?(?P<weddingYear>\d{1,2}))? ?(?P<spouseName>[A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
-            m = p.search(unicode(text2))
-            try:
-                if m.group("weddingYear") != None:
-                    weddingYear = int(m.group("weddingYear"))
+
+            wives = []
+            for i in range(0, len(spouseCount)):
+
+                #decide the end position of the substring where to find the spouse
+                if i+1 < len(spouseCount):
+                    endPos = spouseCount[i+1].start()
                 else:
-                    weddingYear = ""
-            except Exception as e:
-                raise SpouseException(text2, "WEDDINGYEAR")
+                    endPos = spouseCount[i].start() + spouseWindow
 
-            try:
-                spouseName = m.group("spouseName")
-            except Exception as e:
-                raise SpouseException(text2, "SPOUSENAME")
+                wives.append(self.extractSpouse(text2[spouseCount[i].start():endPos], 0))
 
-            try:
-                spouseBirthYear = self.extractBirthday(text2[(m.end()-birthYearWindowLeftOffset):], 0, 64)
-            except ExtractionException as e:
-                #raise SpouseException(e.details, "SPOUSEBIRTHDAY")         #TODO: PITÄISI MERKITÄ KUITENKIN LOKIIN!
-                spouseBirthYear = {"birthDay": "","birthMonth": "", "birthYear": "", "cursorLocation": m.end()-birthYearWindowLeftOffset + 64}
-
-            try:
-                #print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
-                birthPlace = self.extractLocation(text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
-            except ExtractionException as e:
-                #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
-                birthPlace= {"birthLocation": ""}
+            if len(wives) > 1:
+                print "Vaimot: " + str(len(wives)) +" " + text2
 
 
-            deathData = self.extractDeath(text2, m.end(), 40, False)
-            return {"cursorLocation": deathData["cursorLocation"], "hasSpouse": foundSpouse, "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["birthLocation"]}
+            spouseData = self.extractSpouse(text2, cursorLocation)
+            spouseData["hasSpouse"] = foundSpouse
+            return spouseData
         else:
             return {"cursorLocation": cursorLocation, "hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""},  "spouseDeathData": {"deathDay": "","deathMonth": "", "deathYear": "", "deathLocation": ""}, "spouseBirthLocation": ""}
+
+
+    #extract data related to single spouse. Function is provided with a substring whihc contains
+    #spouse information
+    def extractSpouse(self, text, cursorLocation):
+        birthYearWindowLeftOffset = 10
+        #try to find wedding year and the name of the spouse. Wedding year is optional.
+        p = re.compile(ur'\b(?:P|p)so\b(?: \bvst?l?a ?(?P<weddingYear>\d{1,2}))? ?(?P<spouseName>[A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
+        m = p.search(unicode(text))
+        try:
+            if m.group("weddingYear") != None:
+                weddingYear = int(m.group("weddingYear"))
+            else:
+                weddingYear = ""
+        except Exception as e:
+            raise SpouseException(text, "WEDDINGYEAR")
+
+        try:
+            spouseName = m.group("spouseName")
+        except Exception as e:
+            raise SpouseException(text, "SPOUSENAME")
+
+        try:
+            spouseBirthYear = self.extractBirthday(text[(m.end()-birthYearWindowLeftOffset):], 0, 64)
+        except ExtractionException as e:
+            #raise SpouseException(e.details, "SPOUSEBIRTHDAY")         #TODO: PITÄISI MERKITÄ KUITENKIN LOKIIN!
+            spouseBirthYear = {"birthDay": "","birthMonth": "", "birthYear": "", "cursorLocation": m.end()-birthYearWindowLeftOffset + 64}
+
+        try:
+            #print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
+            birthPlace = self.extractLocation(text[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
+        except ExtractionException as e:
+            #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
+            birthPlace= {"birthLocation": ""}
+
+
+        deathData = self.extractDeath(text, m.end(), 40, False)
+        return {"cursorLocation": deathData["cursorLocation"], "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["birthLocation"]}
+
 
 
     #try to find the list of children from the soldier and return it as a single string.
     def findChildren(self, text, cursorLocation):
         text = text[cursorLocation:]
-        print "-----"
-        print text
+        #print "-----"
+        #print text
         text = re.sub(ur'[:;\!\?\+~¨\^\'\"]', '', text)
-        print text
+        #print text
 
         p = re.compile(ur'(?:Lapset|Tytär|Poika)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osall))|(?=pso)))',re.UNICODE | re.IGNORECASE)
         m = p.search(unicode(text))
@@ -237,7 +267,7 @@ class DataExtraction:
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
         personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 32)
-        spouse = self.extractSpouseInformation(text, personLocation["cursorLocation"])
+        spouse = self.findSpouses(text, personLocation["cursorLocation"])
         children = self.findChildren(text,spouse["cursorLocation"])
         #if personData["firstnames"] == "Oiva Ludvig":
         #    raise Exception("asd")
