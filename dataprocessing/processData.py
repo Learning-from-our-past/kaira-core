@@ -9,11 +9,11 @@ from dataExtraction import DataExtraction
 #This script runs the exctraction process by using DataExtraction class's services.
 errors = 0
 count = 0
-root = readData.getXMLroot("rintamamiehet10_tags.xml")
+root = readData.getXMLroot("rintamamiehet8_tags.xml")
 extractor = DataExtraction()
 #save the extract4ed info to a csv file:
-with open("soldiers10.csv", "wb") as results:
-    with open("errors10.csv", "wb") as errorcsv:
+with open("soldiers8.csv", "wb") as results:
+    with open("errors8.csv", "wb") as errorcsv:
         writer = unicodecsv.writer(results, delimiter=";")
         writer.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation", "deathDay", "deathMonth", "deathYear", "fallen", "deathLocation", "hasSpouse", "weddingYear",
                          "spouseName", "spouseBirthDay", "spouseBirthMonth","spouseBirthYear","spouseBirthLocation", "spouseDeathDay", "spouseDeathMonth","spouseDeathYear", "spouseDeathLocation", "childCount", "children"])

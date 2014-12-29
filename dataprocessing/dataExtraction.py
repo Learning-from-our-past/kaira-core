@@ -144,7 +144,7 @@ class DataExtraction:
             checkDeathm = checkDeathp.search(unicode(text2))
             if checkDeathm != None and forDeath == False:
                 if checkDeathm.end() < m.end():
-                    print text2
+                    #print text2
                     #there is entry of death before the matched location. Discard the result:
                     return {"birthLocation": "", "cursorLocation": cursorLocation + m.end()}
 
@@ -163,6 +163,7 @@ class DataExtraction:
 
         spouseCount = findSpouseRE.finditer(text2)
         spouseCount = tuple(spouseCount)
+        children = {}
 
         if findSpouseREm != None:
             foundSpouse = True      #found Pso which suggests there is spouse information available.
@@ -175,12 +176,25 @@ class DataExtraction:
                 #decide the end position of the substring where to find the spouse
                 if i+1 < len(spouseCount):
                     endPos = spouseCount[i+1].start()
+                    children = self.findChildren(text2[spouseCount[i].start():endPos+4], 0)
+
                 else:
                     endPos = spouseCount[i].start() + spouseWindow
+                    children = self.findChildren(text2[spouseCount[i].start():], 0)
 
-                wives.append(self.extractSpouse(text2[spouseCount[i].start():endPos], 0))
+                wife = self.extractSpouse(text2[spouseCount[i].start():endPos], 0)
+                wife["children"] = children
+
+                wives.append(wife)
+
+
+            if len(wives) == 2:
+                #print text2[spouseCount[0].start():endPos]
+                print wives
+                #print "----"
 
             if len(wives) > 2:
+                #raise SpouseException(text, "TOOMUCHWIVES")
                 print "Vaimot: " + str(len(wives)) +" " + text2
 
 
@@ -234,11 +248,10 @@ class DataExtraction:
     def findChildren(self, text, cursorLocation):
         text = text[cursorLocation:]
         #print "-----"
-        #print text
         text = re.sub(ur'[:;\!\?\+~¨\^\'\"]', '', text)
         #print text
 
-        p = re.compile(ur'(?:Lapset|Tytär|Poika)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osall))|(?=pso)))',re.UNICODE | re.IGNORECASE)
+        p = re.compile(ur'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osall))|(?=pso)))',re.UNICODE | re.IGNORECASE)
         m = p.search(unicode(text))
 
         if m != None:
@@ -253,8 +266,20 @@ class DataExtraction:
 
             return {"children": m.group("children"), "childCount" : len(childList2),"cursorLocation" : cursorLocation + m.end()}
         else:
-            #raise ChildrenException(text)
-            return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
+            #try to find children encoded with numbers words:
+            p = re.compile(ur'(?P<count>yksi|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen) (?:lasta|lapsi|tytär|poika)',re.UNICODE | re.IGNORECASE)
+            m = p.search(unicode(text))
+            numberwords = {"yksi": 1, "kaksi": 2, "kolme": 3, "neljä": 4, "viisi": 5, "kuusi": 6, "seitsemän": 7, "kahdeksan": 8, "yhdeksän": 9, "kymmenen": 10}
+
+            if m != None:
+                if m.group("count").lower() in numberwords:
+                    #print "Avainsana löytyi: " + str(numberwords[m.group("count").lower()])
+                    return {"children": "", "cursorLocation" : cursorLocation, "childCount": numberwords[m.group("count").lower()]}
+                else:
+                    return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
+            else:
+                #raise ChildrenException(text)
+                return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
 
 
 
