@@ -6,6 +6,7 @@ import unicodedata
 from extractionExceptions import *
 from chunkerCheck import ChunkChecker
 import guitool.main as GUITool
+import guitool.combineTool as CombineTool
 from lxml import etree
 
 #This script checks the chunked XML file trying to find suspicious entries
@@ -23,10 +24,10 @@ for child in root:
 
 checker.showResults()
 
-GUITool.startGUI(checker.getSuspiciousEntries())
+CombineTool.startGUI(checker.getSuspiciousEntries(), root)
 print "gui loppu"
 
 #write modifications to a new xml-file:
-f = open(path, 'w')
+f = open("koe.xml", 'w')
 f.write(etree.tostring(root, pretty_print=True, encoding='unicode').encode("utf8"))
 f.close()

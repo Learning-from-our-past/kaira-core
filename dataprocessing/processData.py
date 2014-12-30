@@ -5,14 +5,19 @@ import unicodecsv
 import unicodedata
 from extractionExceptions import *
 from dataExtraction import DataExtraction
+from extractionExceptions import *
+from chunkerCheck import ChunkChecker
+import guitool.main as GUITool
+import guitool.combineTool as CombineTool
+from lxml import etree
 
 #This script runs the exctraction process by using DataExtraction class's services.
 errors = 0
 count = 0
-root = readData.getXMLroot("rintamamiehet8_tags.xml")
+root = readData.getXMLroot("fixed_combined.xml")
 extractor = DataExtraction()
 
-
+errorNodes = []
 
 
 #save the extract4ed info to a csv file:
@@ -34,6 +39,7 @@ with open("soldiers8.csv", "wb") as results:
 
                 count +=1
             except ExtractionException as e:
+                errorNodes.append({"child": child})
                 ewriter.writerow([e.message, e.details, e.eType, child.text])
                 errors +=1
                 count +=1
@@ -41,3 +47,15 @@ with open("soldiers8.csv", "wb") as results:
 
 
 print "Errors encountered: " + str(errors) + "/" + str(count)
+
+
+###############################################################
+print "Start error fix tool..."
+
+CombineTool.startGUI(errorNodes, root)
+print "gui loppu"
+
+#write modifications to a new xml-file:
+f = open("fixed_combined.xml", 'w')
+f.write(etree.tostring(root, pretty_print=True, encoding='unicode').encode("utf8"))
+f.close()
