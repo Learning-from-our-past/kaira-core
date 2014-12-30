@@ -11,6 +11,10 @@ errors = 0
 count = 0
 root = readData.getXMLroot("rintamamiehet8_tags.xml")
 extractor = DataExtraction()
+
+
+
+
 #save the extract4ed info to a csv file:
 with open("soldiers8.csv", "wb") as results:
     with open("errors8.csv", "wb") as errorcsv:
