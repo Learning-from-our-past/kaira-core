@@ -61,3 +61,14 @@ class ChildrenException(ExtractionException):
 
     def __unicode__(self):
         return repr(self.message)
+
+
+class RankException(ExtractionException):
+    message = "ERROR in rank extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+    def __unicode__(self):
+        return repr(self.message)
