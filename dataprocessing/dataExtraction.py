@@ -198,11 +198,13 @@ class DataExtraction:
                 print "Vaimot: " + str(len(wives)) +" " + text2
 
 
-            spouseData = self.extractSpouse(text2, cursorLocation)
+            spouseData = { "spouseCount" : len(wives), "wifeList": wives} #self.extractSpouse(text2, cursorLocation)
+
             spouseData["hasSpouse"] = foundSpouse
+            spouseData["spouseCount"] = len(wives)
             return spouseData
         else:
-            return {"cursorLocation": cursorLocation, "hasSpouse": foundSpouse, "weddingYear": "", "spouseName": "", "spouseBirthData": {"birthDay": "","birthMonth": "", "birthYear": ""},  "spouseDeathData": {"deathDay": "","deathMonth": "", "deathYear": "", "deathLocation": ""}, "spouseBirthLocation": ""}
+            return {"spouseCount" : 0, "hasSpouse" : foundSpouse}
 
 
     #extract data related to single spouse. Function is provided with a substring whihc contains
@@ -292,10 +294,14 @@ class DataExtraction:
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
         personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 32)
-        spouse = self.findSpouses(text, personLocation["cursorLocation"])
-        children = self.findChildren(text,spouse["cursorLocation"])
-        #if personData["firstnames"] == "Oiva Ludvig":
-        #    raise Exception("asd")
+        spouseData = self.findSpouses(text, personLocation["cursorLocation"])
+
+        #if there is no spouse, try to still find children:
+        if spouseData["spouseCount"] == 0:
+            children = self.findChildren(text, personLocation["cursorLocation"])
+        else:
+            children = {}
+
 
         #print spouse
-        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouse.items() + children.items())
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items())
