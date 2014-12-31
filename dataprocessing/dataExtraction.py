@@ -283,7 +283,47 @@ class DataExtraction:
                 #raise ChildrenException(text)
                 return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
 
+ #check if the count of "Js" and "Ts" makes sense.
 
+    #figure out if the soldier has been in Ts or Js
+    def warCheck(self, text):
+        findJsRE = re.compile(ur'(?P<jsExists>(?:Js:|JS:|js:|jS:))',re.UNICODE)  #first find out if there is spouse:
+        findJsREm = findJsRE.search(unicode(text))
+
+        JsCount = findJsRE.finditer(text)
+        JsCount = tuple(JsCount)
+
+        result = {"talvisota": False, "jatkosota" : False}
+        if len(JsCount) >= 1:
+            result["jatkosota"] = True
+
+        findTsRE = re.compile(ur'(?P<tsExists>(?:Ts:|TS:|ts:|tS:))',re.UNICODE)  #first find out if there is spouse:
+        findTsREm = findTsRE.search(unicode(text))
+
+        TsCount = findTsRE.finditer(text)
+        TsCount = tuple(TsCount)
+
+        if len(TsCount) >= 1:
+            result["talvisota"] = True
+
+        return result
+
+    #try to find the rank of a soldier
+    def findRank(self, text):
+        findRankRE = re.compile(ur'(?:Sotarvo|Ylenn)(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})\.',re.UNICODE)  #first find out if there is spouse:
+        findRankREm = findRankRE.search(unicode(text))
+
+        if findRankREm != None:
+            result = {"rank": findRankREm.group("rank")}
+        else:
+            #raise RankException(text)
+            result = {"rank" : ""}
+
+        return result
+
+    #find if the soldier has some of the most important medals.
+    def findMedals(self, text):
+        
 
 
     def extraction(self,text):
@@ -302,6 +342,10 @@ class DataExtraction:
         else:
             children = {}
 
+        #check the wars the soldier has served in:
+        wars = self.warCheck(text)
+        rank = self.findRank(text)
+
 
         #print spouse
-        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items())
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items())
