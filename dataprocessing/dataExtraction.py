@@ -187,12 +187,6 @@ class DataExtraction:
 
                 wives.append(wife)
 
-
-            if len(wives) == 2:
-                #print text2[spouseCount[0].start():endPos]
-                print wives
-                #print "----"
-
             if len(wives) > 2:
                 #raise SpouseException(text, "TOOMUCHWIVES")
                 print "Vaimot: " + str(len(wives)) +" " + text2
@@ -293,9 +287,13 @@ class DataExtraction:
         JsCount = findJsRE.finditer(text)
         JsCount = tuple(JsCount)
 
-        result = {"talvisota": False, "jatkosota" : False}
+        result = {"talvisota": False, "talvisotaregiments": "", "jatkosotaregiments" : "", "jatkosota" : False}
         if len(JsCount) >= 1:
+            #find regiments
+            result["jatkosotaregiments"] = self.findRegiments(text[JsCount[0].end():])
             result["jatkosota"] = True
+
+
 
         findTsRE = re.compile(ur'(?P<tsExists>(?:Ts:|TS:|ts:|tS:))',re.UNICODE)  #first find out if there is spouse:
         findTsREm = findTsRE.search(unicode(text))
@@ -304,9 +302,20 @@ class DataExtraction:
         TsCount = tuple(TsCount)
 
         if len(TsCount) >= 1:
+            result["talvisotaregiments"] = self.findRegiments(text[TsCount[0].end():])
             result["talvisota"] = True
 
         return result
+
+    def findRegiments(self, text):
+        findRE = re.compile(ur'(?P<regiments>(:?[A-Za-zä-öÄ-Ö0-9 \n,])+)',re.UNICODE)  #first find out if there is spouse:
+        findREm = findRE.search(unicode(text))
+
+        #return regiments as string
+        if findREm != None:
+            return findREm.group("regiments")
+        else:
+            return ""
 
     #try to find the rank of a soldier
     def findRank(self, text):
@@ -323,7 +332,31 @@ class DataExtraction:
 
     #find if the soldier has some of the most important medals.
     def findMedals(self, text):
-        
+        medals = ""
+        #vapauden mitali
+        vmRE = re.compile(ur'(?P<mitali>Vm ?1|Vm ?2)',re.UNICODE)  #first find out if there is spouse:
+        vmCount = vmRE.finditer(text)
+
+        for match in vmCount:
+            medals += match.group("mitali") +","
+
+        #vapauden risti
+        vrRE = re.compile(ur'(?P<mitali>VR ?suur|VR ?[1-4](?: [a-zä-ö ]{1,})?|VR ?surur)',re.UNICODE)  #first find out if there is spouse:
+        vrCount = vrRE.finditer(text)
+
+        for match in vrCount:
+            medals += match.group("mitali") +","
+
+        #suomen vapauden risti
+        svrRE = re.compile(ur'(?P<mitali>SVR ?suur|SVR ?[A-Za-zä-ö1-2 ]{1,})',re.UNICODE)  #first find out if there is spouse:
+        svrCount = svrRE.finditer(text)
+
+        for match in svrCount:
+            medals += match.group("mitali") +","
+
+
+        return {"medals" : medals}
+
 
 
     def extraction(self,text):
@@ -345,7 +378,8 @@ class DataExtraction:
         #check the wars the soldier has served in:
         wars = self.warCheck(text)
         rank = self.findRank(text)
+        medals = self.findMedals(text)
 
 
         #print spouse
-        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items())
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items())
