@@ -46,8 +46,8 @@ class Application(Frame):
 
         self.lb.config(yscrollcommand=scrollbar.set, width=50, selectmode=EXTENDED)
         self.lb.grid(row=2, rowspan=3, column=2,columnspan=1, sticky=N+E+S+W)
-
         for i in self.objectList:
+
             self.lb.insert(END, i["child"].text)
 
         #bind slot

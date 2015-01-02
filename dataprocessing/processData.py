@@ -7,8 +7,8 @@ from extractionExceptions import *
 from dataExtraction import DataExtraction
 from extractionExceptions import *
 from chunkerCheck import ChunkChecker
-import guitool.main as GUITool
 import guitool.combineTool as CombineTool
+import guitool.groupSelection as GUITool
 from lxml import etree
 
 #This script runs the exctraction process by using DataExtraction class's services.
@@ -16,6 +16,8 @@ errors = 0
 count = 0
 root = readData.getXMLroot("fixed_combined.xml")
 extractor = DataExtraction()
+
+
 
 errorNodes = []
 
@@ -40,6 +42,26 @@ def createRow(d):
 
     return row
 
+#saves information about the error entry so that it can be fixed.
+class ExceptionLogger:
+    errorsListing = {}
+    def logError(self, exceptionType, entry):
+
+        if exceptionType in self.errorsListing:
+            self.errorsListing[exceptionType].append({"child": entry})
+        else:
+            self.errorsListing[exceptionType] = [{"child": entry}]
+
+    def printErrorBreakdown(self):
+        print "ERROR breakdown: "
+        for key, value in self.errorsListing.iteritems():
+            print key
+            print len(value)
+
+    def getErrors(self):
+        return self.errorsListing
+
+
 
 
 #save the extract4ed info to a csv file:
@@ -54,14 +76,17 @@ with open("soldiers8.csv", "wb") as results:
 
         ewriter = unicodecsv.writer(errorcsv, delimiter=";")
         ewriter.writerow(["Exception","Details", "type", "Entry text"])
+        errorLogger = ExceptionLogger()
 
         for child in root:
             try:
-                d = extractor.extraction(child.text)
+                d = extractor.extraction(child.text, child, errorLogger)
                 writer.writerow(createRow(d))
                 count +=1
             except ExtractionException as e:
-                errorNodes.append({"child": child})
+
+                errorLogger.logError(e.eType, child)
+                #errorNodes.append({"child": child})
                 ewriter.writerow([e.message, e.details, e.eType, child.text])
                 errors +=1
                 count +=1
@@ -70,18 +95,17 @@ with open("soldiers8.csv", "wb") as results:
 
 print "Errors encountered: " + str(errors) + "/" + str(count)
 
+errorLogger.printErrorBreakdown()
 
 
 
-"""
 ###############################################################
 print "Start error fix tool..."
 
-CombineTool.startGUI(errorNodes, root)
+GUITool.startGUI(errorLogger.getErrors(), root)
 print "gui loppu"
 
 #write modifications to a new xml-file:
 f = open("fixed_combined.xml", 'w')
 f.write(etree.tostring(root, pretty_print=True, encoding='unicode').encode("utf8"))
 f.close()
-"""
