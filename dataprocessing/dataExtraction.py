@@ -408,7 +408,27 @@ class DataExtraction:
             return {"kotiutusDay": "","kotiutusMonth": "", "kotiutusYear": "", "kotiutusPlace" : ""}
 
     def extractAddress(self, text):
-        return
+
+        osRE = re.compile(ur'(?:\W- ?Os\b|\W- ?os\b|\W- ?o5\b|\W- ?O5\b|\W- ?05\b)(?P<address>(?:.|\n)*?)(?=$|Rva|\.)',re.UNICODE | re.IGNORECASE)  #
+        osREm = osRE.search(unicode(text))
+
+        if osREm != None:
+            address = osREm.group("address")
+        else:
+            address = ""
+
+        return {"address" : address}
+
+    def extractHobbies(self, text):
+        hbRE = re.compile(ur'(?:Harr\b)(?P<hobbies>(?:.|\n)*?)(?=$|Rva|- os\b|\.)',re.UNICODE | re.IGNORECASE)  #
+        hbREm = hbRE.search(unicode(text))
+
+        if hbREm != None:
+            hobbies = hbREm.group("hobbies")
+        else:
+            hobbies = ""
+
+        return {"hobbies" : hobbies}
 
     def extraction(self,text):
         text = ' '.join(text.split())   #remove excess whitespace and linebreaks
@@ -431,7 +451,9 @@ class DataExtraction:
         rank = self.findRank(text)
         medals = self.findMedals(text)
         kotiutus = self.extractKotiutus(text)
+        address = self.extractAddress(text)
+        hobbies = self.extractHobbies(text)
 
 
         #print spouse
-        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items() + kotiutus.items())
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items() + kotiutus.items() + address.items() + hobbies.items())
