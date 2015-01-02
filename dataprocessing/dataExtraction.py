@@ -5,6 +5,7 @@ import unicodecsv
 import unicodedata
 import nltk
 from extractionExceptions import *
+import regex
 
 #use regex to extract the person's names and birthday from given text
 #returns dict containing the data
@@ -319,13 +320,13 @@ class DataExtraction:
 
     #try to find the rank of a soldier
     def findRank(self, text):
-        findRankRE = re.compile(ur'(?:Sotarvo|Ylenn)(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})\.',re.UNICODE)  #first find out if there is spouse:
+        findRankRE = regex.compile(ur'(?:Sotarvo|Ylenn){s<=2}(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,)',re.UNICODE)  #first find out if there is spouse:
         findRankREm = findRankRE.search(unicode(text))
 
         if findRankREm != None:
             result = {"rank": findRankREm.group("rank")}
         else:
-            #raise RankException(text)
+            raise RankException(text)
             result = {"rank" : ""}
 
         return result
@@ -333,31 +334,81 @@ class DataExtraction:
     #find if the soldier has some of the most important medals.
     def findMedals(self, text):
         medals = ""
+
+        #find possible spousedata to try to deduce if the medal belongs to man or wife:
+        rvaRE = re.compile(ur'(?P<rva>\bRva|\brva)',re.UNICODE)  #first find out if there is spouse:
+        rvaREm = rvaRE.search(unicode(text))
+
+        if rvaREm != None:
+            rvaPos = rvaREm.start()
+        else:
+            rvaPos = -1
+
         #vapauden mitali
         vmRE = re.compile(ur'(?P<mitali>Vm ?1|Vm ?2)',re.UNICODE)  #first find out if there is spouse:
         vmCount = vmRE.finditer(text)
 
         for match in vmCount:
-            medals += match.group("mitali") +","
+
+            if rvaPos != -1:
+                if match.start() < rvaPos:
+                    medals += match.group("mitali") +","
+
 
         #vapauden risti
         vrRE = re.compile(ur'(?P<mitali>VR ?suur|VR ?[1-4](?: [a-zä-ö ]{1,})?|VR ?surur)',re.UNICODE)  #first find out if there is spouse:
         vrCount = vrRE.finditer(text)
 
         for match in vrCount:
-            medals += match.group("mitali") +","
+            if rvaPos != -1:
+                if match.start() < rvaPos:
+                    medals += match.group("mitali") +","
+
 
         #suomen vapauden risti
         svrRE = re.compile(ur'(?P<mitali>SVR ?suur|SVR ?[A-Za-zä-ö1-2 ]{1,})',re.UNICODE)  #first find out if there is spouse:
         svrCount = svrRE.finditer(text)
 
         for match in svrCount:
-            medals += match.group("mitali") +","
+            if rvaPos != -1:
+                if match.start() < rvaPos:
+                    medals += match.group("mitali") +","
+
 
 
         return {"medals" : medals}
 
+    def extractKotiutus(self, text):
 
+        #Extract date
+        p = re.compile(ur'(?:Kot|kot) (?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
+        date = p.search(unicode(text))
+
+        year = ""
+        if date != None:
+            if date.group("year") == None:
+                year = date.group("yearOnly")
+            else:
+                year = date.group("year")
+
+            #fix years to four digit format.
+            if int(year) < 50:
+                year = "19" + year
+            elif int(year) < 1800:
+                year = "18" + year
+
+            try:
+                kotiutusPlace = self.extractLocation(text, date.end())["birthLocation"]
+            except Exception as e:
+                kotiutusPlace = ""
+
+
+            return {"kotiutusDay": date.group("day"),"kotiutusMonth": date.group("month"), "kotiutusYear": year, "kotiutusPlace" : kotiutusPlace}    #, "birthday": m.group(3)
+        else:
+            return {"kotiutusDay": "","kotiutusMonth": "", "kotiutusYear": "", "kotiutusPlace" : ""}
+
+    def extractAddress(self, text):
+        return
 
     def extraction(self,text):
         text = ' '.join(text.split())   #remove excess whitespace and linebreaks
@@ -379,7 +430,8 @@ class DataExtraction:
         wars = self.warCheck(text)
         rank = self.findRank(text)
         medals = self.findMedals(text)
+        kotiutus = self.extractKotiutus(text)
 
 
         #print spouse
-        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items())
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items() + kotiutus.items())
