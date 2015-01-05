@@ -1,11 +1,12 @@
 from Tkinter import *
+from highlightText import CustomText
 
 class Application(Frame):
 
     objectList = []
     currentPrevious = None
     currentChild = None
-
+    highlightPattern = u'Kot|kot'
 
 
     def say_hi(self):
@@ -32,7 +33,8 @@ class Application(Frame):
             padx=5, sticky=E+W+S+N)
 
 
-        self.textarea = Text(self)
+        self.textarea = CustomText(self)
+        self.textarea.tag_configure("kot", background="#ff0000")
         self.textarea.grid(row=5, column=0, columnspan=2, rowspan=4,
             padx=5, sticky=E+W+S+N)
 
@@ -84,6 +86,9 @@ class Application(Frame):
         self.currentChild = self.objectList[idx[0]]
         self.textarea.delete(1.0, END)
         self.textarea.insert(INSERT,value)
+
+
+        self.textarea.highlight_pattern(self.highlightPattern, "kot", length=3, regexp=True)
 
         #find previous child's text
         self.currentPrevious = self.currentChild["child"].getprevious()

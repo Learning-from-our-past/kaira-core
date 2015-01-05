@@ -392,9 +392,12 @@ class DataExtraction:
         return {"medals" : medals}
 
     def extractKotiutus(self, text):
+        text2 = text
+        text = text.replace(" ","")           #remove all whitespace in the substring
+        text = text.replace("\n","")
 
         #Extract date
-        p = re.compile(ur'(?:Kot|kot) (?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2}) ?(?:\.|,|:|s) ?(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
+        p = re.compile(ur'(?:Kot|kot)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
         date = p.search(unicode(text))
 
         year = ""
@@ -409,7 +412,11 @@ class DataExtraction:
 
 
             try:
-                kotiutusPlace = self.extractLocation(text, date.end())["location"]
+                #kotiutusPlace = self.extractLocation(text2, date.end())["location"]
+                # customized location extraction:
+                lp = re.compile(ur'\A(?P<location>[A-ZÄ-Öa-zä-ö-]+?)(?=[A-ZÄ-Ö.,:])',re.UNICODE)
+                place = lp.search(text[date.end():date.end()+100])
+                kotiutusPlace = place.group("location")
             except Exception as e:
                 self.errorLogger.logError(DemobilizationPlaceException.eType, self.currentChild )
                 kotiutusPlace = ""
