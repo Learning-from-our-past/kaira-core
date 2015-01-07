@@ -34,10 +34,8 @@ class ChunkChecker:
 
         if self.suspiciousFlag:
             self.suspiciousEntriesCount += 1
-            print text
-            print "SOURCELINE: " + str(sourceline)
             self.entries.append({"child": child, "sourceline": sourceline})
-            print
+
 
 
     def getSuspiciousEntries(self):

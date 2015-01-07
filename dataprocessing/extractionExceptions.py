@@ -58,7 +58,20 @@ class SpouseException(ExtractionException):
     eType = "SPOUSE"
     message = "ERROR in spouse extraction: "
     details = u""
-    eType = u""
+
+
+    def __init__(self, text, type):
+        self.details = text
+        self.eType = type
+
+    def __unicode__(self):
+        return repr(self.message)
+
+class TooManyWivesException(ExtractionException):
+    eType = "TOOMANYWIVES"
+    message = "ERROR in spouse extraction: "
+    details = u""
+
 
     def __init__(self, text, type):
         self.details = text
@@ -71,7 +84,6 @@ class SpouseNameException(ExtractionException):
     eType = "SPOUSENAME"
     message = "ERROR in spouse extraction: "
     details = u""
-    eType = u""
 
     def __init__(self, text, type):
         self.details = text
@@ -84,7 +96,7 @@ class SpouseBirthplaceException(ExtractionException):
     eType = "SPOUSEBIRTHPLACE"
     message = "ERROR in spouse extraction: "
     details = u""
-    eType = u""
+
 
     def __init__(self, text, type):
         self.details = text
@@ -97,7 +109,7 @@ class SpouseBirthdayException(ExtractionException):
     eType = "SPOUSEBIRTHDAY"
     message = "ERROR in spouse extraction: "
     details = u""
-    eType = u""
+
 
     def __init__(self, text, type):
         self.details = text
@@ -168,7 +180,6 @@ class ManLocationException(ExtractionException):
     eType = "MANLOCATION"
     message = "ERROR in location extraction: "
     details = u""
-    eType = u""
 
     def __init__(self, text, type):
         self.details = text
@@ -181,7 +192,6 @@ class WomanLocationException(ExtractionException):
     eType = "WOMANLOCATION"
     message = "ERROR in spouse location extraction: "
     details = u""
-    eType = u""
 
     def __init__(self, text, type):
         self.details = text

@@ -14,9 +14,10 @@ from lxml import etree
 #This script runs the exctraction process by using DataExtraction class's services.
 errors = 0
 count = 0
-root = readData.getXMLroot("fixed_combined.xml")
+file = "rintamamiehet4_tags"
+root = readData.getXMLroot(file + ".xml")
 extractor = DataExtraction()
-
+chunkerCheck = ChunkChecker()
 
 
 errorNodes = []
@@ -65,8 +66,8 @@ class ExceptionLogger:
 
 
 #save the extract4ed info to a csv file:
-with open("soldiers8.csv", "wb") as results:
-    with open("errors8.csv", "wb") as errorcsv:
+with open(file +".csv", "wb") as results:
+    with open(file +"_errors.csv", "wb") as errorcsv:
         writer = unicodecsv.writer(results, delimiter=";")
         writer.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation", "InterviewAddress", "deathDay", "deathMonth", "deathYear", "fallen", "deathLocation", "Served in Talvisota", "Talvisota regiments", "Served in Jatkosota", "Jatkosota regiments","Rank", "DemobilizationDay", "DemobilizationMonth", "DemobilizationYear", "DemobilizationPlace", "Medals", "Hobbies", "hasSpouse", "otherChildren", "otherChildrenCount", "weddingYear",
                          "spouseName", "spouseBirthDay", "spouseBirthMonth","spouseBirthYear","spouseBirthLocation", "spouseDeathDay", "spouseDeathMonth","spouseDeathYear", "spouseDeathLocation", "childCount", "children",
@@ -81,6 +82,7 @@ with open("soldiers8.csv", "wb") as results:
         for child in root:
             try:
                 d = extractor.extraction(child.text, child, errorLogger)
+                chunkerCheck.checkEntry(child, child.sourceline)
                 writer.writerow(createRow(d))
                 count +=1
             except ExtractionException as e:
@@ -95,6 +97,9 @@ with open("soldiers8.csv", "wb") as results:
 
 print "Errors encountered: " + str(errors) + "/" + str(count)
 
+for item in chunkerCheck.getSuspiciousEntries():
+    errorLogger.logError("SUSPICIOUSCHUNK", item["child"])
+
 errorLogger.printErrorBreakdown()
 
 
@@ -106,6 +111,6 @@ GUITool.startGUI(errorLogger.getErrors(), root)
 print "gui loppu"
 
 #write modifications to a new xml-file:
-f = open("fixed_combined.xml", 'w')
+f = open(file + ".xml", 'w')
 f.write(etree.tostring(root, pretty_print=True, encoding='unicode').encode("utf8"))
 f.close()
