@@ -18,7 +18,7 @@ class DataExtraction:
     def extractPersonNameAndBirthday(self, text):
         try:
             #Extract names
-            p = re.compile(ur'\A(?P<surname>[A-ZÄ-Öl() -]{3,})(:?,|.) {0,100}(?P<firstnames>[A-ZÄ-Öa-zä-ö() ]{0,})(:?,|.)',re.UNICODE)
+            p = re.compile(ur'\A(?P<surname>[A-ZÄ-Öl() -]{3,})(:?,|.) {0,100}(?P<firstnames>[A-ZÄ-Öa-zä-ö() -]{0,})(:?,|.)',re.UNICODE)
             m = p.match(unicode(text))
 
             return {"surname": m.group("surname"), "firstnames": m.group("firstnames"), "cursorLocation": m.end()}
@@ -28,12 +28,14 @@ class DataExtraction:
 
 
 
-    def extractBirthday(self, text, cursorLocation, windowWidth = 16):
+    def extractBirthday(self, text, cursorLocation, windowWidth = 18):
 
         try:
             #try to find the date in modified string with regexp
             dateguess = text[cursorLocation:cursorLocation+windowWidth]    #take substring which probably contains the date.
             dateguess = dateguess.replace(" ","")           #remove all whitespace in the substring
+            if text.find("BORUP") != -1:
+                print dateguess
             dp = re.compile(ur'.*(?:s|S|5)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
             date = dp.match(unicode(dateguess))
 
@@ -191,13 +193,15 @@ class DataExtraction:
                     children = self.findChildren(text2[spouseCount[i].start():], 0)
 
                 wife = self.extractSpouse(text2[spouseCount[i].start():endPos], 0)
-                wife["children"] = children
 
-                wives.append(wife)
+                if wife != None:
+                    wife["children"] = children
+                    wives.append(wife)
 
-            if len(wives) > 2:
+            if len(wives) >= 2:
                 #raise SpouseException(text, "TOOMUCHWIVES")
-                print "Vaimot: " + str(len(wives)) +" " + text2
+                self.errorLogger.logError(TooManyWivesException.eType, self.currentChild)
+                #print "Vaimot: " + str(len(wives)) +" " + text2
 
 
             spouseData = { "spouseCount" : len(wives), "wifeList": wives} #self.extractSpouse(text2, cursorLocation)
@@ -225,30 +229,33 @@ class DataExtraction:
             #raise SpouseException(text, "WEDDINGYEAR")
             self.errorLogger.logError(WeddingException.eType, self.currentChild)
 
-        try:
-            spouseName = m.group("spouseName")
-        except Exception as e:
-            self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
-            raise SpouseException(text, "SPOUSENAME")
-        try:
-            spouseBirthYear = self.extractBirthday(text[(m.end()-birthYearWindowLeftOffset):], 0, 64)
-        except ExtractionException as e:
-            raise SpouseException(e.details, "SPOUSEBIRTHDAY")
-            self.errorLogger.logError(SpouseBirthdayException.eType, self.currentChild)
-            spouseBirthYear = {"birthDay": "","birthMonth": "", "birthYear": "", "cursorLocation": m.end()-birthYearWindowLeftOffset + 64}
 
-        try:
-            #print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
-            birthPlace = self.extractLocation(text[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
-        except ExtractionException as e:
-            #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
-            self.errorLogger.logError(SpouseBirthplaceException.eType, self.currentChild)
-            birthPlace= {"location": ""}
+        if m != None:
+            try:
+                spouseName = m.group("spouseName")
+            except Exception as e:
+                self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
+                #raise SpouseException(text, "SPOUSENAME")
+            try:
+                spouseBirthYear = self.extractBirthday(text[(m.end()-birthYearWindowLeftOffset):], 0, 64)
+            except ExtractionException as e:
+                #raise SpouseException(e.details, "SPOUSEBIRTHDAY")
+                self.errorLogger.logError(SpouseBirthdayException.eType, self.currentChild)
+                spouseBirthYear = {"birthDay": "","birthMonth": "", "birthYear": "", "cursorLocation": m.end()-birthYearWindowLeftOffset + 64}
+
+            try:
+                #print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
+                birthPlace = self.extractLocation(text[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
+            except ExtractionException as e:
+                #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
+                self.errorLogger.logError(SpouseBirthplaceException.eType, self.currentChild)
+                birthPlace= {"location": ""}
 
 
-        deathData = self.extractDeath(text, m.end(), 40, False)
-        return {"cursorLocation": deathData["cursorLocation"], "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["location"]}
-
+            deathData = self.extractDeath(text, m.end(), 40, False)
+            return {"cursorLocation": deathData["cursorLocation"], "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["location"]}
+        else:
+            return None
 
 
     #try to find the list of children from the soldier and return it as a single string.
@@ -455,6 +462,7 @@ class DataExtraction:
     def extraction(self, text, xmlElement, eLogger):
         self.errorLogger = eLogger
         self.currentChild = xmlElement
+        text = text.replace("\n", ' ')
         text = ' '.join(text.split())   #remove excess whitespace and linebreaks
         personData = {}
         self.parsingLocation = 0

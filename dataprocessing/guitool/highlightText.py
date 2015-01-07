@@ -41,4 +41,4 @@ class CustomText(tk.Text):
             self.mark_set("matchEnd", "%s+%sc" % (index, length))
 
             self.tag_add(tag, "matchStart", "matchEnd")
-            break
+
