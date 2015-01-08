@@ -14,7 +14,7 @@ from lxml import etree
 #This script runs the exctraction process by using DataExtraction class's services.
 errors = 0
 count = 0
-file = "rintamamiehet4_tags"
+file = "rintamamiehet11_tags"
 root = readData.getXMLroot(file + ".xml")
 extractor = DataExtraction()
 chunkerCheck = ChunkChecker()
