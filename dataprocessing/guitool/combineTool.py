@@ -1,5 +1,7 @@
 from Tkinter import *
 from highlightText import CustomText
+from dialog import Dialog
+from lxml import etree
 
 class Application(Frame):
 
@@ -15,14 +17,13 @@ class Application(Frame):
 
     def createWidgets(self):
 
-        self.parent.title = "Chunk editor"
         self.pack(fill=BOTH, expand=1)
         self.columnconfigure(1, weight=1, minsize=200)
         self.columnconfigure(3)
         self.columnconfigure(4)
 
         self.rowconfigure(3, weight=1)
-        self.rowconfigure(5, pad=7)
+        self.rowconfigure(5, weight=1)
 
         lbl = Label(self, text="Chunk")
         lbl.grid(sticky=W, pady=4, padx=5)
@@ -59,12 +60,30 @@ class Application(Frame):
         self.lb.bind("<<ListboxSelect>>", self.onSelect)
 
 
-        hbtn = Button(self, text=" Save ", command=self.saveChildModifications)
-        hbtn.grid(row=5, column=3, padx=5, sticky=N+E+S)
+        #buttons
+        buttonframe = Frame(self)
+        #buttonframe.place(x=200,y=300)
+        buttonframe.grid(row=5, column=2, padx=5, sticky=N)
 
-        obtn = Button(self, text="Combine", command=self.combineChildren)
-        obtn.grid(row=5, column=2,sticky=N+E+S)
+        hbtn = Button(buttonframe, text=" Save ", command=self.saveChildModifications)
+        hbtn.pack(side=LEFT)
+        #hbtn.grid(row=5, column=3, padx=5, sticky=N+E+S)
 
+        obtn = Button(buttonframe, text="Combine", command=self.combineChildren)
+        #obtn.grid(row=5, column=2,sticky=N+E+S)
+        obtn.pack(side=LEFT)
+
+        nbtn = Button(buttonframe, text="New", command=self.newChild)
+        #nbtn.grid(row=5, column=1,sticky=N+E+S)
+        nbtn.pack(side=LEFT)
+
+    def newChild(self):
+        print "NEW"
+        d = Dialog(self.master, "Dialog")
+        if len(d.result) > 8:
+            child = etree.SubElement(self.xmldocument, "PERSON")
+            child.text = d.result
+            child.attrib["createdFromEditor"] = "True"
 
     def saveChildModifications(self):
         #take the child at question:
@@ -117,6 +136,7 @@ class Application(Frame):
 def startGUI(objectList, xmldocument):
     root = Tk()
     root.geometry("800x800+300+100")
+    root.title("Fixtool")
     app = Application(objectList,xmldocument, master=root)
     app.mainloop()
     #root.destroy()
