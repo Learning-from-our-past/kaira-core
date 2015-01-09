@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Tkinter import *
 from highlightText import CustomText
 from dialog import Dialog
@@ -10,7 +11,8 @@ class Application(Frame):
     currentChild = None
     highlightPatternKot = u'Kot|kot'
     highlightPatternPso = u'Pso|pso'
-    highlightPatternSot = u'Sotarvo|sotarvo'
+    highlightPatternSot = u'Sotarvo|sotarvo|SOIarvo'
+    highlightPatternLapset = u'Lapset|lapset|lapsel|Poika|poika|Tytär|tytär|tylär'
 
     def say_hi(self):
         print "hi there, everyone!"
@@ -39,6 +41,7 @@ class Application(Frame):
         self.textarea.tag_configure("kot", background="#ff0000")
         self.textarea.tag_configure("pso", background="#ff99cc")
         self.textarea.tag_configure("sotarvo", background="#4584d3")
+        self.textarea.tag_configure("lapset", background="#488627")
         self.textarea.grid(row=5, column=0, columnspan=2, rowspan=4,
             padx=5, sticky=E+W+S+N)
 
@@ -113,6 +116,7 @@ class Application(Frame):
         self.textarea.highlight_pattern(self.highlightPatternKot, "kot", length=3, regexp=True)
         self.textarea.highlight_pattern(self.highlightPatternPso, "pso", length=3, regexp=True)
         self.textarea.highlight_pattern(self.highlightPatternSot, "sotarvo", length=7, regexp=True)
+        self.textarea.highlight_pattern(self.highlightPatternLapset, "lapset", length=6, regexp=True)
 
         #find previous child's text
         self.currentPrevious = self.currentChild["child"].getprevious()

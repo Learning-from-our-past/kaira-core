@@ -15,7 +15,7 @@ class DataExtraction:
     errorLogger = None
     currentChild = None
 
-    def extractPersonNameAndBirthday(self, text):
+    def extractPersonName(self, text):
         try:
             #Extract names
             p = re.compile(ur'\A(?P<surname>[A-ZÄ-Öl() -]{3,})(:?,|.) {0,100}(?P<firstnames>[A-ZÄ-Öa-zä-ö() -]{0,})(:?,|.)',re.UNICODE)
@@ -339,7 +339,7 @@ class DataExtraction:
 
     #try to find the rank of a soldier
     def findRank(self, text):
-        findRankRE = regex.compile(ur'(?:Sotarvo|Ylenn){s<=2}(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,)',re.UNICODE)  #first find out if there is spouse:
+        findRankRE = regex.compile(ur'(?:Sotarvo|SOIarvo|Ylenn){s<=2}(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,)',re.UNICODE|re.IGNORECASE)  #first find out if there is spouse:
         findRankREm = findRankRE.search(unicode(text))
 
         if findRankREm != None:
@@ -404,7 +404,7 @@ class DataExtraction:
         text = text.replace("\n","")
 
         #Extract date
-        p = re.compile(ur'(?:Kot|kot)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
+        p = re.compile(ur'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
         date = p.search(unicode(text))
 
         year = ""
@@ -466,7 +466,7 @@ class DataExtraction:
         text = ' '.join(text.split())   #remove excess whitespace and linebreaks
         personData = {}
         self.parsingLocation = 0
-        personData = self.extractPersonNameAndBirthday(text)
+        personData = self.extractPersonName(text)
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
         personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
         personLocation["birthLocation"] = personLocation["location"]
