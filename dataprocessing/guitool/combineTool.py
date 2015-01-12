@@ -13,9 +13,9 @@ class Application(Frame):
     highlightPatternPso = u'Pso|pso'
     highlightPatternSot = u'Sotarvo|sotarvo|SOIarvo'
     highlightPatternLapset = u'Lapset|lapset|lapsel|Poika|poika|Tytär|tytär|tylär'
+    callback = None
 
-    def say_hi(self):
-        print "hi there, everyone!"
+
 
     def createWidgets(self):
 
@@ -128,19 +128,23 @@ class Application(Frame):
 
     def __init__(self, objectList, xmldocument, master=None):
         Frame.__init__(self, master)
+        self.master.protocol("WM_DELETE_WINDOW", self.closeHandler)
         self.objectList = objectList
         self.xmldocument = xmldocument
         self.parent = master
         self.createWidgets()
 
-    def say(self):
-        print "asdfsadsa"
+    def closeHandler(self):
+        print "Sulje combinetool"
+        self.master.destroy()
+        self.callback()
 
 
-def startGUI(objectList, xmldocument):
+def startGUI(objectList, xmldocument, callback):
     root = Tk()
     root.geometry("800x800+300+100")
     root.title("Fixtool")
     app = Application(objectList,xmldocument, master=root)
+    app.callback = callback
     app.mainloop()
     #root.destroy()

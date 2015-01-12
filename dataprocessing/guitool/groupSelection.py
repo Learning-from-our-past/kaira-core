@@ -20,19 +20,20 @@ import guitool.combineTool as CombineTool
 
 class Application(Frame):
 
+    callback = None
     errorList = {}
     xmlroot = None
     currentSelection = None
-    def __init__(self, parent, errorlist, xmlroot):
+    def __init__(self, parent, errorlist, xmlroot, callback):
         Frame.__init__(self, parent)
         self.errorList = errorlist
         self.xmlroot = xmlroot
-
+        self.callback = callback
         self.parent = parent
         self.initUI()
 
     def initUI(self):
-
+        self.master.protocol("WM_DELETE_WINDOW", self.closeHandler)
         self.parent.title("Listbox")
 
         self.pack(fill=BOTH, expand=1)
@@ -52,8 +53,14 @@ class Application(Frame):
 
     def gotoEdit(self):
         print "Start tool..."
-        CombineTool.startGUI(self.currentSelection, self.xmlroot)
-        self.quit()
+        self.master.withdraw()
+        CombineTool.startGUI(self.currentSelection, self.xmlroot, self.callbackEdit)
+        print "back"
+
+
+
+    def callbackEdit(self):
+        self.master.deiconify()
 
     def onSelect(self, val):
 
@@ -64,11 +71,16 @@ class Application(Frame):
         self.currentSelection = self.errorList[value]
         print self.currentSelection
 
+    def closeHandler(self):
+        print "close groupselection"
+        self.quit()
+        self.master.destroy()
+        self.callback(self.xmlroot)
 
-
-def startGUI(objectList, xmlroot):
+def startGUI(objectList, xmlroot, callback):
     root = Tk()
-    ex = Application(root, objectList, xmlroot)
+    ex = Application(root, objectList, xmlroot, callback)
     root.geometry("500x500+300+300")
     root.mainloop()
+
     #root.destroy()

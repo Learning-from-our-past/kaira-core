@@ -13,7 +13,7 @@ from lxml import etree
 
 
 
-def startProcess(filePath):
+def startProcess(filePath, callback):
     #This script runs the exctraction process by using DataExtraction class's services.
     errors = 0
     count = 0
@@ -105,18 +105,20 @@ def startProcess(filePath):
 
     errorLogger.printErrorBreakdown()
 
+    #callback()
+    return {"errors": errorLogger.getErrors(), "root" : root, "file": file}
 
 
-    ###############################################################
-    print "Start error fix tool..."
 
-    GUITool.startGUI(errorLogger.getErrors(), root)
-    print "gui loppu"
 
+
+def saveModificationsToFile(file, root):
     #write modifications to a new xml-file:
+    print "Kirjoitetaan " + file
     f = open(file + ".xml", 'w')
     f.write(etree.tostring(root, pretty_print=True, encoding='unicode').encode("utf8"))
     f.close()
+    print "valmis"
 
 if __name__ == '__main__':
     startProcess("rintamamiehet11_tags")
