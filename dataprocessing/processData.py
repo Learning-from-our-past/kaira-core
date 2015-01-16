@@ -71,7 +71,7 @@ def startProcess(filePath, callback):
     #save the extract4ed info to a csv file:
     with open(file +".csv", "wb") as results:
         with open(file +"_errors.csv", "wb") as errorcsv:
-            writer = unicodecsv.writer(results, delimiter=";")
+            writer = unicodecsv.writer(results, delimiter="&")
             writer.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation", "InterviewAddress", "deathDay", "deathMonth", "deathYear", "fallen", "deathLocation", "Served in Talvisota", "Talvisota regiments", "Served in Jatkosota", "Jatkosota regiments","Rank", "DemobilizationDay", "DemobilizationMonth", "DemobilizationYear", "DemobilizationPlace", "Medals", "Hobbies", "hasSpouse", "otherChildren", "otherChildrenCount", "weddingYear",
                              "spouseName", "spouseBirthDay", "spouseBirthMonth","spouseBirthYear","spouseBirthLocation", "spouseDeathDay", "spouseDeathMonth","spouseDeathYear", "spouseDeathLocation", "childCount", "children",
                              "weddingYear2",

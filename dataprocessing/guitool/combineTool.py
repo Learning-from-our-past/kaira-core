@@ -93,6 +93,9 @@ class Application(Frame):
         self.currentChild["child"].text = self.textarea.get(1.0, END)
         self.currentChild["child"].attrib["checked"] = "True"
         print self.currentChild["child"].text
+        #save changes to previous too
+        self.currentPrevious.text = self.textareaPrevious.get(1.0, END)
+
 
     def combineChildren(self):
         newtxt = self.textareaPrevious.get(1.0, END).strip('\n') + " " + self.textarea.get(1.0, END).strip('\n')

@@ -34,9 +34,7 @@ class DataExtraction:
             #try to find the date in modified string with regexp
             dateguess = text[cursorLocation:cursorLocation+windowWidth]    #take substring which probably contains the date.
             dateguess = dateguess.replace(" ","")           #remove all whitespace in the substring
-            if text.find("BORUP") != -1:
-                print dateguess
-            dp = re.compile(ur'.*(?:s|S|5)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
+            dp = re.compile(ur'.*(?:s|S|5)\.?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
             date = dp.match(unicode(dateguess))
 
             #get the result from correct capturegroup. If there is full date (12.7.18) it is in 1, if only year it is in 2.
@@ -52,6 +50,9 @@ class DataExtraction:
                 year = "19" + year
             elif int(year) < 1800:
                 year = "18" + year
+
+            if int(year) > 2000 or  int(year) < 1800:
+                raise BirthdayException(dateguess)
 
         except Exception as e:
             #print "----BIRTHDAY----"
@@ -339,7 +340,7 @@ class DataExtraction:
 
     #try to find the rank of a soldier
     def findRank(self, text):
-        findRankRE = regex.compile(ur'(?:Sotarvo|SOIarvo|Ylenn){s<=2}(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,)',re.UNICODE|re.IGNORECASE)  #first find out if there is spouse:
+        findRankRE = regex.compile(ur'(?:(?:Sotarvo){s<=2}|(?:SOIarvo){s<=2}|(?:Ylenn){s<=2})(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,| )',re.UNICODE|re.IGNORECASE)  #first find out if there is spouse:
         findRankREm = findRankRE.search(unicode(text))
 
         if findRankREm != None:
@@ -404,7 +405,7 @@ class DataExtraction:
         text = text.replace("\n","")
 
         #Extract date
-        p = re.compile(ur'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
+        p = re.compile(ur'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE | re.IGNORECASE)
         date = p.search(unicode(text))
 
         year = ""
