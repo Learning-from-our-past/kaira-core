@@ -15,6 +15,9 @@ class DataExtraction:
     errorLogger = None
     currentChild = None
 
+    monthNameNumberMapping = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik" : 4,
+    "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
+
     def extractPersonName(self, text):
         try:
             #Extract names
@@ -160,7 +163,7 @@ class DataExtraction:
             if forMan and forDeath == False:
                 self.errorLogger.logError(ManLocationException.eType, self.currentChild )
             if not forMan and forDeath == False:
-                self.errorLogger.logError(WomanLocationException.eType, self.currentChild )
+                self.errorLogger.logError(SpouseBirthplaceException.eType, self.currentChild )
 
             raise BirthplaceException(text2)
 
@@ -405,15 +408,31 @@ class DataExtraction:
         text = text.replace("\n","")
 
         #Extract date
-        p = re.compile(ur'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE | re.IGNORECASE)
+        p = re.compile(ur'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4}(?=\D\D\D\D\D))|(?:(?P<monthName>[a-zä-ö]*)(?P<monthYear>\d{2,4}(?=\D\D\D\D\D))))',re.UNICODE | re.IGNORECASE)
         date = p.search(unicode(text))
 
+        if text.find("AITALAAKSO") != -1:
+            print text
+
         year = ""
+        month = ""
         if date != None:
             if date.group("year") == None:
-                year = date.group("yearOnly")
+
+                if date.group("yearOnly") == None:
+                    #year and month available
+                    year = date.group("monthYear")
+                    month = date.group("monthName")
+                    #try to map month name to a number.
+                    if month in self.monthNameNumberMapping:
+                        month = self.monthNameNumberMapping[month]
+                    else:
+                        month = ""
+                else:
+                    year = date.group("yearOnly")   #only year available
             else:
                 year = date.group("year")
+                month = date.group("month")
 
             #fix years to four digit format.
             year = "19" + year
@@ -430,7 +449,7 @@ class DataExtraction:
                 kotiutusPlace = ""
 
 
-            return {"kotiutusDay": date.group("day"),"kotiutusMonth": date.group("month"), "kotiutusYear": year, "kotiutusPlace" : kotiutusPlace}    #, "birthday": m.group(3)
+            return {"kotiutusDay": date.group("day"),"kotiutusMonth": month, "kotiutusYear": year, "kotiutusPlace" : kotiutusPlace}    #, "birthday": m.group(3)
         else:
             self.errorLogger.logError(DemobilizationTimeException.eType, self.currentChild )
             return {"kotiutusDay": "","kotiutusMonth": "", "kotiutusYear": "", "kotiutusPlace" : ""}
