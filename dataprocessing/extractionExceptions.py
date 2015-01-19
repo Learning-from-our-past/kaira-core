@@ -188,14 +188,3 @@ class ManLocationException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
-class WomanLocationException(ExtractionException):
-    eType = "WOMANLOCATION"
-    message = "ERROR in spouse location extraction: "
-    details = u""
-
-    def __init__(self, text, type):
-        self.details = text
-        self.eType = type
-
-    def __unicode__(self):
-        return repr(self.message)
