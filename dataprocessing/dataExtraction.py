@@ -143,7 +143,7 @@ class DataExtraction:
                 text2 = text2[0:f]
 
         try:
-            p = re.compile(ur'\d+(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
+            p = re.compile(ur'(?:\d+| s)(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
             m = p.search(unicode(text2))
 
             #check if the string has data on death. If it is before the location, be careful to not
@@ -221,8 +221,9 @@ class DataExtraction:
     #spouse information
     def extractSpouse(self, text, cursorLocation):
         birthYearWindowLeftOffset = 10
+
         #try to find wedding year and the name of the spouse. Wedding year is optional.
-        p = re.compile(ur'\b(?:P|p)so\b(?: \bvst?l?a ?(?P<weddingYear>\d{1,2}))? ?(?P<spouseName>[A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
+        p = re.compile(ur'\b(?:P|p)so\b(?: \bvst?l?a ?(?P<weddingYear>\d{1,2})\.?)? ?(?P<spouseName>[A-ZÄ-Ö][A-ZÄ-Öa-zä-ö -]+)(?:,|.)',re.UNICODE)
         m = p.search(unicode(text))
         try:
             if m.group("weddingYear") != None:
@@ -245,11 +246,11 @@ class DataExtraction:
             except ExtractionException as e:
                 #raise SpouseException(e.details, "SPOUSEBIRTHDAY")
                 self.errorLogger.logError(SpouseBirthdayException.eType, self.currentChild)
-                spouseBirthYear = {"birthDay": "","birthMonth": "", "birthYear": "", "cursorLocation": m.end()-birthYearWindowLeftOffset + 64}
-
+                spouseBirthYear = {"birthDay": "","birthMonth": "", "birthYear": "", "cursorLocation": m.end()-birthYearWindowLeftOffset}
+                #print text[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset-10:]
             try:
-                #print text2[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
-                birthPlace = self.extractLocation(text[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:], 0, False)
+                #print text[m.end() + spouseBirthYear["cursorLocation"]-birthYearWindowLeftOffset:]
+                birthPlace = self.extractLocation(text[m.end():], 0, False)
             except ExtractionException as e:
                 #raise SpouseException(e.details, "SPOUSEBIRTHPLACE")
                 self.errorLogger.logError(SpouseBirthplaceException.eType, self.currentChild)

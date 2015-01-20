@@ -44,7 +44,7 @@ class NameException(ExtractionException):
         return repr(self.message)
 
 class WeddingException(ExtractionException):
-    eType = "WEDDING"
+    eType = "WEDDING OR SPOUSENAME"
     message = "ERROR in wedding extraction: "
     details = u""
 
