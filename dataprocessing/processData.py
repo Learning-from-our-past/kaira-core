@@ -27,7 +27,7 @@ def startProcess(filePath, callback):
 
     #tranforms the dict of the entry to a format which can be written into csv
     def createRow(d):
-        row = [d["surname"], d["firstnames"], d["birthDay"], d["birthMonth"], d["birthYear"], d["birthLocation"], d["address"], d["deathDay"], d["deathMonth"], d["deathYear"], d["kaatunut"], d["deathLocation"], d["talvisota"], d["talvisotaregiments"], d["jatkosota"], d["jatkosotaregiments"], d["rank"], d["kotiutusDay"], d["kotiutusMonth"], d["kotiutusYear"], d["kotiutusPlace"], d["medals"], d["hobbies"], d["hasSpouse"]]
+        row = [d["surname"], d["firstnames"], d["birthDay"], d["birthMonth"], d["birthYear"], d["birthLocation"], d["profession"], d["address"], d["deathDay"], d["deathMonth"], d["deathYear"], d["kaatunut"], d["deathLocation"], d["talvisota"], d["talvisotaregiments"], d["jatkosota"], d["jatkosotaregiments"], d["rank"], d["kotiutusDay"], d["kotiutusMonth"], d["kotiutusYear"], d["kotiutusPlace"], d["medals"], d["hobbies"], d["hasSpouse"]]
         """
         """
         if "children" in d:
@@ -72,7 +72,7 @@ def startProcess(filePath, callback):
     with open(file +".csv", "wb") as results:
         with open(file +"_errors.csv", "wb") as errorcsv:
             writer = unicodecsv.writer(results, delimiter="&")
-            writer.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation", "InterviewAddress", "deathDay", "deathMonth", "deathYear", "fallen", "deathLocation", "Served in Talvisota", "Talvisota regiments", "Served in Jatkosota", "Jatkosota regiments","Rank", "DemobilizationDay", "DemobilizationMonth", "DemobilizationYear", "DemobilizationPlace", "Medals", "Hobbies", "hasSpouse", "otherChildren", "otherChildrenCount", "weddingYear",
+            writer.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation", "Profession", "InterviewAddress", "deathDay", "deathMonth", "deathYear", "fallen", "deathLocation", "Served in Talvisota", "Talvisota regiments", "Served in Jatkosota", "Jatkosota regiments","Rank", "DemobilizationDay", "DemobilizationMonth", "DemobilizationYear", "DemobilizationPlace", "Medals", "Hobbies", "hasSpouse", "otherChildren", "otherChildrenCount", "weddingYear",
                              "spouseName", "spouseBirthDay", "spouseBirthMonth","spouseBirthYear","spouseBirthLocation", "spouseDeathDay", "spouseDeathMonth","spouseDeathYear", "spouseDeathLocation", "childCount", "children",
                              "weddingYear2",
                              "spouseName2", "spouseBirthDay2", "spouseBirthMonth2","spouseBirthYear2","spouseBirthLocation2", "spouseDeathDay2", "spouseDeathMonth2","spouseDeathYear2", "spouseDeathLocation2", "childCount2", "children2"

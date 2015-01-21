@@ -478,7 +478,17 @@ class DataExtraction:
 
         return {"hobbies" : hobbies}
 
+    def extractProfession(self, text):
+        p = re.compile(ur'^(?:,|\.)(?P<profession>[A-ZÄ-Öa-zä-ö -]+?)(?:\.|Pso)',re.UNICODE | re.IGNORECASE)  #
+        m = p.search(unicode(text))
 
+        if m != None:
+            profession = m.group("profession")
+        else:
+            self.errorLogger.logError(ProfessionException.eType, self.currentChild )
+            profession = ""
+
+        return {"profession" : profession}
 
     def extraction(self, text, xmlElement, eLogger):
         self.errorLogger = eLogger
@@ -490,6 +500,7 @@ class DataExtraction:
         personData = self.extractPersonName(text)
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
         personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
+        profession = self.extractProfession(text[personLocation["cursorLocation"]-4:])
         personLocation["birthLocation"] = personLocation["location"]
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 32)
         spouseData = self.findSpouses(text, personLocation["cursorLocation"])
@@ -510,4 +521,4 @@ class DataExtraction:
 
 
         #print spouse
-        return dict(personData.items() + personBirthday.items() + personLocation.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items() + kotiutus.items() + address.items() + hobbies.items())
+        return dict(personData.items() + personBirthday.items() + personLocation.items() + profession.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items() + kotiutus.items() + address.items() + hobbies.items())
