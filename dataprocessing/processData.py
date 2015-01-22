@@ -19,6 +19,7 @@ def startProcess(filePath, callback):
     count = 0
     file = filePath #"rintamamiehet11_tags"
     root = readData.getXMLroot(file + ".xml")
+    print "XML file elements: " + str(len(root))
     extractor = DataExtraction()
     chunkerCheck = ChunkChecker()
 
