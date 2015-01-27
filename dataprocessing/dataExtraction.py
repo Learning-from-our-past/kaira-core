@@ -71,28 +71,33 @@ class DataExtraction:
 
     def extractDeath(self, text, cursorLocation, windowWidth = 16 , forMan=True):
 
-        regexPattern = ur'.*k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
+        regexPattern = ur'k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
         kaatunut = False
         if forMan:
             #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
             f = text.find("Pso")
+            if f == -1:
+                f = text.find("pso")
             if f != -1:
                 text = text[0:f]
+
 
             #check if man has died in war
             k = text.find(" kaat ")
             if k != -1:
                 kaatunut = True
-                regexPattern = ur'.*kaat(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
+                regexPattern = ur'kaat(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
+
+            #print text
 
         try:
             #try to find the date in modified string with regexp
             deathLocation = ""
-            dateguess = text[cursorLocation:cursorLocation+windowWidth]    #take substring which probably contains the date.
+            dateguess = text[cursorLocation:cursorLocation+windowWidth] #text[cursorLocation:cursorLocation+windowWidth]    #take substring which probably contains the date.
             dateguess = dateguess.replace(" ","")           #remove all whitespace in the substring
             dp = re.compile(regexPattern,re.UNICODE)
             date = dp.search(unicode(dateguess))
-
+            #print dateguess
 
 
             #get the result from correct capturegroup. If there is full date (12.7.18) it is in 1, if only year it is in 2.
@@ -107,10 +112,12 @@ class DataExtraction:
             year = "19" + year
 
 
-
-            d = self.extractLocation(text, cursorLocation+date.end(), forMan, True)
-            cursorLocation = d["cursorLocation"]
-            deathLocation = d["birthLocation"]  #a misnomer since we use birthlocation function to find the deathlocation. Refactor.
+            try:
+                d = self.extractLocation(text, cursorLocation+date.end(), forMan, True)
+                cursorLocation = d["cursorLocation"]
+                deathLocation = d["location"]  #a misnomer since we use birthlocation function to find the deathlocation. Refactor.
+            except Exception as e:
+                deathLocation = ""
             #try to find the death place:
             #self.extractBirthLocation(text, )
 
@@ -119,6 +126,7 @@ class DataExtraction:
             #print "----BIRTHDAY----"
             #print dateguess
             #print "---------------------"
+            print "poikkeus!"
             return {"deathDay": "","deathMonth": "", "deathYear": "", "kaatunut": "", "deathLocation": deathLocation, "cursorLocation": cursorLocation}
             #raise BirthdayException(dateguess)
 
@@ -132,13 +140,16 @@ class DataExtraction:
         if forMan:
             text2 = text[cursorLocation-4:cursorLocation+24]
             f = text2.find("Pso")
+            if f == -1:
+                f = text2.find("pso")
             if f != -1:
                 text2 = text2[0:f]
         else:
             #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
             text2 = text[cursorLocation:cursorLocation+24]
             f = text2.find("Pso")
-
+            if f == -1:
+                f = text2.find("pso")
             if f != -1:
                 text2 = text2[0:f]
 
@@ -162,8 +173,6 @@ class DataExtraction:
         except Exception as e:
             if forMan and forDeath == False:
                 self.errorLogger.logError(ManLocationException.eType, self.currentChild )
-            if not forMan and forDeath == False:
-                self.errorLogger.logError(SpouseBirthplaceException.eType, self.currentChild )
 
             raise BirthplaceException(text2)
 
@@ -344,7 +353,7 @@ class DataExtraction:
 
     #try to find the rank of a soldier
     def findRank(self, text):
-        findRankRE = regex.compile(ur'(?:(?:Sotarvo){s<=2}|(?:SOIarvo){s<=2}|(?:Ylenn){s<=2})(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,| )',re.UNICODE|re.IGNORECASE)  #first find out if there is spouse:
+        findRankRE = regex.compile(ur'(?:(?:Sotarvo){s<=1}|(?:SOIarvo){s<=1}|(?:Ylenn){s<=1})(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,| )',re.UNICODE|re.IGNORECASE)  #first find out if there is spouse:
         findRankREm = findRankRE.search(unicode(text))
 
         if findRankREm != None:
@@ -412,8 +421,7 @@ class DataExtraction:
         p = re.compile(ur'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4}(?=\D\D\D\D\D))|(?:(?P<monthName>[a-zä-ö]*)(?P<monthYear>\d{2,4}(?=\D\D\D\D\D))))',re.UNICODE | re.IGNORECASE)
         date = p.search(unicode(text))
 
-        if text.find("AITALAAKSO") != -1:
-            print text
+
 
         year = ""
         month = ""
@@ -479,12 +487,13 @@ class DataExtraction:
         return {"hobbies" : hobbies}
 
     def extractProfession(self, text):
-        p = re.compile(ur'^(?:,|\.)(?P<profession>[A-ZÄ-Öa-zä-ö -]+?)(?:\.|Pso)',re.UNICODE | re.IGNORECASE)  #
+        p = re.compile(ur'^ ?(?:,|\.| )(?P<profession>[A-ZÄ-Öa-zä-ö !-]+?)(?:\.|,|Pso)',re.UNICODE | re.IGNORECASE)  #
         m = p.search(unicode(text))
 
         if m != None:
             profession = m.group("profession")
         else:
+            #print text
             self.errorLogger.logError(ProfessionException.eType, self.currentChild )
             profession = ""
 
@@ -500,9 +509,10 @@ class DataExtraction:
         personData = self.extractPersonName(text)
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
         personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
-        profession = self.extractProfession(text[personLocation["cursorLocation"]-4:])
         personLocation["birthLocation"] = personLocation["location"]
-        personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 32)
+
+        profession = self.extractProfession(text[personLocation["cursorLocation"]-4:])
+        personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 320)
         spouseData = self.findSpouses(text, personLocation["cursorLocation"])
 
         #if there is no spouse, try to still find children:
