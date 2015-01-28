@@ -75,11 +75,16 @@ class DataExtraction:
         kaatunut = False
         if forMan:
             #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
-            f = text.find("Pso")
-            if f == -1:
-                f = text.find("pso")
-            if f != -1:
-                text = text[0:f]
+
+            r = re.finditer(ur'(?P<match>pso|ts:|js:)', text, re.IGNORECASE | re.UNICODE)
+            endPos = -1
+            for m in r:
+                endPos = m.start()
+                break
+
+
+            if endPos != -1:
+                text = text[0:endPos]
 
 
             #check if man has died in war
@@ -126,7 +131,6 @@ class DataExtraction:
             #print "----BIRTHDAY----"
             #print dateguess
             #print "---------------------"
-            print "poikkeus!"
             return {"deathDay": "","deathMonth": "", "deathYear": "", "kaatunut": "", "deathLocation": deathLocation, "cursorLocation": cursorLocation}
             #raise BirthdayException(dateguess)
 
