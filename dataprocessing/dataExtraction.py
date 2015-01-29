@@ -296,7 +296,7 @@ class DataExtraction:
                 if len(c) > 2:
                     childList2.append(c)
 
-            return {"children": m.group("children"), "childCount" : len(childList2),"cursorLocation" : cursorLocation + m.end()}
+            return self.sortChildren( {"children": m.group("children"), "childCount" : len(childList2),"cursorLocation" : cursorLocation + m.end()})
         else:
             #try to find children encoded with numbers words:
             p = re.compile(ur'(?P<count>yksi|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen) (?:lasta|lapsi|tytär|poika)',re.UNICODE | re.IGNORECASE)
@@ -312,7 +312,16 @@ class DataExtraction:
             else:
                 #raise ChildrenException(text)
                 self.errorLogger.logError(ChildrenException.eType, self.currentChild )
-                return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
+                return  {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
+
+    #sort children based on the marriage they were conceived in
+    def sortChildren(self, childdict):
+        if childdict["childCount"] > 0:
+            
+        else:
+            return childdict
+
+        pass
 
  #check if the count of "Js" and "Ts" makes sense.
 
