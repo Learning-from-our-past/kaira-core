@@ -4,6 +4,7 @@ import re
 import unicodecsv
 import unicodedata
 import nltk
+from operator import itemgetter
 from extractionExceptions import *
 import regex
 
@@ -283,7 +284,7 @@ class DataExtraction:
         text = re.sub(ur'[:;\!\?\+~¨\^\'\"]', '', text)
         #print text
 
-        p = re.compile(ur'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osall))|(?=pso)))',re.UNICODE | re.IGNORECASE)
+        p = re.compile(ur'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osall))))',re.UNICODE | re.IGNORECASE) #Removed |(?=pso)
         m = p.search(unicode(text))
 
         if m != None:
@@ -317,11 +318,56 @@ class DataExtraction:
     #sort children based on the marriage they were conceived in
     def sortChildren(self, childdict):
         if childdict["childCount"] > 0:
-            
+            #try to find keywords:
+            psoEdp = re.compile(ur'(?P<psoed>pson ed aviol|vaimon I aviol|vaimon ed aviol|rvan ed aviol|pson I aviol|pson I avioi)', re.UNICODE)
+            nykp = re.compile(ur'(?P<nykaviol>nyk aviol|nykyis aviol)', re.UNICODE)
+            miehEdp = re.compile(ur'(?P<miehed>I aviol|ed aviol|miehen I aviol|aik aviol|miehen ed aviol|II aviol)', re.UNICODE)
+
+            childText = childdict["children"]
+            psoEdm = psoEdp.search(childText)
+            nykm = nykp.search(childText)
+            miehEdm = miehEdp.search(childText)
+
+            #figure out the positions where each section begins and ends
+            substrPositions = []
+
+            if psoEdm != None:
+                substrPositions.append({"type" : "psoEd", "begin" : psoEdm.start("psoed"), "end" : psoEdm.end("psoed")})
+            if miehEdm != None:
+                substrPositions.append({"type" : "miehEd", "begin" : miehEdm.start("miehed"), "end" : miehEdm.end("miehed")})
+            if nykm != None:
+                substrPositions.append({"type" : "nyk", "begin" : nykm.start("nykaviol"), "end" : nykm.end("nykaviol")})
+
+            #sort list in order of positions in text:
+            childPosOrdered = sorted(substrPositions, key=itemgetter("begin"))
+            for i in range(0, len(childPosOrdered)):
+                if i+1 < len(childPosOrdered):
+                    #define the end position of the substring containing the children data. It
+                    #is the begnning of the next part or the end of the string.
+                    childPosOrdered[i]["childEnd"] = childPosOrdered[i+1]["begin"]
+                else:
+                    childPosOrdered[i]["childEnd"] = len(childText)
+
+
+            if psoEdm != None or nykm != None or miehEdm != None:
+                pass
+                #print childPosOrdered
+
+            if len(substrPositions) == 0:
+                #TODO: KAIKKI LAPSET NYKYISESTÄ.
+                pass
+
+            separatedChildren = {}
+            for item in childPosOrdered:
+                separatedChildren[item["type"]] = childText[item["end"]:item["childEnd"]]
+            if len(childPosOrdered) > 0:
+                print childText
+                print separatedChildren
+
         else:
             return childdict
 
-        pass
+        return childdict    #TODO: OTA POIS KUN KOODI ON VALMIS
 
  #check if the count of "Js" and "Ts" makes sense.
 
