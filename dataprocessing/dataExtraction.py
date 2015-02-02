@@ -284,7 +284,7 @@ class DataExtraction:
         text = re.sub(ur'[:;\!\?\+~¨\^\'\"]', '', text)
         #print text
 
-        p = re.compile(ur'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osall))))',re.UNICODE | re.IGNORECASE) #Removed |(?=pso)
+        p = re.compile(ur'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osa)|(?:Osall))))',re.UNICODE | re.IGNORECASE) #Removed |(?=pso)
         m = p.search(unicode(text))
 
         if m != None:
@@ -307,21 +307,21 @@ class DataExtraction:
             if m != None:
                 if m.group("count").lower() in numberwords:
                     #print "Avainsana löytyi: " + str(numberwords[m.group("count").lower()])
-                    return {"children": "", "cursorLocation" : cursorLocation, "childCount": numberwords[m.group("count").lower()]}
+                    return {"children": "", "cursorLocation" : cursorLocation, "childCount": numberwords[m.group("count").lower()],  "separated" : {"nyk": "", "miehEd" : "", "psoEd" : ""}}
                 else:
-                    return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
+                    return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0,  "separated" : {"nyk": "", "miehEd" : "", "psoEd" : ""}}
             else:
                 #raise ChildrenException(text)
                 self.errorLogger.logError(ChildrenException.eType, self.currentChild )
-                return  {"children": "", "cursorLocation" : cursorLocation, "childCount": 0}
+                return  {"children": "", "cursorLocation" : cursorLocation, "childCount": 0, "separated" : {"nyk": "", "miehEd" : "", "psoEd" : ""}}
 
     #sort children based on the marriage they were conceived in
     def sortChildren(self, childdict):
         if childdict["childCount"] > 0:
             #try to find keywords:
-            psoEdp = re.compile(ur'(?P<psoed>pson ed aviol|vaimon I aviol|vaimon ed aviol|rvan ed aviol|pson I aviol|pson I avioi)', re.UNICODE)
+            psoEdp = re.compile(ur'(?P<psoed>pson ed aviol|pson aik aviol|vaimon I aviol|vaimon ed aviol|rvan ed aviol|pson I aviol|pson I avioi|miehen I)', re.UNICODE)
             nykp = re.compile(ur'(?P<nykaviol>nyk aviol|nykyis aviol)', re.UNICODE)
-            miehEdp = re.compile(ur'(?P<miehed>I aviol|ed aviol|miehen I aviol|aik aviol|miehen ed aviol|II aviol)', re.UNICODE)
+            miehEdp = re.compile(ur'(?P<miehed>(?<!n )I aviol|(?<!n )ed aviol|miehen I aviol|(?<!pson )aik aviol|miehen ed aviol|(?<!n )II aviol|(?<!n )II? avlol)', re.UNICODE)
 
             childText = childdict["children"]
             psoEdm = psoEdp.search(childText)
@@ -348,26 +348,34 @@ class DataExtraction:
                 else:
                     childPosOrdered[i]["childEnd"] = len(childText)
 
+            separatedChildren = {"nyk": "", "miehEd" : "", "psoEd" : ""}
+
+            #if there was text before the first keyword, interpret them as current children:
+            if len(childPosOrdered) > 0 and childPosOrdered[0]["begin"] > 0:
+                separatedChildren["nyk"] = childText[0:childPosOrdered[0]["begin"]]
 
             if psoEdm != None or nykm != None or miehEdm != None:
                 pass
                 #print childPosOrdered
 
+
             if len(substrPositions) == 0:
                 #TODO: KAIKKI LAPSET NYKYISESTÄ.
-                pass
+                separatedChildren["nyk"] = childText
 
-            separatedChildren = {}
+
             for item in childPosOrdered:
                 separatedChildren[item["type"]] = childText[item["end"]:item["childEnd"]]
             if len(childPosOrdered) > 0:
                 print childText
-                print separatedChildren
 
-        else:
+            childdict["separated"] = separatedChildren
             return childdict
 
-        return childdict    #TODO: OTA POIS KUN KOODI ON VALMIS
+        else:
+            childdict["separated"] = {"nyk": "", "miehEd" : "", "psoEd" : ""}
+            return childdict
+
 
  #check if the count of "Js" and "Ts" makes sense.
 
