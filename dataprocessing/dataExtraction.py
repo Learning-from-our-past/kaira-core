@@ -38,7 +38,7 @@ class DataExtraction:
             #try to find the date in modified string with regexp
             dateguess = text[cursorLocation:cursorLocation+windowWidth]    #take substring which probably contains the date.
             dateguess = dateguess.replace(" ","")           #remove all whitespace in the substring
-            dp = re.compile(ur'.*(?:s|S|5)\.?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
+            dp = re.compile(ur'.*?(?:s|S|5)\.?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))',re.UNICODE)
             date = dp.match(unicode(dateguess))
 
             #get the result from correct capturegroup. If there is full date (12.7.18) it is in 1, if only year it is in 2.
@@ -256,6 +256,9 @@ class DataExtraction:
                 self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
                 #raise SpouseException(text, "SPOUSENAME")
             try:
+                if self.currentChild.text.find("Aino Annikki Nevalainen") != -1:
+                    print "AINOOOOOO"
+                    print text[(m.end()-birthYearWindowLeftOffset):]
                 spouseBirthYear = self.extractBirthday(text[(m.end()-birthYearWindowLeftOffset):], 0, 64)
             except ExtractionException as e:
                 #raise SpouseException(e.details, "SPOUSEBIRTHDAY")
@@ -284,7 +287,10 @@ class DataExtraction:
         text = re.sub(ur'[:;\!\?\+~¨\^\'\"]', '', text)
         #print text
 
-        p = re.compile(ur'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:- ?\n?(?=(?:Ts)|(?:Js)|(?:JR)|(?:Osa)|(?:Osall))))',re.UNICODE | re.IGNORECASE) #Removed |(?=pso)
+
+
+
+        p = re.compile(ur'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:(?:- ?\n?(?=(?:Ts)|(?:Ts)|(?:Js)|(?:JR)|(?:Osa)|(?:Osall)))|pso))',re.UNICODE | re.IGNORECASE) #Removed |(?=pso)
         m = p.search(unicode(text))
 
         if m != None:
@@ -312,14 +318,23 @@ class DataExtraction:
                     return {"children": "", "cursorLocation" : cursorLocation, "childCount": 0,  "separated" : {"nyk": "", "miehEd" : "", "psoEd" : ""}}
             else:
                 #raise ChildrenException(text)
+                if self.currentChild.text.find(u"KATAJISTO") != -1:
+                    print text
+                    print "KATAJISTO LOL"
                 self.errorLogger.logError(ChildrenException.eType, self.currentChild )
                 return  {"children": "", "cursorLocation" : cursorLocation, "childCount": 0, "separated" : {"nyk": "", "miehEd" : "", "psoEd" : ""}}
 
     #sort children based on the marriage they were conceived in
     def sortChildren(self, childdict):
+
+
+        if self.currentChild.text.find(u"KATAJISTO") != -1:
+            print "KATAJISTO"
+            print childdict["children"]
+
         if childdict["childCount"] > 0:
             #try to find keywords:
-            psoEdp = re.compile(ur'(?P<psoed>pson ed aviol|pson aik aviol|vaimon I aviol|vaimon ed aviol|rvan ed aviol|pson I aviol|pson I avioi|miehen I)', re.UNICODE)
+            psoEdp = re.compile(ur'(?P<psoed>pson ed aviol|pson aik aviol|vaimon I aviol|vaimon ed aviol|rvan ed aviol|pson? I aviol|pson I avioi|miehen I)', re.UNICODE)
             nykp = re.compile(ur'(?P<nykaviol>nyk aviol|nykyis aviol)', re.UNICODE)
             miehEdp = re.compile(ur'(?P<miehed>(?<!n )I aviol|(?<!n )ed aviol|miehen I aviol|(?<!pson )aik aviol|miehen ed aviol|(?<!n )II aviol|(?<!n )II? avlol)', re.UNICODE)
 

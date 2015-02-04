@@ -77,7 +77,7 @@ def startProcess(filePath, callback):
             writer.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation", "Profession", "InterviewAddress", "deathDay", "deathMonth", "deathYear", "fallen", "deathLocation", "Served in Talvisota", "Talvisota regiments", "Served in Jatkosota", "Jatkosota regiments","Rank", "DemobilizationDay", "DemobilizationMonth", "DemobilizationYear", "DemobilizationPlace", "Medals", "Hobbies", "hasSpouse", "otherChildren", "otherChildrenCount", "weddingYear",
                              "spouseName", "spouseBirthDay", "spouseBirthMonth","spouseBirthYear","spouseBirthLocation", "spouseDeathDay", "spouseDeathMonth","spouseDeathYear", "spouseDeathLocation", "childCount", "Man's previous marriage", "Current marriage", "Spouse's previous marriage",
                              "weddingYear2",
-                             "spouseName2", "spouseBirthDay2", "spouseBirthMonth2","spouseBirthYear2","spouseBirthLocation2", "spouseDeathDay2", "spouseDeathMonth2","spouseDeathYear2", "spouseDeathLocation2", "childCount2", "children2"
+                             "spouseName2", "spouseBirthDay2", "spouseBirthMonth2","spouseBirthYear2","spouseBirthLocation2", "spouseDeathDay2", "spouseDeathMonth2","spouseDeathYear2", "spouseDeathLocation2", "childCount2", "Man's previous marriage2", "Current marriage2", "Spouse's previous marriage2"
                              ])
 
             ewriter = unicodecsv.writer(errorcsv, delimiter=";")
