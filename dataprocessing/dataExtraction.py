@@ -186,6 +186,18 @@ class DataExtraction:
         text2 = text[cursorLocation-5:]
         spouseWindow = 120
         foundSpouse = False
+
+        #snip the string if there is ts or js markers to avoid taking spouse's old men.
+        r = re.finditer(ur'(?P<match>ts:|js:)', text2, re.IGNORECASE | re.UNICODE)
+        endPos = -1
+        for m in r:
+            endPos = m.start()+10
+            break
+        if endPos != -1:
+            text2 = text2[0:endPos]
+            print text2
+
+
         findSpouseRE = re.compile(ur'(?P<spouseExists>\b(?:P|p)so\b)',re.UNICODE)  #first find out if there is spouse:
         findSpouseREm = findSpouseRE.search(unicode(text2))
 
@@ -286,9 +298,6 @@ class DataExtraction:
         #print "-----"
         text = re.sub(ur'[:;\!\?\+~¨\^\'\"]', '', text)
         #print text
-
-
-
 
         p = re.compile(ur'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:(?:- ?\n?(?=(?:Ts)|(?:Ts)|(?:Js)|(?:JR)|(?:Osa)|(?:Osall)))|pso))',re.UNICODE | re.IGNORECASE) #Removed |(?=pso)
         m = p.search(unicode(text))
