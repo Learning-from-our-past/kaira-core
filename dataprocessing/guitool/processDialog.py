@@ -26,6 +26,7 @@ import guitool.groupSelection as GUITool
 
 class Example(Frame):
 
+    processor = None
     file = ""
     def __init__(self, parent):
         Frame.__init__(self, parent)
@@ -58,6 +59,7 @@ class Example(Frame):
         ftypes = [('Xml files', '*.xml'), ('All files', '*')]
         dlg = tkFileDialog.Open(self, filetypes = ftypes)
         fl = dlg.show()
+        self.processor = None
 
         if fl != '':
             #self.master.destroy()
@@ -66,7 +68,8 @@ class Example(Frame):
             #load the file and run analysis on different thread
             done = []
             def call():
-                result = processData.startProcess(fl[0:len(fl)-4], self.endLoading)
+                self.processor = processData.ProcessData()
+                result = self.processor.startProcess(fl[0:len(fl)-4], self.endLoading)
                 done.append(result)
             thread = threading.Thread(target = call)
             thread.start() # start parallel computation
@@ -81,7 +84,7 @@ class Example(Frame):
             self.file = done[0]["file"]
             self.master.withdraw()
             GUITool.startGUI(done[0]["errors"], done[0]["root"], self.saveresults)
-
+            done = None
             self.label["text"] = "Changes saved to the file " + self.file
 
             print "muutokset loppu"
@@ -89,13 +92,12 @@ class Example(Frame):
 
     def saveresults(self, root):
         self.master.deiconify()
-        processData.saveModificationsToFile(self.file, root)
+        self.processor.saveModificationsToFile(self.file, root)
 
     def endLoading(self):
         self.master.destroy()
 
     def readFile(self, filename):
-
         f = open(filename, "r")
         text = f.read().decode('utf8')
         return text
