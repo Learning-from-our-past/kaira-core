@@ -77,9 +77,9 @@ class Application(Frame):
         self.master.destroy()
         self.callback(self.xmlroot)
 
-def startGUI(objectList, xmlroot, callback):
+def startGUI(errorList, xmlroot, callback):
     root = Tk()
-    ex = Application(root, objectList, xmlroot, callback)
+    ex = Application(root, errorList, xmlroot, callback)
     root.geometry("500x500+300+300")
     root.mainloop()
 

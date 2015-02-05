@@ -3,7 +3,6 @@ import readData
 import re
 import unicodecsv
 import unicodedata
-import nltk
 from extractionExceptions import *
 
 
