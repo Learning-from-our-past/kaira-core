@@ -150,4 +150,4 @@ def startGUI(objectList, xmldocument, callback):
     app = Application(objectList,xmldocument, master=root)
     app.callback = callback
     app.mainloop()
-    #root.destroy()
+    #xmlDataDocument.destroy()

@@ -88,4 +88,4 @@ def startGUI(objectList):
     root.geometry("800x500+300+300")
     app = Application(objectList, master=root)
     app.mainloop()
-    #root.destroy()
+    #xmlDataDocument.destroy()
