@@ -16,7 +16,7 @@ website: www.zetcode.com
 
 from ttk import Frame, Label, Style, Button
 from Tkinter import Tk, BOTH, Listbox, StringVar, END
-import guitool.combineTool as CombineTool
+import dataprocessing.guitool.combineTool as CombineTool
 
 class Application(Frame):
 
@@ -50,6 +50,7 @@ class Application(Frame):
 
         okb = Button(self, text="OK", command=self.gotoEdit)
         okb.place(x=20, y = 300)
+        print "valmista"
 
     def gotoEdit(self):
         print "Start tool..."
@@ -79,8 +80,9 @@ class Application(Frame):
 
 def startGUI(errorList, xmlroot, callback):
     root = Tk()
+    print "ALota nyt"
     ex = Application(root, errorList, xmlroot, callback)
     root.geometry("500x500+300+300")
     root.mainloop()
 
-    #root.destroy()
+    #xmlDataDocument.destroy()

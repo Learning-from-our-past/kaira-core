@@ -19,8 +19,8 @@ import tkFileDialog
 from Tkinter import *
 import Tkinter, time, threading
 import re
-import processData
-import guitool.groupSelection as GUITool
+import dataprocessing.processData as processData
+import dataprocessing.guitool.groupSelection as GUITool
 
 
 
@@ -69,7 +69,7 @@ class Example(Frame):
             done = []
             def call():
                 self.processor = processData.ProcessData()
-                result = self.processor.startProcess(fl[0:len(fl)-4], self.endLoading)
+                result = self.processor.startExtractionProcess(fl[0:len(fl)-4])
                 done.append(result)
             thread = threading.Thread(target = call)
             thread.start() # start parallel computation
@@ -83,7 +83,7 @@ class Example(Frame):
             print "Start error fix tool..."
             self.file = done[0]["file"]
             self.master.withdraw()
-            GUITool.startGUI(done[0]["errors"], done[0]["root"], self.saveresults)
+            GUITool.startGUI(done[0]["errors"], done[0]["xmlDataDocument"], self.saveresults)
             done = None
             self.label["text"] = "Changes saved to the file " + self.file
 
@@ -107,7 +107,7 @@ def main():
 
     root = Tk()
     ex = Example(root)
-    #root.geometry("300x250+300+300")
+    #xmlDataDocument.geometry("300x250+300+300")
     root.mainloop()
 
 
