@@ -15,15 +15,15 @@ class ResultCsvBuilder:
     def openCsv(self, filepath):
         self.filepath = filepath
         self.filename = ntpath.basename(self.filepath)
-        self.initCsv()
+        self._initCsv()
 
 
-    def initCsv(self):
+    def _initCsv(self):
         self.openedCsv = open(self.CSVPATH + self.filename+ ".csv", "wb")
         self.csvWriter = unicodecsv.writer(self.openedCsv, delimiter="&")
-        self.writeCsvHeaders()
+        self._writeCsvHeaders()
 
-    def writeCsvHeaders(self):
+    def _writeCsvHeaders(self):
          self.csvWriter.writerow(["surname", "first names", "birthDay", "birthMonth", "birthYear", "birthLocation",
                                   "Profession", "InterviewAddress", "deathDay", "deathMonth", "deathYear", "fallen",
                                   "deathLocation", "Served in Talvisota", "Talvisota regiments", "Served in Jatkosota",
@@ -40,11 +40,11 @@ class ResultCsvBuilder:
                                  ])
 
     def writeRow(self, dataDict):
-        row = self.createRowFromDict(dataDict)
+        row = self._createRowFromDict(dataDict)
         self.csvWriter.writerow(row)
 
     #tranforms the dict of the entry to a format which can be written into csv
-    def createRowFromDict(self, persondatadict):
+    def _createRowFromDict(self, persondatadict):
         row = [persondatadict["surname"], persondatadict["firstnames"], persondatadict["birthDay"],
                persondatadict["birthMonth"], persondatadict["birthYear"], persondatadict["birthLocation"],
                persondatadict["profession"], persondatadict["address"], persondatadict["deathDay"],
@@ -55,26 +55,33 @@ class ResultCsvBuilder:
                persondatadict["kotiutusPlace"], persondatadict["medals"],persondatadict["hobbies"],
                persondatadict["hasSpouse"]]
 
+        row = self._addOtherChildrenCells(row=row, persondatadict=persondatadict)
+        row = self._addSpouseDataToRow(row=row, persondatadict=persondatadict)
+        return row
+
+    def _addOtherChildrenCells(self, row, persondatadict):
         if "children" in persondatadict:
-            #other children
             row += [persondatadict["children"], persondatadict["childCount"]]
         else:
             row += ["", ""]
+        return row
 
-        #list all spouses data:
+    def _addSpouseDataToRow(self,row, persondatadict):
         if persondatadict["spouseCount"] > 0:
             for wife in persondatadict["wifeList"]:
-                wifeRow = [wife["weddingYear"], wife["spouseName"], wife["spouseBirthData"]["birthDay"],
+                wifeRow = self._createWifeRowFromDict(wife)
+                row += wifeRow
+        return row
+
+    def _createWifeRowFromDict(self, wife):
+        wifeRow = [wife["weddingYear"], wife["spouseName"], wife["spouseBirthData"]["birthDay"],
                            wife["spouseBirthData"]["birthMonth"], wife["spouseBirthData"]["birthYear"],
                                      wife["spouseBirthLocation"],  wife["spouseDeathData"]["deathDay"],
                                      wife["spouseDeathData"]["deathMonth"], wife["spouseDeathData"]["deathYear"],
                                      wife["spouseDeathData"]["deathLocation"], wife["children"]["childCount"],
                                      wife["children"]["separated"]["miehEd"], wife["children"]["separated"]["nyk"],
                                      wife["children"]["separated"]["psoEd"]]
-                row += wifeRow
-
-        #add other children which don't have wife associated into them
-        return row
+        return wifeRow
 
     def closeCsv(self):
         self.openedCsv.close()

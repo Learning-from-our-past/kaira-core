@@ -3,7 +3,6 @@ import ntpath
 import unicodecsv
 
 class ErrorCsvBuilder:
-
     CSVPATH = "../csv/errors/"
     filepath = ""
     filename = ""
@@ -16,20 +15,19 @@ class ErrorCsvBuilder:
     def openCsv(self, filepath):
         self.filepath = filepath
         self.filename = ntpath.basename(self.filepath)
-        self.initCsv()
+        self._initCsv()
 
 
-    def initCsv(self):
+    def _initCsv(self):
         self.openedCsv = open(self.CSVPATH + self.filename+ "_errors.csv", "wb")
         self.csvWriter = unicodecsv.writer(self.openedCsv, delimiter=";")
-        self.writeCsvHeaders()
+        self._writeCsvHeaders()
 
-    def writeCsvHeaders(self):
+    def _writeCsvHeaders(self):
          self.csvWriter.writerow(["Exception","Details", "type", "Entry text"])
 
     def writeRow(self, dataList):
         self.csvWriter.writerow(dataList)
-
 
     def closeCsv(self):
         self.openedCsv.close()
