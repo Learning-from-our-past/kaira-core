@@ -19,8 +19,8 @@ import tkFileDialog
 from Tkinter import *
 import Tkinter, time, threading
 import re
-import dataprocessing.processData as processData
-import dataprocessing.guitool.groupSelection as GUITool
+import processData as processData
+import guitool.groupSelection as GUITool
 
 
 

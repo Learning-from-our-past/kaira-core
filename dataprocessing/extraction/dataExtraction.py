@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-import readData
 import re
-import unicodecsv
-import unicodedata
 from operator import itemgetter
-from extractionExceptions import *
+
 import regex
+
+from extraction.extractionExceptions import *
+from extractors.addressExtractor import AddressExtractor
+from extractors.medalsExtractor import MedalsExtractor
+from extractors.rankExtractor import RankExtractor
 
 #use regex to extract the person's names and birthday from given text
 #returns dict containing the data
@@ -194,7 +196,6 @@ class DataExtraction:
             break
         if endPos != -1:
             text2 = text2[0:endPos]
-            print text2
 
 
         findSpouseRE = re.compile(ur'(?P<spouseExists>\b(?:P|p)so\b)',re.UNICODE)  #first find out if there is spouse:
@@ -267,9 +268,7 @@ class DataExtraction:
                 self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
                 #raise SpouseException(text, "SPOUSENAME")
             try:
-                if self.currentChild.text.find("Aino Annikki Nevalainen") != -1:
-                    print "AINOOOOOO"
-                    print text[(m.end()-birthYearWindowLeftOffset):]
+
                 spouseBirthYear = self.extractBirthday(text[(m.end()-birthYearWindowLeftOffset):], 0, 64)
             except ExtractionException as e:
                 #raise SpouseException(e.details, "SPOUSEBIRTHDAY")
@@ -327,7 +326,7 @@ class DataExtraction:
             else:
                 #raise ChildrenException(text)
                 if self.currentChild.text.find(u"KATAJISTO") != -1:
-                    print text
+                    #print text
                     print "KATAJISTO LOL"
                 self.errorLogger.logError(ChildrenException.eType, self.currentChild )
                 return  {"children": "", "cursorLocation" : cursorLocation, "childCount": 0, "separated" : {"nyk": "", "miehEd" : "", "psoEd" : ""}}
@@ -336,9 +335,6 @@ class DataExtraction:
     def sortChildren(self, childdict):
 
 
-        if self.currentChild.text.find(u"KATAJISTO") != -1:
-            print "KATAJISTO"
-            print childdict["children"]
 
         if childdict["childCount"] > 0:
             #try to find keywords:
@@ -390,7 +386,8 @@ class DataExtraction:
             for item in childPosOrdered:
                 separatedChildren[item["type"]] = childText[item["end"]:item["childEnd"]]
             if len(childPosOrdered) > 0:
-                print childText
+                pass
+                #print childText
 
             childdict["separated"] = separatedChildren
             return childdict
@@ -442,6 +439,7 @@ class DataExtraction:
             return ""
 
     #try to find the rank of a soldier
+    #TODO: REMOVE AND USE CLASS
     def findRank(self, text):
         findRankRE = regex.compile(ur'(?:(?:Sotarvo){s<=1}|(?:SOIarvo){s<=1}|(?:Ylenn){s<=1})(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,| )',re.UNICODE|re.IGNORECASE)  #first find out if there is spouse:
         findRankREm = findRankRE.search(unicode(text))
@@ -456,6 +454,7 @@ class DataExtraction:
         return result
 
     #find if the soldier has some of the most important medals.
+    #TODO: REMOVE AND USE CLASS
     def findMedals(self, text):
         medals = ""
 
@@ -553,6 +552,7 @@ class DataExtraction:
             self.errorLogger.logError(DemobilizationTimeException.eType, self.currentChild )
             return {"kotiutusDay": "","kotiutusMonth": "", "kotiutusYear": "", "kotiutusPlace" : ""}
 
+    #TODO: REMOVE AND USE CLASS
     def extractAddress(self, text):
 
         osRE = re.compile(ur'(?:\W- ?Os\b|\W- ?os\b|\W- ?o5\b|\W- ?O5\b|\W- ?05\b)(?P<address>(?:.|\n)*?)(?=$|Rva|\.)',re.UNICODE | re.IGNORECASE)  #
@@ -613,10 +613,16 @@ class DataExtraction:
 
         #check the wars the soldier has served in:
         wars = self.warCheck(text)
-        rank = self.findRank(text)
-        medals = self.findMedals(text)
+        #rank = self.findRank(text)
+        r = RankExtractor(self.currentChild, self.errorLogger)
+        rank = r.extract(text)
+        #medals = self.findMedals(text)
+        m = MedalsExtractor(self.currentChild, self.errorLogger)
+        medals = m.extract(text)
         kotiutus = self.extractKotiutus(text)
-        address = self.extractAddress(text)
+        #address = self.extractAddress(text)
+        a = AddressExtractor(self.currentChild, self.errorLogger)
+        address = a.extract(text)
         hobbies = self.extractHobbies(text)
 
 

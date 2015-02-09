@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import readData
-import re
-import unicodecsv
-import unicodedata
-from extractionExceptions import *
-from chunkerCheck import ChunkChecker
-import guitool.main as GUITool
-import guitool.combineTool as CombineTool
 from lxml import etree
+
+import readData
+from extraction.extractionExceptions import *
+from chunkerCheck import ChunkChecker
+import guitool.combineTool as CombineTool
+
 
 #This script checks the chunked XML file trying to find suspicious entries
 errors = 0
