@@ -2,7 +2,7 @@
 import re
 import regex
 from baseExtractor import BaseExtractor
-import extractUtils
+import regexUtils
 from extraction.extractionExceptions import *
 
 
@@ -18,9 +18,9 @@ class RankExtractor(BaseExtractor):
 
     def _findRanks(self, text):
         try:
-            foundRanks = extractUtils.safeSearch(self.RANK_PATTERN, text, self.RANK_OPTIONS)
+            foundRanks = regexUtils.safeSearch(self.RANK_PATTERN, text, self.RANK_OPTIONS)
             self.ranks = foundRanks.group("rank")
-        except extractUtils.RegexNoneMatchException as e:
+        except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(RankException.eType, self.currentChild )
 
     def _constructReturnDict(self):

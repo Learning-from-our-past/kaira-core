@@ -2,7 +2,7 @@
 import re
 import regex
 from baseExtractor import BaseExtractor
-import extractUtils
+import regexUtils
 
 
 class MedalsExtractor(BaseExtractor):
@@ -16,14 +16,14 @@ class MedalsExtractor(BaseExtractor):
     rvaPosition = -1    #Position of the possible rva key-word which might indicate that medal is for her.
 
     def extract(self, text):
-        self.rvaPosition = extractUtils.findFirstPositionWithRegexSearch(self.RVA_PATTERN, text)
+        self.rvaPosition = regexUtils.findFirstPositionWithRegexSearch(self.RVA_PATTERN, text)
         self._extractMedal(self.VAPAUDEN_MITALI_PATTERN, text)
         self._extractMedal(self.VAPAUDEN_RISTI_PATTERN, text)
         self._extractMedal(self.SUOMEN_VAPAUDEN_RISTI_PATTERN, text)
         return self._constructReturnDict()
 
     def _extractMedal(self, pattern, text):
-        foundMedals = extractUtils.regexIter(pattern, text)
+        foundMedals = regexUtils.regexIter(pattern, text)
         for medal in foundMedals:
             if self._checkIsTheMedalForMan(medal):
                 self._addMedal(medal)

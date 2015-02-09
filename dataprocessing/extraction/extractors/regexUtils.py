@@ -7,10 +7,8 @@ def findFirstPositionWithRegexSearch(pattern, text):
     pos = -1
     r = re.compile(pattern, re.UNICODE)
     m = r.search(text)
-
     if m is not None:
         pos = m.start()
-
     return pos
 
 def regexIter(pattern, text, options = re.UNICODE):
@@ -24,6 +22,8 @@ def safeSearch(pattern, text, options = re.UNICODE):
     if m is None:
         raise RegexNoneMatchException(text)
     return m
+
+
 
 
 
