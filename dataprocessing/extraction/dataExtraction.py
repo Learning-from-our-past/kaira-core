@@ -8,6 +8,9 @@ from extraction.extractionExceptions import *
 from extractors.addressExtractor import AddressExtractor
 from extractors.medalsExtractor import MedalsExtractor
 from extractors.rankExtractor import RankExtractor
+from extractors.regimentExtractor import RegimentsExtractor
+from extractors.hobbiesExtractor import HobbiesExtractor
+from extractors.professionExtractor import ProfessionExtractor
 
 #use regex to extract the person's names and birthday from given text
 #returns dict containing the data
@@ -29,8 +32,6 @@ class DataExtraction:
             return {"surname": m.group("surname"), "firstnames": m.group("firstnames"), "cursorLocation": m.end()}
         except Exception as e:
             raise NameException(text)
-
-
 
 
     def extractBirthday(self, text, cursorLocation, windowWidth = 18):
@@ -403,14 +404,14 @@ class DataExtraction:
     def warCheck(self, text):
         findJsRE = re.compile(ur'(?P<jsExists>(?:Js:|JS:|js:|jS:))',re.UNICODE)  #first find out if there is spouse:
         findJsREm = findJsRE.search(unicode(text))
-
+        regimentExtractor = RegimentsExtractor(self.currentChild, self.errorLogger)
         JsCount = findJsRE.finditer(text)
         JsCount = tuple(JsCount)
 
         result = {"talvisota": False, "talvisotaregiments": "", "jatkosotaregiments" : "", "jatkosota" : False}
         if len(JsCount) >= 1:
             #find regiments
-            result["jatkosotaregiments"] = self.findRegiments(text[JsCount[0].end():])
+            result["jatkosotaregiments"] = regimentExtractor.extract(text[JsCount[0].end():])["regiments"]
             result["jatkosota"] = True
 
 
@@ -422,84 +423,10 @@ class DataExtraction:
         TsCount = tuple(TsCount)
 
         if len(TsCount) >= 1:
-            result["talvisotaregiments"] = self.findRegiments(text[TsCount[0].end():])
+            result["talvisotaregiments"] = regimentExtractor.extract(text[TsCount[0].end():])["regiments"]
             result["talvisota"] = True
 
         return result
-
-    def findRegiments(self, text):
-        findRE = re.compile(ur'(?P<regiments>(:?[A-Za-zä-öÄ-Ö0-9 \n,])+)',re.UNICODE)  #first find out if there is spouse:
-        findREm = findRE.search(unicode(text))
-
-        #return regiments as string
-        if findREm != None:
-            return findREm.group("regiments")
-        else:
-            self.errorLogger.logError(RegimentException.eType, self.currentChild )
-            return ""
-
-    #try to find the rank of a soldier
-    #TODO: REMOVE AND USE CLASS
-    def findRank(self, text):
-        findRankRE = regex.compile(ur'(?:(?:Sotarvo){s<=1}|(?:SOIarvo){s<=1}|(?:Ylenn){s<=1})(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,| )',re.UNICODE|re.IGNORECASE)  #first find out if there is spouse:
-        findRankREm = findRankRE.search(unicode(text))
-
-        if findRankREm != None:
-            result = {"rank": findRankREm.group("rank")}
-        else:
-            #raise RankException(text)
-            self.errorLogger.logError(RankException.eType, self.currentChild )
-            result = {"rank" : ""}
-
-        return result
-
-    #find if the soldier has some of the most important medals.
-    #TODO: REMOVE AND USE CLASS
-    def findMedals(self, text):
-        medals = ""
-
-        #find possible spousedata to try to deduce if the medal belongs to man or wife:
-        rvaRE = re.compile(ur'(?P<rva>\bRva|\brva)',re.UNICODE)  #first find out if there is spouse:
-        rvaREm = rvaRE.search(unicode(text))
-
-        if rvaREm != None:
-            rvaPos = rvaREm.start()
-        else:
-            rvaPos = -1
-
-        #vapauden mitali
-        vmRE = re.compile(ur'(?P<mitali>Vm ?1|Vm ?2)',re.UNICODE)  #first find out if there is spouse:
-        vmCount = vmRE.finditer(text)
-
-        for match in vmCount:
-
-            if rvaPos != -1:
-                if match.start() < rvaPos:
-                    medals += match.group("mitali") +","
-
-
-        #vapauden risti
-        vrRE = re.compile(ur'(?P<mitali>VR ?suur|VR ?[1-4](?: [a-zä-ö ]{1,})?|VR ?surur)',re.UNICODE)  #first find out if there is spouse:
-        vrCount = vrRE.finditer(text)
-
-        for match in vrCount:
-            if rvaPos != -1:
-                if match.start() < rvaPos:
-                    medals += match.group("mitali") +","
-
-
-        #suomen vapauden risti
-        svrRE = re.compile(ur'(?P<mitali>SVR ?suur|SVR ?[A-Za-zä-ö1-2 ]{1,})',re.UNICODE)  #first find out if there is spouse:
-        svrCount = svrRE.finditer(text)
-
-        for match in svrCount:
-            if rvaPos != -1:
-                if match.start() < rvaPos:
-                    medals += match.group("mitali") +","
-
-
-
-        return {"medals" : medals}
 
     def extractKotiutus(self, text):
         text2 = text
@@ -552,43 +479,6 @@ class DataExtraction:
             self.errorLogger.logError(DemobilizationTimeException.eType, self.currentChild )
             return {"kotiutusDay": "","kotiutusMonth": "", "kotiutusYear": "", "kotiutusPlace" : ""}
 
-    #TODO: REMOVE AND USE CLASS
-    def extractAddress(self, text):
-
-        osRE = re.compile(ur'(?:\W- ?Os\b|\W- ?os\b|\W- ?o5\b|\W- ?O5\b|\W- ?05\b)(?P<address>(?:.|\n)*?)(?=$|Rva|\.)',re.UNICODE | re.IGNORECASE)  #
-        osREm = osRE.search(unicode(text))
-
-        if osREm != None:
-            address = osREm.group("address")
-        else:
-            address = ""
-
-        return {"address" : address}
-
-    def extractHobbies(self, text):
-        hbRE = re.compile(ur'(?:Harr\b)(?P<hobbies>(?:.|\n)*?)(?=$|Rva|- os\b|\.)',re.UNICODE | re.IGNORECASE)  #
-        hbREm = hbRE.search(unicode(text))
-
-        if hbREm != None:
-            hobbies = hbREm.group("hobbies")
-        else:
-            hobbies = ""
-
-        return {"hobbies" : hobbies}
-
-    def extractProfession(self, text):
-        p = re.compile(ur'^ ?(?:,|\.| )(?P<profession>[A-ZÄ-Öa-zä-ö !-]+?)(?:\.|,|Pso)',re.UNICODE | re.IGNORECASE)  #
-        m = p.search(unicode(text))
-
-        if m != None:
-            profession = m.group("profession")
-        else:
-            #print text
-            self.errorLogger.logError(ProfessionException.eType, self.currentChild )
-            profession = ""
-
-        return {"profession" : profession}
-
     def extraction(self, text, xmlElement, eLogger):
         self.errorLogger = eLogger
         self.currentChild = xmlElement
@@ -601,7 +491,10 @@ class DataExtraction:
         personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
         personLocation["birthLocation"] = personLocation["location"]
 
-        profession = self.extractProfession(text[personLocation["cursorLocation"]-4:])
+        #profession = self.extractProfession(text[personLocation["cursorLocation"]-4:])
+        p = ProfessionExtractor(self.currentChild, self.errorLogger)
+        profession = p.extract(text[personLocation["cursorLocation"]-4:])
+
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 320)
         spouseData = self.findSpouses(text, personLocation["cursorLocation"])
 
@@ -616,15 +509,18 @@ class DataExtraction:
         #rank = self.findRank(text)
         r = RankExtractor(self.currentChild, self.errorLogger)
         rank = r.extract(text)
+
         #medals = self.findMedals(text)
         m = MedalsExtractor(self.currentChild, self.errorLogger)
         medals = m.extract(text)
+
         kotiutus = self.extractKotiutus(text)
         #address = self.extractAddress(text)
         a = AddressExtractor(self.currentChild, self.errorLogger)
         address = a.extract(text)
-        hobbies = self.extractHobbies(text)
-
+        #hobbies = self.extractHobbies(text)
+        h = HobbiesExtractor(self.currentChild, self.errorLogger)
+        hobbies = h.extract(text)
 
         #print spouse
         return dict(personData.items() + personBirthday.items() + personLocation.items() + profession.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items() + kotiutus.items() + address.items() + hobbies.items())
