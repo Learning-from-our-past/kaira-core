@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-import readData
-
-import ntpath
-import unicodecsv
-from dataExtraction import DataExtraction
-from extractionExceptions import *
-from chunkerCheck import ChunkChecker
 from lxml import etree
+
+import readData
+from extraction.dataExtraction import DataExtraction
+from extraction.extractionExceptions import *
+from chunkerCheck import ChunkChecker
 from exceptionlogger import ExceptionLogger
 from resultcsvbuilder import ResultCsvBuilder
 from errorcsvbuilder import ErrorCsvBuilder

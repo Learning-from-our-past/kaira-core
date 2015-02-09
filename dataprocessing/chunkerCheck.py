@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-import readData
 import re
-import unicodecsv
-import unicodedata
-from extractionExceptions import *
 
 
 class ChunkChecker:

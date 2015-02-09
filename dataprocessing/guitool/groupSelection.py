@@ -16,7 +16,7 @@ website: www.zetcode.com
 
 from ttk import Frame, Label, Style, Button
 from Tkinter import Tk, BOTH, Listbox, StringVar, END
-import dataprocessing.guitool.combineTool as CombineTool
+import guitool.combineTool as CombineTool
 
 class Application(Frame):
 
