@@ -13,6 +13,7 @@ class RegimentsExtractor(BaseExtractor):
     regiments = ""
 
     def extract(self, text):
+        self.regiments = ""
         self._findRegiments(text)
         return self._constructReturnDict()
 
