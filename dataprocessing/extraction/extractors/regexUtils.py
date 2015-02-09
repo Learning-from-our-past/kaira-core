@@ -23,6 +23,12 @@ def safeSearch(pattern, text, options = re.UNICODE):
         raise RegexNoneMatchException(text)
     return m
 
+def safeMatch(pattern, text, options = re.UNICODE):
+    r = regex.compile(pattern, options)
+    m = r.match(unicode(text))
+    if m is None:
+        raise RegexNoneMatchException(text)
+    return m
 
 
 

@@ -11,6 +11,8 @@ from extractors.rankExtractor import RankExtractor
 from extractors.regimentExtractor import RegimentsExtractor
 from extractors.hobbiesExtractor import HobbiesExtractor
 from extractors.professionExtractor import ProfessionExtractor
+from extractors.nameExtractor import NameExtractor
+from extractors.warExtractor import WarExtractor
 
 #use regex to extract the person's names and birthday from given text
 #returns dict containing the data
@@ -22,17 +24,6 @@ class DataExtraction:
 
     monthNameNumberMapping = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik" : 4,
     "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
-
-    def extractPersonName(self, text):
-        try:
-            #Extract names
-            p = re.compile(ur'\A(?P<surname>[A-ZÄ-Öl() -]{3,})(:?,|.) {0,100}(?P<firstnames>[A-ZÄ-Öa-zä-ö() -]{0,})(:?,|.)',re.UNICODE)
-            m = p.match(unicode(text))
-
-            return {"surname": m.group("surname"), "firstnames": m.group("firstnames"), "cursorLocation": m.end()}
-        except Exception as e:
-            raise NameException(text)
-
 
     def extractBirthday(self, text, cursorLocation, windowWidth = 18):
 
@@ -400,34 +391,6 @@ class DataExtraction:
 
  #check if the count of "Js" and "Ts" makes sense.
 
-    #figure out if the soldier has been in Ts or Js
-    def warCheck(self, text):
-        findJsRE = re.compile(ur'(?P<jsExists>(?:Js:|JS:|js:|jS:))',re.UNICODE)  #first find out if there is spouse:
-        findJsREm = findJsRE.search(unicode(text))
-        regimentExtractor = RegimentsExtractor(self.currentChild, self.errorLogger)
-        JsCount = findJsRE.finditer(text)
-        JsCount = tuple(JsCount)
-
-        result = {"talvisota": False, "talvisotaregiments": "", "jatkosotaregiments" : "", "jatkosota" : False}
-        if len(JsCount) >= 1:
-            #find regiments
-            result["jatkosotaregiments"] = regimentExtractor.extract(text[JsCount[0].end():])["regiments"]
-            result["jatkosota"] = True
-
-
-
-        findTsRE = re.compile(ur'(?P<tsExists>(?:Ts:|TS:|ts:|tS:))',re.UNICODE)  #first find out if there is spouse:
-        findTsREm = findTsRE.search(unicode(text))
-
-        TsCount = findTsRE.finditer(text)
-        TsCount = tuple(TsCount)
-
-        if len(TsCount) >= 1:
-            result["talvisotaregiments"] = regimentExtractor.extract(text[TsCount[0].end():])["regiments"]
-            result["talvisota"] = True
-
-        return result
-
     def extractKotiutus(self, text):
         text2 = text
         text = text.replace(" ","")           #remove all whitespace in the substring
@@ -480,22 +443,30 @@ class DataExtraction:
             return {"kotiutusDay": "","kotiutusMonth": "", "kotiutusYear": "", "kotiutusPlace" : ""}
 
     def extraction(self, text, xmlElement, eLogger):
+
         self.errorLogger = eLogger
         self.currentChild = xmlElement
+
+        #TODO: OMA FUNKTIO
         text = text.replace("\n", ' ')
         text = ' '.join(text.split())   #remove excess whitespace and linebreaks
-        personData = {}
         self.parsingLocation = 0
-        personData = self.extractPersonName(text)
+
+        nE = NameExtractor(self.currentChild, self.errorLogger)
+        personData = nE.extract(text)
+
+        #TODO: OMA LUOKKA
         personBirthday = self.extractBirthday(text, personData["cursorLocation"])
+        #TODO: OMA LUOKKA
         personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
         personLocation["birthLocation"] = personLocation["location"]
 
-        #profession = self.extractProfession(text[personLocation["cursorLocation"]-4:])
         p = ProfessionExtractor(self.currentChild, self.errorLogger)
         profession = p.extract(text[personLocation["cursorLocation"]-4:])
 
+        #TODO: OMA LUOKKA
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 320)
+        #TODO: OMA LUOKKA
         spouseData = self.findSpouses(text, personLocation["cursorLocation"])
 
         #if there is no spouse, try to still find children:
@@ -504,9 +475,17 @@ class DataExtraction:
         else:
             children = {}
 
-        #check the wars the soldier has served in:
-        wars = self.warCheck(text)
-        #rank = self.findRank(text)
+
+
+
+        #TODO: OMA LUOKKA
+        kotiutus = self.extractKotiutus(text)
+
+        #####################################################################################################
+
+        wE = WarExtractor(self.currentChild, self.errorLogger)
+        wars = wE.extract(text)
+
         r = RankExtractor(self.currentChild, self.errorLogger)
         rank = r.extract(text)
 
@@ -514,10 +493,10 @@ class DataExtraction:
         m = MedalsExtractor(self.currentChild, self.errorLogger)
         medals = m.extract(text)
 
-        kotiutus = self.extractKotiutus(text)
         #address = self.extractAddress(text)
         a = AddressExtractor(self.currentChild, self.errorLogger)
         address = a.extract(text)
+
         #hobbies = self.extractHobbies(text)
         h = HobbiesExtractor(self.currentChild, self.errorLogger)
         hobbies = h.extract(text)
