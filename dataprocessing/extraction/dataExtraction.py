@@ -3,7 +3,8 @@ import re
 from operator import itemgetter
 
 import regex
-
+import extractors.textUtils as textUtils
+import extractors.locationPreparingUtils as locationPreparingUtils
 from extraction.extractionExceptions import *
 from extractors.addressExtractor import AddressExtractor
 from extractors.medalsExtractor import MedalsExtractor
@@ -14,6 +15,7 @@ from extractors.professionExtractor import ProfessionExtractor
 from extractors.nameExtractor import NameExtractor
 from extractors.warExtractor import WarExtractor
 from extractors.birthdayExtractor import BirthdayExtractor
+from extractors.locationExtractor import BirthdayLocationExtractor
 
 
 #use regex to extract the person's names and birthday from given text
@@ -135,24 +137,19 @@ class DataExtraction:
 
 
 
+    #TODO: REMOVE AFTER DEATH, DEMOBILIZATION AND SPOUSE USE CLASS VERSION
     #try to extract the location of the birth. Later the results could be compared to the list of locations
     def extractLocation(self, text, cursorLocation, forMan=True, forDeath=False):
 
+        #TODO: OMA FUNKTIO KENTIES KUTSUJAAN/WRAPPERIIN?
         if forMan:
             text2 = text[cursorLocation-4:cursorLocation+24]
-            f = text2.find("Pso")
-            if f == -1:
-                f = text2.find("pso")
-            if f != -1:
-                text2 = text2[0:f]
+            text2 = textUtils.takeSubStrBasedOnFirstRegexOccurrence(text2, ur"Pso", re.IGNORECASE|re.UNICODE)
         else:
+            #TODO: OMA FUNKTIO KENTIES KUTSUJAAN/WRAPPERIIN?
             #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
             text2 = text[cursorLocation:cursorLocation+24]
-            f = text2.find("Pso")
-            if f == -1:
-                f = text2.find("pso")
-            if f != -1:
-                text2 = text2[0:f]
+            text2 = textUtils.takeSubStrBasedOnFirstRegexOccurrence(text2, ur"Pso", re.IGNORECASE|re.UNICODE)
 
         try:
             p = re.compile(ur'(?:\d+| s)(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)',re.UNICODE)   #.\d*(?: |,|.)+(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,})(,|\.)
@@ -283,7 +280,6 @@ class DataExtraction:
             return {"cursorLocation": deathData["cursorLocation"], "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["location"]}
         else:
             return None
-
 
     #try to find the list of children from the soldier and return it as a single string.
     def findChildren(self, text, cursorLocation):
@@ -446,7 +442,6 @@ class DataExtraction:
             return {"kotiutusDay": "","kotiutusMonth": "", "kotiutusYear": "", "kotiutusPlace" : ""}
 
     def extraction(self, text, xmlElement, eLogger):
-
         self.errorLogger = eLogger
         self.currentChild = xmlElement
 
@@ -458,18 +453,20 @@ class DataExtraction:
         nE = NameExtractor(self.currentChild, self.errorLogger)
         personData = nE.extract(text)
 
-        #TODO: OMA LUOKKA
         #personBirthday = self.extractBirthday(text, personData["cursorLocation"])
         bE = BirthdayExtractor(self.currentChild, self.errorLogger)
         bE.dependsOnMatchPositionOf(nE)
         personBirthday = bE.extract(text)
 
-        #TODO: OMA LUOKKA
-        personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
-        personLocation["birthLocation"] = personLocation["location"]
+        plE = BirthdayLocationExtractor(self.currentChild, self.errorLogger)
+        plE.dependsOnMatchPositionOf(bE)
+        personLocation = plE.extract(text)
+        #personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
+        #personLocation["birthLocation"] = personLocation["location"]
 
+        #TODO: MODIFY TO USE dependsOnMatchPositionOf() function
         p = ProfessionExtractor(self.currentChild, self.errorLogger)
-        profession = p.extract(text[personLocation["cursorLocation"]-4:])
+        profession = p.extract(text[personLocation["cursorLocation"]:])
 
         #TODO: OMA LUOKKA
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 320)

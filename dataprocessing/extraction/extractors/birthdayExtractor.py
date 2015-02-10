@@ -28,7 +28,7 @@ class BirthdayExtractor(BaseExtractor):
         self.preparedText = self._prepareTextForExtraction(text)
 
     def _prepareTextForExtraction(self, text):
-        t = textUtils.takeSubStrBasedOnMatchPos(text, self.matchStartPosition, self.SUBSTRING_WIDTH)
+        t = textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition, self.SUBSTRING_WIDTH)
         t = textUtils.removeSpacesFromText(t)
         return t
 

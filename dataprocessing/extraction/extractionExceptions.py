@@ -200,6 +200,18 @@ class ManLocationException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
+class LocationException(ExtractionException):
+    eType = "LOCATION"
+    message = "ERROR in location extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
 
 class DateException(ExtractionException):
     eType = "DATE"
@@ -208,7 +220,7 @@ class DateException(ExtractionException):
 
     def __init__(self, text):
         self.details = text
-        self.eType = type
+
 
     def __unicode__(self):
         return repr(self.message)
