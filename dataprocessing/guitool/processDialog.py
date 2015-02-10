@@ -92,7 +92,7 @@ class Example(Frame):
 
     def saveresults(self, root):
         self.master.deiconify()
-        self.processor.saveModificationsToFile(self.file, root)
+        self.processor.saveModificationsToFile()
 
     def endLoading(self):
         self.master.destroy()
