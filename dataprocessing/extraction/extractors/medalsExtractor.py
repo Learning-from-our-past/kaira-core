@@ -28,12 +28,18 @@ class MedalsExtractor(BaseExtractor):
             if self._checkIsTheMedalForMan(medal):
                 self._addMedal(medal)
 
+
     def _checkIsTheMedalForMan(self, medalMatch):
         medalIsForMan = True
         if self.rvaPosition != -1:
             if medalMatch.start() > self.rvaPosition:
                 medalIsForMan = False
+                self._saveFinalMatchPosition(medalMatch)
         return medalIsForMan
+
+    def _saveFinalMatchPosition(self, medalMatch):
+        if medalMatch.end() > self.matchFinalPosition:
+         self.matchFinalPosition = medalMatch.end()
 
     def _addMedal(self, medal):
         self.medals += medal.group("mitali") +","

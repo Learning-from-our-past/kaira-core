@@ -18,6 +18,8 @@ class NameExtractor(BaseExtractor):
     def _findNames(self, text):
         try:
             self.foundNames = regexUtils.safeMatch(self.PATTERN, text, self.OPTIONS)
+            self.matchFinalPosition = self.foundNames.end()
+
         except regexUtils.RegexNoneMatchException as e:
             raise NameException(text)
 

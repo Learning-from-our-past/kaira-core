@@ -44,7 +44,3 @@ class WarExtractor(BaseExtractor):
     def _constructReturnDict(self):
         return {"talvisota": self.wereInTalvisota, "talvisotaregiments": self.talvisotaRegiments,
                 "jatkosotaregiments" : self.jatkosotaRegiments, "jatkosota" : self.wereInJatkosota}
-
-
-
-

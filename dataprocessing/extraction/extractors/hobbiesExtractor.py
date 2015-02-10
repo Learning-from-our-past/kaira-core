@@ -13,12 +13,14 @@ class HobbiesExtractor(BaseExtractor):
     hobbies = ""
 
     def extract(self, text):
+        super(HobbiesExtractor, self).extract(text)
         self._findHobbies(text)
         return self._constructReturnDict()
 
     def _findHobbies(self, text):
         try:
             foundHobbies= regexUtils.safeSearch(self.HOBBIES_PATTERN, text, self.HOBBIES_OPTIONS)
+            self.matchFinalPosition = foundHobbies.end()
             self.hobbies = foundHobbies.group("hobbies")
         except regexUtils.RegexNoneMatchException as e:
             pass

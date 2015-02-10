@@ -20,6 +20,7 @@ class RankExtractor(BaseExtractor):
         try:
             foundRanks = regexUtils.safeSearch(self.RANK_PATTERN, text, self.RANK_OPTIONS)
             self.ranks = foundRanks.group("rank")
+            self.matchFinalPosition = foundRanks.end()
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(RankException.eType, self.currentChild )
 

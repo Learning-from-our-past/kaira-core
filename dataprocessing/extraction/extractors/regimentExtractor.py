@@ -21,8 +21,11 @@ class RegimentsExtractor(BaseExtractor):
         try:
             foundRegiments = regexUtils.safeSearch(self.REGIMENT_PATTERN, text, self.REGIMENT_OPTIONS)
             self.regiments = foundRegiments.group("regiments")
+            self.matchFinalPosition = foundRegiments.end()
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(RegimentException.eType, self.currentChild )
 
     def _constructReturnDict(self):
         return {"regiments": self.regiments}
+
+
