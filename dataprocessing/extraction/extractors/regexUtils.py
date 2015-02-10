@@ -3,9 +3,9 @@ import re
 import regex
 
 
-def findFirstPositionWithRegexSearch(pattern, text):
+def findFirstPositionWithRegexSearch(pattern, text, options=re.UNICODE):
     pos = -1
-    r = re.compile(pattern, re.UNICODE)
+    r = re.compile(pattern, options)
     m = r.search(text)
     if m is not None:
         pos = m.start()
@@ -30,6 +30,13 @@ def safeMatch(pattern, text, options = re.UNICODE):
         raise RegexNoneMatchException(text)
     return m
 
+def matchExists(pattern, text, options = re.UNICODE):
+    r = regex.compile(pattern, options)
+    m = r.search(unicode(text))
+    if m is None:
+        return False
+    else:
+        return True
 
 
 
