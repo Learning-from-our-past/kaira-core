@@ -19,6 +19,7 @@ class ProfessionExtractor(BaseExtractor):
         try:
             foundProfession= regexUtils.safeSearch(self.PATTERN, text, self.OPTIONS)
             self.profession = foundProfession.group("profession")
+            self.matchFinalPosition = foundProfession.end()
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(ProfessionException.eType, self.currentChild )
 
