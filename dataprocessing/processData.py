@@ -39,6 +39,7 @@ class ProcessData:
         self.extractor = DataExtraction()
         self.chunkerCheck = ChunkChecker()
         self.errorLogger = ExceptionLogger()
+        self.dataFilename = filePath
         self.xmlDataDocument = readData.getXMLroot(filePath + ".xml")
         print "XML file elements: " + str(len(self.xmlDataDocument))
 
@@ -70,11 +71,11 @@ class ProcessData:
         self.errorLogger.printErrorBreakdown()
 
     #TODO: Muu paikka?
-    def saveModificationsToFile(self, file, root):
+    def saveModificationsToFile(self):
         #write modifications to a new xml-file:
-        print "Kirjoitetaan " + file
-        f = open(XMLPATH + self.dataFilename + ".xml", 'w')
-        f.write(etree.tostring(root, pretty_print=True, encoding='unicode').encode("utf8"))
+        print "Kirjoitetaan "
+        f = open(self.dataFilename + ".xml", 'w')
+        f.write(etree.tostring(self.xmlDataDocument, pretty_print=True, encoding='unicode').encode("utf8"))
         f.close()
         print "valmis"
 
