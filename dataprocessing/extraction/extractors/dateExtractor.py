@@ -16,7 +16,8 @@ class DateExtractor():
     year = ""
     month = ""
     day = ""
-
+    processedText = ""
+    dates_always_20th_century = False
     MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik" : 4,
     "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
 
@@ -24,8 +25,12 @@ class DateExtractor():
         self.PATTERN = PATTERN
         self.OPTIONS = OPTIONS
         preparedText = self._prepareTextForExtraction(text)
+        self.processedText = preparedText
         self._findDate(preparedText)
         return self._constructReturnDict()
+
+    def setDatesToAlwaysIn20thCentury(self, boolValue):
+        self.dates_always_20th_century = boolValue
 
     def _prepareTextForExtraction(self, text):
         t = textUtils.removeSpacesFromText(text)
@@ -73,15 +78,18 @@ class DateExtractor():
 
     def _transformYear(self, year):
         #fix years to four digit format.
-        if int(year) < 50:
+        if not self.dates_always_20th_century:
+            if int(year) < 50:
+                year = "19" + year
+            elif int(year) < 1800:
+                year = "18" + year
+        else:
             year = "19" + year
-        elif int(year) < 1800:
-            year = "18" + year
         return year
 
     def _checkIsYearSensible(self):
         if int(self.year) > 2000 or  int(self.year) < 1800:
-            raise DateException(self.preparedText)
+            raise DateException(self.processedText)
 
     def _setFinalMatchPosition(self, foundDate):
         self.matchFinalPosition = foundDate.end()
