@@ -7,7 +7,6 @@ import textUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.dateExtractor import DateExtractor
 
-
 class BirthdayExtractor(BaseExtractor):
     PATTERN = ur'.*?(?:s|S|5)\.?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
     OPTIONS = re.UNICODE    #TODO: TRY IGNORE CASE?

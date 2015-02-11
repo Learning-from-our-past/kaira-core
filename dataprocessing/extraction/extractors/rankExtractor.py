@@ -7,7 +7,6 @@ from extraction.extractionExceptions import *
 
 
 class RankExtractor(BaseExtractor):
-
     RANK_PATTERN = ur'(?:(?:Sotarvo){s<=1}|(?:SOIarvo){s<=1}|(?:Ylenn){s<=1})(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,| )'
     RANK_OPTIONS = (re.UNICODE | re.IGNORECASE)
     ranks = ""

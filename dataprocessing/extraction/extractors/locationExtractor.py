@@ -23,6 +23,10 @@ class LocationExtractor():
         self._findLocation(text)
         return self.foundLocation
 
+    def setCustomPattern(self, pattern, options):
+        self.PATTERN = pattern
+        self.OPTIONS = options
+
     def _prepareTextForExtraction(self, text):
         t = textUtils.removeSpacesFromText(text)
         return t

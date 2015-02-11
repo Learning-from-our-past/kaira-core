@@ -16,6 +16,7 @@ from extractors.nameExtractor import NameExtractor
 from extractors.warExtractor import WarExtractor
 from extractors.birthdayExtractor import BirthdayExtractor
 from extractors.locationExtractor import BirthdayLocationExtractor
+from extractors.demobilizationExtractor import DemobilizationExtractor
 
 
 #use regex to extract the person's names and birthday from given text
@@ -66,7 +67,6 @@ class DataExtraction:
         #find birthplace:
         #locationName = self.extractBirthLocation(text[(m.span()[1]+date.span()[1]):(m.span()[1]+date.span()[1])+24])
         return {"birthDay": date.group("day"),"birthMonth": date.group("month"), "birthYear": year, "cursorLocation": cursorLocation + date.end()}    #, "birthday": m.group(3)
-
 
     def extractDeath(self, text, cursorLocation, windowWidth = 16 , forMan=True):
 
@@ -134,8 +134,6 @@ class DataExtraction:
             #raise BirthdayException(dateguess)
 
         return {"deathDay": date.group("day"),"deathMonth": date.group("month"), "deathYear": year, "kaatunut": kaatunut, "deathLocation": deathLocation, "cursorLocation": cursorLocation + date.end()}
-
-
 
     #TODO: REMOVE AFTER DEATH, DEMOBILIZATION AND SPOUSE USE CLASS VERSION
     #try to extract the location of the birth. Later the results could be compared to the list of locations
@@ -233,7 +231,6 @@ class DataExtraction:
             return spouseData
         else:
             return {"spouseCount" : 0, "hasSpouse" : foundSpouse}
-
 
     #extract data related to single spouse. Function is provided with a substring whihc contains
     #spouse information
@@ -390,57 +387,6 @@ class DataExtraction:
 
  #check if the count of "Js" and "Ts" makes sense.
 
-    def extractKotiutus(self, text):
-        text2 = text
-        text = text.replace(" ","")           #remove all whitespace in the substring
-        text = text.replace("\n","")
-
-        #Extract date
-        p = re.compile(ur'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4}(?=\D\D\D\D\D))|(?:(?P<monthName>[a-zä-ö]*)(?P<monthYear>\d{2,4}(?=\D\D\D\D\D))))',re.UNICODE | re.IGNORECASE)
-        date = p.search(unicode(text))
-
-
-
-        year = ""
-        month = ""
-        if date != None:
-            if date.group("year") == None:
-
-                if date.group("yearOnly") == None:
-                    #year and month available
-                    year = date.group("monthYear")
-                    month = date.group("monthName")
-                    #try to map month name to a number.
-                    if month in self.monthNameNumberMapping:
-                        month = self.monthNameNumberMapping[month]
-                    else:
-                        month = ""
-                else:
-                    year = date.group("yearOnly")   #only year available
-            else:
-                year = date.group("year")
-                month = date.group("month")
-
-            #fix years to four digit format.
-            year = "19" + year
-
-
-            try:
-                #kotiutusPlace = self.extractLocation(text2, date.end())["location"]
-                # customized location extraction:
-                lp = re.compile(ur'\A(?P<location>[A-ZÄ-Öa-zä-ö-]+?)(?=[A-ZÄ-Ö.,:])',re.UNICODE)
-                place = lp.search(text[date.end():date.end()+100])
-                kotiutusPlace = place.group("location")
-            except Exception as e:
-                self.errorLogger.logError(DemobilizationPlaceException.eType, self.currentChild )
-                kotiutusPlace = ""
-
-
-            return {"kotiutusDay": date.group("day"),"kotiutusMonth": month, "kotiutusYear": year, "kotiutusPlace" : kotiutusPlace}    #, "birthday": m.group(3)
-        else:
-            self.errorLogger.logError(DemobilizationTimeException.eType, self.currentChild )
-            return {"kotiutusDay": "","kotiutusMonth": "", "kotiutusYear": "", "kotiutusPlace" : ""}
-
     def extraction(self, text, xmlElement, eLogger):
         self.errorLogger = eLogger
         self.currentChild = xmlElement
@@ -464,28 +410,26 @@ class DataExtraction:
         #personLocation= self.extractLocation(text, personBirthday["cursorLocation"])
         #personLocation["birthLocation"] = personLocation["location"]
 
-        #TODO: MODIFY TO USE dependsOnMatchPositionOf() function
         p = ProfessionExtractor(self.currentChild, self.errorLogger)
-        profession = p.extract(text[personLocation["cursorLocation"]:])
+        p.dependsOnMatchPositionOf(plE)
+        profession = p.extract(text)    #text[personLocation["cursorLocation"]:]
 
         #TODO: OMA LUOKKA
         personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 320)
         #TODO: OMA LUOKKA
         spouseData = self.findSpouses(text, personLocation["cursorLocation"])
 
+        #TODO: OMA LUOKKA
         #if there is no spouse, try to still find children:
         if spouseData["spouseCount"] == 0:
             children = self.findChildren(text, personLocation["cursorLocation"])
         else:
             children = {}
 
-
-
-
-        #TODO: OMA LUOKKA
-        kotiutus = self.extractKotiutus(text)
-
         #####################################################################################################
+
+        dmE = DemobilizationExtractor(self.currentChild, self.errorLogger)
+        kotiutus = dmE.extract(text)
 
         wE = WarExtractor(self.currentChild, self.errorLogger)
         wars = wE.extract(text)
