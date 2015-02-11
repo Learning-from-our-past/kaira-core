@@ -3,6 +3,7 @@ import re
 from operator import itemgetter
 
 import regex
+import extractors.regexUtils as regexUtils
 import extractors.textUtils as textUtils
 import extractors.locationPreparingUtils as locationPreparingUtils
 from extraction.extractionExceptions import *
@@ -17,6 +18,7 @@ from extractors.warExtractor import WarExtractor
 from extractors.birthdayExtractor import BirthdayExtractor
 from extractors.locationExtractor import BirthdayLocationExtractor
 from extractors.demobilizationExtractor import DemobilizationExtractor
+from extractors.deathExtractor import DeathExtractor
 
 
 #use regex to extract the person's names and birthday from given text
@@ -68,27 +70,17 @@ class DataExtraction:
         #locationName = self.extractBirthLocation(text[(m.span()[1]+date.span()[1]):(m.span()[1]+date.span()[1])+24])
         return {"birthDay": date.group("day"),"birthMonth": date.group("month"), "birthYear": year, "cursorLocation": cursorLocation + date.end()}    #, "birthday": m.group(3)
 
+    #TODO: REMOVE AFTER SPOUSECODE USES CLASS
     def extractDeath(self, text, cursorLocation, windowWidth = 16 , forMan=True):
 
         regexPattern = ur'k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
         kaatunut = False
         if forMan:
             #snip the string if there is "Pso" to avoid extracting wife name instead of location name:
+            text = textUtils.takeSubStrBasedOnFirstRegexOccurrence(text,ur'(?P<match>pso|ts:|js:)', re.IGNORECASE | re.UNICODE)
 
-            r = re.finditer(ur'(?P<match>pso|ts:|js:)', text, re.IGNORECASE | re.UNICODE)
-            endPos = -1
-            for m in r:
-                endPos = m.start()
-                break
-
-
-            if endPos != -1:
-                text = text[0:endPos]
-
-
-            #check if man has died in war
-            k = text.find(" kaat ")
-            if k != -1:
+            #onko kaatunut
+            if regexUtils.matchExists(ur" kaat ", text):
                 kaatunut = True
                 regexPattern = ur'kaat(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
 
@@ -322,8 +314,6 @@ class DataExtraction:
     #sort children based on the marriage they were conceived in
     def sortChildren(self, childdict):
 
-
-
         if childdict["childCount"] > 0:
             #try to find keywords:
             psoEdp = re.compile(ur'(?P<psoed>pson ed aviol|pson aik aviol|vaimon I aviol|vaimon ed aviol|rvan ed aviol|pson? I aviol|pson I avioi|miehen I)', re.UNICODE)
@@ -415,7 +405,11 @@ class DataExtraction:
         profession = p.extract(text)    #text[personLocation["cursorLocation"]:]
 
         #TODO: OMA LUOKKA
-        personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 320)
+        #personDeath = self.extractDeath(text, personBirthday["cursorLocation"], 320)
+        pDE = DeathExtractor(self.currentChild, self.errorLogger)
+        pDE.dependsOnMatchPositionOf(bE)
+        personDeath = pDE.extract(text)
+
         #TODO: OMA LUOKKA
         spouseData = self.findSpouses(text, personLocation["cursorLocation"])
 
@@ -427,7 +421,7 @@ class DataExtraction:
             children = {}
 
         #####################################################################################################
-
+        print text
         dmE = DemobilizationExtractor(self.currentChild, self.errorLogger)
         kotiutus = dmE.extract(text)
 
