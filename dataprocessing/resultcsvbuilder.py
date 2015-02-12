@@ -74,13 +74,13 @@ class ResultCsvBuilder:
         return row
 
     def _createWifeRowFromDict(self, wife):
-        wifeRow = [wife["weddingYear"], wife["spouseName"], wife["spouseBirthData"]["birthDay"],
-                           wife["spouseBirthData"]["birthMonth"], wife["spouseBirthData"]["birthYear"],
-                                     wife["spouseBirthLocation"],  wife["spouseDeathData"]["deathDay"],
-                                     wife["spouseDeathData"]["deathMonth"], wife["spouseDeathData"]["deathYear"],
-                                     wife["spouseDeathData"]["deathLocation"], wife["children"]["childCount"],
-                                     wife["children"]["separated"]["miehEd"], wife["children"]["separated"]["nyk"],
-                                     wife["children"]["separated"]["psoEd"]]
+        wifeRow =   [wife["weddingYear"], wife["spouseName"], wife["spouseBirthData"]["birthDay"],
+                     wife["spouseBirthData"]["birthMonth"], wife["spouseBirthData"]["birthYear"],
+                     wife["spouseBirthLocation"],  wife["spouseDeathData"]["deathDay"],
+                     wife["spouseDeathData"]["deathMonth"], wife["spouseDeathData"]["deathYear"],
+                     wife["spouseDeathData"]["deathLocation"], wife["children"]["childCount"],
+                     wife["children"]["separated"]["miehEd"], wife["children"]["separated"]["nyk"],
+                     wife["children"]["separated"]["psoEd"]]
         return wifeRow
 
     def closeCsv(self):

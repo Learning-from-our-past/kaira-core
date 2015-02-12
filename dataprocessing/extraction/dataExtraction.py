@@ -19,6 +19,7 @@ from extractors.birthdayExtractor import BirthdayExtractor
 from extractors.locationExtractor import BirthdayLocationExtractor
 from extractors.demobilizationExtractor import DemobilizationExtractor
 from extractors.deathExtractor import DeathExtractor
+from extractors.childrenExtractor import ChildrenExtractor
 
 
 #use regex to extract the person's names and birthday from given text
@@ -416,7 +417,11 @@ class DataExtraction:
         #TODO: OMA LUOKKA
         #if there is no spouse, try to still find children:
         if spouseData["spouseCount"] == 0:
-            children = self.findChildren(text, personLocation["cursorLocation"])
+            otherCh = ChildrenExtractor(self.currentChild, self.errorLogger)
+            otherCh.dependsOnMatchPositionOf(plE)
+            children = otherCh.extract(text)
+
+            #children = self.findChildren(text, personLocation["cursorLocation"])
         else:
             children = {}
 

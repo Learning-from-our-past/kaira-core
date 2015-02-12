@@ -13,6 +13,7 @@ class ProfessionExtractor(BaseExtractor):
     profession = ""
 
     def extract(self, text):
+        super(ProfessionExtractor, self).extract(text)
         text = self._prepareTextForExtraction(text)
         self._findProfession(text)
         return self._constructReturnDict()
