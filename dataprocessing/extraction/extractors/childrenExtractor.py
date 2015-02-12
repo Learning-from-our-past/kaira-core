@@ -15,14 +15,13 @@ class ChildrenExtractor(BaseExtractor):
     REQUIRES_MATCH_POSITION = True
     childCount = 0
     sortedChildren = {"current": "", "manPrevious": "", "spousePrevious": ""}
-    allChildren = ""        #Needed for other children extraction. Dirty solution for now.
+    allChildren = ""        #TODO: Needed for other children extraction. Dirty solution for now.
 
 
     def extract(self, text):
         super(ChildrenExtractor, self).extract(text)
         preparedText = self._prepareTextForExtraction(text)
         self._findChildren(preparedText)
-
         return self._constructReturnDict()
 
     def _prepareTextForExtraction(self, text):
@@ -39,7 +38,6 @@ class ChildrenExtractor(BaseExtractor):
             self.matchFinalPosition = foundChildren.end()
         except regexUtils.RegexNoneMatchException as e:
             self._findChildrenWithNumberWords(text)
-            #self.errorLogger.logError(ProfessionException.eType, self.currentChild )
 
     def _findChildrenWithNumberWords(self, text):
         """Sometimes the books list the amount of children in format like "yksi tytär" or "viisi lasta"."""
@@ -79,10 +77,6 @@ class ChildrenExtractor(BaseExtractor):
 
 
     def _constructReturnDict(self):
-        print "--------------"
-        print self.currentChild.text
-        print "--------------"
-        print self.sortedChildren
         return  {"children": self.allChildren, "cursorLocation" : self.matchFinalPosition,
                  "childCount": self.childCount, "separated" : {"nyk": self.sortedChildren["current"],
                                                                "miehEd" : self.sortedChildren["manPrevious"],
@@ -173,7 +167,6 @@ class ChildSorter():
         self.childrenFromCurrentMarriage = sepChildrenHelper["current"]
         self.childrenFromMansPreviousMarriage = sepChildrenHelper["manPrevious"]
         self.childrenFromSpousesPreviousMarriage= sepChildrenHelper["spousePrevious"]
-
 
     def _extractSection(self, start, end):
         return self.childText[start:end]
