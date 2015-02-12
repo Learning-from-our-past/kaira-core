@@ -271,7 +271,9 @@ class DataExtraction:
         else:
             return None
 
+
     #try to find the list of children from the soldier and return it as a single string.
+    #TODO: REMOVE AFTER SPOUSECODE USES CLASS
     def findChildren(self, text, cursorLocation):
         text = text[cursorLocation:]
         #print "-----"
@@ -312,6 +314,7 @@ class DataExtraction:
                 self.errorLogger.logError(ChildrenException.eType, self.currentChild )
                 return  {"children": "", "cursorLocation" : cursorLocation, "childCount": 0, "separated" : {"nyk": "", "miehEd" : "", "psoEd" : ""}}
 
+    #TODO: REMOVE AFTER SPOUSECODE USES CLASS
     #sort children based on the marriage they were conceived in
     def sortChildren(self, childdict):
 
