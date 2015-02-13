@@ -59,7 +59,7 @@ class DeathExtractor(BaseExtractor):
     def _prepareTextForLocationExtraction(self, text):
         #Death location is directly after the date.
         t = self._takeSubstring(text)
-        #TODO: The diry +10 is because the position returned from dateExtractor is slightly smaller because of
+        #TODO: The dirty +10 is because the position returned from dateExtractor is slightly smaller because of
         #TODO: removing spaces from the string. There should be better solution for this. Save amount of removed spaces...?
         return textUtils.takeSubStrBasedOnPos(t, self.dateExtractor.getFinalMatchPosition()+10, self.LOCATION_SUBSTRING_WIDTH)
 

@@ -10,6 +10,10 @@ def takeSubStrBasedOnPos(text, start, width=None):
         t = text[start:]
     return t
 
+def takeSubStrBasedOnRange(text, start, end):
+    t = text[start:end]
+    return t
+
 def takeSubStrBasedOnFirstRegexOccurrence(text, pattern, options=re.UNICODE):
     pos = regexUtils.findFirstPositionWithRegexSearch(pattern, text, options)
     if pos == -1:

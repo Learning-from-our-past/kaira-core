@@ -109,8 +109,6 @@ class ChildSorter():
 
 
     def sortChildrenBasedOnMarriage(self, children):
-        print "***********"
-        print children
         self.childText = children
         self._findKeywords(children)
         sections = self._calculateSectionsInText()
