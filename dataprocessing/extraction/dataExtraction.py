@@ -20,6 +20,7 @@ from extractors.locationExtractor import BirthdayLocationExtractor
 from extractors.demobilizationExtractor import DemobilizationExtractor
 from extractors.deathExtractor import DeathExtractor
 from extractors.childrenExtractor import ChildrenExtractor
+from extractors.spouseExtractor import SpouseExtractor
 
 
 #use regex to extract the person's names and birthday from given text
@@ -192,7 +193,6 @@ class DataExtraction:
             foundSpouse = True      #found Pso which suggests there is spouse information available.
 
         if foundSpouse:
-
             wives = []
             for i in range(0, len(spouseCount)):
 
@@ -415,7 +415,10 @@ class DataExtraction:
         personDeath = pDE.extract(text)
 
         #TODO: OMA LUOKKA
-        spouseData = self.findSpouses(text, personLocation["cursorLocation"])
+        #spouseData = self.findSpouses(text, personLocation["cursorLocation"])
+        spouseExtractor = SpouseExtractor(self.currentChild, self.errorLogger)
+        spouseExtractor.dependsOnMatchPositionOf(plE)
+        spouseData = spouseExtractor.extract(text)
 
         #TODO: OMA LUOKKA
         #if there is no spouse, try to still find children:
@@ -429,7 +432,6 @@ class DataExtraction:
             children = {}
 
         #####################################################################################################
-        print text
         dmE = DemobilizationExtractor(self.currentChild, self.errorLogger)
         kotiutus = dmE.extract(text)
 

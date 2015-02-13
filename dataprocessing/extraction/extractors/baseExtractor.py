@@ -26,7 +26,11 @@ class BaseExtractor():
     def dependsOnMatchPositionOf(self, extractor):
         self.matchStartPosition = extractor.getFinalMatchPosition()
         self.matchFinalPosition = self.matchStartPosition   #in case extractor doesn't find anything, we set finalPos as startPos
-        pass
+
+    def setDependencyMatchPositionToZero(self):
+        self.matchStartPosition = 0
+        self.matchFinalPosition = self.matchStartPosition   #in case extractor doesn't find anything, we set finalPos as startPos
+
 
     #TODO: REMOVE AND USE regexUtils
     def _executeSearchRegex(self, text, options=re.UNICODE | re.IGNORECASE):

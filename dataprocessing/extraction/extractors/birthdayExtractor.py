@@ -11,7 +11,7 @@ class BirthdayExtractor(BaseExtractor):
     PATTERN = ur'.*?(?:s|S|5)\.?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
     OPTIONS = re.UNICODE    #TODO: TRY IGNORE CASE?
     REQUIRES_MATCH_POSITION = True
-    SUBSTRING_WIDTH = 18
+    SUBSTRING_WIDTH = 24
     dateExtractor = None
     foundDate = {}
     preparedText = ""
