@@ -40,7 +40,6 @@ class SpouseExtractor(BaseExtractor):
            pass
 
     def _constructReturnDict(self):
-        print self.spouseData
         return self.spouseData
 
     def _findAllSpouses(self, text):
@@ -57,9 +56,9 @@ class SpouseExtractor(BaseExtractor):
 
             #wife = self.extractSpouse(self, extractionStrs["spouseString"], 0)      #TODO: USE CLASS
             wifeExt = WifeDataExtractor(self.currentChild, self.errorLogger)
-            print "WIFESTRING: " + unicode(extractionStrs["spouseString"])
+
             wife = wifeExt.extract(extractionStrs["spouseString"])
-            print "WIFE: " + unicode(wife)
+
             if wife["spouseName"] != "":
                 wife["children"] = children
                 wives.append(wife)
@@ -75,7 +74,7 @@ class SpouseExtractor(BaseExtractor):
     def _getSpouseCount(self, text):
         spouseCount = regexUtils.regexIter(self.PATTERN_SPOUSE_EXISTS, text, self.OPTIONS)
         spouseCount = tuple(spouseCount)
-        print len(spouseCount)
+
         return spouseCount
 
     def _constructSpouseExtractionStrings(self, spouseCount, i, text):
@@ -141,7 +140,7 @@ class WifeDataExtractor(BaseExtractor):
             preparedText = textUtils.takeSubStrBasedOnPos(text, self.matchFinalPosition - self.BIRTHYEAR_WINDOW_LEFTOFFSET, 64)
             bDayExt.setDependencyMatchPositionToZero()
             self.birthData = bDayExt.extract(preparedText) #self.extractBirthday(text[(m.end()-birthYearWindowLeftOffset):], 0, 64)
-            self.matchFinalPosition += bDayExt.getFinalMatchPosition()
+            self.matchFinalPosition += bDayExt.getFinalMatchPosition()- self.BIRTHYEAR_WINDOW_LEFTOFFSET
         except BirthdayException as e:
             self.errorLogger.logError(SpouseBirthdayException.eType, self.currentChild)
 
@@ -150,14 +149,14 @@ class WifeDataExtractor(BaseExtractor):
             locationExt = LocationExtractor()
             preparedText = textUtils.takeSubStrBasedOnPos(text, self.matchFinalPosition)
             self.birthPlace = locationExt.extract(preparedText).group("location")
-            print "Vaimon syntymapaikka: " + unicode(self.birthPlace)
-            self.matchFinalPosition += locationExt.getFinalMatchPosition()
+            self.matchFinalPosition += locationExt.getFinalMatchPosition() - 15
         except LocationException as e:
             self.errorLogger.logError(SpouseBirthplaceException.eType, self.currentChild)
 
     def _findDeath(self, text):
         deathExt = DeathExtractor(self.currentChild, self.errorLogger)
         preparedText = textUtils.takeSubStrBasedOnPos(text, self.matchFinalPosition, 40)
+        print "KUOLEMA: " + unicode(preparedText)
         deathExt.setDependencyMatchPositionToZero()
         self.deathData = deathExt.extract(preparedText)
         self.matchFinalPosition += deathExt.getFinalMatchPosition()
