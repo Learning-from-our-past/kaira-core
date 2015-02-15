@@ -14,7 +14,7 @@ class DeathExtractor(BaseExtractor):
     DATE_PATTERN_FALLEN = ur'kaat(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
     date_pattern = ""
     DATE_OPTIONS = re.UNICODE | re.IGNORECASE
-    LOCATION_SUBSTRING_WIDTH = 100
+    LOCATION_SUBSTRING_WIDTH = 110
     DATE_SUBSTRING_WIDTH = 320
 
     REQUIRES_MATCH_POSITION = True
@@ -25,6 +25,7 @@ class DeathExtractor(BaseExtractor):
     year = ""
     location = ""
     fallenInWar = False
+    doneForWife = False     #TODO: Refactor the code to make this needless later. Used in preparation
 
     def extract(self, text):
         super(DeathExtractor, self).extract(text)
@@ -45,6 +46,9 @@ class DeathExtractor(BaseExtractor):
             pass
         return self._constructReturnDict()
 
+    def targetIsSpouse(self):
+        self.doneForWife = True
+
     def initExtractors(self):
         self.dateExtractor = DateExtractor()
         self.dateExtractor.setDatesToAlwaysIn20thCentury(True)
@@ -59,9 +63,14 @@ class DeathExtractor(BaseExtractor):
     def _prepareTextForLocationExtraction(self, text):
         #Death location is directly after the date.
         t = self._takeSubstring(text)
-        #TODO: The dirty +10 is because the position returned from dateExtractor is slightly smaller because of
-        #TODO: removing spaces from the string. There should be better solution for this. Save amount of removed spaces...?
-        return textUtils.takeSubStrBasedOnPos(t, self.dateExtractor.getFinalMatchPosition()+10, self.LOCATION_SUBSTRING_WIDTH)
+
+        if not self.doneForWife:
+            #TODO: The dirty +10 is because the position returned from dateExtractor is slightly smaller because of
+            #TODO: removing spaces from the string. There should be better solution for this. Save amount of removed spaces...?
+            t = textUtils.takeSubStrBasedOnPos(t, self.dateExtractor.getFinalMatchPosition()+10, self.LOCATION_SUBSTRING_WIDTH)
+        else:
+            t = textUtils.takeSubStrBasedOnPos(t, self.dateExtractor.getFinalMatchPosition(), self.LOCATION_SUBSTRING_WIDTH)
+        return t
 
     def _findIfFallenInWar(self, text):
         if regexUtils.matchExists(ur" kaat ", text):
