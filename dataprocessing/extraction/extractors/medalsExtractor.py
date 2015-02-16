@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
 
 
 class MedalsExtractor(BaseExtractor):
 
-    RVA_PATTERN = ur'(?P<rva>\bRva|\brva)'
-    VAPAUDEN_MITALI_PATTERN = ur'(?P<mitali>Vm ?1|Vm ?2)'
-    VAPAUDEN_RISTI_PATTERN = ur'(?P<mitali>VR ?suur|VR ?[1-4](?: [a-zä-ö ]{1,})?|VR ?surur)'
-    SUOMEN_VAPAUDEN_RISTI_PATTERN = ur'(?P<mitali>SVR ?suur|SVR ?[A-Za-zä-ö1-2 ]{1,})'
+    RVA_PATTERN = r'(?P<rva>\bRva|\brva)'
+    VAPAUDEN_MITALI_PATTERN = r'(?P<mitali>Vm ?1|Vm ?2)'
+    VAPAUDEN_RISTI_PATTERN = r'(?P<mitali>VR ?suur|VR ?[1-4](?: [a-zä-ö ]{1,})?|VR ?surur)'
+    SUOMEN_VAPAUDEN_RISTI_PATTERN = r'(?P<mitali>SVR ?suur|SVR ?[A-Za-zä-ö1-2 ]{1,})'
 
     medals = ""
     rvaPosition = -1    #Position of the possible rva key-word which might indicate that medal is for her.

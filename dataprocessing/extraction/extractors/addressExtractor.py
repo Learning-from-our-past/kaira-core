@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
+from extraction.extractors.baseExtractor import BaseExtractor
 
 
 class AddressExtractor(BaseExtractor):
-    regexPattern = ur'(?:\W- ?Os\b|\W- ?os\b|\W- ?o5\b|\W- ?O5\b|\W- ?05\b)(?P<address>(?:.|\n)*?)(?=$|Rva|\.)'
+    regexPattern = r'(?:\W- ?Os\b|\W- ?os\b|\W- ?o5\b|\W- ?O5\b|\W- ?05\b)(?P<address>(?:.|\n)*?)(?=$|Rva|\.)'
     address = ""
 
     def extract(self, text):

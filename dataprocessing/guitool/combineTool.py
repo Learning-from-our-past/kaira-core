@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from Tkinter import *
-from highlightText import CustomText
-from dialog import Dialog
+from tkinter import *
+from guitool.highlightText import CustomText
+from guitool.dialog import Dialog
 from lxml import etree
 
 class Application(Frame):
@@ -81,7 +81,7 @@ class Application(Frame):
         nbtn.pack(side=LEFT)
 
     def newChild(self):
-        print "NEW"
+        print ("NEW")
         d = Dialog(self.master, "Dialog")
         if len(d.result) > 8:
             child = etree.SubElement(self.xmldocument, "PERSON")
@@ -92,7 +92,7 @@ class Application(Frame):
         #take the child at question:
         self.currentChild["child"].text = self.textarea.get(1.0, END)
         self.currentChild["child"].attrib["checked"] = "True"
-        print self.currentChild["child"].text
+        print (self.currentChild["child"].text)
         #save changes to previous too
         self.currentPrevious.text = self.textareaPrevious.get(1.0, END)
 
@@ -102,7 +102,7 @@ class Application(Frame):
         self.currentChild["child"].text = newtxt
         self.currentChild["child"].attrib["combined"] = "True"
         self.xmldocument.remove(self.currentPrevious)
-        print self.currentChild["child"].text
+        print (self.currentChild["child"].text)
 
 
     def onSelect(self, val):
@@ -123,7 +123,7 @@ class Application(Frame):
 
         #find previous child's text
         self.currentPrevious = self.currentChild["child"].getprevious()
-        print self.currentPrevious.text
+        print (self.currentPrevious.text)
         self.textareaPrevious.delete(1.0, END)
 
         self.textareaPrevious.insert(INSERT,self.currentPrevious.text)
@@ -138,7 +138,7 @@ class Application(Frame):
         self.createWidgets()
 
     def closeHandler(self):
-        print "Sulje combinetool"
+        print ("Sulje combinetool")
         self.master.destroy()
         self.callback()
 

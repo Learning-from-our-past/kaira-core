@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils, textUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
+import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.childrenExtractor import ChildrenExtractor
 from extraction.extractors.birthdayExtractor import BirthdayExtractor
@@ -10,7 +11,7 @@ from extraction.extractors.locationExtractor import LocationExtractor
 from extraction.extractors.deathExtractor import DeathExtractor
 
 class SpouseExtractor(BaseExtractor):
-    PATTERN_SPOUSE_EXISTS = ur'(?P<spouseExists>\b(?:P|p)so\b)'
+    PATTERN_SPOUSE_EXISTS = r'(?P<spouseExists>\b(?:P|p)so\b)'
     OPTIONS = re.UNICODE
 
     REQUIRES_MATCH_POSITION = True
@@ -27,7 +28,7 @@ class SpouseExtractor(BaseExtractor):
     def _prepareTextForExtraction(self, text):
         t = textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition-5)
         #snip the string if there is ts or js markers to avoid taking spouse's old men.
-        pos = regexUtils.findFirstPositionWithRegexSearch(ur'(?P<match>ts:|js:)', text, re.IGNORECASE | re.UNICODE)
+        pos = regexUtils.findFirstPositionWithRegexSearch(r'(?P<match>ts:|js:)', text, re.IGNORECASE | re.UNICODE)
         t = textUtils.takeSubStrBasedOnPos(t, 0, pos+10)
         return t
 
@@ -92,7 +93,7 @@ class SpouseExtractor(BaseExtractor):
 
 
 class WifeDataExtractor(BaseExtractor):
-    WEDDINGYEAR_NAME_PATTERN = ur'\b(?:P|p)so\b(?: \bvst?l?a ?(?P<weddingYear>\d{1,2})\.?)? ?(?P<spouseName>[A-ZÄ-Ö][A-ZÄ-Öa-zä-ö -]+)(?:,|.)'
+    WEDDINGYEAR_NAME_PATTERN = r'\b(?:P|p)so\b(?: \bvst?l?a ?(?P<weddingYear>\d{1,2})\.?)? ?(?P<spouseName>[A-ZÄ-Ö][A-ZÄ-Öa-zä-ö -]+)(?:,|.)'
     OPTIONS = re.UNICODE
     BIRTHYEAR_WINDOW_LEFTOFFSET = 10
     spouseName = ""
@@ -167,18 +168,3 @@ class NoWifeException(Exception):
     message = "Couldn't find wife data."
     def __unicode__(self):
         return repr(self.message)
-
-
-def extractSdfgfdgfdgdfgfedgpouse(self, text, cursorLocation):
-        birthYearWindowLeftOffset = 10
-
-        if m != None:
-
-
-
-            deathData = self.extractDeath(text, m.end(), 40, False)
-            return {"cursorLocation": deathData["cursorLocation"], "weddingYear": weddingYear, "spouseName": spouseName, "spouseBirthData": spouseBirthYear, "spouseDeathData": deathData,"spouseBirthLocation": birthPlace["location"]}
-        else:
-            return None
-
-

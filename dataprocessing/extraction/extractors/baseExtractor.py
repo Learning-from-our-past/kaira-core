@@ -4,7 +4,7 @@ import re
 
 class BaseExtractor():
     __metaclass__ = ABCMeta
-    regexPattern = ur''
+    regexPattern = r''
     currentChild = None
     errorLogger = None
     REQUIRES_MATCH_POSITION = False   #Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
@@ -35,7 +35,7 @@ class BaseExtractor():
     #TODO: REMOVE AND USE regexUtils
     def _executeSearchRegex(self, text, options=re.UNICODE | re.IGNORECASE):
         r = re.compile(self.regexPattern, options)
-        return r.search(unicode(text))
+        return r.search(text)
 
     @abstractmethod
     def _constructReturnDict(self):
@@ -48,6 +48,6 @@ class BaseExtractor():
 class MatchPositionRequiredException(Exception):
     message = u"Match position required to supplied with dependsOnMatchPositionOf before extract call. "
     def __init__(self, details = ""):
-        self.message += unicode(details)
+        self.message += details
     def __unicode__(self):
         return self.message

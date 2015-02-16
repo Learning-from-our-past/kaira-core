@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils
-import textUtils
-import locationPreparingUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
+import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 
 
@@ -14,7 +13,7 @@ from extraction.extractionExceptions import *
 #Also return match object to be used by caller
 
 class LocationExtractor():
-    PATTERN = ur'(?:\d+| s)(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
+    PATTERN = r'(?:\d+| s)(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
     OPTIONS = re.UNICODE
     matchFinalPosition = 0
     foundLocation = None
@@ -49,7 +48,7 @@ class LocationExtractor():
 
 
 class BirthdayLocationExtractor(BaseExtractor):
-    DEATHCHECK_PATTERN = ur'(\bk\b|\bkaat\b)'
+    DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
     REQUIRES_MATCH_POSITION = True
     SUBSTRING_WIDTH = 28
     locationExtractor = None

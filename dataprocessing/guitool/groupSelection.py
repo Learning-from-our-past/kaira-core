@@ -14,8 +14,8 @@ website: www.zetcode.com
 
 
 
-from ttk import Frame, Label, Style, Button
-from Tkinter import Tk, BOTH, Listbox, StringVar, END
+from tkinter.ttk import Frame, Label, Style, Button
+from tkinter import Tk, BOTH, Listbox, StringVar, END
 import guitool.combineTool as CombineTool
 
 class Application(Frame):
@@ -41,7 +41,7 @@ class Application(Frame):
 
         lb = Listbox(self)
         lb.config(width=150, height=15)
-        for key, value in self.errorList.iteritems():
+        for key, value in self.errorList.items():
             lb.insert(END, (str(key) + " " + str(len(value))))
 
         lb.bind("<<ListboxSelect>>", self.onSelect)
@@ -50,13 +50,13 @@ class Application(Frame):
 
         okb = Button(self, text="OK", command=self.gotoEdit)
         okb.place(x=20, y = 300)
-        print "valmista"
+        print ("valmista")
 
     def gotoEdit(self):
-        print "Start tool..."
+        print ("Start tool...")
         self.master.withdraw()
         CombineTool.startGUI(self.currentSelection, self.xmlroot, self.callbackEdit)
-        print "back"
+        print ("back")
 
 
 
@@ -70,17 +70,17 @@ class Application(Frame):
         value = sender.get(idx)
         value = value.partition(' ')[0]
         self.currentSelection = self.errorList[value]
-        print self.currentSelection
+        print (self.currentSelection)
 
     def closeHandler(self):
-        print "close groupselection"
+        print ("close groupselection")
         self.quit()
         self.master.destroy()
         self.callback(self.xmlroot)
 
 def startGUI(errorList, xmlroot, callback):
     root = Tk()
-    print "ALota nyt"
+    print ("ALota nyt")
     ex = Application(root, errorList, xmlroot, callback)
     root.geometry("500x500+300+300")
     root.mainloop()

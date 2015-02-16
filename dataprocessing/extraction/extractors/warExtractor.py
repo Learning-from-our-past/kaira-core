@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.regimentExtractor import RegimentsExtractor
 
 
 class WarExtractor(BaseExtractor):
-    JATKOSOTA_PATTERN = ur'(?P<jsExists>(?:Js:|JS:|js:|jS:))'
+    JATKOSOTA_PATTERN = r'(?P<jsExists>(?:Js:|JS:|js:|jS:))'
     JATKOSOTA_OPTIONS = re.UNICODE
-    TALVISOTA_PATTERN = ur'(?P<tsExists>(?:Ts:|TS:|ts:|tS:))'
+    TALVISOTA_PATTERN = r'(?P<tsExists>(?:Ts:|TS:|ts:|tS:))'
     TALVISOTA_OPTIONS = re.UNICODE
     wereInJatkosota = False
     wereInTalvisota = False

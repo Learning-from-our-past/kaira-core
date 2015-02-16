@@ -9,10 +9,10 @@ class ExceptionLogger:
             self.errorsListing[exceptionType] = [{"child": entry}]
 
     def printErrorBreakdown(self):
-        print "ERROR breakdown: "
-        for key, value in self.errorsListing.iteritems():
-            print key
-            print len(value)
+        print ("ERROR breakdown: ")
+        for key, value in self.errorsListing.items():
+            print (key)
+            print (len(value))
 
     def getErrors(self):
         return self.errorsListing

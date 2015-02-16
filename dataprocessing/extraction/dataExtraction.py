@@ -3,24 +3,24 @@ import re
 from operator import itemgetter
 
 import regex
-import extractors.regexUtils as regexUtils
-import extractors.textUtils as textUtils
-import extractors.locationPreparingUtils as locationPreparingUtils
+import extraction.extractors.regexUtils as regexUtils
+import extraction.extractors.textUtils as textUtils
+import extraction.extractors.locationPreparingUtils as locationPreparingUtils
 from extraction.extractionExceptions import *
-from extractors.addressExtractor import AddressExtractor
-from extractors.medalsExtractor import MedalsExtractor
-from extractors.rankExtractor import RankExtractor
-from extractors.regimentExtractor import RegimentsExtractor
-from extractors.hobbiesExtractor import HobbiesExtractor
-from extractors.professionExtractor import ProfessionExtractor
-from extractors.nameExtractor import NameExtractor
-from extractors.warExtractor import WarExtractor
-from extractors.birthdayExtractor import BirthdayExtractor
-from extractors.locationExtractor import BirthdayLocationExtractor
-from extractors.demobilizationExtractor import DemobilizationExtractor
-from extractors.deathExtractor import DeathExtractor
-from extractors.childrenExtractor import ChildrenExtractor
-from extractors.spouseExtractor import SpouseExtractor
+from extraction.extractors.addressExtractor import AddressExtractor
+from extraction.extractors.medalsExtractor import MedalsExtractor
+from extraction.extractors.rankExtractor import RankExtractor
+from extraction.extractors.regimentExtractor import RegimentsExtractor
+from extraction.extractors.hobbiesExtractor import HobbiesExtractor
+from extraction.extractors.professionExtractor import ProfessionExtractor
+from extraction.extractors.nameExtractor import NameExtractor
+from extraction.extractors.warExtractor import WarExtractor
+from extraction.extractors.birthdayExtractor import BirthdayExtractor
+from extraction.extractors.locationExtractor import BirthdayLocationExtractor
+from extraction.extractors.demobilizationExtractor import DemobilizationExtractor
+from extraction.extractors.deathExtractor import DeathExtractor
+from extraction.extractors.childrenExtractor import ChildrenExtractor
+from extraction.extractors.spouseExtractor import SpouseExtractor
 
 """Extraction process is handled here for one entry per time. This class calls all the extractor
 classes to execute extraction in specific order."""
@@ -85,6 +85,20 @@ class DataExtraction:
         h = HobbiesExtractor(self.currentChild, self.errorLogger)
         hobbies = h.extract(text)
 
+        d = personData.copy()
+        d.update(personBirthday)
+        d.update(personLocation)
+        d.update(profession)
+        d.update(personDeath)
+        d.update(spouseData)
+        d.update(children)
+        d.update(wars)
+        d.update(rank)
+        d.update(medals)
+        d.update(kotiutus)
+        d.update(address)
+        d.update(hobbies)
+        return d
         return dict(personData.items() + personBirthday.items() + personLocation.items() + profession.items() + personDeath.items()+ spouseData.items() + children.items() + wars.items() + rank.items() + medals.items() + kotiutus.items() + address.items() + hobbies.items())
 
     def cleanText(self, text):

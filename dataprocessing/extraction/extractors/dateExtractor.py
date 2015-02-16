@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils
-import textUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
+import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 
 #This class extracts date from given string. Substringing has to be made in caller.
@@ -11,7 +11,7 @@ from extraction.extractionExceptions import *
 #other extractors.
 #NOTE: DOESN'T INHERIT BASEEXTRACTOR!
 class DateExtractor():
-    PATTERN = ur""
+    PATTERN = r""
     OPTIONS = None
     year = ""
     month = ""

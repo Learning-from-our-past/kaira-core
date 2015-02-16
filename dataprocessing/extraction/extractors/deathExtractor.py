@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils
-import textUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
+import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.dateExtractor import DateExtractor
 from extraction.extractors.locationExtractor import LocationExtractor
 
 class DeathExtractor(BaseExtractor):
     #TODO: Split deatlocationExtract to own class like the birthday one?
-    DATE_PATTERN_DEFAULT = ur'k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
-    DATE_PATTERN_FALLEN = ur'kaat(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
+    DATE_PATTERN_DEFAULT = r'k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
+    DATE_PATTERN_FALLEN = r'kaat(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
     date_pattern = ""
     DATE_OPTIONS = re.UNICODE | re.IGNORECASE
     LOCATION_SUBSTRING_WIDTH = 110
@@ -55,7 +55,7 @@ class DeathExtractor(BaseExtractor):
         self.locationExtractor = LocationExtractor()
 
     def _takeSubstring(self, text):
-        return textUtils.takeSubStrBasedOnFirstRegexOccurrence(text,ur'(?P<match>pso|ts:|js:)', re.IGNORECASE | re.UNICODE)
+        return textUtils.takeSubStrBasedOnFirstRegexOccurrence(text,r'(?P<match>pso|ts:|js:)', re.IGNORECASE | re.UNICODE)
 
     def _prepareTextForDateExtraction(self, text):
         return textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition, self.DATE_SUBSTRING_WIDTH)
@@ -73,7 +73,7 @@ class DeathExtractor(BaseExtractor):
         return t
 
     def _findIfFallenInWar(self, text):
-        if regexUtils.matchExists(ur" kaat ", text):
+        if regexUtils.matchExists(r" kaat ", text):
             self.fallenInWar = True
             self.date_pattern = self.DATE_PATTERN_FALLEN
         else:

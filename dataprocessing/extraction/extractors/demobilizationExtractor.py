@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils
-import textUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
+import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.dateExtractor import DateExtractor
 from extraction.extractors.locationExtractor import LocationExtractor
 
 class DemobilizationExtractor(BaseExtractor):
-    DATE_PATTERN = ur'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4}(?=\D\D\D\D\D))|(?:(?P<monthName>[a-zä-ö]*)(?P<monthYear>\d{2,4}(?=\D\D\D\D\D))))'
+    DATE_PATTERN = r'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4}(?=\D\D\D\D\D))|(?:(?P<monthName>[a-zä-ö]*)(?P<monthYear>\d{2,4}(?=\D\D\D\D\D))))'
     DATE_OPTIONS = re.UNICODE | re.IGNORECASE
-    LOCATION_PATTERN = ur'\A(?P<location>[A-ZÄ-Öa-zä-ö-]+?)(?=[A-ZÄ-Ö.,:])'
+    LOCATION_PATTERN = r'\A(?P<location>[A-ZÄ-Öa-zä-ö-]+?)(?=[A-ZÄ-Ö.,:])'
     LOCATION_OPTIONS = re.UNICODE
     LOCATION_SUBSTRING_WIDTH = 100
     dateExtractor = None

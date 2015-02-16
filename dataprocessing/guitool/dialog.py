@@ -1,4 +1,4 @@
-from Tkinter import *
+from tkinter import *
 import os
 
 class Dialog(Toplevel):
@@ -94,4 +94,4 @@ class Dialog(Toplevel):
 
     def apply(self):
         self.result = self.e1.get(1.0, END)
-        print self.result# or something
+        print (self.result)# or something

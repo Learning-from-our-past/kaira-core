@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
 
 
 class HobbiesExtractor(BaseExtractor):
 
-    HOBBIES_PATTERN = ur'(?:Harr\b)(?P<hobbies>(?:.|\n)*?)(?=$|Rva|- os\b|\.)'
+    HOBBIES_PATTERN = r'(?:Harr\b)(?P<hobbies>(?:.|\n)*?)(?=$|Rva|- os\b|\.)'
     HOBBIES_OPTIONS = (re.UNICODE | re.IGNORECASE)
     hobbies = ""
 
