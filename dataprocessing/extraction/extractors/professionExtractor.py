@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils, textUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
+import extraction.extractors.textUtils as  textUtils
 from extraction.extractionExceptions import *
 
 
 class ProfessionExtractor(BaseExtractor):
-    PATTERN = ur'^ ?(?:,|\.| )(?P<profession>[A-ZÄ-Öa-zä-ö !-]+?)(?:\.|,|Pso)'
+    PATTERN = r'^ ?(?:,|\.| )(?P<profession>[A-ZÄ-Öa-zä-ö !-]+?)(?:\.|,|Pso)'
     OPTIONS = (re.UNICODE | re.IGNORECASE)
     REQUIRES_MATCH_POSITION = True
     profession = ""

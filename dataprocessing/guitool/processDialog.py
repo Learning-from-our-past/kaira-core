@@ -14,10 +14,10 @@ website: www.zetcode.com
 """
 
 
-from Tkinter import Frame, Tk, BOTH, Text, Menu, END, Label
-import tkFileDialog
-from Tkinter import *
-import Tkinter, time, threading
+from tkinter import Frame, Tk, BOTH, Text, Menu, END, Label
+import tkinter.filedialog as tkFileDialog
+from tkinter import *
+import tkinter, time, threading
 import re
 import processData as processData
 import guitool.groupSelection as GUITool
@@ -80,14 +80,14 @@ class Example(Frame):
 
             #fire up the fixing tool:
             ###############################################################
-            print "Start error fix tool..."
+            print ("Start error fix tool...")
             self.file = done[0]["file"]
             self.master.withdraw()
             GUITool.startGUI(done[0]["errors"], done[0]["xmlDataDocument"], self.saveresults)
             done = None
             self.label["text"] = "Changes saved to the file " + self.file
 
-            print "muutokset loppu"
+            print ("muutokset loppu")
 
 
     def saveresults(self, root):

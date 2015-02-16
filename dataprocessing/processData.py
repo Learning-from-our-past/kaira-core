@@ -27,7 +27,7 @@ class ProcessData:
         self._initProcess(filePath)
         self._processAllEntries()
         self._finishProcess()
-        return {"errors": self.errorLogger.getErrors(), "xmlDataDocument" : self.xmlDataDocument, "file": file}
+        return {"errors": self.errorLogger.getErrors(), "xmlDataDocument" : self.xmlDataDocument, "file": filePath}
 
     def _initProcess(self, filePath):
         self.errors = 0
@@ -41,7 +41,7 @@ class ProcessData:
         self.errorLogger = ExceptionLogger()
         self.dataFilename = filePath
         self.xmlDataDocument = readData.getXMLroot(filePath + ".xml")
-        print "XML file elements: " + str(len(self.xmlDataDocument))
+        print ("XML file elements: " + str(len(self.xmlDataDocument)))
 
     def _processAllEntries(self):
         for child in self.xmlDataDocument:
@@ -67,15 +67,15 @@ class ProcessData:
         self.errorCsvBuilder.closeCsv()
 
     def _printStatistics(self):
-        print "Errors encountered: " + str(self.errors) + "/" + str(self.count)
+        print ("Errors encountered: " + str(self.errors) + "/" + str(self.count))
         self.errorLogger.printErrorBreakdown()
 
     #TODO: Muu paikka?
     def saveModificationsToFile(self):
         #write modifications to a new xml-file:
-        print "Kirjoitetaan "
+        print ("Kirjoitetaan ")
         f = open(self.dataFilename + ".xml", 'w')
         f.write(etree.tostring(self.xmlDataDocument, pretty_print=True, encoding='unicode').encode("utf8"))
         f.close()
-        print "valmis"
+        print ("valmis")
 

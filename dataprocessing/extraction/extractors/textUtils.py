@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-import regexUtils
+import extraction.extractors.regexUtils as regexUtils
 
 def takeSubStrBasedOnPos(text, start, width=None):
     if width is not None:

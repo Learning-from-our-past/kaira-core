@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import ntpath
-import unicodecsv
+import csv
 
 class ErrorCsvBuilder:
     CSVPATH = "../csv/errors/"
@@ -19,8 +19,8 @@ class ErrorCsvBuilder:
 
 
     def _initCsv(self):
-        self.openedCsv = open(self.CSVPATH + self.filename+ "_errors.csv", "wb")
-        self.csvWriter = unicodecsv.writer(self.openedCsv, delimiter=";")
+        self.openedCsv = open(self.CSVPATH + self.filename+ "_errors.csv", "w")
+        self.csvWriter = csv.writer(self.openedCsv, delimiter=";")
         self._writeCsvHeaders()
 
     def _writeCsvHeaders(self):

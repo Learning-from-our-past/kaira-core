@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
-from baseExtractor import BaseExtractor
-import regexUtils
+from extraction.extractors.baseExtractor import BaseExtractor
+import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
 
 
 class RegimentsExtractor(BaseExtractor):
 
-    REGIMENT_PATTERN = ur'(?P<regiments>(:?[A-Za-zä-öÄ-Ö0-9 \n,])+)'
+    REGIMENT_PATTERN = r'(?P<regiments>(:?[A-Za-zä-öÄ-Ö0-9 \n,])+)'
     REGIMENT_OPTIONS = re.UNICODE
     regiments = ""
 
