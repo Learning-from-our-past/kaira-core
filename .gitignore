@@ -1,3 +1,7 @@
 dataprocessing/build
 dataprocessing/dist
 *.pyc
+*.csv
+*.xml
+*.txt
+dataprocessing/.idea
