@@ -6,10 +6,10 @@ At the moment it lets the user to extract most of the interesting information fr
 
 #How does it work?
 ![Imgur](http://i.imgur.com/Obp8gM8.jpg)
-1. First you need a digital scan of the book. Preferably as good quality as possible.
-2. Run an OCR for the scanned documents to get the raw text in a simple .txt format. Picking up a good OCR-software and settings is a bit trial and error. We used Adobe's and will be using ABBYY Finereader because of the good support for Finnish language.
-3. We run "chunker" for the raw text-file which tries to isolate every one person entry to a separate XML-tag for easy processing. This is done with a regex which looks for patterns common in beginning of the one soldier's entry. It works most of the time but might make mistakes which has to be fixed in the fixer-tool (more about that below).
-4. We ran the actual extractor software which reads the XML-file and runs multiple tailored regexes and other domain-specific logic and generates a csv-file containing the data. At this point user can use fixing-tool to find missing information, edit the xml-file to fix the extraction errors and rerun the process.
+ 1. First you need a digital scan of the book. Preferably as good quality as possible.
+ 2. Run an OCR for the scanned documents to get the raw text in a simple .txt format. Picking up a good OCR-software and settings is a bit trial and error. We used Adobe's and will be using ABBYY Finereader because of the good support for Finnish language.
+ 3. We run "chunker" for the raw text-file which tries to isolate every one person entry to a separate XML-tag for easy processing. This is done with a regex which looks for patterns common in beginning of the one soldier's entry. It works most of the time but might make mistakes which has to be fixed in the fixer-tool (more about that below).
+ 4. We ran the actual extractor software which reads the XML-file and runs multiple tailored regexes and other domain-specific logic and generates a csv-file containing the data. At this point user can use fixing-tool to find missing information, edit the xml-file to fix the extraction errors and rerun the process.
 
 #Fixing tool
 At the moment the fixing-tool (can be found from GUI-tools) is **really** crude. Basically it is cobbled together from some Tkinter examples so that I could easily test and see the data and possible errors. There will be a much better fixing tool with actually working and usable GUI in future!
