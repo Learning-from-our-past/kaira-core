@@ -26,8 +26,8 @@ class XmlImport(QObject):
         filename = QFileDialog.getOpenFileName(self.parent, "Open xml-file containing the data to be analyzed.",
                                                "../xmldata", "Person data files (*.xml);;All files (*)")
         print(filename)
-        #TODO: SUORITA VAIN JOS TIEDOSTO VALITAAN
-        self._analyzeOpenedXml(filename)
+        if filename[0] != "":
+            self._analyzeOpenedXml(filename)
 
     def _analyzeOpenedXml(self, file):
         self.progressDialog = QProgressDialog(self.parent)
