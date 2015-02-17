@@ -67,9 +67,11 @@ class Example(Frame):
 
             #load the file and run analysis on different thread
             done = []
+            def cb(a, b):
+                pass
             def call():
-                self.processor = processData.ProcessData()
-                result = self.processor.startExtractionProcess(fl[0:len(fl)-4])
+                self.processor = processData.ProcessData(cb)
+                result = self.processor.startExtractionProcess(fl[0:len(fl)-4] + ".xml")
                 done.append(result)
             thread = threading.Thread(target = call)
             thread.start() # start parallel computation

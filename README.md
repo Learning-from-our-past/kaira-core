@@ -14,10 +14,12 @@ At the moment it lets the user to extract most of the interesting information fr
 #Fixing tool
 At the moment the fixing-tool (can be found from GUI-tools) is **really** crude. Basically it is cobbled together from some Tkinter examples so that I could easily test and see the data and possible errors. There will be a much better fixing tool with actually working and usable GUI in future!
 
+Instead of Tkinter future gui will most likely use PyQt5. 
+
 #Usage
 Since this software only works for the certain book-series you obviously need them for the source-data. There is short sample XML file provided with anonymized data to test the program. To run the project, I recommend opening it in the Pycharm and running **GUITool/processDialog.py** which first generates the csv and then opens fixing-tool to show data on the missing data (and simple tools to fix them).
 
-You'll need the Pyhton packages described in *requirements.txt* file as well as Python 2.7.8.
+You'll need the Python packages described in *requirements.txt* file as well as Python 3.4.
 
 #Code
 For those interested in checking the sourcecode, I suggest starting from either **processData.py** or **dataExtraction.py**. The software basically reads provided XML-file one node at a time and run multiple extractor-classes for each and saves the data to be saved in the csv.

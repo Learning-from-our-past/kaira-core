@@ -22,6 +22,11 @@ class ProcessData:
     count = 0
     xmlDataDocument = None
 
+    processUpdateCallbackFunction = None
+
+    def __init__(self, callback):
+        self.processUpdateCallbackFunction = callback
+
     #TODO: Nimeä uudestaan kuvaamaan että se palauttaa valmiin tuloksen?
     def startExtractionProcess(self, filePath):
         self._initProcess(filePath)
@@ -40,15 +45,19 @@ class ProcessData:
         self.chunkerCheck = ChunkChecker()
         self.errorLogger = ExceptionLogger()
         self.dataFilename = filePath
-        self.xmlDataDocument = readData.getXMLroot(filePath + ".xml")
+        self.xmlDataDocument = readData.getXMLroot(filePath)
+        self.xmlDataDocumentLen = len(self.xmlDataDocument)
         print ("XML file elements: " + str(len(self.xmlDataDocument)))
 
     def _processAllEntries(self):
+        i = 0
         for child in self.xmlDataDocument:
             try:
                 self._processEntry(child)
             except ExtractionException as e:
                 self._handleExtractionErrorLogging(exception=e, entry=child)
+            i +=1
+            self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
 
     def _processEntry(self, entry):
         personEntryDict = self.extractor.extraction(entry.text, entry, self.errorLogger)
