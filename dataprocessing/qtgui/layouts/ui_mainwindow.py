@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Feb 17 15:01:41 2015
+# Created: Wed Feb 18 15:37:45 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -81,13 +81,20 @@ class Ui_MainWindow(object):
         self.entriesLabel.setObjectName("entriesLabel")
         self.entriesControlLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.entriesLabel)
         self.entriesComboBox = QtWidgets.QComboBox(self.entriesFrame)
+        self.entriesComboBox.setMaxVisibleItems(20)
         self.entriesComboBox.setObjectName("entriesComboBox")
         self.entriesComboBox.addItem("")
         self.entriesControlLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.entriesComboBox)
         self.verticalLayout_4.addLayout(self.entriesControlLayout)
-        self.entriestListWidget = QtWidgets.QListWidget(self.entriesFrame)
-        self.entriestListWidget.setObjectName("entriestListWidget")
-        self.verticalLayout_4.addWidget(self.entriestListWidget)
+        self.entriestListView = QtWidgets.QListView(self.entriesFrame)
+        self.entriestListView.setStyleSheet("QListWidget {\n"
+"alternate-background-color: #EDEDED;\n"
+"background-color: white;\n"
+"}")
+        self.entriestListView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.entriestListView.setAlternatingRowColors(True)
+        self.entriestListView.setObjectName("entriestListView")
+        self.verticalLayout_4.addWidget(self.entriestListView)
         self.gridLayout.addWidget(self.entriesFrame, 0, 0, 1, 1)
         self.attributesFrame = QtWidgets.QFrame(self.centralwidget)
         self.attributesFrame.setFrameShape(QtWidgets.QFrame.Panel)

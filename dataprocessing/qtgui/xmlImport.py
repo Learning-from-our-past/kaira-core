@@ -1,6 +1,6 @@
 from PyQt5.QtCore import pyqtSlot, QThread, pyqtSignal
 
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QProgressDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QProgressDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot, QObject
 from qtgui.layouts.ui_mainwindow import Ui_MainWindow
 import processData
@@ -13,19 +13,23 @@ class XmlImport(QObject):
     parent = None
     processCount = 0
     threadUpdateSignal = pyqtSignal(int, int, name="progressUpdate")
+    threadExceptionSignal = pyqtSignal(name="exceptionInProcess")
+    threadResultsSignal = pyqtSignal(dict, name="results")
+    finishedSignal = pyqtSignal(dict, name="processFinished")
+    result = {}
 
     def __init__(self, parent):
         super(XmlImport, self).__init__(parent)
         self.parent = parent
         self.thread = QThread(parent = self.parent)
         self.threadUpdateSignal.connect(self._updateProgressBarInMainThread)
-
+        self.threadExceptionSignal.connect(self._loadingFailed)
+        self.threadResultsSignal.connect(self._processFinished)
 
     @pyqtSlot()
     def openXMLFile(self):
         filename = QFileDialog.getOpenFileName(self.parent, "Open xml-file containing the data to be analyzed.",
                                                "../xmldata", "Person data files (*.xml);;All files (*)")
-        print(filename)
         if filename[0] != "":
             self._analyzeOpenedXml(filename)
 
@@ -41,18 +45,33 @@ class XmlImport(QObject):
 
 
     def _runProcess(self):
-        print("JASKA")
-        self.processor = processData.ProcessData(self._processUpdateCallback)
-        result = self.processor.startExtractionProcess(self.file[0])
+        try:
+            self.processor = processData.ProcessData(self._processUpdateCallback)
+            result = self.processor.startExtractionProcess(self.file[0])
+            self.threadResultsSignal.emit(result)
+        except Exception as e:
+            self.threadExceptionSignal.emit()
 
     @pyqtSlot(int, int)
     def _updateProgressBarInMainThread(self, i, max):
         self.progressDialog.setRange(0, max)
         self.progressDialog.setValue(i)
 
+    @pyqtSlot()
+    def _loadingFailed(self):
+        self.progressDialog.cancel()
+        msgbox = QMessageBox()
+        msgbox.information(self.parent, "Extraction failed", "Error in data-file. Extraction failed. Is the xml valid?")
+        msgbox.show()
+
+    @pyqtSlot(dict)
+    def _processFinished(self, result):
+        self.result = result
+        self.finishedSignal.emit(self.result)
+
+
     def _processUpdateCallback(self, i, max):
         self.threadUpdateSignal.emit(i, max)
-        #self.thread.emit(self.threadUpdateSignal, i)
 
 
 
