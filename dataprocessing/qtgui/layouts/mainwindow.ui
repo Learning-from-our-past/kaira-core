@@ -124,6 +124,9 @@
            </item>
            <item row="0" column="1">
             <widget class="QComboBox" name="entriesComboBox">
+             <property name="maxVisibleItems">
+              <number>20</number>
+             </property>
              <item>
               <property name="text">
                <string>All</string>
@@ -134,7 +137,20 @@
           </layout>
          </item>
          <item>
-          <widget class="QListWidget" name="entriestListWidget"/>
+          <widget class="QListView" name="entriestListView">
+           <property name="styleSheet">
+            <string notr="true">QListWidget {
+alternate-background-color: #EDEDED;
+background-color: white;
+}</string>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
