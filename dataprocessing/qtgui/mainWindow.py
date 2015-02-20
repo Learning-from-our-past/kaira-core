@@ -1,19 +1,23 @@
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog
 from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtGui import  QStandardItemModel
 from qtgui.layouts.ui_mainwindow import Ui_MainWindow
 import processData
 import threading
 import time
 import qtgui.utils
-from qtgui.models import *
+from qtgui.entriesModels import *
 from qtgui.xmlImport import XmlImport
+from qtgui.entriesModels import *
 
 class Mainwindow(QMainWindow):
 
-    xmlDocument = []
+    dataEntries = []
     missingDataListing = {}
     entriesListModel = None
+
+    entrySelectedSignal = pyqtSignal(dict, name="entrySelected")
 
     def __init__(self, parent=None):
         super(Mainwindow, self).__init__(parent)
@@ -24,9 +28,10 @@ class Mainwindow(QMainWindow):
         #Connect actions to slots
         self.ui.actionOpen_XML_for_analyze.triggered.connect(self.xmlImporter.openXMLFile)
         self.xmlImporter.finishedSignal.connect(self._entriesImportedFromFile)
+        self.entrySelectedSignal.connect(self._updateEntryTextFields)
 
         #set models.
-        self.entriesListModel = EntriesListModel(self.ui.entriestListView)
+        self.entriesListModel = EntriesListModel(self.ui.entriestListView, self)
         self.ui.entriestListView.setModel(self.entriesListModel)
         self.ui.entriestListView.show()
 
@@ -37,21 +42,30 @@ class Mainwindow(QMainWindow):
 
 
     def _updateEntriesList(self):
-        self.ui.entriestListWidget.clear()
-        for e in self.xmlDocument:
-             self.ui.entriestListWidget.addItem(qtgui.utils.makeSubStrForListViews(e.text) +"...")
+        self.entriesListModel.addItems(self.dataEntries)
 
     def _updateEntriesComboBox(self):
         self.ui.entriesComboBox.clear()
-        self.ui.entriesComboBox.addItem("ALL " + str(len(self.xmlDocument)))
+        self.ui.entriesComboBox.addItem("ALL " + str(len(self.dataEntries)))
         for key, value in self.missingDataListing.items():
             print(key)
             self.ui.entriesComboBox.addItem(str(key) + " " + str(len(value)))
 
     @pyqtSlot(dict)
-    def _entriesImportedFromFile(self, entries):
-        self.xmlDocument = entries["xmlDataDocument"]
-        self.missingDataListing = entries["errors"]
+    def _updateEntryTextFields(self, entry):
+        self.ui.rawTextTextEdit.setPlainText(entry["xml"].text)
+
+        previous = entry["xml"].getprevious()
+        if previous is not None:
+            self.ui.previousEntryTextEdit.setPlainText(previous.text)
+        else:
+            self.ui.previousEntryTextEdit.setPlainText("")
+
+    @pyqtSlot(dict)
+    def _entriesImportedFromFile(self, resultsFromFile):
+
+        self.dataEntries = resultsFromFile["entries"]
+        self.missingDataListing = resultsFromFile["errors"]
         self._updateEntriesList()
         self._updateEntriesComboBox()
 
