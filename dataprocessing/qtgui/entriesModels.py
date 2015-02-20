@@ -3,8 +3,7 @@ from PyQt5.QtCore import QAbstractListModel, QVariant, QModelIndex
 from PyQt5.QtGui import  QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog
 from PyQt5.QtCore import pyqtSlot
-import qtgui.utils
-import qtgui.mainWindow as Mainwindow
+import qtgui.utils as utils
 
 """Holds entries listing and handling related code for mainwindow."""
 
@@ -40,4 +39,4 @@ class EntriesListItemModel(QStandardItem):
         return self.dataEntry
 
     def _constructText(self):
-        return qtgui.utils.makeSubStrForListViews(self.dataEntry["xml"].text) +"..."
+        return utils.makeSubStrForListViews(self.dataEntry["xml"].text) +"..."

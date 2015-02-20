@@ -69,10 +69,16 @@ class Mainwindow(QMainWindow):
         self._updateEntriesList()
         self._updateEntriesComboBox()
 
-if __name__ == '__main__':
-    import sys
 
+def start():
+    import sys
     app = QApplication(sys.argv)
     fixingtool = Mainwindow()
     fixingtool.show()
     sys.exit(app.exec_())
+
+if __name__ == '__main__':
+
+    start()
+
+
