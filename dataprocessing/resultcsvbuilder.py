@@ -19,7 +19,7 @@ class ResultCsvBuilder:
 
 
     def _initCsv(self):
-        self.openedCsv = open(self.CSVPATH + self.filename+ ".csv", "w", newline='', encoding="utf-8")
+        self.openedCsv = open(self.CSVPATH + self.filename[:-4]+ ".csv", "w", newline='', encoding="utf-8")
         self.csvWriter = csv.writer(self.openedCsv, delimiter="&")
         self._writeCsvHeaders()
 
