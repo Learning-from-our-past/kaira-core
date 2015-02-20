@@ -21,7 +21,7 @@ class ProcessData:
     errors = 0
     count = 0
     xmlDataDocument = None
-
+    readDataEntries = []
     processUpdateCallbackFunction = None
 
     def __init__(self, callback):
@@ -32,7 +32,7 @@ class ProcessData:
         self._initProcess(filePath)
         self._processAllEntries()
         self._finishProcess()
-        return {"errors": self.errorLogger.getErrors(), "xmlDataDocument" : self.xmlDataDocument, "file": filePath}
+        return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "file": filePath}
 
     def _initProcess(self, filePath):
         self.errors = 0
@@ -55,14 +55,20 @@ class ProcessData:
             try:
                 self._processEntry(child)
             except ExtractionException as e:
+                self._createAddEntryToProcessedList(child, {})    #TODO: Probably better idea to pass dict with keys with empty fields?
                 self._handleExtractionErrorLogging(exception=e, entry=child)
+
             i +=1
             self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
 
     def _processEntry(self, entry):
         personEntryDict = self.extractor.extraction(entry.text, entry, self.errorLogger)
+        self._createAddEntryToProcessedList(entry, personEntryDict)
         self.csvBuilder.writeRow(personEntryDict)
         self.count +=1
+
+    def _createAddEntryToProcessedList(self, xmlEntry, extractionResults):
+        self.readDataEntries.append({"xml": xmlEntry, "extractionResults" : extractionResults})
 
     def _handleExtractionErrorLogging(self, exception, entry):
         self.errorLogger.logError(exception.eType, entry)
