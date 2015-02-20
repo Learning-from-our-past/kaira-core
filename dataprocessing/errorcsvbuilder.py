@@ -19,7 +19,7 @@ class ErrorCsvBuilder:
 
 
     def _initCsv(self):
-        self.openedCsv = open(self.CSVPATH + self.filename+ "_errors.csv", "w")
+        self.openedCsv = open(self.CSVPATH + self.filename+ "_errors.csv", "w", encoding="utf-8")
         self.csvWriter = csv.writer(self.openedCsv, delimiter=";")
         self._writeCsvHeaders()
 
