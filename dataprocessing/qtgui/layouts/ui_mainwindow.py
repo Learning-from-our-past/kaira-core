@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Wed Feb 18 15:37:45 2015
-#      by: PyQt5 UI code generator 5.4
+# Created: Fri Feb 20 22:34:40 2015
+#      by: PyQt5 UI code generator 5.3.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -24,43 +24,25 @@ class Ui_MainWindow(object):
         self.previousFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.previousFrame.setObjectName("previousFrame")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.previousFrame)
+        self.verticalLayout_3.setContentsMargins(-1, -1, -1, 12)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.previousControlsLayout = QtWidgets.QHBoxLayout()
         self.previousControlsLayout.setSpacing(2)
+        self.previousControlsLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.previousControlsLayout.setContentsMargins(-1, -1, -1, 0)
         self.previousControlsLayout.setObjectName("previousControlsLayout")
         self.previousEntryLabel = QtWidgets.QLabel(self.previousFrame)
         self.previousEntryLabel.setObjectName("previousEntryLabel")
         self.previousControlsLayout.addWidget(self.previousEntryLabel)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.previousControlsLayout.addItem(spacerItem)
-        self.previousENtrySaveButton = QtWidgets.QPushButton(self.previousFrame)
-        self.previousENtrySaveButton.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8f8f91;\n"
-"    min-width: 50px;\n"
-"    min-height: 20px;\n"
-"}\n"
-"\n"
-" QPushButton:pressed {\n"
-"     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                       stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
-" }\n"
-"\n"
-"")
+        self.previousENtrySaveButton = QtWidgets.QToolButton(self.previousFrame)
+        self.previousENtrySaveButton.setMinimumSize(QtCore.QSize(52, 22))
+        self.previousENtrySaveButton.setStyleSheet("")
         self.previousENtrySaveButton.setObjectName("previousENtrySaveButton")
         self.previousControlsLayout.addWidget(self.previousENtrySaveButton)
-        self.previousEntryDeleteButton = QtWidgets.QPushButton(self.previousFrame)
-        self.previousEntryDeleteButton.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8f8f91;\n"
-"    min-width: 50px;\n"
-"    min-height: 20px;\n"
-"}\n"
-"\n"
-" QPushButton:pressed {\n"
-"     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                       stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
-" }\n"
-"\n"
-"")
+        self.previousEntryDeleteButton = QtWidgets.QToolButton(self.previousFrame)
+        self.previousEntryDeleteButton.setStyleSheet("")
         self.previousEntryDeleteButton.setObjectName("previousEntryDeleteButton")
         self.previousControlsLayout.addWidget(self.previousEntryDeleteButton)
         self.verticalLayout_3.addLayout(self.previousControlsLayout)
@@ -109,21 +91,10 @@ class Ui_MainWindow(object):
         self.attributesControlsLayout.addWidget(self.attributesLabel)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.attributesControlsLayout.addItem(spacerItem1)
-        self.pushButton = QtWidgets.QPushButton(self.attributesFrame)
-        self.pushButton.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8f8f91;\n"
-"    min-width: 80px;\n"
-"    min-height: 20px;\n"
-"}\n"
-"\n"
-" QPushButton:pressed {\n"
-"     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                       stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
-" }\n"
-"\n"
-"")
-        self.pushButton.setObjectName("pushButton")
-        self.attributesControlsLayout.addWidget(self.pushButton)
+        self.toolButton = QtWidgets.QToolButton(self.attributesFrame)
+        self.toolButton.setStyleSheet("")
+        self.toolButton.setObjectName("toolButton")
+        self.attributesControlsLayout.addWidget(self.toolButton)
         self.verticalLayout.addLayout(self.attributesControlsLayout)
         self.tableView = QtWidgets.QTableView(self.attributesFrame)
         self.tableView.setObjectName("tableView")
@@ -147,57 +118,22 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.rawTextCurrentLabel)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
-        self.combineButton = QtWidgets.QPushButton(self.currentFrame)
+        self.combineButton = QtWidgets.QToolButton(self.currentFrame)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.combineButton.sizePolicy().hasHeightForWidth())
         self.combineButton.setSizePolicy(sizePolicy)
         self.combineButton.setAutoFillBackground(False)
-        self.combineButton.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8f8f91;\n"
-"    min-width: 50px;\n"
-"    min-height: 20px;\n"
-"}\n"
-"\n"
-" QPushButton:pressed {\n"
-"     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                       stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
-" }\n"
-"\n"
-"")
-        self.combineButton.setAutoDefault(False)
-        self.combineButton.setFlat(True)
+        self.combineButton.setStyleSheet("")
         self.combineButton.setObjectName("combineButton")
         self.horizontalLayout.addWidget(self.combineButton)
-        self.rawTextSaveButton = QtWidgets.QPushButton(self.currentFrame)
-        self.rawTextSaveButton.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8f8f91;\n"
-"    min-width: 50px;\n"
-"    min-height: 20px;\n"
-"}\n"
-"\n"
-" QPushButton:pressed {\n"
-"     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                       stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
-" }\n"
-"")
-        self.rawTextSaveButton.setFlat(True)
+        self.rawTextSaveButton = QtWidgets.QToolButton(self.currentFrame)
+        self.rawTextSaveButton.setStyleSheet("")
         self.rawTextSaveButton.setObjectName("rawTextSaveButton")
         self.horizontalLayout.addWidget(self.rawTextSaveButton)
-        self.rawTextDeleteButton = QtWidgets.QPushButton(self.currentFrame)
-        self.rawTextDeleteButton.setStyleSheet("QPushButton {\n"
-"    border: 1px solid #8f8f91;\n"
-"    min-width: 50px;\n"
-"    min-height: 20px;\n"
-"}\n"
-"\n"
-" QPushButton:pressed {\n"
-"     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-"                                       stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
-" }\n"
-"")
-        self.rawTextDeleteButton.setFlat(True)
+        self.rawTextDeleteButton = QtWidgets.QToolButton(self.currentFrame)
+        self.rawTextDeleteButton.setStyleSheet("")
         self.rawTextDeleteButton.setObjectName("rawTextDeleteButton")
         self.horizontalLayout.addWidget(self.rawTextDeleteButton)
         self.verticalLayout_2.addLayout(self.horizontalLayout)
@@ -208,7 +144,7 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -267,8 +203,8 @@ class Ui_MainWindow(object):
         self.entriesLabel.setText(_translate("MainWindow", "Entries "))
         self.entriesComboBox.setItemText(0, _translate("MainWindow", "All"))
         self.attributesLabel.setText(_translate("MainWindow", "Found attributes of entry "))
-        self.pushButton.setToolTip(_translate("MainWindow", "<html><head/><body><p>Run extraction for current entry and update attributes. Handy for testing if rawtext editing has helped.</p></body></html>"))
-        self.pushButton.setText(_translate("MainWindow", "Rerun analysis"))
+        self.toolButton.setToolTip(_translate("MainWindow", "<html><head/><body><p>Run extraction for current entry and update attributes. Handy for testing if rawtext editing has helped.</p></body></html>"))
+        self.toolButton.setText(_translate("MainWindow", "Rerun analysis"))
         self.rawTextLabel.setText(_translate("MainWindow", "Rawtext "))
         self.combineButton.setText(_translate("MainWindow", "Combine"))
         self.rawTextSaveButton.setText(_translate("MainWindow", "Save"))
