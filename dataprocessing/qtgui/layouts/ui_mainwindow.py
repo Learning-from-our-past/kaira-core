@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri Feb 20 22:34:40 2015
-#      by: PyQt5 UI code generator 5.3.2
+# Created: Mon Feb 23 11:46:25 2015
+#      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -37,7 +37,6 @@ class Ui_MainWindow(object):
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.previousControlsLayout.addItem(spacerItem)
         self.previousENtrySaveButton = QtWidgets.QToolButton(self.previousFrame)
-        self.previousENtrySaveButton.setMinimumSize(QtCore.QSize(52, 22))
         self.previousENtrySaveButton.setStyleSheet("")
         self.previousENtrySaveButton.setObjectName("previousENtrySaveButton")
         self.previousControlsLayout.addWidget(self.previousENtrySaveButton)
@@ -144,7 +143,7 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
