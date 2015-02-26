@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Feb 23 11:46:25 2015
+# Created: Thu Feb 26 15:17:26 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
         self.entriesComboBox.addItem("")
         self.entriesControlLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.entriesComboBox)
         self.verticalLayout_4.addLayout(self.entriesControlLayout)
-        self.entriestListView = QtWidgets.QListView(self.entriesFrame)
+        self.entriestListView = EntriesListView(self.entriesFrame)
         self.entriestListView.setStyleSheet("QListWidget {\n"
 "alternate-background-color: #EDEDED;\n"
 "background-color: white;\n"
@@ -228,3 +228,4 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setText(_translate("MainWindow", "Create a  new Person"))
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
 
+from entriesModels import EntriesListView

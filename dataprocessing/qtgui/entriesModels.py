@@ -1,7 +1,7 @@
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from PyQt5.QtCore import QAbstractListModel, QVariant, QModelIndex
 from PyQt5.QtGui import  QStandardItem, QStandardItemModel
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QListView
 from PyQt5.QtCore import pyqtSlot
 import qtgui.utils as utils
 
@@ -12,18 +12,32 @@ class EntriesListModel(QStandardItemModel):
     def __init__(self, listview, parent):
         super(EntriesListModel, self).__init__(listview)
         self.parent = parent
-        listview.clicked.connect(self.itemSelected)
-        #listview.selectionModel().selectionChanged.connect(self.itemSelected)
 
     def addItems(self, entries):
         for entry in entries:
             self.appendRow(EntriesListItemModel(entry))
 
-    #Maybe these event handlers should be moved to view itself, but for now they can reside here.
-    def itemSelected(self, index):
-        #TODO: EMIT SIGNAL TO SET RELEVANT DATA TO TEXTFIELDS.
-        self.parent.entrySelectedSignal.emit(self.itemFromIndex(index).getDataEntry())
 
+
+
+
+
+class EntriesListView(QListView):
+
+    entrySelectedSignal = pyqtSignal(dict, name="entrySelected")
+
+    def __init__(self, parent):
+        super(EntriesListView, self).__init__(parent)
+        self.parent = parent
+
+    @pyqtSlot(int)
+    def _selectionChanged(self, selection):
+        if len(selection.indexes()) > 0:
+            self.entrySelectedSignal.emit(self.model().itemFromIndex(selection.indexes()[0]).getDataEntry())
+
+    def setModel(self, model):
+        super(EntriesListView, self).setModel(model)
+        self.selectionModel().selectionChanged.connect(self._selectionChanged)
 
 
 class EntriesListItemModel(QStandardItem):

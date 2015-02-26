@@ -1,0 +1,30 @@
+{
+	"book" : "Suomen Rintamamiehet",
+   "attributes":[
+      "surname",
+      "firstnames",
+      "birthDay",
+      "birthMonth",
+      "birthYear",
+      "birthLocation",
+      "profession",
+      "address",
+      "deathDay",
+      "deathMonth",
+      "deathYear",
+      "kaatunut",
+      "deathLocation",
+      "talvisota",
+      "talvisotaregiments",
+      "jatkosota",
+      "jatkosotaregiments",
+      "rank",
+      "kotiutusDay",
+      "kotiutusMonth",
+      "kotiutusYear",
+      "kotiutusPlace",
+      "medals",
+      "hobbies",
+      "hasSpouse"
+   ]
+}

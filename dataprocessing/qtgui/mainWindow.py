@@ -14,10 +14,11 @@ from qtgui.entriesModels import *
 class Mainwindow(QMainWindow):
 
     dataEntries = []
-    missingDataListing = {}
+    missingDataEntries = {}
+    missingDataListing = []
     entriesListModel = None
 
-    entrySelectedSignal = pyqtSignal(dict, name="entrySelected")
+
 
     def __init__(self, parent=None):
         super(Mainwindow, self).__init__(parent)
@@ -28,28 +29,37 @@ class Mainwindow(QMainWindow):
         #Connect actions to slots
         self.ui.actionOpen_XML_for_analyze.triggered.connect(self.xmlImporter.openXMLFile)
         self.xmlImporter.finishedSignal.connect(self._entriesImportedFromFile)
-        self.entrySelectedSignal.connect(self._updateEntryTextFields)
+        self.ui.entriestListView.entrySelectedSignal.connect(self._updateEntryTextFields)
 
         #set models.
         self.entriesListModel = EntriesListModel(self.ui.entriestListView, self)
         self.ui.entriestListView.setModel(self.entriesListModel)
         self.ui.entriestListView.show()
 
-        #Comboboxin populointi
+
         self.ui.entriesComboBox.clear()
-        self.ui.entriesComboBox.addItems(["A", "B", "C", "D"])
-        self.ui.entriesComboBox.setCurrentIndex(1)
+        self.ui.entriesComboBox.setCurrentIndex(0)
+        self.ui.entriesComboBox.currentIndexChanged.connect(self._changedEntriesComboBox)
 
 
-    def _updateEntriesList(self):
-        self.entriesListModel.addItems(self.dataEntries)
+    def _updateEntriesList(self, items):
+        self.entriesListModel.clear()
+        self.entriesListModel.addItems(items)
 
     def _updateEntriesComboBox(self):
         self.ui.entriesComboBox.clear()
+        self.missingDataListing = []
         self.ui.entriesComboBox.addItem("ALL " + str(len(self.dataEntries)))
-        for key, value in self.missingDataListing.items():
-            print(key)
+        for key, value in self.missingDataEntries.items():
             self.ui.entriesComboBox.addItem(str(key) + " " + str(len(value)))
+            self.missingDataListing.append(value)
+
+    @pyqtSlot(int)
+    def _changedEntriesComboBox(self, index):
+        if index > 0:
+            self._updateEntriesList(self.missingDataListing[index-1])
+        else:
+            self._updateEntriesList(self.dataEntries)
 
     @pyqtSlot(dict)
     def _updateEntryTextFields(self, entry):
@@ -65,8 +75,8 @@ class Mainwindow(QMainWindow):
     def _entriesImportedFromFile(self, resultsFromFile):
 
         self.dataEntries = resultsFromFile["entries"]
-        self.missingDataListing = resultsFromFile["errors"]
-        self._updateEntriesList()
+        self.missingDataEntries = resultsFromFile["errors"]
+        self._updateEntriesList(self.dataEntries)
         self._updateEntriesComboBox()
 
 
