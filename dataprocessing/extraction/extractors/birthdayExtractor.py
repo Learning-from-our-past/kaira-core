@@ -36,6 +36,7 @@ class BirthdayExtractor(BaseExtractor):
             self.foundDate = self.dateExtractor.extract(text, self.PATTERN, self.OPTIONS)
             self._setFinalMatchPosition()
         except DateException as e:
+
             raise BirthdayException(text)
 
     def _setFinalMatchPosition(self):

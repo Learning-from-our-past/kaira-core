@@ -124,7 +124,7 @@
           </layout>
          </item>
          <item>
-          <widget class="QListView" name="entriestListView">
+          <widget class="EntriesListView" name="entriestListView">
            <property name="styleSheet">
             <string notr="true">QListWidget {
 alternate-background-color: #EDEDED;
@@ -400,6 +400,13 @@ background-color: white;
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EntriesListView</class>
+   <extends>QListView</extends>
+   <header>entriesModels.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

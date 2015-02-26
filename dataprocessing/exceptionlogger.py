@@ -4,9 +4,9 @@ class ExceptionLogger:
     errorsListing = {}
     def logError(self, exceptionType, entry):
         if exceptionType in self.errorsListing:
-            self.errorsListing[exceptionType].append({"child": entry})
+            self.errorsListing[exceptionType].append(entry)
         else:
-            self.errorsListing[exceptionType] = [{"child": entry}]
+            self.errorsListing[exceptionType] = [entry]
 
     def printErrorBreakdown(self):
         print ("ERROR breakdown: ")

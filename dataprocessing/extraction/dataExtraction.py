@@ -28,9 +28,9 @@ class DataExtraction:
     errorLogger = None
     currentChild = None
 
-    def extraction(self, text, xmlElement, eLogger):
+    def extraction(self, text, entry, eLogger):
         self.errorLogger = eLogger
-        self.currentChild = xmlElement
+        self.currentChild = entry
         text = self.cleanText(text)
 
         nE = NameExtractor(self.currentChild, self.errorLogger)

@@ -52,27 +52,30 @@ class ProcessData:
     def _processAllEntries(self):
         i = 0
         for child in self.xmlDataDocument:
+            entry = self._createEntry(child)
             try:
-                self._processEntry(child)
+                self._processEntry(entry)
             except ExtractionException as e:
-                self._createAddEntryToProcessedList(child, {})    #TODO: Probably better idea to pass dict with keys with empty fields?
-                self._handleExtractionErrorLogging(exception=e, entry=child)
+                self.readDataEntries.append(entry)    #TODO: Probably better idea to pass dict with keys with empty fields?
+                self._handleExtractionErrorLogging(exception=e, entry=entry)
 
             i +=1
             self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
 
     def _processEntry(self, entry):
-        personEntryDict = self.extractor.extraction(entry.text, entry, self.errorLogger)
-        self._createAddEntryToProcessedList(entry, personEntryDict)
+
+        personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
+        entry["extractionResults"] = personEntryDict
+        self.readDataEntries.append(entry)
         self.csvBuilder.writeRow(personEntryDict)
         self.count +=1
 
-    def _createAddEntryToProcessedList(self, xmlEntry, extractionResults):
-        self.readDataEntries.append({"xml": xmlEntry, "extractionResults" : extractionResults})
+    def _createEntry(self, xmlEntry):
+        return {"xml": xmlEntry, "extractionResults" : {}}
 
     def _handleExtractionErrorLogging(self, exception, entry):
         self.errorLogger.logError(exception.eType, entry)
-        self.errorCsvBuilder.writeRow([exception.message, exception.details, exception.eType, entry.text])
+        self.errorCsvBuilder.writeRow([exception.message, exception.details, exception.eType, entry["xml"].text])
         self.errors +=1
         self.count +=1
 

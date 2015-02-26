@@ -4,4 +4,5 @@ dataprocessing/dist
 *.csv
 *.xml
 *.txt
+*.bat
 dataprocessing/.idea
