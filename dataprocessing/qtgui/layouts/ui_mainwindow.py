@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Thu Feb 26 15:17:26 2015
+# Created: Mon Mar  2 17:04:29 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(934, 712)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
@@ -95,8 +95,12 @@ class Ui_MainWindow(object):
         self.toolButton.setObjectName("toolButton")
         self.attributesControlsLayout.addWidget(self.toolButton)
         self.verticalLayout.addLayout(self.attributesControlsLayout)
-        self.tableView = QtWidgets.QTableView(self.attributesFrame)
+        self.tableView = EntryTableView(self.attributesFrame)
+        self.tableView.setAlternatingRowColors(True)
+        self.tableView.setSortingEnabled(True)
         self.tableView.setObjectName("tableView")
+        self.tableView.horizontalHeader().setCascadingSectionResizes(False)
+        self.tableView.horizontalHeader().setStretchLastSection(False)
         self.verticalLayout.addWidget(self.tableView)
         self.gridLayout.addWidget(self.attributesFrame, 1, 0, 1, 1)
         self.currentFrame = QtWidgets.QFrame(self.centralwidget)
@@ -143,7 +147,7 @@ class Ui_MainWindow(object):
         self.gridLayout_2.addLayout(self.gridLayout, 0, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 934, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -228,4 +232,5 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setText(_translate("MainWindow", "Create a  new Person"))
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
 
-from entriesModels import EntriesListView
+from qtgui.entrytable import EntryTableView
+from qtgui.entriesModels import EntriesListView

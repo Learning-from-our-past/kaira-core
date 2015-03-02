@@ -71,7 +71,18 @@ class ProcessData:
         self.count +=1
 
     def _createEntry(self, xmlEntry):
-        return {"xml": xmlEntry, "extractionResults" : {}}
+        return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
+
+    def _createResultTemplate(self):
+        return {"surname" : "", "firstnames" : "", "birthDay": "",
+               "birthMonth" : "", "birthYear" : "", "birthLocation" : "",
+               "profession" : "", "address" : "", "deathDay" : "",
+               "deathMonth": "", "deathYear": "", "kaatunut": "",
+               "deathLocation": "", "talvisota": "", "talvisotaregiments": "",
+               "jatkosota": "", "jatkosotaregiments": "","rank": "",
+               "kotiutusDay": "", "kotiutusMonth": "", "kotiutusYear": "",
+               "kotiutusPlace": "", "medals": "","hobbies": "",
+               "hasSpouse": "", "children": "", "childCount": ""}
 
     def _handleExtractionErrorLogging(self, exception, entry):
         self.errorLogger.logError(exception.eType, entry)

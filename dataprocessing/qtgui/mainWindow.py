@@ -10,6 +10,7 @@ import qtgui.utils
 from qtgui.entriesModels import *
 from qtgui.xmlImport import XmlImport
 from qtgui.entriesModels import *
+from qtgui.entrytable import *
 
 class Mainwindow(QMainWindow):
 
@@ -36,10 +37,15 @@ class Mainwindow(QMainWindow):
         self.ui.entriestListView.setModel(self.entriesListModel)
         self.ui.entriestListView.show()
 
+        self.entryTableModel = EntryTableModel(self.ui.tableView, self)
+        self.ui.tableView.setModel(self.entryTableModel)
+        self.ui.tableView.show()
+
 
         self.ui.entriesComboBox.clear()
         self.ui.entriesComboBox.setCurrentIndex(0)
         self.ui.entriesComboBox.currentIndexChanged.connect(self._changedEntriesComboBox)
+
 
 
     def _updateEntriesList(self, items):
@@ -64,7 +70,8 @@ class Mainwindow(QMainWindow):
     @pyqtSlot(dict)
     def _updateEntryTextFields(self, entry):
         self.ui.rawTextTextEdit.setPlainText(entry["xml"].text)
-
+        self.entryTableModel.clear()
+        self.entryTableModel.addItems(entry)
         previous = entry["xml"].getprevious()
         if previous is not None:
             self.ui.previousEntryTextEdit.setPlainText(previous.text)
