@@ -5,7 +5,7 @@ from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 import extraction.extractors.textUtils as  textUtils
 from extraction.extractionExceptions import *
-
+from extractionkeys import KEYS
 
 class ProfessionExtractor(BaseExtractor):
     PATTERN = r'^ ?(?:,|\.| )(?P<profession>[A-ZÄ-Öa-zä-ö !-]+?)(?:\.|,|Pso)'
@@ -33,4 +33,4 @@ class ProfessionExtractor(BaseExtractor):
 
 
     def _constructReturnDict(self):
-        return {"profession": self.profession}
+        return {KEYS["profession"]: self.profession}

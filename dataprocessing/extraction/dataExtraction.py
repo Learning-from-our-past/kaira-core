@@ -21,7 +21,7 @@ from extraction.extractors.demobilizationExtractor import DemobilizationExtracto
 from extraction.extractors.deathExtractor import DeathExtractor
 from extraction.extractors.childrenExtractor import ChildrenExtractor
 from extraction.extractors.spouseExtractor import SpouseExtractor
-
+from extractionkeys import KEYS
 """Extraction process is handled here for one entry per time. This class calls all the extractor
 classes to execute extraction in specific order."""
 class DataExtraction:
@@ -58,7 +58,7 @@ class DataExtraction:
 
         #TODO: OWN FUNCTION
         #if there is no spouse, try to still find children:
-        if spouseData["spouseCount"] == 0:
+        if spouseData[KEYS["spouseCount"]] == 0:
             otherCh = ChildrenExtractor(self.currentChild, self.errorLogger)
             otherCh.dependsOnMatchPositionOf(plE)
             children = otherCh.extract(text)

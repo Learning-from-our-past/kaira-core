@@ -4,7 +4,7 @@ import regex
 from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
-
+from extractionkeys import KEYS
 
 class RankExtractor(BaseExtractor):
     RANK_PATTERN = r'(?:(?:Sotarvo){s<=1}|(?:SOIarvo){s<=1}|(?:Ylenn){s<=1})(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,| )'
@@ -24,4 +24,4 @@ class RankExtractor(BaseExtractor):
             self.errorLogger.logError(RankException.eType, self.currentChild )
 
     def _constructReturnDict(self):
-        return {"rank": self.ranks}
+        return {KEYS["rank"]: self.ranks}

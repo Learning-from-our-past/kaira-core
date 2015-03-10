@@ -7,7 +7,7 @@ import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.dateExtractor import DateExtractor
 from extraction.extractors.locationExtractor import LocationExtractor
-
+from extractionkeys import KEYS
 class DemobilizationExtractor(BaseExtractor):
     DATE_PATTERN = r'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4}(?=\D\D\D\D\D))|(?:(?P<monthName>[a-zä-ö]*)(?P<monthYear>\d{2,4}(?=\D\D\D\D\D))))'
     DATE_OPTIONS = re.UNICODE | re.IGNORECASE
@@ -74,7 +74,7 @@ class DemobilizationExtractor(BaseExtractor):
         self.matchFinalPosition = self.dateExtractor.getFinalMatchPosition() + self.locationExtractor.getFinalMatchPosition()
 
     def _constructReturnDict(self):
-        return {"kotiutusDay": self.day,"kotiutusMonth": self.month, "kotiutusYear": self.year, "kotiutusPlace" : self.location}
+        return {KEYS["kotiutusDay"]: self.day,KEYS["kotiutusMonth"]: self.month, KEYS["kotiutusYear"]: self.year, KEYS["kotiutusPlace"] : self.location}
 
 
 class DemobilizationFailedException(Exception):

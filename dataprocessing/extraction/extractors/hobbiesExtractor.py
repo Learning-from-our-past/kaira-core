@@ -4,7 +4,7 @@ import regex
 from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
-
+from extractionkeys import KEYS
 
 class HobbiesExtractor(BaseExtractor):
 
@@ -26,4 +26,4 @@ class HobbiesExtractor(BaseExtractor):
             pass
 
     def _constructReturnDict(self):
-        return {"hobbies": self.hobbies}
+        return {KEYS["hobbies"]: self.hobbies}
