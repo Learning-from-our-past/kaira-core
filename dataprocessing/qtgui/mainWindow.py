@@ -11,6 +11,9 @@ from qtgui.entriesModels import *
 from qtgui.xmlImport import XmlImport
 from qtgui.entriesModels import *
 from qtgui.entrytable import *
+from qtgui.entrytree import *
+from PyQt5.QtGui import  QStandardItem, QStandardItemModel
+
 
 class Mainwindow(QMainWindow):
 
@@ -47,6 +50,13 @@ class Mainwindow(QMainWindow):
         self.ui.entriesComboBox.currentIndexChanged.connect(self._changedEntriesComboBox)
 
 
+        #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
+        """self.treeModel = TreeModel()
+        self.treeModel.setColumnCount(2)
+        self.ui.treeView.setModel(self.treeModel)
+        item = TreeItem("jaska", None)
+        self.treeModel.setItem(item)
+        self.treeModel.setItem(TreeItem("jaska2", item))"""
 
     def _updateEntriesList(self, items):
         self.entriesListModel.clear()
