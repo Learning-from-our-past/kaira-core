@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import ntpath
 import csv
-
+from extractionkeys import KEYS
 class ResultCsvBuilder:
     CSVPATH = "../csv/"
     filepath = ""
@@ -45,15 +45,15 @@ class ResultCsvBuilder:
 
     #tranforms the dict of the entry to a format which can be written into csv
     def _createRowFromDict(self, persondatadict):
-        row = [persondatadict["surname"], persondatadict["firstnames"], persondatadict["birthDay"],
-               persondatadict["birthMonth"], persondatadict["birthYear"], persondatadict["birthLocation"],
-               persondatadict["profession"], persondatadict["address"], persondatadict["deathDay"],
-               persondatadict["deathMonth"], persondatadict["deathYear"], persondatadict["kaatunut"],
-               persondatadict["deathLocation"], persondatadict["talvisota"], persondatadict["talvisotaregiments"],
-               persondatadict["jatkosota"], persondatadict["jatkosotaregiments"],persondatadict["rank"],
-               persondatadict["kotiutusDay"], persondatadict["kotiutusMonth"], persondatadict["kotiutusYear"],
-               persondatadict["kotiutusPlace"], persondatadict["medals"],persondatadict["hobbies"],
-               persondatadict["hasSpouse"]]
+        row = [persondatadict[KEYS["surname"]], persondatadict[KEYS["firstnames"]], persondatadict[KEYS["birthDay"]],
+               persondatadict[KEYS["birthMonth"]], persondatadict[KEYS["birthYear"]], persondatadict[KEYS["birthLocation"]],
+               persondatadict[KEYS["profession"]], persondatadict[KEYS["address"]], persondatadict[KEYS["deathDay"]],
+               persondatadict[KEYS["deathMonth"]], persondatadict[KEYS["deathYear"]], persondatadict[KEYS["kaatunut"]],
+               persondatadict[KEYS["deathLocation"]], persondatadict[KEYS["talvisota"]], persondatadict[KEYS["talvisotaregiments"]],
+               persondatadict[KEYS["jatkosota"]], persondatadict[KEYS["jatkosotaregiments"]],persondatadict[KEYS["rank"]],
+               persondatadict[KEYS["kotiutusDay"]], persondatadict[KEYS["kotiutusMonth"]], persondatadict[KEYS["kotiutusYear"]],
+               persondatadict[KEYS["kotiutusPlace"]], persondatadict[KEYS["medals"]],persondatadict[KEYS["hobbies"]],
+               persondatadict[KEYS["hasSpouse"]]]
 
         row = self._addOtherChildrenCells(row=row, persondatadict=persondatadict)
         row = self._addSpouseDataToRow(row=row, persondatadict=persondatadict)
@@ -67,20 +67,21 @@ class ResultCsvBuilder:
         return row
 
     def _addSpouseDataToRow(self,row, persondatadict):
-        if persondatadict["spouseCount"] > 0:
-            for wife in persondatadict["wifeList"]:
+        if persondatadict[KEYS["spouseCount"]] > 0:
+            for wife in persondatadict[KEYS["wifeList"]]:
                 wifeRow = self._createWifeRowFromDict(wife)
                 row += wifeRow
         return row
 
     def _createWifeRowFromDict(self, wife):
-        wifeRow =   [wife["weddingYear"], wife["spouseName"], wife["spouseBirthData"]["birthDay"],
-                     wife["spouseBirthData"]["birthMonth"], wife["spouseBirthData"]["birthYear"],
-                     wife["spouseBirthLocation"],  wife["spouseDeathData"]["deathDay"],
-                     wife["spouseDeathData"]["deathMonth"], wife["spouseDeathData"]["deathYear"],
-                     wife["spouseDeathData"]["deathLocation"], wife["children"]["childCount"],
-                     wife["children"]["separated"]["miehEd"], wife["children"]["separated"]["nyk"],
-                     wife["children"]["separated"]["psoEd"]]
+        print (wife)
+        wifeRow =   [wife[KEYS["weddingYear"]], wife[KEYS["spouseName"]], wife[KEYS["spouseBirthData"]][KEYS["birthDay"]],
+                     wife[KEYS["spouseBirthData"]][KEYS["birthMonth"]], wife[KEYS["spouseBirthData"]][KEYS["birthYear"]],
+                     wife[KEYS["spouseBirthLocation"]],  wife[KEYS["spouseDeathData"]][KEYS["deathDay"]],
+                     wife[KEYS["spouseDeathData"]][KEYS["deathMonth"]], wife[KEYS["spouseDeathData"]][KEYS["deathYear"]],
+                     wife[KEYS["spouseDeathData"]][KEYS["deathLocation"]], wife[KEYS["children"]][KEYS["childCount"]],
+                     wife[KEYS["children"]][KEYS["separated"]][KEYS["miehEd"]], wife[KEYS["children"]][KEYS["separated"]][KEYS["nyk"]],
+                     wife[KEYS["children"]][KEYS["separated"]][KEYS["psoEd"]]]
         return wifeRow
 
     def closeCsv(self):

@@ -4,7 +4,7 @@ import regex
 from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
-
+from extractionkeys import KEYS
 
 class NameExtractor(BaseExtractor):
     PATTERN = r'\A(?P<surname>[A-ZÄ-Öl() -]{3,})(:?,|.) {0,100}(?P<firstnames>[A-ZÄ-Öa-zä-ö() -]{0,})(:?,|.)'
@@ -25,6 +25,6 @@ class NameExtractor(BaseExtractor):
             raise NameException(text)
 
     def _constructReturnDict(self):
-        return {"surname": self.foundNames.group("surname"), "firstnames": self.foundNames.group("firstnames"), "cursorLocation": self.foundNames.end()}
+        return {KEYS["surname"]: self.foundNames.group("surname"), KEYS["firstnames"]: self.foundNames.group("firstnames"), "cursorLocation": self.foundNames.end()}
 
 

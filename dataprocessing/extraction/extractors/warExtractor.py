@@ -5,7 +5,7 @@ from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.regimentExtractor import RegimentsExtractor
-
+from extractionkeys import KEYS
 
 class WarExtractor(BaseExtractor):
     JATKOSOTA_PATTERN = r'(?P<jsExists>(?:Js:|JS:|js:|jS:))'
@@ -32,15 +32,15 @@ class WarExtractor(BaseExtractor):
         foundJatkosotaMarkers = tuple(foundJatkosotaMarkers)
         if len(foundJatkosotaMarkers) > 0:
             self.wereInJatkosota = True
-            self.jatkosotaRegiments = self.regimentExtractor.extract(text[foundJatkosotaMarkers[0].end():])["regiments"]
+            self.jatkosotaRegiments = self.regimentExtractor.extract(text[foundJatkosotaMarkers[0].end():])[KEYS["regiments"]]
 
     def _extractTalvisota(self, text):
         foundTalvisotaMarkers = regexUtils.regexIter(self.TALVISOTA_PATTERN, text, self.TALVISOTA_OPTIONS)
         foundTalvisotaMarkers = tuple(foundTalvisotaMarkers)
         if len(foundTalvisotaMarkers) > 0:
             self.wereInTalvisota = True
-            self.talvisotaRegiments = self.regimentExtractor.extract(text[foundTalvisotaMarkers[0].end():])["regiments"]
+            self.talvisotaRegiments = self.regimentExtractor.extract(text[foundTalvisotaMarkers[0].end():])[KEYS["regiments"]]
 
     def _constructReturnDict(self):
-        return {"talvisota": self.wereInTalvisota, "talvisotaregiments": self.talvisotaRegiments,
-                "jatkosotaregiments" : self.jatkosotaRegiments, "jatkosota" : self.wereInJatkosota}
+        return {KEYS["talvisota"]: self.wereInTalvisota, KEYS["talvisotaregiments"]: self.talvisotaRegiments,
+                KEYS["jatkosotaregiments"] : self.jatkosotaRegiments, KEYS["jatkosota"] : self.wereInJatkosota}

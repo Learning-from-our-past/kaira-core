@@ -5,7 +5,7 @@ from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
-
+from extractionkeys import KEYS
 
 #This class extracts a location string from provided substring/text.
 #Used mostly by other extractors such as Death and Demobilization extractors.
@@ -95,4 +95,4 @@ class BirthdayLocationExtractor(BaseExtractor):
         self.matchFinalPosition = self.locationExtractor.getFinalMatchPosition() + self.matchStartPosition - 4  #TODO: Dirty -4 offset
 
     def _constructReturnDict(self):
-        return {"birthLocation" : self.location, "cursorLocation" : self.getFinalMatchPosition()}
+        return {KEYS["birthLocation"] : self.location, "cursorLocation" : self.getFinalMatchPosition()}

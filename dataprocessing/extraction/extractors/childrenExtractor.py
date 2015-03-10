@@ -6,7 +6,7 @@ import extraction.extractors.regexUtils as regexUtils
 import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 from operator import itemgetter
-
+from extractionkeys import KEYS
 
 class ChildrenExtractor(BaseExtractor):
     PATTERN_DEFAULT = r'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:(?:- ?\n?(?=(?:Ts)|(?:Ts)|(?:Js)|(?:JR)|(?:Osa)|(?:Osall)))|pso))'
@@ -78,10 +78,10 @@ class ChildrenExtractor(BaseExtractor):
 
 
     def _constructReturnDict(self):
-        return  {"children": self.allChildren, "cursorLocation" : self.matchFinalPosition,
-                 "childCount": self.childCount, "separated" : {"nyk": self.sortedChildren["current"],
-                                                               "miehEd" : self.sortedChildren["manPrevious"],
-                                                               "psoEd" : self.sortedChildren["spousePrevious"]}}
+        return  {KEYS["children"]: self.allChildren, "cursorLocation" : self.matchFinalPosition,
+                 KEYS["childCount"]: self.childCount, KEYS["separated"] : {KEYS["nyk"]: self.sortedChildren["current"],
+                                                               KEYS["miehEd"] : self.sortedChildren["manPrevious"],
+                                                               KEYS["psoEd"] : self.sortedChildren["spousePrevious"]}}
 
 
 class ChildSorter():

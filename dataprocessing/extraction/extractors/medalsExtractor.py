@@ -3,7 +3,7 @@ import re
 import regex
 from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
-
+from extractionkeys import KEYS
 
 class MedalsExtractor(BaseExtractor):
 
@@ -45,5 +45,5 @@ class MedalsExtractor(BaseExtractor):
         self.medals += medal.group("mitali") +","
 
     def _constructReturnDict(self):
-        return {"medals" : self.medals}
+        return {KEYS["medals"] : self.medals}
 

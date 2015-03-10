@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import regex
+from extractionkeys import KEYS
 from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 import extraction.extractors.textUtils as textUtils

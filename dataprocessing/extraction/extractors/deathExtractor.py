@@ -7,7 +7,7 @@ import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.dateExtractor import DateExtractor
 from extraction.extractors.locationExtractor import LocationExtractor
-
+from extractionkeys import KEYS
 class DeathExtractor(BaseExtractor):
     #TODO: Split deatlocationExtract to own class like the birthday one?
     DATE_PATTERN_DEFAULT = r'k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
@@ -108,7 +108,7 @@ class DeathExtractor(BaseExtractor):
         self.matchFinalPosition = self.dateExtractor.getFinalMatchPosition() + self.locationExtractor.getFinalMatchPosition()
 
     def _constructReturnDict(self):
-        return  {"deathDay": self.day,"deathMonth": self.month, "deathYear": self.year, "kaatunut": self.fallenInWar, "deathLocation": self.location, "cursorLocation": self.matchFinalPosition}
+        return  {KEYS["deathDay"]: self.day,KEYS["deathMonth"]: self.month, KEYS["deathYear"]: self.year, KEYS["kaatunut"]: self.fallenInWar, KEYS["deathLocation"]: self.location, "cursorLocation": self.matchFinalPosition}
 
 class DeathFailedException(Exception):
     message = "Couldn't find death data."

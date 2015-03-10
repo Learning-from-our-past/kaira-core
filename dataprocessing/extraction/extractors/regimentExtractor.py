@@ -4,7 +4,7 @@ import regex
 from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
-
+from extractionkeys import KEYS
 
 class RegimentsExtractor(BaseExtractor):
 
@@ -26,6 +26,6 @@ class RegimentsExtractor(BaseExtractor):
             self.errorLogger.logError(RegimentException.eType, self.currentChild )
 
     def _constructReturnDict(self):
-        return {"regiments": self.regiments}
+        return {KEYS["regiments"]: self.regiments}
 
 
