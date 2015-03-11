@@ -51,12 +51,22 @@ class Mainwindow(QMainWindow):
 
 
         #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
-        """self.treeModel = TreeModel()
-        self.treeModel.setColumnCount(2)
+        self.treeModel = TreeModel([], self)
+        jaska = TreeItem(["JASKA", 33])
+        self.treeModel.rootItem.appendChild(jaska)
+        jaska.appendChild(TreeItem(["jakke", 32], jaska))
+        jaska.appendChild(TreeItem(["jarkko", 66], jaska))
+        toinen = TreeItem(["KAIJA", 123])
+        self.treeModel.rootItem.appendChild(toinen)
+        toinen.appendChild(TreeItem(["Lissu", 23], toinen))
+        toinen.child(0).appendChild(TreeItem(["Liina", 47], toinen.child(0)))
+
+        #self.treeModel.setColumnCount(2)
         self.ui.treeView.setModel(self.treeModel)
-        item = TreeItem("jaska", None)
-        self.treeModel.setItem(item)
-        self.treeModel.setItem(TreeItem("jaska2", item))"""
+        self.ui.treeView.expandAll()
+        #item = TreeItem(["jaska"], None)
+        #self.treeModel.setItem(item)
+        #self.treeModel.setItem(TreeItem("jaska2", item))
 
     def _updateEntriesList(self, items):
         self.entriesListModel.clear()

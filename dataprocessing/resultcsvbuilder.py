@@ -74,7 +74,6 @@ class ResultCsvBuilder:
         return row
 
     def _createWifeRowFromDict(self, wife):
-        print (wife)
         wifeRow =   [wife[KEYS["weddingYear"]], wife[KEYS["spouseName"]], wife[KEYS["spouseBirthData"]][KEYS["birthDay"]],
                      wife[KEYS["spouseBirthData"]][KEYS["birthMonth"]], wife[KEYS["spouseBirthData"]][KEYS["birthYear"]],
                      wife[KEYS["spouseBirthLocation"]],  wife[KEYS["spouseDeathData"]][KEYS["deathDay"]],
