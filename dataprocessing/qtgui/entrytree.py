@@ -13,8 +13,16 @@ class TreeModel(QtCore.QAbstractItemModel):
         super(TreeModel, self).__init__(parent)
         self.parents=[]
         self.dbdata = data
-        self.rootItem = TreeItem(["Attributes", "Values"])
+        self.rootItem = TreeItem([["Attributes"], ["Values"]])
         self.setupModelData(self.dbdata, self.rootItem)
+
+    def clear(self):
+        self.rootItem.removeChildren()
+        self.layoutChanged.emit()
+        #self.rootItem = TreeItem([["Attributes"], ["Values"]])
+        #self.setupModelData(self.dbdata, self.rootItem)
+        pass
+
 
     def setData(self, index, value, role):
        if index.isValid() and role == QtCore.Qt.EditRole:
@@ -136,6 +144,49 @@ class TreeModel(QtCore.QAbstractItemModel):
            if len(self.parents) > 0:
                 self.parents.pop()
 
+
+    def createTreeFromDict(self, data, parent, top=False):
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if isinstance(value, dict):
+                    node = TreeItem([key, ""], parent)
+                    parent.appendChild(node)
+                    self.createTreeFromDict(value, node)
+
+                elif isinstance(value, list):
+                    node = TreeItem([key, ""], parent)
+                    parent.appendChild(node)
+                    self.createTreeFromDict(value, node)
+
+                else:
+                    print(key)
+                    print(value)
+                    node = TreeItem([key, value], parent)
+                    parent.appendChild(node)
+
+
+        if isinstance(data, list):
+            for index, value in enumerate(data):
+                if isinstance(value, dict):
+
+                    node = TreeItem([index+1, ""], parent)
+                    parent.appendChild(node)
+                    self.createTreeFromDict(value, node)
+
+                elif isinstance(value, list):
+                    node = TreeItem([index+1, ""], parent)
+                    parent.appendChild(node)
+                    self.createTreeFromDict(value, node)
+
+                else:
+                    node = TreeItem(["juttu", value], parent)
+                    parent.appendChild(node)
+
+        if top:
+            self.layoutChanged.emit()
+
+
+
 class TreeItem(object):
       def __init__(self, data, parent=None):
           self.parentItem = parent
@@ -171,6 +222,12 @@ class TreeItem(object):
           return 0
       def setData(self, data, column):
           self.itemData[column] = data
+
+      def removeChildren(self):
+          self.childItems = []
+          return True
+
+
 
 """
 class TreeItem():
