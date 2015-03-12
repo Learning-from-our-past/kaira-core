@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1524</width>
-    <height>712</height>
+    <width>1123</width>
+    <height>694</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -317,7 +317,7 @@ background-color: white;
          <bool>true</bool>
         </property>
         <property name="sortingEnabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="animated">
          <bool>true</bool>
@@ -328,11 +328,17 @@ background-color: white;
         <property name="expandsOnDoubleClick">
          <bool>false</bool>
         </property>
+        <attribute name="headerCascadingSectionResizes">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="headerDefaultSectionSize">
+         <number>100</number>
+        </attribute>
         <attribute name="headerHighlightSections">
          <bool>true</bool>
         </attribute>
         <attribute name="headerMinimumSectionSize">
-         <number>400</number>
+         <number>399</number>
         </attribute>
         <attribute name="headerStretchLastSection">
          <bool>true</bool>
@@ -348,7 +354,7 @@ background-color: white;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1524</width>
+     <width>1123</width>
      <height>21</height>
     </rect>
    </property>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Mar 10 16:01:02 2015
+# Created: Thu Mar 12 13:50:11 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1524, 712)
+        MainWindow.resize(1123, 694)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -151,19 +151,21 @@ class Ui_MainWindow(object):
         self.treeView.setMinimumSize(QtCore.QSize(631, 0))
         self.treeView.setMaximumSize(QtCore.QSize(631, 16777215))
         self.treeView.setUniformRowHeights(True)
-        self.treeView.setSortingEnabled(False)
+        self.treeView.setSortingEnabled(True)
         self.treeView.setAnimated(True)
         self.treeView.setWordWrap(True)
         self.treeView.setExpandsOnDoubleClick(False)
         self.treeView.setObjectName("treeView")
+        self.treeView.header().setCascadingSectionResizes(True)
+        self.treeView.header().setDefaultSectionSize(100)
         self.treeView.header().setHighlightSections(True)
-        self.treeView.header().setMinimumSectionSize(400)
+        self.treeView.header().setMinimumSectionSize(399)
         self.treeView.header().setStretchLastSection(True)
         self.horizontalLayout_2.addWidget(self.treeView)
         self.verticalLayout_5.addLayout(self.horizontalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1524, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1123, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -249,5 +251,5 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
 
 from qtgui.entrytable import EntryTableView
-from qtgui.entriesModels import EntriesListView
 from qtgui.entrytree import EntryTreeView
+from qtgui.entriesModels import EntriesListView
