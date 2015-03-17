@@ -158,12 +158,12 @@ class TreeModel(QtCore.QAbstractItemModel):
             data = ValueWrapper(data)
 
         if isinstance(data.value, dict):
-            print("dicti")
             for key, value in data.value.items():
 
-                if key == "cursorLocation":
+                if key == "cursorLocation" or isinstance(value, str):
                     continue
-                print(key + " " + str(value))
+                #print(key + " " + str(value))
+
                 if isinstance(value.value, dict):
                     node = TreeItem([key, ""], parent)
                     parent.appendChild(node)
@@ -177,18 +177,13 @@ class TreeModel(QtCore.QAbstractItemModel):
                     self.createTreeFromDict(value, node)
 
                 elif isinstance(value.value, ValueWrapper):
-                    print("se on vlauewrapper")
                     node = TreeItem([key, value.value], parent)
                     parent.appendChild(node)
                 else:
-                    print(key)
-                    print(value.value)
-                    print(type(value.value))
                     node = TreeItem([key, value], parent)
                     parent.appendChild(node)
 
         if isinstance(data.value, list):
-            print("listi")
             for index, value in enumerate(data.value):
                 if isinstance(value.value, dict):
 
