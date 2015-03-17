@@ -6,7 +6,7 @@ import extraction.extractors.regexUtils as regexUtils
 import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 from operator import itemgetter
-from extractionkeys import KEYS
+from extractionkeys import KEYS, ValueWrapper
 
 class ChildrenExtractor(BaseExtractor):
     PATTERN_DEFAULT = r'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:(?:- ?\n?(?=(?:Ts)|(?:Ts)|(?:Js)|(?:JR)|(?:Osa)|(?:Osall)))|pso))'
@@ -78,10 +78,10 @@ class ChildrenExtractor(BaseExtractor):
 
 
     def _constructReturnDict(self):
-        return  {KEYS["children"]: self.allChildren, "cursorLocation" : self.matchFinalPosition,
-                 KEYS["childCount"]: self.childCount, KEYS["separated"] : {KEYS["nyk"]: self.sortedChildren["current"],
-                                                               KEYS["miehEd"] : self.sortedChildren["manPrevious"],
-                                                               KEYS["psoEd"] : self.sortedChildren["spousePrevious"]}}
+        return  { "cursorLocation" : self.matchFinalPosition,
+                 KEYS["childCount"]:  ValueWrapper(self.childCount), KEYS["separated"] :  ValueWrapper({KEYS["nyk"]:  ValueWrapper(self.sortedChildren["current"]),
+                                                               KEYS["miehEd"] :  ValueWrapper(self.sortedChildren["manPrevious"]),
+                                                               KEYS["psoEd"] :  ValueWrapper(self.sortedChildren["spousePrevious"])})}
 
 
 class ChildSorter():
@@ -171,5 +171,5 @@ class ChildSorter():
         return self.childText[start:end]
 
     def _constructReturnDict(self):
-        return {"current": self.childrenFromCurrentMarriage, "spousePrevious": self.childrenFromSpousesPreviousMarriage,
-                "manPrevious": self.childrenFromMansPreviousMarriage}
+        return {"current": ValueWrapper(self.childrenFromCurrentMarriage), "spousePrevious": ValueWrapper(self.childrenFromSpousesPreviousMarriage),
+                "manPrevious": ValueWrapper(self.childrenFromMansPreviousMarriage)}

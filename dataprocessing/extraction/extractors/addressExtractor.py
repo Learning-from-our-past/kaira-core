@@ -2,7 +2,7 @@
 import re
 import regex
 from extraction.extractors.baseExtractor import BaseExtractor
-from extractionkeys import KEYS
+from extractionkeys import KEYS, ValueWrapper
 
 class AddressExtractor(BaseExtractor):
     regexPattern = r'(?:\W- ?Os\b|\W- ?os\b|\W- ?o5\b|\W- ?O5\b|\W- ?05\b)(?P<address>(?:.|\n)*?)(?=$|Rva|\.)'
@@ -19,5 +19,5 @@ class AddressExtractor(BaseExtractor):
         return self.address
 
     def _constructReturnDict(self):
-        return {KEYS["address"] : self.address}
+        return {KEYS["address"] : ValueWrapper(self.address)}
 

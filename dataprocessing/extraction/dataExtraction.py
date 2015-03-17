@@ -58,7 +58,7 @@ class DataExtraction:
 
         #TODO: OWN FUNCTION
         #if there is no spouse, try to still find children:
-        if spouseData[KEYS["spouseCount"]] == 0:
+        if spouseData[KEYS["spouseCount"]].value == 0:
             otherCh = ChildrenExtractor(self.currentChild, self.errorLogger)
             otherCh.dependsOnMatchPositionOf(plE)
             children = otherCh.extract(text)

@@ -6,7 +6,7 @@ import extraction.extractors.regexUtils as regexUtils
 import extraction.extractors.textUtils as textUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.dateExtractor import DateExtractor
-from extractionkeys import KEYS
+from extractionkeys import KEYS, ValueWrapper
 class BirthdayExtractor(BaseExtractor):
     PATTERN = r'.*?(?:s|S|5)\.?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'
     OPTIONS = re.UNICODE    #TODO: TRY IGNORE CASE?
@@ -43,5 +43,5 @@ class BirthdayExtractor(BaseExtractor):
         self.matchFinalPosition = self.dateExtractor.getFinalMatchPosition() + self.matchStartPosition - 4
 
     def _constructReturnDict(self):
-        return {KEYS["birthDay"]: self.foundDate["day"], KEYS["birthMonth"]: self.foundDate["month"],
-                KEYS["birthYear"]: self.foundDate["year"], KEYS["cursorLocation"]: self.matchFinalPosition}
+        return {KEYS["birthDay"]:  ValueWrapper(self.foundDate["day"]), KEYS["birthMonth"]:  ValueWrapper(self.foundDate["month"]),
+                KEYS["birthYear"]:  ValueWrapper(self.foundDate["year"]), KEYS["cursorLocation"]:  ValueWrapper(self.matchFinalPosition)}

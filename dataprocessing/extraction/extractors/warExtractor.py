@@ -5,7 +5,7 @@ from extraction.extractors.baseExtractor import BaseExtractor
 import extraction.extractors.regexUtils as regexUtils
 from extraction.extractionExceptions import *
 from extraction.extractors.regimentExtractor import RegimentsExtractor
-from extractionkeys import KEYS
+from extractionkeys import KEYS, ValueWrapper
 
 class WarExtractor(BaseExtractor):
     JATKOSOTA_PATTERN = r'(?P<jsExists>(?:Js:|JS:|js:|jS:))'
@@ -42,5 +42,5 @@ class WarExtractor(BaseExtractor):
             self.talvisotaRegiments = self.regimentExtractor.extract(text[foundTalvisotaMarkers[0].end():])[KEYS["regiments"]]
 
     def _constructReturnDict(self):
-        return {KEYS["talvisota"]: self.wereInTalvisota, KEYS["talvisotaregiments"]: self.talvisotaRegiments,
-                KEYS["jatkosotaregiments"] : self.jatkosotaRegiments, KEYS["jatkosota"] : self.wereInJatkosota}
+        return {KEYS["talvisota"]:  ValueWrapper(self.wereInTalvisota), KEYS["talvisotaregiments"]:  ValueWrapper(self.talvisotaRegiments),
+                KEYS["jatkosotaregiments"] :  ValueWrapper(self.jatkosotaRegiments), KEYS["jatkosota"] :  ValueWrapper(self.wereInJatkosota)}
