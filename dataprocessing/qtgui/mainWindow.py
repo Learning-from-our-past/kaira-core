@@ -41,9 +41,7 @@ class Mainwindow(QMainWindow):
         self.ui.entriestListView.setModel(self.entriesListModel)
         self.ui.entriestListView.show()
 
-        self.entryTableModel = EntryTableModel(self.ui.tableView, self)
-        self.ui.tableView.setModel(self.entryTableModel)
-        self.ui.tableView.show()
+
 
 
         self.ui.entriesComboBox.clear()
@@ -99,8 +97,7 @@ class Mainwindow(QMainWindow):
     @pyqtSlot(dict)
     def _updateEntryTextFields(self, entry):
         self.ui.rawTextTextEdit.setPlainText(entry["xml"].text)
-        self.entryTableModel.clear()
-        self.entryTableModel.addItems(entry)
+
 
         self.treeModel.clear()
         self.treeModel.createTreeFromDict(entry["extractionResults"], self.treeModel.rootItem, True)
@@ -119,6 +116,12 @@ class Mainwindow(QMainWindow):
             self.ui.previousEntryTextEdit.setPlainText(previous.text)
         else:
             self.ui.previousEntryTextEdit.setPlainText("")
+
+        next = entry["xml"].getnext()
+        if next is not None:
+            self.ui.nextEntryTextEdit.setPlainText(next.text)
+        else:
+            self.ui.nextEntryTextEdit.setPlainText("")
 
     @pyqtSlot(dict)
     def _entriesImportedFromFile(self, resultsFromFile):
