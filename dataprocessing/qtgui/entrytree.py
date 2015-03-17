@@ -2,7 +2,7 @@ from PyQt5.QtGui import  QStandardItem, QStandardItemModel
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QAbstractItemModel
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QListView, QTreeView
-
+from extractionkeys import ValueWrapper
 #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
 
 class EntryTreeView(QTreeView):
@@ -28,6 +28,7 @@ class TreeModel(QtCore.QAbstractItemModel):
        if index.isValid() and role == QtCore.Qt.EditRole:
 
             prev_value = self.getValue(index)
+            print(prev_value)
             item = index.internalPointer()
 
             item.setData(value, index.column())
@@ -61,9 +62,14 @@ class TreeModel(QtCore.QAbstractItemModel):
 
     def data(self, index, role):
        if not index.isValid():
-           return None
+            return None
+       if role == QtCore.Qt.EditRole:
+            item = index.internalPointer()
+            return QtCore.QVariant(item.data(index.column()))
        if role != QtCore.Qt.DisplayRole:
-           return None
+            return None
+
+
 
        item = index.internalPointer()
        return QtCore.QVariant(item.data(index.column()))
@@ -72,7 +78,7 @@ class TreeModel(QtCore.QAbstractItemModel):
         if not index.isValid():
            return QtCore.Qt.NoItemFlags
 
-        if index.column() == 0:
+        if index.column() == 0 or not self.nodeFromIndex(index).isEditable():
             return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
         else:
             return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
@@ -146,36 +152,55 @@ class TreeModel(QtCore.QAbstractItemModel):
 
 
     def createTreeFromDict(self, data, parent, top=False):
-        if isinstance(data, dict):
-            for key, value in data.items():
-                if isinstance(value, dict):
+
+        #experimental
+        if top:
+            data = ValueWrapper(data)
+
+        if isinstance(data.value, dict):
+            print("dicti")
+            for key, value in data.value.items():
+
+                if key == "cursorLocation":
+                    continue
+                print(key + " " + str(value))
+                if isinstance(value.value, dict):
                     node = TreeItem([key, ""], parent)
                     parent.appendChild(node)
+                    node.setNotEditable()
                     self.createTreeFromDict(value, node)
 
-                elif isinstance(value, list):
+                elif isinstance(value.value, list):
                     node = TreeItem([key, ""], parent)
                     parent.appendChild(node)
+                    node.setNotEditable()
                     self.createTreeFromDict(value, node)
 
+                elif isinstance(value.value, ValueWrapper):
+                    print("se on vlauewrapper")
+                    node = TreeItem([key, value.value], parent)
+                    parent.appendChild(node)
                 else:
                     print(key)
-                    print(value)
+                    print(value.value)
+                    print(type(value.value))
                     node = TreeItem([key, value], parent)
                     parent.appendChild(node)
 
-
-        if isinstance(data, list):
-            for index, value in enumerate(data):
-                if isinstance(value, dict):
+        if isinstance(data.value, list):
+            print("listi")
+            for index, value in enumerate(data.value):
+                if isinstance(value.value, dict):
 
                     node = TreeItem([index+1, ""], parent)
                     parent.appendChild(node)
+                    node.setNotEditable()
                     self.createTreeFromDict(value, node)
 
-                elif isinstance(value, list):
+                elif isinstance(value.value, list):
                     node = TreeItem([index+1, ""], parent)
                     parent.appendChild(node)
+                    node.setNotEditable()
                     self.createTreeFromDict(value, node)
 
                 else:
@@ -192,6 +217,13 @@ class TreeItem(object):
           self.parentItem = parent
           self.itemData = data
           self.childItems = []
+          self.editable = True
+
+      def setNotEditable(self):
+          self.editable = False
+
+      def isEditable(self):
+          return self.editable
 
       def appendChild(self, item):
           self.childItems.append(item)
@@ -205,9 +237,15 @@ class TreeItem(object):
       def columnCount(self):
           return len(self.itemData)
 
+
       def data(self, column):
+
           try:
-              return self.itemData[column]
+              if isinstance(self.itemData[column], ValueWrapper):
+                    return self.itemData[column].value
+
+              else:
+                    return self.itemData[column]
 
           except IndexError:
               return None
@@ -221,7 +259,7 @@ class TreeItem(object):
 
           return 0
       def setData(self, data, column):
-          self.itemData[column] = data
+          self.itemData[column].value = data
 
       def removeChildren(self):
           self.childItems = []

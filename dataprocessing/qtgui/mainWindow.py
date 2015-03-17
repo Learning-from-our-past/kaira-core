@@ -53,24 +53,6 @@ class Mainwindow(QMainWindow):
 
         #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
         self.treeModel = TreeModel([], self)
-        self.treeModel.createTreeFromDict({'Medals': '', 'Talvisota': True,
-                                                                 'cursorLocation': 27, 'Profession': ' mv',
-                                                                 'DeathMonth': '', 'Surname': 'SAVANDER',
-                                                                 'Rank': 'korpr', 'Spouse count': 1,
-                                                                 'Wives': [{'Spouse name': 'Martta Johanna Marttinen',
-                                                                            'Children': {
-                                                                                'Separated': {"Man's previous marriage": '',
-                                                                                              "Man's current marriage": ' Kirsti 46, Tuula 48, Hannu 50. ',
-                                                                                              "Spouse's previous marriage": ''},
-                                                                                'Child count': 3, 'Children': ' Kirsti 46, Tuula 48, Hannu 50. ',
-                                                                                'cursorLocation': 84}, 'WeddingYear': 45, 'cursorLocation': 37,
-                                                                            'Spouse birth location': 'PionK', 'Spouse death data': {
-                                                                     'DeathMonth': '', 'DeathLocation': '',
-                                                                     'cursorLocation': 0, 'DeathDay': '',
-                                                                     'DeathYear': '', 'Fallen': False},
-                                                                            'Spouse birth data': {
-                                                                                'BirthMonth': '', 'BirthYear': '',
-                                                                                'BirthDay': ''}}], 'BirthDay': '8', 'BirthMonth': '7', 'Jatkosota regiments': ' 10 DE, 43 KmK, 33 TaIK, 40 TalK, 40 EVarK, 36 EVarK', 'Jatkosota': True, 'BirthLocation': 'Mikkelin mlk', 'Hobbies': ' kalastus', 'DemobilizationYear': '1944', 'DeathYear': '', 'BirthYear': '1907', 'DemobilizationMonth': '11', 'Address': ' Tikkalant 1, Mikkeli', 'Has spouse': True, 'DeathLocation': '', 'DeathDay': '', 'DemobilizationLocation': 'Mikkeli', 'Talvisota regiments': ' 25 PionK', 'DemobilizationDay': '19', 'First names': 'Toivo Jalmari', 'Fallen': False}, self.treeModel.rootItem, True)
 
         """
         jaska = TreeItem(["JASKA", 33])
@@ -129,7 +111,7 @@ class Mainwindow(QMainWindow):
         self.ui.treeView.resizeColumnToContents(0)
         self.ui.treeView.resizeColumnToContents(1)
         self.ui.treeView.expandAll()
-        
+
 
 
         previous = entry["xml"].getprevious()

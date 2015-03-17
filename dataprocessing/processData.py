@@ -12,6 +12,8 @@ from errorcsvbuilder import ErrorCsvBuilder
 XMLPATH = "../xmldata/"
 CSVPATH = "../csv/"
 
+
+
 class ProcessData:
     dataFilename = ""
     csvBuilder = None
@@ -61,6 +63,8 @@ class ProcessData:
 
             i +=1
             self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
+
+
 
     def _processEntry(self, entry):
 

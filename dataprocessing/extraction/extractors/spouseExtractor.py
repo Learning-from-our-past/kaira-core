@@ -9,7 +9,7 @@ from extraction.extractors.childrenExtractor import ChildrenExtractor
 from extraction.extractors.birthdayExtractor import BirthdayExtractor
 from extraction.extractors.locationExtractor import LocationExtractor
 from extraction.extractors.deathExtractor import DeathExtractor
-from extractionkeys import KEYS
+from extractionkeys import KEYS, ValueWrapper
 class SpouseExtractor(BaseExtractor):
     PATTERN_SPOUSE_EXISTS = r'(?P<spouseExists>\b(?:P|p)so\b)'
     OPTIONS = re.UNICODE
@@ -17,7 +17,7 @@ class SpouseExtractor(BaseExtractor):
     REQUIRES_MATCH_POSITION = True
     SPOUSE_WINDOW_WIDTH = 120
     foundSpouse = False
-    spouseData = {KEYS["spouseCount"] : 0, KEYS["hasSpouse"]: False}
+    spouseData = {KEYS["spouseCount"] :  ValueWrapper(0), KEYS["hasSpouse"]:  ValueWrapper(False)}
 
     def extract(self, text):
         super(SpouseExtractor, self).extract(text)
@@ -58,16 +58,16 @@ class SpouseExtractor(BaseExtractor):
 
             wife = wifeExt.extract(extractionStrs["spouseString"])
 
-            if wife[KEYS["spouseName"]] != "":
-                wife[KEYS["children"]] = children
-                wives.append(wife)
+            if wife[KEYS["spouseName"]].value != "":
+                wife[KEYS["children"]] = ValueWrapper(children)
+                wives.append(ValueWrapper(wife))
 
         if len(wives) >= 2: #make a note that there is lots of wives which may indicate chunking error in XML
             self.errorLogger.logError(TooManyWivesException.eType, self.currentChild)
 
-        spouseData = { KEYS["spouseCount"] : len(wives), KEYS["wifeList"]: wives} #self.extractSpouse(text2, cursorLocation)
-        spouseData[KEYS["hasSpouse"]] = True
-        spouseData[KEYS["spouseCount"]] = len(wives)
+        spouseData = { KEYS["spouseCount"] :  ValueWrapper(len(wives)), KEYS["wifeList"]:  ValueWrapper(wives)} #self.extractSpouse(text2, cursorLocation)
+        spouseData[KEYS["hasSpouse"]] =  ValueWrapper(True)
+        spouseData[KEYS["spouseCount"]] =  ValueWrapper(len(wives))
         self.spouseData = spouseData
 
     def _getSpouseCount(self, text):
@@ -98,7 +98,7 @@ class WifeDataExtractor(BaseExtractor):
     BIRTHYEAR_WINDOW_LEFTOFFSET = 10
     spouseName = ""
     weddingYear = ""
-    birthData = {KEYS["birthDay"]: "",KEYS["birthMonth"]: "", KEYS["birthYear"]: ""}
+    birthData = {KEYS["birthDay"]:  ValueWrapper(""),KEYS["birthMonth"]:  ValueWrapper(""), KEYS["birthYear"]:  ValueWrapper("")}
     birthPlace = ""
     deathData = ""
     wifeData = None
@@ -161,7 +161,7 @@ class WifeDataExtractor(BaseExtractor):
         self.deathData = deathExt.extract(preparedText)
 
     def _constructReturnDict(self):
-        return {"cursorLocation": self.getFinalMatchPosition(), KEYS["weddingYear"]: self.weddingYear, KEYS["spouseName"]: self.spouseName, KEYS["spouseBirthData"]: self.birthData, KEYS["spouseDeathData"]: self.deathData, KEYS["spouseBirthLocation"]: self.birthPlace}
+        return {"cursorLocation": self.getFinalMatchPosition(), KEYS["weddingYear"]: ValueWrapper(self.weddingYear), KEYS["spouseName"]: ValueWrapper(self.spouseName), KEYS["spouseBirthData"]: ValueWrapper(self.birthData), KEYS["spouseDeathData"]: ValueWrapper(self.deathData), KEYS["spouseBirthLocation"]: ValueWrapper(self.birthPlace)}
 
 
 class NoWifeException(Exception):
