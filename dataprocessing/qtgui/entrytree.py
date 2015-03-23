@@ -27,13 +27,10 @@ class TreeModel(QtCore.QAbstractItemModel):
     def setData(self, index, value, role):
 
         if index.isValid() and role == QtCore.Qt.EditRole:
-
             prev_value = self.getValue(index)
             print(prev_value)
             item = index.internalPointer()
-
             item.setData(value, index.column())
-
             return True
         else:
            return False
