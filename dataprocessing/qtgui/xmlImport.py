@@ -48,7 +48,6 @@ class XmlImport(QObject):
         #try:
         self.processor = processData.ProcessData(self._processUpdateCallback)
         result = self.processor.startExtractionProcess(self.file[0])
-        print (result)
         self.threadResultsSignal.emit(result)
         """except Exception as e:
             print(e)

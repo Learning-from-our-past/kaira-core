@@ -19,7 +19,7 @@ class WarExtractor(BaseExtractor):
     regimentExtractor = None
 
     def extract(self, text):
-        self.regimentExtractor = RegimentsExtractor(self.currentChild, self.errorLogger)
+        self.regimentExtractor = RegimentsExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         self._findWars(text)
         return self._constructReturnDict()
 

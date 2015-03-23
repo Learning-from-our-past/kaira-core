@@ -12,9 +12,10 @@ class BaseExtractor():
     matchFinalPosition = 0          #after extractor is finished, save the ending position of the match
 
 
-    def __init__(self, currentChild, errorLogger):
+    def __init__(self, currentChild, errorLogger, xmlDocument):
         self.currentChild = currentChild
         self.errorLogger = errorLogger
+        self.xmlDocument = xmlDocument
 
     @abstractmethod
     def extract(self, text):

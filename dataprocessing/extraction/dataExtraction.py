@@ -28,38 +28,41 @@ class DataExtraction:
     errorLogger = None
     currentChild = None
 
+    def __init__(self, xmlDocument):
+        self.xmlDocument = xmlDocument
+
     def extraction(self, text, entry, eLogger):
         self.errorLogger = eLogger
         self.currentChild = entry
         text = self.cleanText(text)
 
-        nE = NameExtractor(self.currentChild, self.errorLogger)
+        nE = NameExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         personData = nE.extract(text)
 
-        bE = BirthdayExtractor(self.currentChild, self.errorLogger)
+        bE = BirthdayExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         bE.dependsOnMatchPositionOf(nE)
         personBirthday = bE.extract(text)
 
-        plE = BirthdayLocationExtractor(self.currentChild, self.errorLogger)
+        plE = BirthdayLocationExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         plE.dependsOnMatchPositionOf(bE)
         personLocation = plE.extract(text)
 
-        p = ProfessionExtractor(self.currentChild, self.errorLogger)
+        p = ProfessionExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         p.dependsOnMatchPositionOf(plE)
         profession = p.extract(text)    #text[personLocation["cursorLocation"]:]
 
-        pDE = DeathExtractor(self.currentChild, self.errorLogger)
+        pDE = DeathExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         pDE.dependsOnMatchPositionOf(bE)
         personDeath = pDE.extract(text)
 
-        spouseExtractor = SpouseExtractor(self.currentChild, self.errorLogger)
+        spouseExtractor = SpouseExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         spouseExtractor.dependsOnMatchPositionOf(plE)
         spouseData = spouseExtractor.extract(text)
 
         #TODO: OWN FUNCTION
         #if there is no spouse, try to still find children:
         if spouseData[KEYS["spouseCount"]].value == 0:
-            otherCh = ChildrenExtractor(self.currentChild, self.errorLogger)
+            otherCh = ChildrenExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
             otherCh.dependsOnMatchPositionOf(plE)
             children = otherCh.extract(text)
 
@@ -67,22 +70,22 @@ class DataExtraction:
         else:
             children = {}
 
-        dmE = DemobilizationExtractor(self.currentChild, self.errorLogger)
+        dmE = DemobilizationExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         kotiutus = dmE.extract(text)
 
-        wE = WarExtractor(self.currentChild, self.errorLogger)
+        wE = WarExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         wars = wE.extract(text)
 
-        r = RankExtractor(self.currentChild, self.errorLogger)
+        r = RankExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         rank = r.extract(text)
 
-        m = MedalsExtractor(self.currentChild, self.errorLogger)
+        m = MedalsExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         medals = m.extract(text)
 
-        a = AddressExtractor(self.currentChild, self.errorLogger)
+        a = AddressExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         address = a.extract(text)
 
-        h = HobbiesExtractor(self.currentChild, self.errorLogger)
+        h = HobbiesExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         hobbies = h.extract(text)
 
         d = personData.copy()

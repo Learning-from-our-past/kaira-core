@@ -8,6 +8,7 @@ from chunkerCheck import ChunkChecker
 from exceptionlogger import ExceptionLogger
 from resultcsvbuilder import ResultCsvBuilder
 from errorcsvbuilder import ErrorCsvBuilder
+from extractionkeys import ValueWrapper
 
 XMLPATH = "../xmldata/"
 CSVPATH = "../csv/"
@@ -15,18 +16,19 @@ CSVPATH = "../csv/"
 
 
 class ProcessData:
-    dataFilename = ""
-    csvBuilder = None
-    errorCsvBuilder = None
-    extractor = None
-    chunkerCheck = None
-    errors = 0
-    count = 0
-    xmlDataDocument = None
-    readDataEntries = []
-    processUpdateCallbackFunction = None
+
 
     def __init__(self, callback):
+        self.dataFilename = ""
+        self.csvBuilder = None
+        self.errorCsvBuilder = None
+        self.extractor = None
+        self.chunkerCheck = None
+        self.errors = 0
+        self.count = 0
+        self.xmlDataDocument = None
+        self.readDataEntries = []
+        self.processUpdateCallbackFunction = None
         self.processUpdateCallbackFunction = callback
 
     #TODO: Nimeä uudestaan kuvaamaan että se palauttaa valmiin tuloksen?
@@ -34,7 +36,8 @@ class ProcessData:
         self._initProcess(filePath)
         self._processAllEntries()
         self._finishProcess()
-        return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "file": filePath}
+        return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
+                "file": filePath}
 
     def _initProcess(self, filePath):
         self.errors = 0
@@ -43,11 +46,11 @@ class ProcessData:
         self.csvBuilder.openCsv(filePath)
         self.errorCsvBuilder = ErrorCsvBuilder()
         self.errorCsvBuilder.openCsv(filePath)
-        self.extractor = DataExtraction()
-        self.chunkerCheck = ChunkChecker()
         self.errorLogger = ExceptionLogger()
         self.dataFilename = filePath
         self.xmlDataDocument = readData.getXMLroot(filePath)
+
+        self.extractor = DataExtraction(self.xmlDataDocument)
         self.xmlDataDocumentLen = len(self.xmlDataDocument)
         print ("XML file elements: " + str(len(self.xmlDataDocument)))
 
@@ -55,6 +58,7 @@ class ProcessData:
         i = 0
         for child in self.xmlDataDocument:
             entry = self._createEntry(child)
+            ValueWrapper.xmlEntry = child
             try:
                 self._processEntry(entry)
             except ExtractionException as e:
@@ -62,6 +66,7 @@ class ProcessData:
                 self._handleExtractionErrorLogging(exception=e, entry=entry)
 
             i +=1
+            ValueWrapper.reset_id_counter() #Resets the id-generator for each datafield of entry
             self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
 
 

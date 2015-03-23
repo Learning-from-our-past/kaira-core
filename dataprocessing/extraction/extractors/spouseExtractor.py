@@ -17,10 +17,10 @@ class SpouseExtractor(BaseExtractor):
     REQUIRES_MATCH_POSITION = True
     SPOUSE_WINDOW_WIDTH = 120
     foundSpouse = False
-    spouseData = {KEYS["spouseCount"] :  ValueWrapper(0), KEYS["hasSpouse"]:  ValueWrapper(False)}
 
     def extract(self, text):
         super(SpouseExtractor, self).extract(text)
+        self.spouseData = {KEYS["spouseCount"] :  ValueWrapper(0), KEYS["hasSpouse"]:  ValueWrapper(False)}
         preparedText = self._prepareTextForExtraction(text)
         self._findSpouses(preparedText)
         return self._constructReturnDict()
@@ -50,11 +50,11 @@ class SpouseExtractor(BaseExtractor):
         for i in range(0, len(spouseCount)):
             extractionStrs = self._constructSpouseExtractionStrings(spouseCount, i, text)
 
-            childExtractor = ChildrenExtractor(self.currentChild, self.errorLogger)
+            childExtractor = ChildrenExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
             childExtractor.setDependencyMatchPositionToZero()
             children = childExtractor.extract(extractionStrs["childString"])
 
-            wifeExt = WifeDataExtractor(self.currentChild, self.errorLogger)
+            wifeExt = WifeDataExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
 
             wife = wifeExt.extract(extractionStrs["spouseString"])
 
@@ -98,7 +98,7 @@ class WifeDataExtractor(BaseExtractor):
     BIRTHYEAR_WINDOW_LEFTOFFSET = 10
     spouseName = ""
     weddingYear = ""
-    birthData = {KEYS["birthDay"]:  ValueWrapper(""),KEYS["birthMonth"]:  ValueWrapper(""), KEYS["birthYear"]:  ValueWrapper("")}
+
     birthPlace = ""
     deathData = ""
     wifeData = None
@@ -106,6 +106,7 @@ class WifeDataExtractor(BaseExtractor):
 
     def extract(self, text):
         super(WifeDataExtractor, self).extract(text)
+        self.birthData = {KEYS["birthDay"]:  ValueWrapper(""),KEYS["birthMonth"]:  ValueWrapper(""), KEYS["birthYear"]:  ValueWrapper("")}
         try:
             self._findSpouseNameAndWeddingYear(text)
             self._findBirthday(text)
@@ -136,7 +137,7 @@ class WifeDataExtractor(BaseExtractor):
 
     def _findBirthday(self, text):
         try:
-            bDayExt = BirthdayExtractor(self.currentChild, self.errorLogger)
+            bDayExt = BirthdayExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
             preparedText = textUtils.takeSubStrBasedOnPos(text, self.matchFinalPosition - self.BIRTHYEAR_WINDOW_LEFTOFFSET, 64)
             bDayExt.setDependencyMatchPositionToZero()
             self.birthData = bDayExt.extract(preparedText) #self.extractBirthday(text[(m.end()-birthYearWindowLeftOffset):], 0, 64)
@@ -154,7 +155,7 @@ class WifeDataExtractor(BaseExtractor):
             self.errorLogger.logError(SpouseBirthplaceException.eType, self.currentChild)
 
     def _findDeath(self, text):
-        deathExt = DeathExtractor(self.currentChild, self.errorLogger)
+        deathExt = DeathExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         preparedText = textUtils.takeSubStrBasedOnPos(text, self.matchFinalPosition, 60)
         deathExt.targetIsSpouse()
         deathExt.setDependencyMatchPositionToZero()

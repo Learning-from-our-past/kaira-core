@@ -1,6 +1,6 @@
 KEYS = {
       "surname" : "Surname",
-      "firstnames" : "First names",
+      "firstnames" : "FirstNames",
       "birthDay" :  "BirthDay",
       "birthMonth" : "BirthMonth",
       "birthYear" : "BirthYear",
@@ -13,9 +13,9 @@ KEYS = {
       "kaatunut" : "Fallen",
       "deathLocation" : "DeathLocation",
       "talvisota" : "Talvisota",
-      "talvisotaregiments" : "Talvisota regiments",
+      "talvisotaregiments" : "TalvisotaRegiments",
       "jatkosota" : "Jatkosota",
-      "jatkosotaregiments" : "Jatkosota regiments",
+      "jatkosotaregiments" : "JatkosotaRegiments",
       "rank": "Rank",
       "kotiutusDay" : "DemobilizationDay",
       "kotiutusMonth" : "DemobilizationMonth",
@@ -23,28 +23,43 @@ KEYS = {
       "kotiutusPlace" : "DemobilizationLocation",
       "medals" : "Medals",
       "hobbies" : "Hobbies",
-      "hasSpouse" : "Has spouse",
+      "hasSpouse" : "HasSpouse",
       "weddingYear" : "WeddingYear",
-      "spouseName" : "Spouse name",
-      "spouseBirthData" : "Spouse birth data",
-      "spouseDeathData" : "Spouse death data",
+      "spouseName" : "SpouseName",
+      "spouseBirthData" : "SpouseBirthData",
+      "spouseDeathData" : "SpouseDeathData",
       "children" : "Children",
       "separated" : "Separated",
-      "miehEd" : "Man's previous marriage",
-      "nyk" : "Man's current marriage",
-      "psoEd" : "Spouse's previous marriage",
+      "miehEd" : "ManPreviousMarriage",
+      "nyk" : "ManCurrentMarriage",
+      "psoEd" : "SpousePreviousMarriage",
       "wifeList" : "Wives",
-      "spouseCount" : "Spouse count",
+      "spouseCount" : "SpouseCount",
       "cursorLocation" : "cursorLocation",
-      "childCount" : "Child count",
-      "spouseBirthLocation" : "Spouse birth location",
+      "childCount" : "ChildCount",
+      "spouseBirthLocation" : "SpouseBirthLocation",
       "regiments" : "Regiments"
 
 
 }
 
+
 class ValueWrapper():
-    value = None
+    xmlEntry = None  #Processdata sets this every time before extracting a new Entry.
+    idcounter = 1000    #class variable to generate
+
+    @staticmethod
+    def reset_id_counter():
+        ValueWrapper.idcounter = 1000
 
     def __init__(self, val):
         self.value = val
+        self.id = "t" + str(ValueWrapper.idcounter)
+        self.manuallyEdited = False
+
+        if self.id in ValueWrapper.xmlEntry.attrib:
+            #there is manual entered value for this field in xml, use it instead
+            self.value = ValueWrapper.xmlEntry.attrib[self.id]
+            self.manuallyEdited = True
+        ValueWrapper.idcounter += 1
+

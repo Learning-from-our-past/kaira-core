@@ -14,35 +14,37 @@ from qtgui.entriesModels import *
 from qtgui.entrytable import *
 from qtgui.entrytree import *
 from PyQt5.QtGui import  QStandardItem, QStandardItemModel
-
+from qtgui.savefile import *
 
 class Mainwindow(QMainWindow):
 
-    dataEntries = []
-    missingDataEntries = {}
-    missingDataListing = []
-    entriesListModel = None
+
 
 
 
     def __init__(self, parent=None):
+        self.dataEntries = []
+        self.missingDataEntries = {}
+        self.missingDataListing = []
+        self.entriesListModel = None
+        self.xmlDocument = None
+
         super(Mainwindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
         self.xmlImporter = XmlImport(self)
+        self.saveFile = SaveFile(self)
         #Connect actions to slots
         self.ui.actionOpen_XML_for_analyze.triggered.connect(self.xmlImporter.openXMLFile)
         self.xmlImporter.finishedSignal.connect(self._entriesImportedFromFile)
         self.ui.entriestListView.entrySelectedSignal.connect(self._updateEntryTextFields)
+        self.ui.actionSave_changes_to_xml.triggered.connect(self.saveFile.choose_place_to_save_xml)
 
         #set models.
         self.entriesListModel = EntriesListModel(self.ui.entriestListView, self)
         self.ui.entriestListView.setModel(self.entriesListModel)
         self.ui.entriestListView.show()
-
-
-
 
         self.ui.entriesComboBox.clear()
         self.ui.entriesComboBox.setCurrentIndex(0)
@@ -98,9 +100,8 @@ class Mainwindow(QMainWindow):
     def _updateEntryTextFields(self, entry):
         self.ui.rawTextTextEdit.setPlainText(entry["xml"].text)
 
-
         self.treeModel.clear()
-        self.treeModel.createTreeFromDict(entry["extractionResults"], self.treeModel.rootItem, True)
+        self.treeModel.createTreeFromDict(entry["extractionResults"], entry["xml"], self.treeModel.rootItem, True)
         proxyModel = QSortFilterProxyModel(self.ui.treeView)
         proxyModel.setSourceModel(self.treeModel)
         self.ui.treeView.setModel(proxyModel)
@@ -108,8 +109,6 @@ class Mainwindow(QMainWindow):
         self.ui.treeView.resizeColumnToContents(0)
         self.ui.treeView.resizeColumnToContents(1)
         self.ui.treeView.expandAll()
-
-
 
         previous = entry["xml"].getprevious()
         if previous is not None:
@@ -125,12 +124,15 @@ class Mainwindow(QMainWindow):
 
     @pyqtSlot(dict)
     def _entriesImportedFromFile(self, resultsFromFile):
-
+        self.xmlDocument = resultsFromFile["xmlDocument"]
         self.dataEntries = resultsFromFile["entries"]
         self.missingDataEntries = resultsFromFile["errors"]
         self._updateEntriesList(self.dataEntries)
         self._updateEntriesComboBox()
-
+        self.treeModel.clear()
+        self.ui.previousEntryTextEdit.setPlainText("")
+        self.ui.nextEntryTextEdit.setPlainText("")
+        self.ui.rawTextTextEdit.setPlainText("")
 
 def start():
     import sys
@@ -140,7 +142,6 @@ def start():
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
-
     start()
 
 
