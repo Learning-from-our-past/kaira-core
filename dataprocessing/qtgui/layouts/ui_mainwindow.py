@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Mar 17 12:37:52 2015
+# Created: Mon Mar 23 16:11:03 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -207,7 +207,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Extraction data editor"))
         self.entriesLabel.setText(_translate("MainWindow", "Entries "))
         self.entriesComboBox.setItemText(0, _translate("MainWindow", "All"))
         self.rawTextLabel.setText(_translate("MainWindow", "Current entry"))
@@ -238,5 +238,5 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setText(_translate("MainWindow", "Create a  new Person"))
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
 
-from qtgui.entriesModels import EntriesListView
 from qtgui.entrytree import EntryTreeView
+from qtgui.entriesModels import EntriesListView
