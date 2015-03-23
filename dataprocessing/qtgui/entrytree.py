@@ -1,4 +1,4 @@
-from PyQt5.QtGui import  QStandardItem, QStandardItemModel
+from PyQt5.QtGui import  QStandardItem, QStandardItemModel, QColor
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QAbstractItemModel
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QListView, QTreeView
@@ -13,7 +13,7 @@ class TreeModel(QtCore.QAbstractItemModel):
         super(TreeModel, self).__init__(parent)
         self.parents=[]
         self.dbdata = data
-        self.rootItem = TreeItem([["Attributes"], ["Values"]])
+        self.rootItem = TreeItem([["Attributes"], ["Values"]], None)
         self.setupModelData(self.dbdata, self.rootItem)
 
     def clear(self):
@@ -25,7 +25,8 @@ class TreeModel(QtCore.QAbstractItemModel):
 
 
     def setData(self, index, value, role):
-       if index.isValid() and role == QtCore.Qt.EditRole:
+
+        if index.isValid() and role == QtCore.Qt.EditRole:
 
             prev_value = self.getValue(index)
             print(prev_value)
@@ -34,7 +35,7 @@ class TreeModel(QtCore.QAbstractItemModel):
             item.setData(value, index.column())
 
             return True
-       else:
+        else:
            return False
 
     def removeRows(self, position=0, count=1,  parent=QtCore.QModelIndex()):
@@ -61,18 +62,16 @@ class TreeModel(QtCore.QAbstractItemModel):
            return self.rootItem.columnCount()
 
     def data(self, index, role):
-       if not index.isValid():
+        if not index.isValid():
             return None
-       if role == QtCore.Qt.EditRole:
+        if role == QtCore.Qt.EditRole:
             item = index.internalPointer()
             return QtCore.QVariant(item.data(index.column()))
-       if role != QtCore.Qt.DisplayRole:
+        if role != QtCore.Qt.DisplayRole:
             return None
 
-
-
-       item = index.internalPointer()
-       return QtCore.QVariant(item.data(index.column()))
+        item = index.internalPointer()
+        return QtCore.QVariant(item.data(index.column()))
 
     def flags(self, index):
         if not index.isValid():
@@ -151,7 +150,7 @@ class TreeModel(QtCore.QAbstractItemModel):
                 self.parents.pop()
 
 
-    def createTreeFromDict(self, data, parent, top=False):
+    def createTreeFromDict(self, data, xml, parent, top=False):
 
         #experimental
         if top:
@@ -165,41 +164,41 @@ class TreeModel(QtCore.QAbstractItemModel):
                 #print(key + " " + str(value))
 
                 if isinstance(value.value, dict):
-                    node = TreeItem([key, ""], parent)
+                    node = TreeItem([key, ""],xml, parent)
                     parent.appendChild(node)
                     node.setNotEditable()
-                    self.createTreeFromDict(value, node)
+                    self.createTreeFromDict(value, xml, node)
 
                 elif isinstance(value.value, list):
-                    node = TreeItem([key, ""], parent)
+                    node = TreeItem([key, ""],xml, parent)
                     parent.appendChild(node)
                     node.setNotEditable()
-                    self.createTreeFromDict(value, node)
+                    self.createTreeFromDict(value, xml, node)
 
                 elif isinstance(value.value, ValueWrapper):
-                    node = TreeItem([key, value.value], parent)
+                    node = TreeItem([key, value.value],xml, parent)
                     parent.appendChild(node)
                 else:
-                    node = TreeItem([key, value], parent)
+                    node = TreeItem([key, value],xml, parent)
                     parent.appendChild(node)
 
         if isinstance(data.value, list):
             for index, value in enumerate(data.value):
                 if isinstance(value.value, dict):
 
-                    node = TreeItem([index+1, ""], parent)
+                    node = TreeItem([index+1, ""],xml, parent)
                     parent.appendChild(node)
                     node.setNotEditable()
-                    self.createTreeFromDict(value, node)
+                    self.createTreeFromDict(value,xml, node)
 
                 elif isinstance(value.value, list):
-                    node = TreeItem([index+1, ""], parent)
+                    node = TreeItem([index+1, ""],xml, parent)
                     parent.appendChild(node)
                     node.setNotEditable()
-                    self.createTreeFromDict(value, node)
+                    self.createTreeFromDict(value,xml, node)
 
                 else:
-                    node = TreeItem(["juttu", value], parent)
+                    node = TreeItem(["juttu", value],xml, parent)
                     parent.appendChild(node)
 
         if top:
@@ -208,10 +207,11 @@ class TreeModel(QtCore.QAbstractItemModel):
 
 
 class TreeItem(object):
-      def __init__(self, data, parent=None):
+      def __init__(self, data, xml, parent=None):
           self.parentItem = parent
           self.itemData = data
           self.childItems = []
+          self.xml = xml
           self.editable = True
 
       def setNotEditable(self):
@@ -235,6 +235,8 @@ class TreeItem(object):
 
       def data(self, column):
 
+
+
           try:
               if isinstance(self.itemData[column], ValueWrapper):
                     return self.itemData[column].value
@@ -254,6 +256,8 @@ class TreeItem(object):
 
           return 0
       def setData(self, data, column):
+          print(self.itemData[column].id)
+          self.xml.attrib[self.itemData[column].id] = str(data)  #save manual data to an attribute to the xml entry
           self.itemData[column].value = data
 
       def removeChildren(self):
