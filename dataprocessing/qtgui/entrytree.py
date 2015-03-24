@@ -1,4 +1,4 @@
-from PyQt5.QtGui import  QStandardItem, QStandardItemModel, QColor
+from PyQt5.QtGui import  QStandardItem, QStandardItemModel, QColor, qRgb
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QAbstractItemModel
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QListView, QTreeView
@@ -27,7 +27,7 @@ class TreeModel(QtCore.QAbstractItemModel):
     def setData(self, index, value, role):
 
         if index.isValid() and role == QtCore.Qt.EditRole:
-            prev_value = self.getValue(index)
+            prev_value = self.getValue(index, role)
             print(prev_value)
             item = index.internalPointer()
             item.setData(value, index.column())
@@ -48,9 +48,9 @@ class TreeModel(QtCore.QAbstractItemModel):
        else:
            return self.rootItem
 
-    def getValue(self, index):
+    def getValue(self, index, role):
        item = index.internalPointer()
-       return item.data(index.column())
+       return item.data(index.column(), role)
 
     def columnCount(self, parent):
        if parent.isValid():
@@ -63,12 +63,15 @@ class TreeModel(QtCore.QAbstractItemModel):
             return None
         if role == QtCore.Qt.EditRole:
             item = index.internalPointer()
-            return QtCore.QVariant(item.data(index.column()))
-        if role != QtCore.Qt.DisplayRole:
+            return QtCore.QVariant(item.data(index.column(), role))
+
+        if role != QtCore.Qt.DisplayRole and role != QtCore.Qt.BackgroundRole:
             return None
 
+
+
         item = index.internalPointer()
-        return QtCore.QVariant(item.data(index.column()))
+        return QtCore.QVariant(item.data(index.column(), role))
 
     def flags(self, index):
         if not index.isValid():
@@ -82,7 +85,7 @@ class TreeModel(QtCore.QAbstractItemModel):
 
     def headerData(self, section, orientation, role):
        if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-           return QtCore.QVariant(self.rootItem.data(section)[0])
+           return QtCore.QVariant(self.rootItem.data(section, role)[0])
 
        return None
 
@@ -204,6 +207,8 @@ class TreeModel(QtCore.QAbstractItemModel):
 
 
 class TreeItem(object):
+
+      EDITED_ROW_COLOR = QColor(111,199,70)
       def __init__(self, data, xml, parent=None):
           self.parentItem = parent
           self.itemData = data
@@ -230,13 +235,14 @@ class TreeItem(object):
           return len(self.itemData)
 
 
-      def data(self, column):
-
-
+      def data(self, column, role):
 
           try:
               if isinstance(self.itemData[column], ValueWrapper):
-                    return self.itemData[column].value
+                  #color the row differently if it has manually edited data
+                  if role == QtCore.Qt.BackgroundRole and self.itemData[column].manuallyEdited:
+                      return QtCore.QVariant(self.EDITED_ROW_COLOR)
+                  return self.itemData[column].value
 
               else:
                     return self.itemData[column]
@@ -255,6 +261,7 @@ class TreeItem(object):
       def setData(self, data, column):
           print(self.itemData[column].id)
           self.xml.attrib[self.itemData[column].id] = str(data)  #save manual data to an attribute to the xml entry
+          self.itemData[column].manuallyEdited = True
           self.itemData[column].value = data
 
       def removeChildren(self):

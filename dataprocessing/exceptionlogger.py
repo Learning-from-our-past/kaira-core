@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 class ExceptionLogger:
-    errorsListing = {}
+
+    def __init__(self):
+        self.errorsListing = {}
+        
     def logError(self, exceptionType, entry):
         if exceptionType in self.errorsListing:
             self.errorsListing[exceptionType].append(entry)
