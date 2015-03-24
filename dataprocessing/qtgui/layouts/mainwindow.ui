@@ -233,7 +233,6 @@ background-color: white;
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionRun_analysis_for_all"/>
    <addaction name="actionCreate_a_new_Person"/>
   </widget>
   <action name="actionOpen_XML_for_analyze">

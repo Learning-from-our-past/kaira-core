@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Mar 24 11:15:43 2015
+# Created: Tue Mar 24 12:49:39 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -144,7 +144,6 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.menuImport.menuAction())
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuQuit.menuAction())
-        self.toolBar.addAction(self.actionRun_analysis_for_all)
         self.toolBar.addAction(self.actionCreate_a_new_Person)
 
         self.retranslateUi(MainWindow)
@@ -178,5 +177,5 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setText(_translate("MainWindow", "Create a  new Person"))
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
 
-from qtgui.entriesModels import EntriesListView
 from qtgui.entrytree import EntryTreeView
+from qtgui.entriesModels import EntriesListView

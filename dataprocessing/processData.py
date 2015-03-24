@@ -17,7 +17,6 @@ CSVPATH = "../csv/"
 
 class ProcessData:
 
-
     def __init__(self, callback):
         self.dataFilename = ""
         self.csvBuilder = None
@@ -38,6 +37,19 @@ class ProcessData:
         self._finishProcess()
         return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
                 "file": filePath}
+
+
+    def extractOne(self, xmlEntry):
+        """Can be used to extract only one entry after the main file"""
+        entry = self._createEntry(xmlEntry)
+        ValueWrapper.xmlEntry = xmlEntry
+        try:
+            personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
+            entry["extractionResults"] = personEntryDict
+        except ExtractionException as e:
+            pass
+
+        return entry
 
     def _initProcess(self, filePath):
         self.errors = 0
@@ -72,12 +84,12 @@ class ProcessData:
 
 
     def _processEntry(self, entry):
-
         personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
         entry["extractionResults"] = personEntryDict
         self.readDataEntries.append(entry)
         self.csvBuilder.writeRow(personEntryDict)
         self.count +=1
+        return entry
 
     def _createEntry(self, xmlEntry):
         return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
