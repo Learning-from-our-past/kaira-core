@@ -10,21 +10,29 @@ import time
 
 class XmlImport(QObject):
 
-    parent = None
-    processCount = 0
+
     threadUpdateSignal = pyqtSignal(int, int, name="progressUpdate")
     threadExceptionSignal = pyqtSignal(name="exceptionInProcess")
     threadResultsSignal = pyqtSignal(dict, name="results")
     finishedSignal = pyqtSignal(dict, name="processFinished")
-    result = {}
+
 
     def __init__(self, parent):
         super(XmlImport, self).__init__(parent)
         self.parent = parent
+        self.processCount = 0
+        self.result = {}
         self.thread = QThread(parent = self.parent)
         self.threadUpdateSignal.connect(self._updateProgressBarInMainThread)
         self.threadExceptionSignal.connect(self._loadingFailed)
         self.threadResultsSignal.connect(self._processFinished)
+
+    def importOne(self, xmlEntry):
+        if self.processor is not None:
+            result = self.processor.extractOne(xmlEntry)
+            return result
+        else:
+            return None
 
     @pyqtSlot()
     def openXMLFile(self):

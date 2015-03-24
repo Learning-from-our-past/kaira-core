@@ -15,6 +15,7 @@ from qtgui.entrytable import *
 from qtgui.entrytree import *
 from PyQt5.QtGui import  QStandardItem, QStandardItemModel
 from qtgui.savefile import *
+from qtgui.createnewperson import NewPersonDialog
 
 class Mainwindow(QMainWindow):
 
@@ -36,6 +37,7 @@ class Mainwindow(QMainWindow):
         self.xmlImporter.finishedSignal.connect(self._entriesImportedFromFile)
         self.ui.entriestListView.entrySelectedSignal.connect(self._updateEntryTextFields)
         self.ui.actionSave_changes_to_xml.triggered.connect(self.saveFile.choose_place_to_save_xml)
+        self.ui.actionCreate_a_new_Person.triggered.connect(self._createNewPerson)
 
         #set models.
         self.entriesListModel = EntriesListModel(self.ui.entriestListView, self)
@@ -48,6 +50,7 @@ class Mainwindow(QMainWindow):
         self.ui.nextEntryTextEdit.setEnabled(False)
         self.ui.previousEntryTextEdit.setEnabled(False)
         self.ui.rawTextTextEdit.setEnabled(False)
+        self.ui.toolBar.setEnabled(False)
 
         #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
         self.treeModel = TreeModel([], self)
@@ -74,6 +77,18 @@ class Mainwindow(QMainWindow):
         #item = TreeItem(["jaska"], None)
         #self.treeModel.setItem(item)
         #self.treeModel.setItem(TreeItem("jaska2", item))
+
+
+    def _createNewPerson(self):
+        newperson = NewPersonDialog(self.xmlDocument, self.xmlImporter, self )
+        selection = newperson.exec_()
+
+        entry = newperson.getPersonEntry()
+        if entry is not None and selection == 1:
+            self.dataEntries.append(entry)
+            self._updateEntriesList(self.dataEntries)
+            self._updateEntriesComboBox()
+
 
     def _updateEntriesList(self, items):
         self.entriesListModel.clear()
@@ -130,6 +145,7 @@ class Mainwindow(QMainWindow):
         self.ui.nextEntryTextEdit.setEnabled(False)
         self.ui.previousEntryTextEdit.setEnabled(False)
         self.ui.rawTextTextEdit.setEnabled(False)
+        self.ui.toolBar.setEnabled(True)
 
         self.xmlDocument = resultsFromFile["xmlDocument"]
         self.dataEntries = resultsFromFile["entries"]
