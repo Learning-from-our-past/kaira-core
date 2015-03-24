@@ -18,10 +18,6 @@ from qtgui.savefile import *
 
 class Mainwindow(QMainWindow):
 
-
-
-
-
     def __init__(self, parent=None):
         self.dataEntries = []
         self.missingDataEntries = {}
@@ -49,7 +45,9 @@ class Mainwindow(QMainWindow):
         self.ui.entriesComboBox.clear()
         self.ui.entriesComboBox.setCurrentIndex(0)
         self.ui.entriesComboBox.currentIndexChanged.connect(self._changedEntriesComboBox)
-
+        self.ui.nextEntryTextEdit.setEnabled(False)
+        self.ui.previousEntryTextEdit.setEnabled(False)
+        self.ui.rawTextTextEdit.setEnabled(False)
 
         #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
         self.treeModel = TreeModel([], self)
@@ -99,7 +97,7 @@ class Mainwindow(QMainWindow):
     @pyqtSlot(dict)
     def _updateEntryTextFields(self, entry):
         self.ui.rawTextTextEdit.setPlainText(entry["xml"].text)
-
+        self.ui.rawTextTextEdit.setEnabled(True)
         self.treeModel.clear()
         self.treeModel.createTreeFromDict(entry["extractionResults"], entry["xml"], self.treeModel.rootItem, True)
         proxyModel = QSortFilterProxyModel(self.ui.treeView)
@@ -113,17 +111,26 @@ class Mainwindow(QMainWindow):
         previous = entry["xml"].getprevious()
         if previous is not None:
             self.ui.previousEntryTextEdit.setPlainText(previous.text)
+            self.ui.previousEntryTextEdit.setEnabled(True)
         else:
+            print("disabled previous")
             self.ui.previousEntryTextEdit.setPlainText("")
+            self.ui.previousEntryTextEdit.setEnabled(False)
 
         next = entry["xml"].getnext()
         if next is not None:
             self.ui.nextEntryTextEdit.setPlainText(next.text)
+            self.ui.nextEntryTextEdit.setEnabled(True)
         else:
             self.ui.nextEntryTextEdit.setPlainText("")
+            self.ui.nextEntryTextEdit.setEnabled(False)
 
     @pyqtSlot(dict)
     def _entriesImportedFromFile(self, resultsFromFile):
+        self.ui.nextEntryTextEdit.setEnabled(False)
+        self.ui.previousEntryTextEdit.setEnabled(False)
+        self.ui.rawTextTextEdit.setEnabled(False)
+
         self.xmlDocument = resultsFromFile["xmlDocument"]
         self.dataEntries = resultsFromFile["entries"]
         self.missingDataEntries = resultsFromFile["errors"]

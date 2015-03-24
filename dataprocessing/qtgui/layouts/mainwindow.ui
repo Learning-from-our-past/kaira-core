@@ -73,94 +73,6 @@ background-color: white;
       </item>
       <item>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="1" column="1">
-         <widget class="QFrame" name="currentFrame">
-          <property name="frameShape">
-           <enum>QFrame::Panel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <property name="spacing">
-              <number>2</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="rawTextLabel">
-               <property name="text">
-                <string>Current entry</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="rawTextCurrentLabel">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="rawTexthorizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QToolButton" name="combineButton">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="autoFillBackground">
-                <bool>false</bool>
-               </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Combine</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="rawTextSaveButton">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Save</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="rawTextDeleteButton">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Delete</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QPlainTextEdit" name="rawTextTextEdit"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QFrame" name="previousFrame">
           <property name="frameShape">
@@ -191,66 +103,27 @@ background-color: white;
                </property>
               </widget>
              </item>
-             <item>
-              <spacer name="previousHorizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QToolButton" name="previousENtrySaveButton">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Save</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QToolButton" name="previousEntryDeleteButton">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>Delete</string>
-               </property>
-              </widget>
-             </item>
             </layout>
            </item>
            <item>
             <widget class="QPlainTextEdit" name="previousEntryTextEdit"/>
            </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QFrame" name="verticalFrame">
-          <property name="frameShape">
-           <enum>QFrame::Panel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QVBoxLayout" name="nextFrame">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-             <item>
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>Next entry</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QLabel" name="rawTextLabel">
+             <property name="text">
+              <string>Current entry</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPlainTextEdit" name="rawTextTextEdit"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Next entry</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPlainTextEdit" name="nextEntryTextEdit"/>
