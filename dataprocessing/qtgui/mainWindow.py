@@ -25,6 +25,7 @@ class Mainwindow(QMainWindow):
         self.missingDataListing = []
         self.entriesListModel = None
         self.xmlDocument = None
+        self.selectedEntry = None
 
         super(Mainwindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
@@ -41,6 +42,7 @@ class Mainwindow(QMainWindow):
 
         #set models.
         self.entriesListModel = EntriesListModel(self.ui.entriestListView, self)
+        self.ui.entriestListView.entrySelectedSignal.connect(self._entrySelected)
         self.ui.entriestListView.setModel(self.entriesListModel)
         self.ui.entriestListView.show()
 
@@ -51,21 +53,13 @@ class Mainwindow(QMainWindow):
         self.ui.previousEntryTextEdit.setEnabled(False)
         self.ui.rawTextTextEdit.setEnabled(False)
         self.ui.toolBar.setEnabled(False)
+        self.ui.rawTextTextEdit.textChanged.connect(self._editedCurrentTextField)
+        self.ui.previousEntryTextEdit.textChanged.connect(self._editedPreviousTextField)
+        self.ui.nextEntryTextEdit.textChanged.connect(self._editedNextTextField)
 
         #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
         self.treeModel = TreeModel([], self)
 
-        """
-        jaska = TreeItem(["JASKA", 33])
-        jaska.appendChild(TreeItem(["jakke", 32], jaska))
-        jaska.appendChild(TreeItem(["jarkko", 66], jaska))
-        toinen = TreeItem(["KAIJA", 123])
-        self.treeModel.rootItem.appendChild(toinen)
-        toinen.appendChild(TreeItem(["Lissu", 23], toinen))
-        toinen.child(0).appendChild(TreeItem(["Liina", 47], toinen.child(0)))"""
-
-        #self.treeModel.setColumnCount(2)
-        #self.ui.treeView.setModel(self.treeModel)
         proxyModel = QSortFilterProxyModel(self.ui.treeView)
         proxyModel.setSourceModel(self.treeModel)
 
@@ -74,9 +68,7 @@ class Mainwindow(QMainWindow):
         self.ui.treeView.resizeColumnToContents(0)
         self.ui.treeView.resizeColumnToContents(1)
         self.ui.treeView.expandAll()
-        #item = TreeItem(["jaska"], None)
-        #self.treeModel.setItem(item)
-        #self.treeModel.setItem(TreeItem("jaska2", item))
+
 
 
     def _createNewPerson(self):
@@ -111,6 +103,10 @@ class Mainwindow(QMainWindow):
 
     @pyqtSlot(dict)
     def _updateEntryTextFields(self, entry):
+        self.ui.rawTextTextEdit.blockSignals(True)
+        self.ui.previousEntryTextEdit.blockSignals(True)
+        self.ui.nextEntryTextEdit.blockSignals(True)
+
         self.ui.rawTextTextEdit.setPlainText(entry["xml"].text)
         self.ui.rawTextTextEdit.setEnabled(True)
         self.treeModel.clear()
@@ -140,12 +136,17 @@ class Mainwindow(QMainWindow):
             self.ui.nextEntryTextEdit.setPlainText("")
             self.ui.nextEntryTextEdit.setEnabled(False)
 
+        self.ui.rawTextTextEdit.blockSignals(False)
+        self.ui.previousEntryTextEdit.blockSignals(False)
+        self.ui.nextEntryTextEdit.blockSignals(False)
+
     @pyqtSlot(dict)
     def _entriesImportedFromFile(self, resultsFromFile):
         self.ui.nextEntryTextEdit.setEnabled(False)
         self.ui.previousEntryTextEdit.setEnabled(False)
         self.ui.rawTextTextEdit.setEnabled(False)
         self.ui.toolBar.setEnabled(True)
+        self.selectedEntry = None
 
         self.xmlDocument = resultsFromFile["xmlDocument"]
         self.dataEntries = resultsFromFile["entries"]
@@ -156,6 +157,28 @@ class Mainwindow(QMainWindow):
         self.ui.previousEntryTextEdit.setPlainText("")
         self.ui.nextEntryTextEdit.setPlainText("")
         self.ui.rawTextTextEdit.setPlainText("")
+
+    def _entrySelected(self, entry):
+        self.selectedEntry = entry
+
+    def _editedCurrentTextField(self):
+        if self.selectedEntry is not None:
+            self.selectedEntry["xml"].text = self.ui.rawTextTextEdit.toPlainText()
+
+    def _editedPreviousTextField(self):
+        if self.selectedEntry is not None:
+            previous = self.selectedEntry["xml"].getprevious()
+            if previous is not None:
+                previous.text = self.ui.previousEntryTextEdit.toPlainText()
+
+    def _editedNextTextField(self):
+        if self.selectedEntry is not None:
+            next = self.selectedEntry["xml"].getnext()
+            if next is not None:
+                print(self.ui.nextEntryTextEdit.toPlainText())
+                next.text = self.ui.nextEntryTextEdit.toPlainText()
+
+
 
 def start():
     import sys
