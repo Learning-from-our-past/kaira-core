@@ -19,6 +19,8 @@ from qtgui.createnewperson import NewPersonDialog
 
 class Mainwindow(QMainWindow):
 
+    updateEntriesListSignal = pyqtSignal(name="updatelist")
+
     def __init__(self, parent=None):
         self.dataEntries = []
         self.missingDataEntries = {}
@@ -32,13 +34,14 @@ class Mainwindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.xmlImporter = XmlImport(self)
-        self.saveFile = SaveFile(self)
+        self.saveFile = SaveFile(self, self.dataEntries)
         #Connect actions to slots
         self.ui.actionOpen_XML_for_analyze.triggered.connect(self.xmlImporter.openXMLFile)
         self.xmlImporter.finishedSignal.connect(self._entriesImportedFromFile)
         self.ui.entriestListView.entrySelectedSignal.connect(self._updateEntryTextFields)
         self.ui.actionSave_changes_to_xml.triggered.connect(self.saveFile.choose_place_to_save_xml)
         self.ui.actionCreate_a_new_Person.triggered.connect(self._createNewPerson)
+        self.updateEntriesListSignal.connect(self._entryModelUpdated)
 
         #set models.
         self.entriesListModel = EntriesListModel(self.ui.entriestListView, self)
@@ -69,8 +72,6 @@ class Mainwindow(QMainWindow):
         self.ui.treeView.resizeColumnToContents(1)
         self.ui.treeView.expandAll()
 
-
-
     def _createNewPerson(self):
         newperson = NewPersonDialog(self.xmlDocument, self.xmlImporter, self )
         selection = newperson.exec_()
@@ -80,6 +81,21 @@ class Mainwindow(QMainWindow):
             self.dataEntries.append(entry)
             self._updateEntriesList(self.dataEntries)
             self._updateEntriesComboBox()
+
+
+    def _entryModelUpdated(self):
+        self._updateEntriesList(self.dataEntries)
+        self._updateEntriesComboBox()
+        self.ui.nextEntryTextEdit.setEnabled(False)
+        self.ui.previousEntryTextEdit.setEnabled(False)
+        self.ui.rawTextTextEdit.setEnabled(False)
+        self.ui.toolBar.setEnabled(True)
+        self.selectedEntry = None
+        self.treeModel.clear()
+        self.ui.previousEntryTextEdit.setPlainText("")
+        self.ui.nextEntryTextEdit.setPlainText("")
+        self.ui.rawTextTextEdit.setPlainText("")
+
 
 
     def _updateEntriesList(self, items):
@@ -142,21 +158,10 @@ class Mainwindow(QMainWindow):
 
     @pyqtSlot(dict)
     def _entriesImportedFromFile(self, resultsFromFile):
-        self.ui.nextEntryTextEdit.setEnabled(False)
-        self.ui.previousEntryTextEdit.setEnabled(False)
-        self.ui.rawTextTextEdit.setEnabled(False)
-        self.ui.toolBar.setEnabled(True)
-        self.selectedEntry = None
-
         self.xmlDocument = resultsFromFile["xmlDocument"]
         self.dataEntries = resultsFromFile["entries"]
         self.missingDataEntries = resultsFromFile["errors"]
-        self._updateEntriesList(self.dataEntries)
-        self._updateEntriesComboBox()
-        self.treeModel.clear()
-        self.ui.previousEntryTextEdit.setPlainText("")
-        self.ui.nextEntryTextEdit.setPlainText("")
-        self.ui.rawTextTextEdit.setPlainText("")
+        self._entryModelUpdated()
 
     def _entrySelected(self, entry):
         self.selectedEntry = entry
