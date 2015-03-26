@@ -16,6 +16,7 @@ from qtgui.entrytree import *
 from PyQt5.QtGui import  QStandardItem, QStandardItemModel
 from qtgui.savefile import *
 from qtgui.createnewperson import NewPersonDialog
+from qtgui.chunking import ChunkFile
 
 class Mainwindow(QMainWindow):
 
@@ -34,9 +35,11 @@ class Mainwindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.xmlImporter = XmlImport(self)
+        self.chunkFile = ChunkFile(self)
         self.saveFile = SaveFile(self, self.dataEntries)
         #Connect actions to slots
         self.ui.actionOpen_XML_for_analyze.triggered.connect(self.xmlImporter.openXMLFile)
+        self.ui.actionFrom_txt_OCR.triggered.connect(self.chunkFile.import_txt)
         self.xmlImporter.finishedSignal.connect(self._entriesImportedFromFile)
         self.ui.entriestListView.entrySelectedSignal.connect(self._updateEntryTextFields)
         self.ui.actionSave_changes_to_xml.triggered.connect(self.saveFile.choose_place_to_save_xml)
@@ -95,8 +98,6 @@ class Mainwindow(QMainWindow):
         self.ui.previousEntryTextEdit.setPlainText("")
         self.ui.nextEntryTextEdit.setPlainText("")
         self.ui.rawTextTextEdit.setPlainText("")
-
-
 
     def _updateEntriesList(self, items):
         self.entriesListModel.clear()
