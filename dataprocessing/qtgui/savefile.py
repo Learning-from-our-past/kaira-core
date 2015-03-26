@@ -3,12 +3,13 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QIn
 from PyQt5.QtCore import pyqtSlot, QEvent, QSettings, QStandardPaths
 from lxml import etree
 from PyQt5.QtGui import QStatusTipEvent, QDesktopServices
+from resultcsvbuilder import ResultCsvBuilder
 
 
-class SaveFile(QObject):
+class SaveXmlFile(QObject):
 
     def __init__(self, parent, dataEntries):
-        super(SaveFile, self).__init__(parent)
+        super(SaveXmlFile, self).__init__(parent)
         self.parent = parent
         self.dataEntries = dataEntries
 
@@ -44,4 +45,37 @@ class SaveFile(QObject):
                         self.dataEntries.pop(i)
                         break
         self.parent.updateEntriesListSignal.emit()
+
+
+class SaveCsvFile(QObject):
+
+    def __init__(self, parent, dataEntries):
+        super(SaveCsvFile, self).__init__(parent)
+        self.parent = parent
+        self.dataEntries = dataEntries
+
+
+    def choose_place_to_save_csv(self):
+            paths = QStandardPaths.standardLocations(0)
+            if len(paths) > 0:
+                path = paths[0]
+            else:
+                path = ""
+            filename = QFileDialog.getSaveFileName(self.parent, "Save csv-data containing the extracted data:",
+                                                   path +"/extraction_results.csv", "CSV-files (*.csv);;All files (*)")
+            if filename[0] != "":
+                self._save_to_csv(self.parent.dataEntries, filename[0])
+
+    def _save_to_csv(self, entries, path):
+        #write modifications to a new xml-file:
+        writer = ResultCsvBuilder()
+        print(path)
+        writer.openCsv(path)
+        for entry in self.parent.dataEntries:
+            try:
+                writer.writeRow(entry["extractionResults"])
+            except KeyError:
+                pass
+        writer.closeCsv()
+
 

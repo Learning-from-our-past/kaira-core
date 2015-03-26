@@ -8,11 +8,11 @@ from extractionkeys import KEYS, ValueWrapper
 
 class RegimentsExtractor(BaseExtractor):
 
-    REGIMENT_PATTERN = r'(?P<regiments>(:?[A-Za-zä-öÄ-Ö0-9 \n,])+)'
-    REGIMENT_OPTIONS = re.UNICODE
-    regiments = ""
+
 
     def extract(self, text):
+        self.REGIMENT_PATTERN = r'(?P<regiments>(:?[A-Za-zä-öÄ-Ö0-9 \n,])+)'
+        self.REGIMENT_OPTIONS = re.UNICODE
         self.regiments = ""
         self._findRegiments(text)
         return self._constructReturnDict()
@@ -23,6 +23,7 @@ class RegimentsExtractor(BaseExtractor):
             self.regiments = foundRegiments.group("regiments")
             self.matchFinalPosition = foundRegiments.end()
         except regexUtils.RegexNoneMatchException as e:
+
             self.errorLogger.logError(RegimentException.eType, self.currentChild )
 
     def _constructReturnDict(self):

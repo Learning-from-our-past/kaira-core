@@ -36,7 +36,8 @@ class Mainwindow(QMainWindow):
 
         self.xmlImporter = XmlImport(self)
         self.chunkFile = ChunkFile(self)
-        self.saveFile = SaveFile(self, self.dataEntries)
+        self.saveCsv = SaveCsvFile(self, self.dataEntries)
+        self.saveFile = SaveXmlFile(self, self.dataEntries)
         #Connect actions to slots
         self.ui.actionOpen_XML_for_analyze.triggered.connect(self.xmlImporter.openXMLFile)
         self.ui.actionFrom_txt_OCR.triggered.connect(self.chunkFile.import_txt)
@@ -45,6 +46,7 @@ class Mainwindow(QMainWindow):
         self.ui.actionSave_changes_to_xml.triggered.connect(self.saveFile.choose_place_to_save_xml)
         self.ui.actionCreate_a_new_Person.triggered.connect(self._createNewPerson)
         self.updateEntriesListSignal.connect(self._entryModelUpdated)
+        self.ui.actionCsv.triggered.connect(self.saveCsv.choose_place_to_save_csv)
 
         #set models.
         self.entriesListModel = EntriesListModel(self.ui.entriestListView, self)

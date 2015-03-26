@@ -53,8 +53,8 @@ class ProcessData:
     def _initProcess(self, filePath):
         self.errors = 0
         self.count = 0
-        self.csvBuilder = ResultCsvBuilder()
-        self.csvBuilder.openCsv(filePath)
+        #self.csvBuilder = ResultCsvBuilder()
+        #self.csvBuilder.openCsv(filePath)
         self.errorCsvBuilder = ErrorCsvBuilder()
         self.errorCsvBuilder.openCsv(filePath)
         self.errorLogger = ExceptionLogger()
@@ -86,7 +86,8 @@ class ProcessData:
         personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
         entry["extractionResults"] = personEntryDict
         self.readDataEntries.append(entry)
-        self.csvBuilder.writeRow(personEntryDict)
+        print(personEntryDict)
+        #self.csvBuilder.writeRow(personEntryDict)
         self.count +=1
         return entry
 
@@ -112,7 +113,7 @@ class ProcessData:
 
     def _finishProcess(self):
         self._printStatistics()
-        self.csvBuilder.closeCsv()
+        #self.csvBuilder.closeCsv()
         self.errorCsvBuilder.closeCsv()
 
     def _printStatistics(self):
