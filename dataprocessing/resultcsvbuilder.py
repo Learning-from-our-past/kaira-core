@@ -3,14 +3,14 @@ import ntpath
 import csv
 from extractionkeys import KEYS
 class ResultCsvBuilder:
-    CSVPATH = "../csv/"
-    filepath = ""
-    filename = ""
-    openedCsv = None
-    csvWriter = None
+
 
     def __init__(self):
-        pass
+        self.filepath = ""
+        self.filename = ""
+        self.openedCsv = None
+        self.csvWriter = None
+
 
     def openCsv(self, filepath):
         self.filepath = filepath
@@ -19,7 +19,7 @@ class ResultCsvBuilder:
 
 
     def _initCsv(self):
-        self.openedCsv = open(self.CSVPATH + self.filename[:-4]+ ".csv", "w", newline='', encoding="utf-8")
+        self.openedCsv = open(self.filepath, "w", newline='', encoding="utf-8")
         self.csvWriter = csv.writer(self.openedCsv, delimiter="&")
         self._writeCsvHeaders()
 
@@ -45,6 +45,7 @@ class ResultCsvBuilder:
 
     #tranforms the dict of the entry to a format which can be written into csv
     def _createRowFromDict(self, persondatadict):
+
         row = [persondatadict[KEYS["surname"]].value, persondatadict[KEYS["firstnames"]].value, persondatadict[KEYS["birthDay"]].value,
                persondatadict[KEYS["birthMonth"]].value, persondatadict[KEYS["birthYear"]].value, persondatadict[KEYS["birthLocation"]].value,
                persondatadict[KEYS["profession"]].value, persondatadict[KEYS["address"]].value, persondatadict[KEYS["deathDay"]].value,
