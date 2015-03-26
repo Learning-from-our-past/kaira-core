@@ -12,7 +12,7 @@ class XmlImport(QObject):
 
 
     threadUpdateSignal = pyqtSignal(int, int, name="progressUpdate")
-    threadExceptionSignal = pyqtSignal(name="exceptionInProcess")
+    threadExceptionSignal = pyqtSignal(object, name="exceptionInProcess")
     threadResultsSignal = pyqtSignal(dict, name="results")
     finishedSignal = pyqtSignal(dict, name="processFinished")
 
@@ -53,13 +53,13 @@ class XmlImport(QObject):
 
 
     def _runProcess(self):
-        #try:
-        self.processor = processData.ProcessData(self._processUpdateCallback)
-        result = self.processor.startExtractionProcess(self.file[0])
-        self.threadResultsSignal.emit(result)
-        """except Exception as e:
+        try:
+            self.processor = processData.ProcessData(self._processUpdateCallback)
+            result = self.processor.startExtractionProcess(self.file[0])
+            self.threadResultsSignal.emit(result)
+        except Exception as e:
             print(e)
-            self.threadExceptionSignal.emit()"""
+            self.threadExceptionSignal.emit(e)
 
 
     @pyqtSlot(int, int)
@@ -67,11 +67,11 @@ class XmlImport(QObject):
         self.progressDialog.setRange(0, max)
         self.progressDialog.setValue(i)
 
-    @pyqtSlot()
-    def _loadingFailed(self):
+    @pyqtSlot(object)
+    def _loadingFailed(self, e):
         self.progressDialog.cancel()
         msgbox = QMessageBox()
-        msgbox.information(self.parent, "Extraction failed", "Error in data-file. Extraction failed. Is the xml valid?")
+        msgbox.information(self.parent, "Extraction failed", "Error in data-file. Extraction failed. Is the xml valid and in utf-8 format? More info: " + str(e))
         msgbox.show()
 
     @pyqtSlot(dict)

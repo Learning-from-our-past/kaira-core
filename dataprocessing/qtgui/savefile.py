@@ -38,12 +38,9 @@ class SaveFile(QObject):
         for child in xmldocument:
             if child.text.strip() == "":
                 xmldocument.remove(child)
-                print("lapsi pois")
-                print(len(self.dataEntries))
                 for i in range(0, len(self.dataEntries)):
                     print(self.dataEntries[i]["xml"])
                     if self.dataEntries[i]["xml"] == child:
-                        print("pop")
                         self.dataEntries.pop(i)
                         break
         self.parent.updateEntriesListSignal.emit()
