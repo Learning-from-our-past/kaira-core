@@ -9,18 +9,19 @@ from operator import itemgetter
 from extractionkeys import KEYS, ValueWrapper
 
 class ChildrenExtractor(BaseExtractor):
-    PATTERN_DEFAULT = r'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:(?:- ?\n?(?=(?:Ts)|(?:Ts)|(?:Js)|(?:JR)|(?:Osa)|(?:Osall)))|pso))'
-    PATTERN_WORDFORMAT = r'(?P<count>yksi|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen) (?:lasta|lapsi|tytär|poika)'
-    WORDS_TO_NUMBERS_MAPPING = {"yksi": 1, "kaksi": 2, "kolme": 3, "neljä": 4, "viisi": 5, "kuusi": 6, "seitsemän": 7, "kahdeksan": 8, "yhdeksän": 9, "kymmenen": 10}
-    OPTIONS = (re.UNICODE | re.IGNORECASE)
-    REQUIRES_MATCH_POSITION = True
-    childCount = 0
-    sortedChildren = {"current": "", "manPrevious": "", "spousePrevious": ""}
-    allChildren = ""        #TODO: Needed for other children extraction. Dirty solution for now.
-
 
     def extract(self, text):
         super(ChildrenExtractor, self).extract(text)
+        self.PATTERN_DEFAULT = r'(?:Lapset|Tytär|Poika|Lapsel|Tylär)(?P<children>[A-ZÄ-Öa-zä-ö,0-9,\.\n -]*?)((?:(?:- ?\n?(?=(?:Ts)|(?:Ts)|(?:Js)|(?:JR)|(?:Osa)|(?:Osall)))|pso ))'
+        self.PATTERN_WORDFORMAT = r'(?P<count>yksi|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen) (?:lasta|lapsi|tytär|poika)'
+        self.WORDS_TO_NUMBERS_MAPPING = {"yksi": 1, "kaksi": 2, "kolme": 3, "neljä": 4, "viisi": 5, "kuusi": 6, "seitsemän": 7, "kahdeksan": 8, "yhdeksän": 9, "kymmenen": 10}
+        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
+        self.REQUIRES_MATCH_POSITION = True
+        self.childCount = 0
+        self.sortedChildren = {"current": "", "manPrevious": "", "spousePrevious": ""}
+        self.allChildren = ""        #TODO: Needed for other children extraction. Dirty solution for now.
+
+
         preparedText = self._prepareTextForExtraction(text)
         self._findChildren(preparedText)
         return self._constructReturnDict()
@@ -95,7 +96,7 @@ class ChildSorter():
     """
     SPOUSE_PREVIOUS_PATTERN = r'(?P<psoed>pson ed aviol|pson aik aviol|vaimon I aviol|vaimon ed aviol|rvan ed aviol|pson? I aviol|pson I avioi|miehen I)'
     CURRENT_PATTERN = r'(?P<nykaviol>nyk aviol|nykyis aviol)'
-    MAN_PREVIOUS_PATTERN = r'(?P<miehed>(?<!n )I aviol|(?<!n )ed aviol|miehen I aviol|(?<!pson )aik aviol|miehen ed aviol|(?<!n )II aviol|(?<!n )II? avlol)'
+    MAN_PREVIOUS_PATTERN = r'(?P<miehed>(?<!n )I aviol|(?<!n )ed aviol|miehen I aviol|miehen aik aviol|(?<!pson )aik aviol|miehen ed aviol|(?<!n )II aviol|(?<!n )II? avlol)'
     OPTIONS = re.UNICODE
     FINAL_CHILD = -1
     childText = ""

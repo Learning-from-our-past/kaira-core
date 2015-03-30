@@ -26,7 +26,7 @@ class ChunkFile(QObject):
             else:
                 path = ""
             filename = QFileDialog.getSaveFileName(self.parent, "Save xml-data containing the chunked data:",
-                                                   path +"/originaldata.xml", "XML-files (*.xml);;All files (*)")
+                                                   path +"/data_from_ocr.xml", "XML-files (*.xml);;All files (*)")
             if filename[0] != "":
                 self._save_to_xml(chunked_text, filename[0])
 
