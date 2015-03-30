@@ -50,6 +50,8 @@ class Mainwindow(QMainWindow):
         self.ui.actionSave.setShortcut('Ctrl+S')
         self.ui.actionOpen_XML_for_analyze.setShortcut('Ctrl+O')
         self.ui.actionCreate_a_new_Person.setShortcut('Ctrl+N')
+        self.ui.actionCsv.setShortcut('Ctrl+E')
+        self.ui.actionFrom_txt_OCR.setShortcut('Ctrl+I')
 
         self.ui.actionCreate_a_new_Person.triggered.connect(self._createNewPerson)
         self.updateEntriesListSignal.connect(self._entryModelUpdated)
