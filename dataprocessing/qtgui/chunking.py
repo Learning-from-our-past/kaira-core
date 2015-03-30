@@ -34,7 +34,7 @@ class ChunkFile(QObject):
     def _open_text_file(self):
         print("open")
         filename = QFileDialog.getOpenFileName(self.parent, "Open text-file containing the data to be chunked.",
-                                               "../xmldata", "Person data text files (*.txt);;All files (*)")
+                                               ".", "Person data text files (*.txt);;All files (*)")
         if filename[0] != "":
             chunked_text = self._chunk_text_file(filename)
             self.choose_place_to_save_xml(chunked_text)

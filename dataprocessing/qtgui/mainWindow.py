@@ -44,6 +44,13 @@ class Mainwindow(QMainWindow):
         self.xmlImporter.finishedSignal.connect(self._entriesImportedFromFile)
         self.ui.entriestListView.entrySelectedSignal.connect(self._updateEntryTextFields)
         self.ui.actionSave_changes_to_xml.triggered.connect(self.saveFile.choose_place_to_save_xml)
+        self.ui.actionSave.triggered.connect(self.saveFile.save_xml)
+
+        #shortcuts
+        self.ui.actionSave.setShortcut('Ctrl+S')
+        self.ui.actionOpen_XML_for_analyze.setShortcut('Ctrl+O')
+        self.ui.actionCreate_a_new_Person.setShortcut('Ctrl+N')
+
         self.ui.actionCreate_a_new_Person.triggered.connect(self._createNewPerson)
         self.updateEntriesListSignal.connect(self._entryModelUpdated)
         self.ui.actionCsv.triggered.connect(self.saveCsv.choose_place_to_save_csv)
@@ -159,9 +166,10 @@ class Mainwindow(QMainWindow):
         self.ui.previousEntryTextEdit.blockSignals(False)
         self.ui.nextEntryTextEdit.blockSignals(False)
 
-    @pyqtSlot(dict)
-    def _entriesImportedFromFile(self, resultsFromFile):
+    @pyqtSlot(dict, str)
+    def _entriesImportedFromFile(self, resultsFromFile, filepath):
         self.xmlDocument = resultsFromFile["xmlDocument"]
+        self.saveFile.set_default_filepath(filepath)
         self.dataEntries = resultsFromFile["entries"]
         self.missingDataEntries = resultsFromFile["errors"]
         self._entryModelUpdated()

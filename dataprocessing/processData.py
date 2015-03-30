@@ -40,6 +40,7 @@ class ProcessData:
 
     def extractOne(self, xmlEntry):
         """Can be used to extract only one entry after the main file"""
+        ValueWrapper.reset_id_counter()
         entry = self._createEntry(xmlEntry)
         ValueWrapper.xmlEntry = xmlEntry
         try:
@@ -67,6 +68,7 @@ class ProcessData:
 
     def _processAllEntries(self):
         i = 0
+        ValueWrapper.reset_id_counter()
         for child in self.xmlDataDocument:
             entry = self._createEntry(child)
             ValueWrapper.xmlEntry = child
