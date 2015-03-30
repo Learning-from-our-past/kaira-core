@@ -86,7 +86,6 @@ class ProcessData:
         personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
         entry["extractionResults"] = personEntryDict
         self.readDataEntries.append(entry)
-        print(personEntryDict)
         #self.csvBuilder.writeRow(personEntryDict)
         self.count +=1
         return entry
