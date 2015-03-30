@@ -12,7 +12,10 @@ class SaveXmlFile(QObject):
         super(SaveXmlFile, self).__init__(parent)
         self.parent = parent
         self.dataEntries = dataEntries
+        self.path = ""
 
+    def set_default_filepath(self, path):
+        self.path = path
 
     def choose_place_to_save_xml(self):
             paths = QStandardPaths.standardLocations(0)
@@ -25,6 +28,14 @@ class SaveXmlFile(QObject):
             if filename[0] != "":
                 self._save_to_xml(self.parent.xmlDocument, filename[0])
 
+    def save_xml(self):
+        #Ask path if it is not defined yet:
+        if self.path == "":
+            self.choose_place_to_save_xml()
+        else:
+            self._save_to_xml(self.parent.xmlDocument, self.path)
+
+
     def _save_to_xml(self, xmldata, path):
         #write modifications to a new xml-file:
         self.dataEntries = self.parent.dataEntries
@@ -36,15 +47,18 @@ class SaveXmlFile(QObject):
 
 
     def _remove_empty_elements(self, xmldocument):
+        removed = False
         for child in xmldocument:
             if child.text.strip() == "":
                 xmldocument.remove(child)
                 for i in range(0, len(self.dataEntries)):
                     print(self.dataEntries[i]["xml"])
                     if self.dataEntries[i]["xml"] == child:
+                        removed = True
                         self.dataEntries.pop(i)
                         break
-        self.parent.updateEntriesListSignal.emit()
+        if removed:
+            self.parent.updateEntriesListSignal.emit()
 
 
 class SaveCsvFile(QObject):

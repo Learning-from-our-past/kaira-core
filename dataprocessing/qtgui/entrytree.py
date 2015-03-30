@@ -151,9 +151,10 @@ class TreeModel(QtCore.QAbstractItemModel):
 
 
     def createTreeFromDict(self, data, xml, parent, top=False):
-
+        print("koko jutun tyyppi on " + str(type(data)))
         #experimental
         if top:
+            print(data)
             data = ValueWrapper(data)
 
         if isinstance(data.value, dict):
@@ -161,7 +162,7 @@ class TreeModel(QtCore.QAbstractItemModel):
 
                 if key == "cursorLocation" or isinstance(value, str):
                     continue
-                #print(key + " " + str(value))
+
 
                 if isinstance(value.value, dict):
                     node = TreeItem([key, ""],xml, parent)
@@ -179,13 +180,13 @@ class TreeModel(QtCore.QAbstractItemModel):
                     node = TreeItem([key, value.value],xml, parent)
                     parent.appendChild(node)
                 else:
+                    #print("tiedot " + str(key) + " " + str(value.value))
                     node = TreeItem([key, value],xml, parent)
                     parent.appendChild(node)
 
         if isinstance(data.value, list):
             for index, value in enumerate(data.value):
                 if isinstance(value.value, dict):
-
                     node = TreeItem([index+1, ""],xml, parent)
                     parent.appendChild(node)
                     node.setNotEditable()
@@ -215,6 +216,7 @@ class TreeItem(object):
           self.childItems = []
           self.xml = xml
           self.editable = True
+          print(data)
 
       def setNotEditable(self):
           self.editable = False

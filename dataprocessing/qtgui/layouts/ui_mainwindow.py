@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Tue Mar 24 12:49:39 2015
+# Created: Mon Mar 30 12:54:56 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -135,10 +135,13 @@ class Ui_MainWindow(object):
         self.actionRun_analysis_for_current.setObjectName("actionRun_analysis_for_current")
         self.actionCreate_a_new_Person = QtWidgets.QAction(MainWindow)
         self.actionCreate_a_new_Person.setObjectName("actionCreate_a_new_Person")
+        self.actionSave = QtWidgets.QAction(MainWindow)
+        self.actionSave.setObjectName("actionSave")
         self.menuExport.addAction(self.actionCsv)
         self.menuExport.addAction(self.actionJSON)
         self.menuImport.addAction(self.actionFrom_txt_OCR)
         self.menuFile.addAction(self.actionOpen_XML_for_analyze)
+        self.menuFile.addAction(self.actionSave)
         self.menuFile.addAction(self.actionSave_changes_to_xml)
         self.menuFile.addAction(self.menuExport.menuAction())
         self.menuFile.addAction(self.menuImport.menuAction())
@@ -166,7 +169,7 @@ class Ui_MainWindow(object):
         self.actionCsv.setText(_translate("MainWindow", "CSV"))
         self.actionJSON.setText(_translate("MainWindow", "JSON"))
         self.actionOpen_txt.setText(_translate("MainWindow", "Open txt"))
-        self.actionSave_changes_to_xml.setText(_translate("MainWindow", "Save changes to xml"))
+        self.actionSave_changes_to_xml.setText(_translate("MainWindow", "Save As..."))
         self.actionFrom_txt_OCR.setText(_translate("MainWindow", "From txt (OCR)"))
         self.actionRun_analysis_for_all.setText(_translate("MainWindow", "Run analysis for all"))
         self.actionRun_analysis_for_all.setToolTip(_translate("MainWindow", "Run analysis for all entries in current file"))
@@ -176,6 +179,7 @@ class Ui_MainWindow(object):
         self.actionRun_analysis_for_current.setShortcut(_translate("MainWindow", "Ctrl+R"))
         self.actionCreate_a_new_Person.setText(_translate("MainWindow", "Create a  new Person"))
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
+        self.actionSave.setText(_translate("MainWindow", "&Save"))
 
 from qtgui.entrytree import EntryTreeView
 from qtgui.entriesModels import EntriesListView

@@ -14,7 +14,7 @@ class XmlImport(QObject):
     threadUpdateSignal = pyqtSignal(int, int, name="progressUpdate")
     threadExceptionSignal = pyqtSignal(object, name="exceptionInProcess")
     threadResultsSignal = pyqtSignal(dict, name="results")
-    finishedSignal = pyqtSignal(dict, name="processFinished")
+    finishedSignal = pyqtSignal(dict, str, name="processFinished")
 
 
     def __init__(self, parent):
@@ -26,6 +26,7 @@ class XmlImport(QObject):
         self.threadUpdateSignal.connect(self._updateProgressBarInMainThread)
         self.threadExceptionSignal.connect(self._loadingFailed)
         self.threadResultsSignal.connect(self._processFinished)
+        self.filepath = ""
 
     def importOne(self, xmlEntry):
         if self.processor is not None:
@@ -37,8 +38,9 @@ class XmlImport(QObject):
     @pyqtSlot()
     def openXMLFile(self):
         filename = QFileDialog.getOpenFileName(self.parent, "Open xml-file containing the data to be analyzed.",
-                                               "../xmldata", "Person data files (*.xml);;All files (*)")
+                                               ".", "Person data files (*.xml);;All files (*)")
         if filename[0] != "":
+            self.filepath = filename[0]
             self._analyzeOpenedXml(filename)
 
     def _analyzeOpenedXml(self, file):
@@ -53,13 +55,13 @@ class XmlImport(QObject):
 
 
     def _runProcess(self):
-        #try:
-        self.processor = processData.ProcessData(self._processUpdateCallback)
-        result = self.processor.startExtractionProcess(self.file[0])
-        self.threadResultsSignal.emit(result)
-        #except Exception as e:
-        #   print(e)
-        #   self.threadExceptionSignal.emit(e)
+        try:
+            self.processor = processData.ProcessData(self._processUpdateCallback)
+            result = self.processor.startExtractionProcess(self.file[0])
+            self.threadResultsSignal.emit(result)
+        except Exception as e:
+           print(e)
+           self.threadExceptionSignal.emit(e)
 
 
     @pyqtSlot(int, int)
@@ -77,7 +79,7 @@ class XmlImport(QObject):
     @pyqtSlot(dict)
     def _processFinished(self, result):
         self.result = result
-        self.finishedSignal.emit(self.result)
+        self.finishedSignal.emit(self.result, self.filepath)
 
 
     def _processUpdateCallback(self, i, max):
