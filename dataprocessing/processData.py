@@ -5,21 +5,16 @@ import readData
 from extraction.dataExtraction import DataExtraction
 from extraction.extractionExceptions import *
 from exceptionlogger import ExceptionLogger
-from resultcsvbuilder import ResultCsvBuilder
-from errorcsvbuilder import ErrorCsvBuilder
 from extractionkeys import ValueWrapper
 
 XMLPATH = "../xmldata/"
 CSVPATH = "../csv/"
-
-
 
 class ProcessData:
 
     def __init__(self, callback):
         self.dataFilename = ""
         self.csvBuilder = None
-        self.errorCsvBuilder = None
         self.extractor = None
         self.chunkerCheck = None
         self.errors = 0
@@ -56,8 +51,7 @@ class ProcessData:
         self.count = 0
         #self.csvBuilder = ResultCsvBuilder()
         #self.csvBuilder.openCsv(filePath)
-        self.errorCsvBuilder = ErrorCsvBuilder()
-        self.errorCsvBuilder.openCsv(filePath)
+
         self.errorLogger = ExceptionLogger()
         self.dataFilename = filePath
         self.xmlDataDocument = readData.getXMLroot(filePath)
@@ -108,25 +102,16 @@ class ProcessData:
 
     def _handleExtractionErrorLogging(self, exception, entry):
         self.errorLogger.logError(exception.eType, entry)
-        self.errorCsvBuilder.writeRow([exception.message, exception.details, exception.eType, entry["xml"].text])
         self.errors +=1
         self.count +=1
 
     def _finishProcess(self):
         self._printStatistics()
         #self.csvBuilder.closeCsv()
-        self.errorCsvBuilder.closeCsv()
+
 
     def _printStatistics(self):
         print ("Errors encountered: " + str(self.errors) + "/" + str(self.count))
         self.errorLogger.printErrorBreakdown()
 
-    #TODO: Muu paikka?
-    def saveModificationsToFile(self):
-        #write modifications to a new xml-file:
-        print ("Kirjoitetaan ")
-        f = open(self.dataFilename + ".xml", 'w')
-        f.write(etree.tostring(self.xmlDataDocument, pretty_print=True, encoding='unicode').encode("utf8"))
-        f.close()
-        print ("valmis")
 
