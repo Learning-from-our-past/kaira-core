@@ -34,8 +34,6 @@ class WarExtractor(BaseExtractor):
         if len(foundJatkosotaMarkers) > 0:
             self.wereInJatkosota = True
             self.jatkosotaRegiments = self.regimentExtractor.extract(text[foundJatkosotaMarkers[0].end():])[KEYS["regiments"]]
-            print(type(self.jatkosotaRegiments))
-
 
     def _extractTalvisota(self, text):
         foundTalvisotaMarkers = regexUtils.regexIter(self.TALVISOTA_PATTERN, text, self.TALVISOTA_OPTIONS)
@@ -43,7 +41,7 @@ class WarExtractor(BaseExtractor):
         if len(foundTalvisotaMarkers) > 0:
             self.wereInTalvisota = True
             self.talvisotaRegiments = self.regimentExtractor.extract(text[foundTalvisotaMarkers[0].end():])[KEYS["regiments"]]
-            print(self.talvisotaRegiments)
+
 
     def _constructReturnDict(self):
         return {KEYS["talvisota"]:  ValueWrapper(self.wereInTalvisota), KEYS["talvisotaregiments"]:  ValueWrapper(self.talvisotaRegiments),
