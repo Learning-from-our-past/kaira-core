@@ -171,5 +171,5 @@ class ChildSorter():
         return self.childText[start:end]
 
     def _constructReturnDict(self):
-        return {"current": ValueWrapper(self.childrenFromCurrentMarriage), "spousePrevious": ValueWrapper(self.childrenFromSpousesPreviousMarriage),
-                "manPrevious": ValueWrapper(self.childrenFromMansPreviousMarriage)}
+        return {"current": self.childrenFromCurrentMarriage, "spousePrevious": self.childrenFromSpousesPreviousMarriage,
+                "manPrevious": self.childrenFromMansPreviousMarriage}

@@ -8,17 +8,18 @@ from extraction.extractors.regimentExtractor import RegimentsExtractor
 from extractionkeys import KEYS, ValueWrapper
 
 class WarExtractor(BaseExtractor):
-    JATKOSOTA_PATTERN = r'(?P<jsExists>(?:Js:|JS:|js:|jS:))'
-    JATKOSOTA_OPTIONS = re.UNICODE
-    TALVISOTA_PATTERN = r'(?P<tsExists>(?:Ts:|TS:|ts:|tS:))'
-    TALVISOTA_OPTIONS = re.UNICODE
-    wereInJatkosota = False
-    wereInTalvisota = False
-    jatkosotaRegiments = ""
-    talvisotaRegiments = ""
-    regimentExtractor = None
+
 
     def extract(self, text):
+        self.JATKOSOTA_PATTERN = r'(?P<jsExists>(?:Js:|JS:|js:|jS:))'
+        self.JATKOSOTA_OPTIONS = re.UNICODE
+        self.TALVISOTA_PATTERN = r'(?P<tsExists>(?:Ts:|TS:|ts:|tS:))'
+        self.TALVISOTA_OPTIONS = re.UNICODE
+        self.wereInJatkosota = False
+        self.wereInTalvisota = False
+        self.jatkosotaRegiments = ""
+        self.talvisotaRegiments = ""
+        self.regimentExtractor = None
         self.regimentExtractor = RegimentsExtractor(self.currentChild, self.errorLogger, self.xmlDocument)
         self._findWars(text)
         return self._constructReturnDict()
@@ -33,6 +34,8 @@ class WarExtractor(BaseExtractor):
         if len(foundJatkosotaMarkers) > 0:
             self.wereInJatkosota = True
             self.jatkosotaRegiments = self.regimentExtractor.extract(text[foundJatkosotaMarkers[0].end():])[KEYS["regiments"]]
+            print(type(self.jatkosotaRegiments))
+
 
     def _extractTalvisota(self, text):
         foundTalvisotaMarkers = regexUtils.regexIter(self.TALVISOTA_PATTERN, text, self.TALVISOTA_OPTIONS)
@@ -40,6 +43,7 @@ class WarExtractor(BaseExtractor):
         if len(foundTalvisotaMarkers) > 0:
             self.wereInTalvisota = True
             self.talvisotaRegiments = self.regimentExtractor.extract(text[foundTalvisotaMarkers[0].end():])[KEYS["regiments"]]
+            print(self.talvisotaRegiments)
 
     def _constructReturnDict(self):
         return {KEYS["talvisota"]:  ValueWrapper(self.wereInTalvisota), KEYS["talvisotaregiments"]:  ValueWrapper(self.talvisotaRegiments),
