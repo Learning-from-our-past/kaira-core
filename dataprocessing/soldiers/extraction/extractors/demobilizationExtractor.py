@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import re
-import regex
-from extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-import extraction.extractors.textUtils as textUtils
-from extraction.extractionExceptions import *
-from extraction.extractors.dateExtractor import DateExtractor
-from extraction.extractors.locationExtractor import LocationExtractor
-from extractionkeys import KEYS, ValueWrapper
+
+from soldiers.extraction.extractors.baseExtractor import BaseExtractor
+import soldiers.extraction.extractors.textUtils as textUtils
+from soldiers.extraction.extractionExceptions import *
+from soldiers.extraction.extractors.dateExtractor import DateExtractor
+from soldiers.extraction.extractors.locationExtractor import LocationExtractor
+from soldiers.extractionkeys import KEYS, ValueWrapper
+
+
 class DemobilizationExtractor(BaseExtractor):
     DATE_PATTERN = r'(?:Kot|kot|KOI)(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4}(?=\D\D\D\D\D))|(?:(?P<monthName>[a-zä-ö]*)(?P<monthYear>\d{2,4}(?=\D\D\D\D\D))))'
     DATE_OPTIONS = re.UNICODE | re.IGNORECASE

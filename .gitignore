@@ -1,8 +1,12 @@
 dataprocessing/build
 dataprocessing/dist
+dataprocessing/siirtokarjalaiset
 *.pyc
 *.csv
 *.xml
 *.txt
 *.bat
+*.html
+*.jpg
+
 dataprocessing/.idea

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import re
-import regex
-from extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-import extraction.extractors.textUtils as textUtils
-from extraction.extractionExceptions import *
 from operator import itemgetter
-from extractionkeys import KEYS, ValueWrapper
+
+from soldiers.extraction.extractors.baseExtractor import BaseExtractor
+import soldiers.extraction.extractors.regexUtils as regexUtils
+import soldiers.extraction.extractors.textUtils as textUtils
+from soldiers.extraction.extractionExceptions import *
+from soldiers.extractionkeys import KEYS, ValueWrapper
+
 
 class ChildrenExtractor(BaseExtractor):
 

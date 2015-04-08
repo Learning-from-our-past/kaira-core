@@ -2,6 +2,7 @@
 import ntpath
 import csv
 
+""" DEPRECATED """
 class ErrorCsvBuilder:
     CSVPATH = "../csv/errors/"
     filepath = ""

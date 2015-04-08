@@ -1,8 +1,9 @@
-from PyQt5.QtGui import  QStandardItem, QStandardItemModel, QColor, qRgb
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QAbstractItemModel
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QListView, QTreeView
-from extractionkeys import ValueWrapper
+
+from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QTreeView
+from soldiers.extractionkeys import ValueWrapper
+
 #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
 
 class EntryTreeView(QTreeView):

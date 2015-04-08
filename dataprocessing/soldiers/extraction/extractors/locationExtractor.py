@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 import re
-import regex
-from extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-import extraction.extractors.textUtils as textUtils
-from extraction.extractionExceptions import *
-from extractionkeys import KEYS, ValueWrapper
+
+from soldiers.extraction.extractors.baseExtractor import BaseExtractor
+from soldiers.extraction.extractors import regexUtils as regexUtils
+import soldiers.extraction.extractors.textUtils as textUtils
+from soldiers.extraction.extractionExceptions import *
+from soldiers.extractionkeys import KEYS, ValueWrapper
+
+
+
 
 #This class extracts a location string from provided substring/text.
 #Used mostly by other extractors such as Death and Demobilization extractors.

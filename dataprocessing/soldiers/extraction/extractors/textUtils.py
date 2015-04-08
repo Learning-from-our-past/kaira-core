@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import re
-import regex
-import extraction.extractors.regexUtils as regexUtils
+
+from soldiers.extraction.extractors import regexUtils
+
 
 def takeSubStrBasedOnPos(text, start, width=None):
     if width is not None:

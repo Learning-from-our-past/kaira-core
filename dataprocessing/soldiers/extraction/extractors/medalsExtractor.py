@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-import re
-import regex
-from extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-from extractionkeys import KEYS, ValueWrapper
+from soldiers.extraction.extractors.baseExtractor import BaseExtractor
+import soldiers.extraction.extractors.regexUtils as regexUtils
+from soldiers.extractionkeys import KEYS, ValueWrapper
 
 class MedalsExtractor(BaseExtractor):
 
