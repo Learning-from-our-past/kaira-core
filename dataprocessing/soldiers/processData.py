@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from lxml import etree
 
-import readData
-from extraction.dataExtraction import DataExtraction
-from extraction.extractionExceptions import *
+from soldiers import readData
+from soldiers.extraction.dataExtraction import DataExtraction
+from soldiers.extraction.extractionExceptions import *
 from exceptionlogger import ExceptionLogger
-from extractionkeys import ValueWrapper
+from soldiers.extractionkeys import ValueWrapper
 
 XMLPATH = "../xmldata/"
 CSVPATH = "../csv/"

@@ -1,27 +1,19 @@
 # -*- coding: utf-8 -*-
-import re
-from operator import itemgetter
 
-import regex
-import extraction.extractors.regexUtils as regexUtils
-import extraction.extractors.textUtils as textUtils
-import extraction.extractors.locationPreparingUtils as locationPreparingUtils
-from extraction.extractionExceptions import *
-from extraction.extractors.addressExtractor import AddressExtractor
-from extraction.extractors.medalsExtractor import MedalsExtractor
-from extraction.extractors.rankExtractor import RankExtractor
-from extraction.extractors.regimentExtractor import RegimentsExtractor
-from extraction.extractors.hobbiesExtractor import HobbiesExtractor
-from extraction.extractors.professionExtractor import ProfessionExtractor
-from extraction.extractors.nameExtractor import NameExtractor
-from extraction.extractors.warExtractor import WarExtractor
-from extraction.extractors.birthdayExtractor import BirthdayExtractor
-from extraction.extractors.locationExtractor import BirthdayLocationExtractor
-from extraction.extractors.demobilizationExtractor import DemobilizationExtractor
-from extraction.extractors.deathExtractor import DeathExtractor
-from extraction.extractors.childrenExtractor import ChildrenExtractor
-from extraction.extractors.spouseExtractor import SpouseExtractor
-from extractionkeys import KEYS
+from soldiers.extraction.extractors.addressExtractor import AddressExtractor
+from soldiers.extraction.extractors.medalsExtractor import MedalsExtractor
+from soldiers.extraction.extractors.rankExtractor import RankExtractor
+from soldiers.extraction.extractors.hobbiesExtractor import HobbiesExtractor
+from soldiers.extraction.extractors.professionExtractor import ProfessionExtractor
+from soldiers.extraction.extractors.nameExtractor import NameExtractor
+from soldiers.extraction.extractors.warExtractor import WarExtractor
+from soldiers.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from soldiers.extraction.extractors.locationExtractor import BirthdayLocationExtractor
+from soldiers.extraction.extractors.demobilizationExtractor import DemobilizationExtractor
+from soldiers.extraction.extractors.deathExtractor import DeathExtractor
+from soldiers.extraction.extractors.childrenExtractor import ChildrenExtractor
+from soldiers.extraction.extractors.spouseExtractor import SpouseExtractor
+from soldiers.extractionkeys import KEYS
 """Extraction process is handled here for one entry per time. This class calls all the extractor
 classes to execute extraction in specific order."""
 class DataExtraction:

@@ -1,9 +1,9 @@
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QDate, QDateTime, QDir, QObject
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QInputDialog, QMessageBox, QCompleter
-from PyQt5.QtCore import pyqtSlot, QEvent, QSettings, QStandardPaths
 from lxml import etree
-from PyQt5.QtGui import QStatusTipEvent, QDesktopServices
-from resultcsvbuilder import ResultCsvBuilder
+
+from PyQt5.QtCore import QObject
+from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtCore import QStandardPaths
+from soldiers.resultcsvbuilder import ResultCsvBuilder
 
 
 class SaveXmlFile(QObject):

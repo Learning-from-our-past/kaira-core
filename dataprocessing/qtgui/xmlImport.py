@@ -1,11 +1,8 @@
 from PyQt5.QtCore import pyqtSlot, QThread, pyqtSignal
 
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QProgressDialog, QMessageBox
+from PyQt5.QtWidgets import QFileDialog, QProgressDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot, QObject
-from qtgui.layouts.ui_mainwindow import Ui_MainWindow
-import processData
-import threading
-import time
+from soldiers import processData
 
 
 class XmlImport(QObject):

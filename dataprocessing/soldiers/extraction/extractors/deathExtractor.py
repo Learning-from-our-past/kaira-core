@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 import re
-import regex
-from extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-import extraction.extractors.textUtils as textUtils
-from extraction.extractionExceptions import *
-from extraction.extractors.dateExtractor import DateExtractor
-from extraction.extractors.locationExtractor import LocationExtractor
-from extractionkeys import KEYS, ValueWrapper
+
+from soldiers.extraction.extractors.baseExtractor import BaseExtractor
+import soldiers.extraction.extractors.regexUtils as regexUtils
+import soldiers.extraction.extractors.textUtils as textUtils
+from soldiers.extraction.extractionExceptions import *
+from soldiers.extraction.extractors.dateExtractor import DateExtractor
+from soldiers.extraction.extractors.locationExtractor import LocationExtractor
+from soldiers.extractionkeys import KEYS, ValueWrapper
+
+
 class DeathExtractor(BaseExtractor):
     #TODO: Split deatlocationExtract to own class like the birthday one?
     DATE_PATTERN_DEFAULT = r'k(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)(?P<year>\d{2,4}))|(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))'

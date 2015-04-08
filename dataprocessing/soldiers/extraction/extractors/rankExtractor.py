@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
-import regex
-from extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-from extraction.extractionExceptions import *
-from extractionkeys import KEYS, ValueWrapper
+
+from soldiers.extraction.extractors.baseExtractor import BaseExtractor
+import soldiers.extraction.extractors.regexUtils as regexUtils
+from soldiers.extraction.extractionExceptions import *
+from soldiers.extractionkeys import KEYS, ValueWrapper
+
 
 class RankExtractor(BaseExtractor):
     RANK_PATTERN = r'(?:(?:Sotarvo){s<=1}|(?:SOIarvo){s<=1}|(?:Ylenn){s<=1})(?: |\n)(?P<rank>[A-ZÄ-Öa-zä-ö0-9, \n]{2,})(?:\.|:|,| )'

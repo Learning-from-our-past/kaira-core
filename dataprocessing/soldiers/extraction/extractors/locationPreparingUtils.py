@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import re
-import regex
-from  extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-import extraction.extractors.textUtils as textUtils
-from extraction.extractionExceptions import *
+
+import soldiers.extraction.extractors.textUtils as textUtils
+
+
 
 # This file provides simple functions to prepare location strings before passing them to
 # the LocationExtractor class.

@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import ntpath
 import csv
-from extractionkeys import KEYS
+
+from soldiers.extractionkeys import KEYS
+
+
 class ResultCsvBuilder:
 
 

@@ -1,9 +1,8 @@
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QDate, QDateTime, QDir, QObject
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog, QInputDialog, QMessageBox, QCompleter
-from PyQt5.QtCore import pyqtSlot, QEvent, QSettings, QStandardPaths
-from lxml import etree
-from PyQt5.QtGui import QStatusTipEvent, QDesktopServices
-import chunktextfile
+from PyQt5.QtCore import QObject
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5.QtCore import QStandardPaths
+from soldiers import chunktextfile
+
 
 class ChunkFile(QObject):
 

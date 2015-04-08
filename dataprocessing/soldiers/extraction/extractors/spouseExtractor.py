@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 import re
-import regex
-from extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-import extraction.extractors.textUtils as textUtils
-from extraction.extractionExceptions import *
-from extraction.extractors.childrenExtractor import ChildrenExtractor
-from extraction.extractors.birthdayExtractor import BirthdayExtractor
-from extraction.extractors.locationExtractor import LocationExtractor
-from extraction.extractors.deathExtractor import DeathExtractor
-from extractionkeys import KEYS, ValueWrapper
+
+from soldiers.extraction.extractors.baseExtractor import BaseExtractor
+import soldiers.extraction.extractors.regexUtils as regexUtils
+import soldiers.extraction.extractors.textUtils as textUtils
+from soldiers.extraction.extractionExceptions import *
+from soldiers.extraction.extractors.childrenExtractor import ChildrenExtractor
+from soldiers.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from soldiers.extraction.extractors.locationExtractor import LocationExtractor
+from soldiers.extraction.extractors.deathExtractor import DeathExtractor
+from soldiers.extractionkeys import KEYS, ValueWrapper
+
+
 class SpouseExtractor(BaseExtractor):
     PATTERN_SPOUSE_EXISTS = r'(?P<spouseExists>\b(?:P|p)so\b)'
     OPTIONS = re.UNICODE

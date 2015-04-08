@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-import re
-import regex
-from extractionkeys import KEYS
-from extraction.extractors.baseExtractor import BaseExtractor
-import extraction.extractors.regexUtils as regexUtils
-import extraction.extractors.textUtils as textUtils
-from extraction.extractionExceptions import *
+from soldiers.extraction.extractors import regexUtils
+import soldiers.extraction.extractors.textUtils as textUtils
+from soldiers.extraction.extractionExceptions import *
 
 #This class extracts date from given string. Substringing has to be made in caller.
 #The interface also differs a bit from other extractors since this is meant to be used by

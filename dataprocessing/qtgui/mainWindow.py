@@ -1,22 +1,15 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import pyqtSlot,QSortFilterProxyModel, Qt
-from PyQt5.QtGui import  QStandardItemModel
 
 from qtgui.layouts.ui_mainwindow import Ui_MainWindow
-import processData
-import threading
-import time
-import qtgui.utils
-from qtgui.entriesModels import *
 from qtgui.xmlImport import XmlImport
 from qtgui.entriesModels import *
-from qtgui.entrytable import *
 from qtgui.entrytree import *
-from PyQt5.QtGui import  QStandardItem, QStandardItemModel
 from qtgui.savefile import *
 from qtgui.createnewperson import NewPersonDialog
 from qtgui.chunking import ChunkFile
+
 
 class Mainwindow(QMainWindow):
 
@@ -85,6 +78,8 @@ class Mainwindow(QMainWindow):
         self.ui.treeView.resizeColumnToContents(0)
         self.ui.treeView.resizeColumnToContents(1)
         self.ui.treeView.expandAll()
+
+
 
     def _createNewPerson(self):
         newperson = NewPersonDialog(self.xmlDocument, self.xmlImporter, self )
