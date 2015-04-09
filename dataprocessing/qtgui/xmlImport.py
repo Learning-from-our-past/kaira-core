@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSlot, QThread, pyqtSignal
 
 from PyQt5.QtWidgets import QFileDialog, QProgressDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot, QObject
-from soldiers import processData
+from books.soldiers import processData
 
 
 class XmlImport(QObject):
