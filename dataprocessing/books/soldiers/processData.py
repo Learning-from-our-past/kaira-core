@@ -1,0 +1,117 @@
+# -*- coding: utf-8 -*-
+
+from books.soldiers import readData
+from books.soldiers.extraction.dataExtraction import DataExtraction
+from books.soldiers.extraction.extractionExceptions import *
+from shared.exceptionlogger import ExceptionLogger
+from interface.valuewrapper import ValueWrapper
+from interface.processdatainterface import ProcessDataInterface
+
+XMLPATH = "../xmldata/"
+CSVPATH = "../csv/"
+
+class ProcessData(ProcessDataInterface):
+
+    def __init__(self, callback):
+        self.dataFilename = ""
+        self.csvBuilder = None
+        self.extractor = None
+        self.chunkerCheck = None
+        self.errors = 0
+        self.count = 0
+        self.xmlDataDocument = None
+        self.readDataEntries = []
+        self.processUpdateCallbackFunction = None
+        self.processUpdateCallbackFunction = callback
+
+    #TODO: Nimeä uudestaan kuvaamaan että se palauttaa valmiin tuloksen?
+    def startExtractionProcess(self, filePath):
+        self._initProcess(filePath)
+        self._processAllEntries()
+        self._finishProcess()
+        return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
+                "file": filePath}
+
+
+    def extractOne(self, xmlEntry):
+        """Can be used to extract only one entry after the main file"""
+        ValueWrapper.reset_id_counter()
+        entry = self._createEntry(xmlEntry)
+        ValueWrapper.xmlEntry = xmlEntry
+        try:
+            personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
+            entry["extractionResults"] = personEntryDict
+        except ExtractionException as e:
+            pass
+
+        return entry
+
+    def _initProcess(self, filePath):
+        self.errors = 0
+        self.count = 0
+        #self.csvBuilder = ResultCsvBuilder()
+        #self.csvBuilder.openCsv(filePath)
+
+        self.errorLogger = ExceptionLogger()
+        self.dataFilename = filePath
+        self.xmlDataDocument = readData.getXMLroot(filePath)
+
+        self.extractor = DataExtraction(self.xmlDataDocument)
+        self.xmlDataDocumentLen = len(self.xmlDataDocument)
+        print ("XML file elements: " + str(len(self.xmlDataDocument)))
+
+    def _processAllEntries(self):
+        i = 0
+        ValueWrapper.reset_id_counter()
+        for child in self.xmlDataDocument:
+            entry = self._createEntry(child)
+            ValueWrapper.xmlEntry = child
+            try:
+                self._processEntry(entry)
+            except ExtractionException as e:
+                self.readDataEntries.append(entry)    #TODO: Probably better idea to pass dict with keys with empty fields?
+                self._handleExtractionErrorLogging(exception=e, entry=entry)
+
+            i +=1
+            ValueWrapper.reset_id_counter() #Resets the id-generator for each datafield of entry
+            self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
+
+
+
+    def _processEntry(self, entry):
+        personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
+        entry["extractionResults"] = personEntryDict
+        self.readDataEntries.append(entry)
+        #self.csvBuilder.writeRow(personEntryDict)
+        self.count +=1
+        return entry
+
+    def _createEntry(self, xmlEntry):
+        return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
+
+    def _createResultTemplate(self):
+        return {"surname" : "", "firstnames" : "", "birthDay": "",
+               "birthMonth" : "", "birthYear" : "", "birthLocation" : "",
+               "profession" : "", "address" : "", "deathDay" : "",
+               "deathMonth": "", "deathYear": "", "kaatunut": "",
+               "deathLocation": "", "talvisota": "", "talvisotaregiments": "",
+               "jatkosota": "", "jatkosotaregiments": "","rank": "",
+               "kotiutusDay": "", "kotiutusMonth": "", "kotiutusYear": "",
+               "kotiutusPlace": "", "medals": "","hobbies": "",
+               "hasSpouse": "", "children": "", "childCount": ""}
+
+    def _handleExtractionErrorLogging(self, exception, entry):
+        self.errorLogger.logError(exception.eType, entry)
+        self.errors +=1
+        self.count +=1
+
+    def _finishProcess(self):
+        self._printStatistics()
+        #self.csvBuilder.closeCsv()
+
+
+    def _printStatistics(self):
+        print ("Errors encountered: " + str(self.errors) + "/" + str(self.count))
+        self.errorLogger.printErrorBreakdown()
+
+

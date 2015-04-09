@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from PyQt5.QtCore import QStandardPaths
-from soldiers import chunktextfile
+from books.soldiers.chunktextfile import ChunkTextFile
 
 
 class ChunkFile(QObject):
@@ -41,7 +41,8 @@ class ChunkFile(QObject):
     def _chunk_text_file(self, filename):
         f = open(filename[0], "r", encoding="utf8")
         text = f.read()
-        return chunktextfile.chunkTextFile(text)
+        chunker = ChunkTextFile()
+        return chunker.chunk_text(text)
 
     def _save_to_xml(self, chunkedtext, path):
         print ("Kirjoitetaan ")
