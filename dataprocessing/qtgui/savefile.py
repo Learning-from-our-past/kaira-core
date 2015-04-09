@@ -3,7 +3,7 @@ from lxml import etree
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QStandardPaths
-from books.soldiers.resultcsvbuilder import ResultCsvBuilder
+import route_gui
 
 
 class SaveXmlFile(QObject):
@@ -82,7 +82,7 @@ class SaveCsvFile(QObject):
 
     def _save_to_csv(self, entries, path):
         #write modifications to a new xml-file:
-        writer = ResultCsvBuilder()
+        writer = route_gui.get_csvbuilder_class()()
         print(path)
         writer.openCsv(path)
         for entry in self.parent.dataEntries:

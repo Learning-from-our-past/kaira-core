@@ -8,7 +8,7 @@ from qtgui.entriesModels import *
 from qtgui.entrytree import *
 from qtgui.savefile import *
 from qtgui.createnewperson import NewPersonDialog
-from qtgui.chunking import ChunkFile
+from qtgui.importocrdialog import ImportOcrDialog
 
 
 class Mainwindow(QMainWindow):
@@ -28,7 +28,7 @@ class Mainwindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.xmlImporter = XmlImport(self)
-        self.chunkFile = ChunkFile(self)
+        self.chunkFile = ImportOcrDialog(self)
         self.saveCsv = SaveCsvFile(self, self.dataEntries)
         self.saveFile = SaveXmlFile(self, self.dataEntries)
         #Connect actions to slots
