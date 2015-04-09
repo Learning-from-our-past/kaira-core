@@ -2,7 +2,7 @@ from PyQt5 import QtCore
 
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QTreeView
-from soldiers.extractionkeys import ValueWrapper
+from interface.valuewrapper import ValueWrapper
 
 #http://doc.qt.digia.com/4.6/itemviews-editabletreemodel.html
 

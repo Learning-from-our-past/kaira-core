@@ -3,7 +3,7 @@ from lxml import etree
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QStandardPaths
-from soldiers.resultcsvbuilder import ResultCsvBuilder
+from books.soldiers.resultcsvbuilder import ResultCsvBuilder
 
 
 class SaveXmlFile(QObject):
