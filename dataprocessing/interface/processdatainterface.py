@@ -1,4 +1,3 @@
-
 from abc import abstractmethod
 XMLPATH = "../xmldata/"
 CSVPATH = "../csv/"

@@ -1,15 +1,23 @@
 from lxml.html import *
 from lxml import etree
+from lxml import html
 import re
 import cProfile
 import os, nturl2path
 import shutil
+from interface.chunktextinterface import ChunkTextInterface
 
 def read_html_file(path):
     return parse(path)
 
 
-class PersonPreprocessor:
+class PersonPreprocessor(ChunkTextInterface):
+
+    def chunk_text(self, text):
+        parsed = html.document_fromstring( text)
+        persons = self.process(parsed)
+        print(len(persons))
+        return etree.tostring(persons, pretty_print=True, encoding='unicode')
 
     def process(self, tree):
         self.persons_document = etree.Element("DATA")
@@ -26,8 +34,6 @@ class PersonPreprocessor:
         for e in tree.iter():
             if "src" in e.attrib:
                 self._parse_image(e)
-
-
 
             if e.text is not None:
                 try:
@@ -149,15 +155,16 @@ class PersonPreprocessor:
         if person is not None and len(person.text) > 4:
             self.persons_document.append(person)
 
-
 def start():
     os.chdir("material")
-    parsed = read_html_file("Siirtokarjalaisten_whole_book.htm") #Siirtokarjalaisten_whole_book.htm
+    f = open("Siirtokarjalaisten tie I fragment_kuvat.html", "r", encoding="utf8")
+    text = f.read()
+    #"Siirtokarjalaisten_whole_book.htm") #Siirtokarjalaisten_whole_book.htm
     p = PersonPreprocessor()
-    persons = p.process(parsed)
-    print(len(persons))
+    persons = p.chunk_text(text)
     f = open("results.xml", "wb")
-    f.write(etree.tostring(persons, pretty_print=True, encoding='unicode').encode("utf8"))
+    f.write(persons.encode("utf8"))
     f.close()
 
-cProfile.run("start()")
+if __name__ == "__main__":
+    start()

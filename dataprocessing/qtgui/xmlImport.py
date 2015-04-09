@@ -3,7 +3,7 @@ from PyQt5.QtCore import pyqtSlot, QThread, pyqtSignal
 from PyQt5.QtWidgets import QFileDialog, QProgressDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot, QObject
 from books.soldiers import processData
-
+import route_gui
 
 class XmlImport(QObject):
 
@@ -53,7 +53,7 @@ class XmlImport(QObject):
 
     def _runProcess(self):
         try:
-            self.processor = processData.ProcessData(self._processUpdateCallback)
+            self.processor = route_gui.get_processdata_class()(self._processUpdateCallback)
             result = self.processor.startExtractionProcess(self.file[0])
             self.threadResultsSignal.emit(result)
         except Exception as e:
