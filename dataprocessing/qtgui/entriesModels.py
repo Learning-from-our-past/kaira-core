@@ -53,4 +53,7 @@ class EntriesListItemModel(QStandardItem):
         return self.dataEntry
 
     def _constructText(self):
-        return utils.makeSubStrForListViews(self.dataEntry["xml"].text) +"..."
+        if "name" in self.dataEntry["xml"].attrib:
+            return utils.makeSubStrForListViews(self.dataEntry["xml"].attrib["name"])
+        else:
+            return utils.makeSubStrForListViews(self.dataEntry["xml"].text) +"..."

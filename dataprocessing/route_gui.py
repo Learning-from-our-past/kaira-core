@@ -8,6 +8,7 @@ from books.soldiers.chunktextfile import ChunkTextFile as SoldierChunk
 from books.soldiers.processData import ProcessData as SoldierProcessdata
 from books.soldiers.resultcsvbuilder import ResultCsvBuilder as SoldierCsvBuilder
 from books.karelians.chunktextfile import PersonPreprocessor as KarelianChunk
+from books.karelians.processData import ProcessData as KarelianProcessdata
 
 class Router():
 
@@ -27,7 +28,7 @@ class Router():
     @staticmethod
     def get_processdata_class(extractor):
         if extractor == Router.KARELIANS:
-            raise NoExtractorAvailable()
+            return KarelianProcessdata
         elif extractor == Router.SOLDIERS:
             return SoldierProcessdata
         else:
