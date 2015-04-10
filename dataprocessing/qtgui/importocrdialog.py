@@ -79,7 +79,7 @@ class ImportOcrDialog(QDialog):
         f = open(filename, "r", encoding="utf8")
         text = f.read()
         chunker = route_gui.get_chunktext_class()()
-        return chunker.chunk_text(text)
+        return chunker.chunk_text(text, self.destination_file)
 
     def _save_to_xml(self, chunkedtext, path):
         print ("Kirjoitetaan ")

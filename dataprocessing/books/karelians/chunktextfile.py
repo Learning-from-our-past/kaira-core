@@ -13,7 +13,9 @@ def read_html_file(path):
 
 class PersonPreprocessor(ChunkTextInterface):
 
-    def chunk_text(self, text):
+    def chunk_text(self, text, destination_path):
+        self.save_path = destination_path
+        print(self.save_path)
         parsed = html.document_fromstring( text)
         persons = self.process(parsed)
         print(len(persons))
@@ -78,7 +80,7 @@ class PersonPreprocessor(ChunkTextInterface):
                 name = foundNext["next"].text
 
         if name != "":
-            new_path = "images/" + re.sub(r"(?:[^a-zä-ö0-9]|(?<=['\"])s)", r"", name, flags=re.IGNORECASE) + ".jpg"
+            new_path = re.sub(r"(?:[^a-zä-ö0-9]|(?<=['\"])s)", r"", name, flags=re.IGNORECASE) + ".jpg"
             self._copy_rename_imagefiles(new_path, image_path)
             self.images.append({"name": self._convert_image_name(name), "image": new_path})
 
@@ -120,10 +122,18 @@ class PersonPreprocessor(ChunkTextInterface):
         return {"next": next, "found" : foundNext}
 
     def _copy_rename_imagefiles(self, new_path, image_path):
-         #copy the image files and rename them according to person's name
-        os.makedirs("./images", exist_ok=True)
-        if not os.path.isfile(os.path.join(os.getcwd(), new_path)):
-            shutil.copy(os.path.join(os.getcwd(), image_path), os.path.join(os.getcwd(), new_path))
+        #TODO: It would be nice to provide error message to user rather than fail silently
+        try:
+            #copy the image files and rename them according to person's name
+            file_prefix = os.path.basename(os.path.splitext(self.save_path)[0])
+            new_path = os.path.join(file_prefix + "_images", new_path)
+            new_path = os.path.join(os.path.dirname(self.save_path), new_path)
+            print(new_path)
+            os.makedirs(os.path.dirname(self.save_path) + "/" + file_prefix + "_images", exist_ok=True)
+            if not os.path.isfile(os.path.join(new_path)):
+                shutil.copy(os.path.join(os.getcwd(), image_path), new_path)
+        except Exception:
+            pass
 
     def _convert_image_name(self, name):
         name = name.upper()
