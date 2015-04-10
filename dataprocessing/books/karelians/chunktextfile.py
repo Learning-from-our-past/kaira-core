@@ -81,6 +81,8 @@ class PersonPreprocessor(ChunkTextInterface):
 
         if name != "":
             new_path = re.sub(r"(?:[^a-zä-ö0-9]|(?<=['\"])s)", r"", name, flags=re.IGNORECASE) + ".jpg"
+            file_prefix = os.path.basename(os.path.splitext(self.save_path)[0])
+            new_path = os.path.join(file_prefix + "_images", new_path)
             self._copy_rename_imagefiles(new_path, image_path)
             self.images.append({"name": self._convert_image_name(name), "image": new_path})
 
@@ -126,9 +128,7 @@ class PersonPreprocessor(ChunkTextInterface):
         try:
             #copy the image files and rename them according to person's name
             file_prefix = os.path.basename(os.path.splitext(self.save_path)[0])
-            new_path = os.path.join(file_prefix + "_images", new_path)
             new_path = os.path.join(os.path.dirname(self.save_path), new_path)
-            print(new_path)
             os.makedirs(os.path.dirname(self.save_path) + "/" + file_prefix + "_images", exist_ok=True)
             if not os.path.isfile(os.path.join(new_path)):
                 shutil.copy(os.path.join(os.getcwd(), image_path), new_path)
