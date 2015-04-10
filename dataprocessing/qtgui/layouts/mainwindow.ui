@@ -263,7 +263,7 @@ background-color: white;
   </action>
   <action name="actionFrom_txt_OCR">
    <property name="text">
-    <string>From txt (OCR)</string>
+    <string>From OCR</string>
    </property>
   </action>
   <action name="actionRun_analysis_for_all">

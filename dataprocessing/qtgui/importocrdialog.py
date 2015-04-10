@@ -19,7 +19,7 @@ class ImportOcrDialog(QDialog):
 
     def _browse_sourcefile(self):
         filename = QFileDialog.getOpenFileName(self.parent, "Open text-file containing the data to be chunked.",
-                                               ".", "Person data text files (*.txt, *.html, *.htm);;All files (*)")
+                                               ".", "Person data text files (*.txt *.htm *.html);;All files (*)")
         if filename[0] != "":
             self.source_file = filename[0]
             self.ui.sourcepathLabel.setText(self.source_file[-20:])
@@ -78,7 +78,14 @@ class ImportOcrDialog(QDialog):
         os.chdir(os.path.dirname(filename))
         f = open(filename, "r", encoding="utf8")
         text = f.read()
-        chunker = route_gui.get_chunktext_class()()
+
+        #TODO: Maybe find a better place for these?
+        if self.ui.karelianRadio.isChecked():
+            chunker = route_gui.Router.get_chunktext_class(route_gui.Router.KARELIANS)()
+
+        if self.ui.soldierRadio.isChecked():
+            chunker = route_gui.Router.get_chunktext_class(route_gui.Router.SOLDIERS)()
+
         return chunker.chunk_text(text, self.destination_file)
 
     def _save_to_xml(self, chunkedtext, path):

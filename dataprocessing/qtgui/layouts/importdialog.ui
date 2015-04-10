@@ -91,7 +91,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Book series (DOES NOT WORK YET):</string>
+      <string>Book series:</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -112,9 +112,6 @@
        </widget>
       </item>
      </layout>
-     <zorder>soldierRadio</zorder>
-     <zorder>soldierRadio</zorder>
-     <zorder>karelianRadio</zorder>
     </widget>
    </item>
    <item>

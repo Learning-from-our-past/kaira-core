@@ -7,15 +7,43 @@ without modifying GUI-code.
 from books.soldiers.chunktextfile import ChunkTextFile as SoldierChunk
 from books.soldiers.processData import ProcessData as SoldierProcessdata
 from books.soldiers.resultcsvbuilder import ResultCsvBuilder as SoldierCsvBuilder
-
 from books.karelians.chunktextfile import PersonPreprocessor as KarelianChunk
 
-def get_chunktext_class():
-    return KarelianChunk
+class Router():
 
-def get_processdata_class():
-    return SoldierProcessdata
+    SOLDIERS = "soldiers"
+    KARELIANS = "karelians"
 
-def get_csvbuilder_class():
-    return SoldierCsvBuilder
+    @staticmethod
+    def get_chunktext_class(extractor):
 
+        if extractor == Router.KARELIANS:
+            return KarelianChunk
+        elif extractor == Router.SOLDIERS:
+            return SoldierChunk
+        else:
+            raise NoExtractorAvailable()
+
+    @staticmethod
+    def get_processdata_class(extractor):
+        if extractor == Router.KARELIANS:
+            raise NoExtractorAvailable()
+        elif extractor == Router.SOLDIERS:
+            return SoldierProcessdata
+        else:
+            raise NoExtractorAvailable()
+
+    @staticmethod
+    def get_csvbuilder_class(extractor):
+        if extractor == Router.KARELIANS:
+            raise NoExtractorAvailable()
+        elif extractor == Router.SOLDIERS:
+            return SoldierCsvBuilder
+        else:
+            raise NoExtractorAvailable()
+
+
+class NoExtractorAvailable(Exception):
+
+    def __init__(self):
+        pass

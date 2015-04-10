@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'importdialog.ui'
 #
-# Created: Thu Apr  9 16:31:03 2015
+# Created: Fri Apr 10 12:56:59 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -82,7 +82,7 @@ class Ui_ImportDialog(object):
         self.destinationLabel.setText(_translate("ImportDialog", "Destination file to save to:"))
         self.destinationpathLabel.setText(_translate("ImportDialog", "<not selected>"))
         self.destinationButton.setText(_translate("ImportDialog", "Browse"))
-        self.groupBox.setTitle(_translate("ImportDialog", "Book series (DOES NOT WORK YET):"))
+        self.groupBox.setTitle(_translate("ImportDialog", "Book series:"))
         self.soldierRadio.setText(_translate("ImportDialog", "Suomen Rintamamiehet 1939-43"))
         self.karelianRadio.setText(_translate("ImportDialog", "Siirtokarjalaisten tie"))
 

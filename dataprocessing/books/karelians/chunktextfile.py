@@ -158,7 +158,6 @@ class PersonPreprocessor(ChunkTextInterface):
         person.attrib["approximated_page"] = str(self.page_number-1) + "-" + str(self.page_number+1)
         person.text = entry
         self.map_name_to_person[name] = person
-
         return person
 
     def _add_person(self, person):
