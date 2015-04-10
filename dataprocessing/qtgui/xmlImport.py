@@ -53,7 +53,7 @@ class XmlImport(QObject):
 
     def _runProcess(self):
         try:
-            self.processor = route_gui.get_processdata_class()(self._processUpdateCallback)
+            self.processor = route_gui.Router.get_processdata_class(route_gui.Router.SOLDIERS)(self._processUpdateCallback)
             result = self.processor.startExtractionProcess(self.file[0])
             self.threadResultsSignal.emit(result)
         except Exception as e:
