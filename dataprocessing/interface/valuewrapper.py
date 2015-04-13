@@ -1,5 +1,5 @@
 class ValueWrapper():
-    xmlEntry = None  #Processdata sets this every time before extracting a new Entry.
+    xmlEntry = None     #Processdata sets this every time before extracting a new Entry.
     idcounter = 1000    #class variable to generate
 
     @staticmethod

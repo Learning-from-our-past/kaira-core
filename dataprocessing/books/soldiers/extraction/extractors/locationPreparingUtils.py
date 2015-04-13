@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-import books.soldiers.extraction.extractors.textUtils as textUtils
+import shared.textUtils as textUtils
 
 
 
