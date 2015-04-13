@@ -3,7 +3,8 @@ KEYS = {
       "firstnames" : "FirstNames",
       "origfamily" : "OriginalFamily",
       "profession" : "Profession/Status",
-
+      "imagepath": "ImagePath",
+      "omakotitalo" : "Omakotitalo",
 
 
       "birthDay" :  "BirthDay",

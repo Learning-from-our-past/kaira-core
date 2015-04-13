@@ -28,8 +28,10 @@ class ProfessionExtractor(BaseExtractor):
             self.errorLogger.logError(ProfessionException.eType, self.currentChild)
 
     def _clean_professions(self):
-        self.professions = self.professions.strip(" ")
         self.professions = self.professions.strip(",")
+        self.professions = self.professions.strip()
+        self.professions = self.professions.lstrip()
+
 
         if self.professions == "":
             self.errorLogger.logError(ProfessionException.eType, self.currentChild)
