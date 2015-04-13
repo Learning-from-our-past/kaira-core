@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-from books.soldiers.extraction.extractors import regexUtils
+from shared import regexUtils
 
 
 def takeSubStrBasedOnPos(text, start, width=None):

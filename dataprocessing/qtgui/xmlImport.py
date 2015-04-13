@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot, QThread, pyqtSignal
-
+import os
 from PyQt5.QtWidgets import QFileDialog, QProgressDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot, QObject
 from books.soldiers import processData
@@ -52,13 +52,17 @@ class XmlImport(QObject):
 
 
     def _runProcess(self):
-        #try:
-        self.processor = route_gui.Router.get_processdata_class(route_gui.Router.KARELIANS)(self._processUpdateCallback)
-        result = self.processor.startExtractionProcess(self.file[0])
-        self.threadResultsSignal.emit(result)
-        """except Exception as e:
-           print(e)
-           self.threadExceptionSignal.emit(e)"""
+
+        try:
+            self.processor = route_gui.Router.get_processdata_class(route_gui.Router.KARELIANS)(self._processUpdateCallback)
+            result = self.processor.startExtractionProcess(self.file[0])
+            self.threadResultsSignal.emit(result)
+        except Exception as e:
+            if "DEV" in os.environ and os.environ["DEV"]:
+                raise e
+            else:
+                print(e)
+                self.threadExceptionSignal.emit(e)
 
 
     @pyqtSlot(int, int)

@@ -7,7 +7,7 @@ from books.soldiers.extraction.extractors.childrenExtractor import ChildrenExtra
 from books.soldiers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from books.soldiers.extraction.extractors.locationExtractor import LocationExtractor
 from books.soldiers.extraction.extractors.deathExtractor import DeathExtractor
-from books.soldiers.extraction.extractors import textUtils, regexUtils
+from shared import regexUtils, textUtils
 from books.soldiers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 

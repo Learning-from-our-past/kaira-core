@@ -9,6 +9,7 @@ from books.soldiers.processData import ProcessData as SoldierProcessdata
 from books.soldiers.resultcsvbuilder import ResultCsvBuilder as SoldierCsvBuilder
 from books.karelians.chunktextfile import PersonPreprocessor as KarelianChunk
 from books.karelians.processData import ProcessData as KarelianProcessdata
+from books.karelians.resultcsvbuilder import ResultCsvBuilder as KarelianCsvBuilder
 
 class Router():
 
@@ -37,7 +38,7 @@ class Router():
     @staticmethod
     def get_csvbuilder_class(extractor):
         if extractor == Router.KARELIANS:
-            raise NoExtractorAvailable()
+            return KarelianCsvBuilder
         elif extractor == Router.SOLDIERS:
             return SoldierCsvBuilder
         else:

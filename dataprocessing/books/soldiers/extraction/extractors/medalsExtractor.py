@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from books.soldiers.extraction.extractors.baseExtractor import BaseExtractor
-import books.soldiers.extraction.extractors.regexUtils as regexUtils
+import shared.regexUtils as regexUtils
 from books.soldiers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 

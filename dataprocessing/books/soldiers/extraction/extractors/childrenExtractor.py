@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import re
 from operator import itemgetter
+
 from books.soldiers.extraction.extractors.baseExtractor import BaseExtractor
 from books.soldiers.extraction.extractionExceptions import *
-from books.soldiers.extraction.extractors import textUtils, regexUtils
+from shared import regexUtils, textUtils
 from books.soldiers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 

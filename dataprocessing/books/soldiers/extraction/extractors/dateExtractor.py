@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from books.soldiers.extraction.extractors import regexUtils
-import books.soldiers.extraction.extractors.textUtils as textUtils
+from shared import regexUtils
+import shared.textUtils as textUtils
 from books.soldiers.extraction.extractionExceptions import *
 
 #This class extracts date from given string. Substringing has to be made in caller.
