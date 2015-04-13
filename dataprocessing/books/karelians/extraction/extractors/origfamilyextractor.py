@@ -14,7 +14,7 @@ class OrigFamilyExtractor(BaseExtractor):
     SEARCH_SPACE = 40
 
     def extract(self, text, entry):
-        self.FAMILY_PATTERN = r"(?:o|0).? ?s. (?P<family>[a-zä-ö-]*)(?:,|\.)"
+        self.FAMILY_PATTERN = r"(?:o|0)\.? ?s\.?,? (?P<family>([a-zä-ö-]*)(, ent\. \w*)?)(?:,|\.)"
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.own_family = ""
 

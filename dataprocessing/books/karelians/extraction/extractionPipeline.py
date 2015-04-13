@@ -5,6 +5,8 @@ required extractors.
 from books.karelians.extraction.extractors.nameextractor import NameExtractor
 from books.karelians.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
 from books.karelians.extraction.extractors.professionextractor import ProfessionExtractor
+from books.karelians.extraction.extractors.imageextractor import ImageExtractor
+from books.karelians.extraction.extractors.omakotitaloextractor import OmakotitaloExtractor
 
 class ExtractionPipeline():
 
@@ -15,6 +17,8 @@ class ExtractionPipeline():
     def process(self, text, entry, eLogger):
         nameExt = NameExtractor(entry, eLogger, self.xmlDocument)
         names = nameExt.extract(text, entry)
+        imageExt = ImageExtractor(entry, eLogger, self.xmlDocument)
+        image = imageExt.extract(text, entry)
 
         origFamilyExt = OrigFamilyExtractor(entry, eLogger, self.xmlDocument)
         origFamilyExt.setDependencyMatchPositionToZero()
@@ -24,7 +28,14 @@ class ExtractionPipeline():
         professionExt.dependsOnMatchPositionOf(origFamilyExt)
         profession = professionExt.extract(text, entry)
 
+        omakotitaloExt = OmakotitaloExtractor(entry, eLogger, self.xmlDocument)
+        omakotitalo = omakotitaloExt.extract(text, entry)
+
+
         d = names.copy()
+        d.update(image)
         d.update(origFamily)
         d.update(profession)
+        d.update(omakotitalo)
+
         return d
