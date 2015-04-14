@@ -21,6 +21,13 @@ class ProfessionExtractor(BaseExtractor):
     def _find_profession(self, text):
         text = textUtils.takeSubStrBasedOnRange(text, self.matchStartPosition, self.SEARCH_SPACE)
         try:
+            #limit the search range if there is spouse keyword:
+            try:
+                foundSpouseWord =  regexUtils.safeSearch(r"Puol", text, self.PROFESSION_OPTIONS)
+                text = textUtils.takeSubStrBasedOnRange(text, 0, foundSpouseWord.start())
+            except regexUtils.RegexNoneMatchException as e:
+                pass
+
             foundProfession= regexUtils.safeSearch(self.PROFESSION_PATTERN, text, self.PROFESSION_OPTIONS)
             self.matchFinalPosition = foundProfession.end()
             self.professions = foundProfession.group("profession")
@@ -32,6 +39,15 @@ class ProfessionExtractor(BaseExtractor):
         self.professions = self.professions.strip()
         self.professions = self.professions.lstrip()
 
+        uppercase = re.match(r"[A-ZÄ-Ö]", self.professions)
+        if uppercase is not None:
+            comma = self.professions.find(",")
+            if comma != -1:
+                self.professions = self.professions[comma:]
+
+        self.professions = self.professions.strip(",")
+        self.professions = self.professions.strip()
+        self.professions = self.professions.lstrip()
 
         if self.professions == "":
             self.errorLogger.logError(ProfessionException.eType, self.currentChild)
