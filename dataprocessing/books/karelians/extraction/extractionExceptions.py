@@ -55,3 +55,28 @@ class BirthdayException(ExtractionException):
 
     def __unicode__(self):
         return repr(self.message)
+
+
+class ManLocationException(ExtractionException):
+    eType = "MANLOCATION"
+    message = "ERROR in location extraction: "
+    details = u""
+
+    def __init__(self, text, type):
+        self.details = text
+        self.eType = type
+
+    def __unicode__(self):
+        return repr(self.message)
+
+class LocationException(ExtractionException):
+    eType = "LOCATION"
+    message = "ERROR in location extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
