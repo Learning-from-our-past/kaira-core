@@ -32,3 +32,26 @@ class ProfessionException(ExtractionException):
 
     def __unicode__(self):
         return repr(self.message)
+
+class DateException(ExtractionException):
+    eType = "DATE"
+    message = "ERROR in date extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
+class BirthdayException(ExtractionException):
+    eType = "BIRTHDAY"
+    message = "ERROR in birthday extraction: "
+    details = u""
+
+    def __init__(self, dateguess):
+        self.details = dateguess
+
+    def __unicode__(self):
+        return repr(self.message)

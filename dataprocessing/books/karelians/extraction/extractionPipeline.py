@@ -7,6 +7,7 @@ from books.karelians.extraction.extractors.origfamilyextractor import OrigFamily
 from books.karelians.extraction.extractors.professionextractor import ProfessionExtractor
 from books.karelians.extraction.extractors.imageextractor import ImageExtractor
 from books.karelians.extraction.extractors.omakotitaloextractor import OmakotitaloExtractor
+from books.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
 
 class ExtractionPipeline():
 
@@ -28,8 +29,13 @@ class ExtractionPipeline():
         professionExt.dependsOnMatchPositionOf(origFamilyExt)
         profession = professionExt.extract(text, entry)
 
+        birthdayExt = BirthdayExtractor(entry, eLogger, self.xmlDocument)
+        birthdayExt.dependsOnMatchPositionOf(origFamilyExt)
+        birthday = birthdayExt.extract(text, entry)
+
         omakotitaloExt = OmakotitaloExtractor(entry, eLogger, self.xmlDocument)
         omakotitalo = omakotitaloExt.extract(text, entry)
+
 
 
         d = names.copy()
@@ -37,5 +43,6 @@ class ExtractionPipeline():
         d.update(origFamily)
         d.update(profession)
         d.update(omakotitalo)
+        d.update(birthday)
 
         return d
