@@ -23,7 +23,7 @@ class ResultCsvBuilder():
         self._writeCsvHeaders()
 
     def _writeCsvHeaders(self):
-        self.csvWriter.writerow(["Surname", "first names", "original family", "profession/status", "omakotitalo", "imagepath"])
+        self.csvWriter.writerow(["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "profession/status", "omakotitalo", "imagepath"])
 
 
     def writeRow(self, dataDict):
@@ -34,7 +34,9 @@ class ResultCsvBuilder():
     #tranforms the dict of the entry to a format which can be written into csv
     def _createRowFromDict(self, persondatadict):
         row = [persondatadict[KEYS["surname"]].value, persondatadict[KEYS["firstnames"]].value,
-               persondatadict[KEYS["origfamily"]].value, persondatadict[KEYS["profession"]].value,
+               persondatadict[KEYS["origfamily"]].value, persondatadict[KEYS["birthDay"]].value,
+               persondatadict[KEYS["birthMonth"]].value, persondatadict[KEYS["birthYear"]].value,
+               persondatadict[KEYS["profession"]].value,
                persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,]
         return row
 

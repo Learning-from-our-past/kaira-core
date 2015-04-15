@@ -25,4 +25,5 @@ def takeSubStrBasedOnFirstRegexOccurrence(text, pattern, options=re.UNICODE):
 
 def removeSpacesFromText(text):
     text = text.replace("\n","")
+    text = text.replace(" ","")
     return text.replace(" ","")
