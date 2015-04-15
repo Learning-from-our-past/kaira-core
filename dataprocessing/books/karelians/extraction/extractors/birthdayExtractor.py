@@ -52,7 +52,6 @@ class BirthdayExtractor(BaseExtractor):
             self.foundDate = {"day": "","month": "",
                 "year": "", "cursorLocation": ""}
 
-
     def _setFinalMatchPosition(self):
         #Dirty fix for inaccuracy in positions which would screw the Location extraction
         self.matchFinalPosition = self.dateExtractor.getFinalMatchPosition() + self.matchStartPosition - 4
