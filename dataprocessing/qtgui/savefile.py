@@ -81,8 +81,7 @@ class SaveCsvFile(QObject):
 
     def _save_to_csv(self, entries, path):
         #write modifications to a new xml-file:
-        writer = route_gui.Router.get_csvbuilder_class(route_gui.Router.KARELIANS)()
-        print(path)
+        writer = route_gui.Router.get_csvbuilder_class(self.parent.xmlDocument.attrib["bookseries"])()
         writer.openCsv(path)
         for entry in self.parent.dataEntries:
             try:

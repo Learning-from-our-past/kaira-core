@@ -10,7 +10,7 @@ class ProcessDataInterface:
 
     #TODO: Nimeä uudestaan kuvaamaan että se palauttaa valmiin tuloksen?
     @abstractmethod
-    def startExtractionProcess(self, filePath):
+    def startExtractionProcess(self, xmlDocument, filePath):
         """return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
                 "file": filePath}"""
         pass

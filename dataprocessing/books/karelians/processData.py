@@ -16,20 +16,21 @@ class ProcessData(ProcessDataInterface):
         self.processUpdateCallbackFunction = None
         self.processUpdateCallbackFunction = callback
 
-    def startExtractionProcess(self, file_path):
-        self._initProcess(file_path)
+    def startExtractionProcess(self, xmlDocument, file_path):
+        self.xmlDataDocument = xmlDocument
+        self.dataFilename = file_path
+        self._initProcess()
         self._processAllEntries()
         #self._finishProcess()
         #self.processUpdateCallbackFunction(self.xmlDataDocumentLen, self.xmlDataDocumentLen)    #DUMMY
         return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
                 "file": file_path}
 
-    def _initProcess(self, file_path):
+    def _initProcess(self):
         self.errors = 0
         self.count = 0
         self.errorLogger = ExceptionLogger()
-        self.dataFilename = file_path
-        self.xmlDataDocument = self._getXMLroot(file_path)
+
 
         self.extractor = ExtractionPipeline(self.xmlDataDocument)
         self.xmlDataDocumentLen = len(self.xmlDataDocument)
@@ -65,9 +66,3 @@ class ProcessData(ProcessDataInterface):
 
     def extractOne(self, xmlEntry):
         pass
-
-
-    def _getXMLroot(self, filepath):
-        #read the data in XML-format to be processed
-        tree = etree.parse(filepath) #ET.parse(filepath)
-        return tree.getroot()
