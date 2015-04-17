@@ -1,8 +1,10 @@
 from PyQt5.QtCore import pyqtSlot, QThread, pyqtSignal
-
+import os
 from PyQt5.QtWidgets import QFileDialog, QProgressDialog, QMessageBox
 from PyQt5.QtCore import pyqtSlot, QObject
 from books.soldiers import processData
+import route_gui
+from lxml import etree
 
 
 class XmlImport(QObject):
@@ -52,13 +54,23 @@ class XmlImport(QObject):
 
 
     def _runProcess(self):
+
         try:
-            self.processor = processData.ProcessData(self._processUpdateCallback)
-            result = self.processor.startExtractionProcess(self.file[0])
-            self.threadResultsSignal.emit(result)
+            xmlDataDocument = self._getXMLroot(self.file[0])
+            #TODO: Lue xml:n metadata
+            try:
+
+                self.processor = route_gui.Router.get_processdata_class(xmlDataDocument.attrib["bookseries"])(self._processUpdateCallback)
+                result = self.processor.startExtractionProcess(xmlDataDocument, self.file[0])
+                self.threadResultsSignal.emit(result)
+            except KeyError:
+                raise MetadataException()
         except Exception as e:
-           print(e)
-           self.threadExceptionSignal.emit(e)
+            if "DEV" in os.environ and os.environ["DEV"]:
+                raise e
+            else:
+                print(e)
+                self.threadExceptionSignal.emit(e)
 
 
     @pyqtSlot(int, int)
@@ -83,6 +95,22 @@ class XmlImport(QObject):
         self.threadUpdateSignal.emit(i, max)
 
 
+    def _getXMLroot(self, filepath):
+
+        #read the data in XML-format to be processed
+        tree = etree.parse(filepath) #ET.parse(filepath)
+
+
+        return tree.getroot()
+
+
+class MetadataException(Exception):
+
+    def __init__(self):
+        self.msg = "ERROR: The document doesn't contain bookseries attribute in the beginning of the file. Couldn't import. Try " \
+                   "to generate new xml-file from the source ocr-text or add the missing attribute to the file manually."
+    def __str__(self):
+        return repr(self.msg)
 
 
 

@@ -25,8 +25,10 @@ class ProcessData(ProcessDataInterface):
         self.processUpdateCallbackFunction = callback
 
     #TODO: Nimeä uudestaan kuvaamaan että se palauttaa valmiin tuloksen?
-    def startExtractionProcess(self, filePath):
-        self._initProcess(filePath)
+    def startExtractionProcess(self, xmlDocument, filePath):
+        self.xmlDataDocument = xmlDocument
+        self.dataFilename = filePath
+        self._initProcess()
         self._processAllEntries()
         self._finishProcess()
         return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
@@ -46,15 +48,15 @@ class ProcessData(ProcessDataInterface):
 
         return entry
 
-    def _initProcess(self, filePath):
+    def _initProcess(self):
         self.errors = 0
         self.count = 0
         #self.csvBuilder = ResultCsvBuilder()
         #self.csvBuilder.openCsv(filePath)
 
         self.errorLogger = ExceptionLogger()
-        self.dataFilename = filePath
-        self.xmlDataDocument = readData.getXMLroot(filePath)
+
+        #self.xmlDataDocument = readData.getXMLroot(filePath)
 
         self.extractor = DataExtraction(self.xmlDataDocument)
         self.xmlDataDocumentLen = len(self.xmlDataDocument)

@@ -5,7 +5,7 @@ from books.soldiers.extraction.extractors.baseExtractor import BaseExtractor
 from books.soldiers.extraction.extractionExceptions import *
 from books.soldiers.extraction.extractors.dateExtractor import DateExtractor
 from books.soldiers.extraction.extractors.locationExtractor import LocationExtractor
-from books.soldiers.extraction.extractors import textUtils
+from shared import textUtils
 from books.soldiers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 

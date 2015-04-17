@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Mar 30 12:54:56 2015
+# Created: Fri Apr 10 11:40:29 2015
 #      by: PyQt5 UI code generator 5.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -170,7 +170,7 @@ class Ui_MainWindow(object):
         self.actionJSON.setText(_translate("MainWindow", "JSON"))
         self.actionOpen_txt.setText(_translate("MainWindow", "Open txt"))
         self.actionSave_changes_to_xml.setText(_translate("MainWindow", "Save As..."))
-        self.actionFrom_txt_OCR.setText(_translate("MainWindow", "From txt (OCR)"))
+        self.actionFrom_txt_OCR.setText(_translate("MainWindow", "From OCR"))
         self.actionRun_analysis_for_all.setText(_translate("MainWindow", "Run analysis for all"))
         self.actionRun_analysis_for_all.setToolTip(_translate("MainWindow", "Run analysis for all entries in current file"))
         self.actionRun_analysis_for_all.setShortcut(_translate("MainWindow", "Ctrl+Shift+R"))

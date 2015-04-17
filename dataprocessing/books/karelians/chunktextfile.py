@@ -1,18 +1,29 @@
 from lxml.html import *
 from lxml import etree
+from lxml import html
 import re
 import cProfile
 import os, nturl2path
 import shutil
+from interface.chunktextinterface import ChunkTextInterface
 
 def read_html_file(path):
     return parse(path)
 
 
-class PersonPreprocessor:
+class PersonPreprocessor(ChunkTextInterface):
+
+    def chunk_text(self, text, destination_path):
+        self.save_path = destination_path
+        print(self.save_path)
+        parsed = html.document_fromstring( text)
+        persons = self.process(parsed)
+        print(len(persons))
+        return etree.tostring(persons, pretty_print=True, encoding='unicode')
 
     def process(self, tree):
         self.persons_document = etree.Element("DATA")
+        self.persons_document.attrib["bookseries"] = "Siirtokarjalaisten tie"
         self.map_name_to_person = {}
         self.current_person = None
         self.page_number = 1
@@ -26,8 +37,6 @@ class PersonPreprocessor:
         for e in tree.iter():
             if "src" in e.attrib:
                 self._parse_image(e)
-
-
 
             if e.text is not None:
                 try:
@@ -72,7 +81,9 @@ class PersonPreprocessor:
                 name = foundNext["next"].text
 
         if name != "":
-            new_path = "images/" + re.sub(r"(?:[^a-zä-ö0-9]|(?<=['\"])s)", r"", name, flags=re.IGNORECASE) + ".jpg"
+            new_path = re.sub(r"(?:[^a-zä-ö0-9]|(?<=['\"])s)", r"", name, flags=re.IGNORECASE) + ".jpg"
+            file_prefix = os.path.basename(os.path.splitext(self.save_path)[0])
+            new_path = os.path.join(file_prefix + "_images", new_path)
             self._copy_rename_imagefiles(new_path, image_path)
             self.images.append({"name": self._convert_image_name(name), "image": new_path})
 
@@ -114,10 +125,16 @@ class PersonPreprocessor:
         return {"next": next, "found" : foundNext}
 
     def _copy_rename_imagefiles(self, new_path, image_path):
-         #copy the image files and rename them according to person's name
-        os.makedirs("./images", exist_ok=True)
-        if not os.path.isfile(os.path.join(os.getcwd(), new_path)):
-            shutil.copy(os.path.join(os.getcwd(), image_path), os.path.join(os.getcwd(), new_path))
+        #TODO: It would be nice to provide error message to user rather than fail silently
+        try:
+            #copy the image files and rename them according to person's name
+            file_prefix = os.path.basename(os.path.splitext(self.save_path)[0])
+            new_path = os.path.join(os.path.dirname(self.save_path), new_path)
+            os.makedirs(os.path.dirname(self.save_path) + "/" + file_prefix + "_images", exist_ok=True)
+            if not os.path.isfile(os.path.join(new_path)):
+                shutil.copy(os.path.join(os.getcwd(), image_path), new_path)
+        except Exception:
+            pass
 
     def _convert_image_name(self, name):
         name = name.upper()
@@ -142,22 +159,22 @@ class PersonPreprocessor:
         person.attrib["approximated_page"] = str(self.page_number-1) + "-" + str(self.page_number+1)
         person.text = entry
         self.map_name_to_person[name] = person
-
         return person
 
     def _add_person(self, person):
         if person is not None and len(person.text) > 4:
             self.persons_document.append(person)
 
-
 def start():
     os.chdir("material")
-    parsed = read_html_file("Siirtokarjalaisten_whole_book.htm") #Siirtokarjalaisten_whole_book.htm
+    f = open("Siirtokarjalaisten tie I fragment_kuvat.html", "r", encoding="utf8")
+    text = f.read()
+    #"Siirtokarjalaisten_whole_book.htm") #Siirtokarjalaisten_whole_book.htm
     p = PersonPreprocessor()
-    persons = p.process(parsed)
-    print(len(persons))
+    persons = p.chunk_text(text)
     f = open("results.xml", "wb")
-    f.write(etree.tostring(persons, pretty_print=True, encoding='unicode').encode("utf8"))
+    f.write(persons.encode("utf8"))
     f.close()
 
-cProfile.run("start()")
+if __name__ == "__main__":
+    start()

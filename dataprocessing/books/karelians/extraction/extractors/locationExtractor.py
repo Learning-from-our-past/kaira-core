@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
 
-from books.soldiers.extraction.extractors.baseExtractor import BaseExtractor
-from books.soldiers.extraction.extractionExceptions import *
+from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
+from books.karelians.extraction.extractionExceptions import *
 from shared import regexUtils, textUtils
-from books.soldiers.extractionkeys import KEYS
+from books.karelians.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
-
-
-
-
 
 
 #This class extracts a location string from provided substring/text.

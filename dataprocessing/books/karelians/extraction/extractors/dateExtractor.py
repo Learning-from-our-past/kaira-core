@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from shared import regexUtils
 import shared.textUtils as textUtils
-from books.soldiers.extraction.extractionExceptions import *
+from books.karelians.extraction.extractionExceptions import *
 
 #This class extracts date from given string. Substringing has to be made in caller.
 #The interface also differs a bit from other books since this is meant to be used by
@@ -76,7 +76,7 @@ class DateExtractor():
     def _transformYear(self, year):
         #fix years to four digit format.
         if not self.dates_always_20th_century:
-            if int(year) < 50:
+            if int(year) < 70:
                 year = "19" + year
             elif int(year) < 1800:
                 year = "18" + year
