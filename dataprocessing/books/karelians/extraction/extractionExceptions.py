@@ -80,3 +80,16 @@ class LocationException(ExtractionException):
 
     def __unicode__(self):
         return repr(self.message)
+
+
+class KarelianLocationException(ExtractionException):
+    eType = "KARELIAN LOCATION"
+    message = "ERROR in karelian location extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)

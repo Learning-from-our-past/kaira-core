@@ -5,6 +5,7 @@ KEYS = {
       "profession" : "Profession/Status",
       "imagepath": "ImagePath",
       "omakotitalo" : "Omakotitalo",
+      "karelianlocations" : "KarelianLocations",
 
 
       "birthDay" :  "BirthDay",
