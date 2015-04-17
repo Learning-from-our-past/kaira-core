@@ -19,7 +19,6 @@ class Router():
 
     @staticmethod
     def get_chunktext_class(extractor):
-
         if extractor == Router.KARELIANS:
             return KarelianChunk
         elif extractor == Router.SOLDIERS:
@@ -44,7 +43,6 @@ class Router():
             return SoldierCsvBuilder
         else:
             raise NoExtractorAvailable()
-
 
 class NoExtractorAvailable(Exception):
 
