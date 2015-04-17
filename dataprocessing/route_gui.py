@@ -13,8 +13,9 @@ from books.karelians.resultcsvbuilder import ResultCsvBuilder as KarelianCsvBuil
 
 class Router():
 
-    SOLDIERS = "soldiers"
-    KARELIANS = "karelians"
+    #these are equivalent of the "bookseries" attribute in xml datafiles.
+    SOLDIERS = "Suomen rintamamiehet"
+    KARELIANS = "Siirtokarjalaisten tie"
 
     @staticmethod
     def get_chunktext_class(extractor):

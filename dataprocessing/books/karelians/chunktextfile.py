@@ -23,6 +23,7 @@ class PersonPreprocessor(ChunkTextInterface):
 
     def process(self, tree):
         self.persons_document = etree.Element("DATA")
+        self.persons_document.attrib["bookseries"] = "Siirtokarjalaisten tie"
         self.map_name_to_person = {}
         self.current_person = None
         self.page_number = 1
