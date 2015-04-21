@@ -29,4 +29,5 @@ class NameExtractor(BaseExtractor):
             self.errorLogger.logError(NameException.eType, self.currentChild)
 
     def _constructReturnDict(self):
+        print(self.surname + " " + self.first_names)
         return {KEYS["firstnames"] : ValueWrapper(self.first_names), KEYS["surname"]: ValueWrapper(self.surname)}

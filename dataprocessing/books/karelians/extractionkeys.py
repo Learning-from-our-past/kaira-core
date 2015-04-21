@@ -6,6 +6,8 @@ KEYS = {
       "imagepath": "ImagePath",
       "omakotitalo" : "Omakotitalo",
       "karelianlocations" : "KarelianLocations",
+      "karelianlocation" : "KarelianLocation",
+      "returnedkarelia": "ReturnedToKarelia",
 
 
       "birthDay" :  "BirthDay",
