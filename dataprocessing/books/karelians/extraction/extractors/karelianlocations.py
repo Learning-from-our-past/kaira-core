@@ -35,14 +35,20 @@ class KarelianLocationsExtractor(BaseExtractor):
 
     def _clean_locations(self):
         self.locations = self.locations.strip(",")
+        self.locations = self.locations.strip(".")
         self.locations = self.locations.strip()
         self.locations = self.locations.lstrip()
 
     def _split_locations(self):
         foundLocations = regexUtils.regexIter(self.SPLIT_PATTERN1, self.locations, self.SPLIT_OPTIONS1)
+        count = 0
         for m in foundLocations:
+            count += 1
             self._process_location(m.group("place"), m.group("years"))
             #print("Place: " + m.group("place") + " Years: " + m.group("years") + " Year count: " + str(self._count_years(m.group("years"))))
+
+        if count == 0:
+            self._create_location_entry(self.locations, [])
 
     def _process_location(self, place, years):
 
@@ -76,6 +82,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         return y
 
     def _create_location_entry(self, place, move_years):
+        print(place)
         #create the final(?) entry
         movedOut = ""
         movedIn = ""

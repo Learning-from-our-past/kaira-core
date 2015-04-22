@@ -16,6 +16,11 @@ def regexIter(pattern, text, options = re.UNICODE):
     m = r.finditer(text)
     return m
 
+def regexAll(pattern, text, options = re.UNICODE):
+    r = re.compile(pattern, options)
+    m = r.findall(text)
+    return m
+
 def safeSearch(pattern, text, options = re.UNICODE):
     r = regex.compile(pattern, options)
     m = r.search(text)
