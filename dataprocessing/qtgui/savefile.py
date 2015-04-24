@@ -3,7 +3,7 @@ from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import QStandardPaths
 import route_gui
-
+import os
 
 class SaveXmlFile(QObject):
 
@@ -86,8 +86,10 @@ class SaveCsvFile(QObject):
         for entry in self.parent.dataEntries:
             try:
                 writer.writeRow(entry["extractionResults"])
-            except KeyError:
-                pass
+            except KeyError as e:
+                if "DEV" in os.environ and os.environ["DEV"]:
+                    raise e
+
         writer.closeCsv()
 
 

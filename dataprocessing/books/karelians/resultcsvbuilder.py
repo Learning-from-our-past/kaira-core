@@ -39,8 +39,23 @@ class ResultCsvBuilder():
                persondatadict[KEYS["birthLocation"]].value, persondatadict[KEYS["profession"]].value,
                persondatadict[KEYS["karelianlocations"]].value,
                persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,]
+        self._addKarelianLocations(persondatadict)
         return row
 
+    def _addKarelianLocations(self, persondatadict):
+        lrow = []
+        locations = persondatadict[KEYS["karelianlocations"]].value
+
+        for l in locations:
+            lrow.append(l.value[KEYS["karelianlocation"]].value) #name of the place
+            lrow.append(l.value["movedIn"].value) #year when moved in
+            lrow.append(l.value["movedOut"].value) #year when moved out
+            lrow.append(l.value[KEYS["kareliancoordinate"]].value["latitude"].value) #latitude
+            lrow.append(l.value[KEYS["kareliancoordinate"]].value["longitude"].value) #latitude
+            print(lrow)
+
+        print("asdasdsasd")
+        print(lrow)
 
     def _addSpouseDataToRow(self,row, persondatadict):
         pass
