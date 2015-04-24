@@ -1,26 +1,24 @@
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
-from books.karelians.extraction.extractionExceptions import KarelianLocationException
+from books.karelians.extraction.extractionExceptions import OtherLocationException
 from shared import regexUtils
 from shared import textUtils
 import re
 import regex
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 
-class KarelianLocationsExtractor(BaseExtractor):
+class FinnishLocationsExtractor(BaseExtractor):
     """ Tries to extract the locations of the person in karelia.
     """
     geocoder = GeoCoder()
 
     def extract(self, text, entry):
-
-        self.LOCATION_PATTERN = r"Asuinp\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))" #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
+        self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.SPLIT_PATTERN1 = r"(?P<place>[A-ZÄ-Öa-zä-ö\s-]+)\s(?P<years>[\d,\.\s—-]*)"
+        self.SPLIT_PATTERN1 = r"(?P<place>[A-ZÄ-Öa-zä-ö-]+)\s?(?P<years>[\d,\.\s—-]*)" #r"(?P<place>[A-ZÄ-Öa-zä-ö\s-]+)\s(?P<years>[\d,\.\s—-]*)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
         self.coordinates_notfound = False   #used to limit error logging to only single time
-        self.returned = ""
         self.locations = ""
         self.locationlisting = []
         self._find_locations(text)
@@ -35,7 +33,7 @@ class KarelianLocationsExtractor(BaseExtractor):
             self._clean_locations()
             self._split_locations()
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(KarelianLocationException.eType, self.currentChild)
+            self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
 
     def _clean_locations(self):
         self.locations = self.locations.strip(",")
@@ -47,6 +45,8 @@ class KarelianLocationsExtractor(BaseExtractor):
         foundLocations = regexUtils.regexIter(self.SPLIT_PATTERN1, self.locations, self.SPLIT_OPTIONS1)
         count = 0
         for m in foundLocations:
+            print(m.string)
+            print(m.groups())
             count += 1
             self._process_location(m.group("place"), m.group("years"))
             #print("Place: " + m.group("place") + " Years: " + m.group("years") + " Year count: " + str(self._count_years(m.group("years"))))
@@ -58,7 +58,6 @@ class KarelianLocationsExtractor(BaseExtractor):
 
         if self._count_years(years) > 2:
             #split the years and mark the return to Karelia
-            self.returned = place
             self._handle_returning_person(place, years)
         else:
             move_years = self._get_move_years(years)
@@ -99,15 +98,13 @@ class KarelianLocationsExtractor(BaseExtractor):
 
 
         try:
-            geocoordinates = self.geocoder.get_coordinates(place, "russia")
+            geocoordinates = self.geocoder.get_coordinates(place, "finland")
         except LocationNotFound as e:
             if not self.coordinates_notfound:
                 self.coordinates_notfound = True
                 self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
 
-
-
-        self.locationlisting.append(ValueWrapper({KEYS["karelianlocation"] : ValueWrapper(place), KEYS["kareliancoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
+        self.locationlisting.append(ValueWrapper({KEYS["otherlocation"] : ValueWrapper(place), KEYS["othercoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
 
 
     def _count_years(self, text):
@@ -115,4 +112,4 @@ class KarelianLocationsExtractor(BaseExtractor):
         return len(list(years))
 
     def _constructReturnDict(self):
-        return {KEYS["karelianlocations"] : ValueWrapper(self.locationlisting), KEYS["returnedkarelia"] : ValueWrapper(self.returned)}
+        return {KEYS["otherlocations"] : ValueWrapper(self.locationlisting)}

@@ -6,7 +6,7 @@ import csv
 
 db = DatabaseHandler()
 
-with open("finland_names.csv", "rU", encoding="utf8") as csvfile:
+with open("russia_names.csv", "rU", encoding="utf8") as csvfile:
     reader = csv.DictReader(csvfile, delimiter=";")
     for row in reader:
-        db.storeToDb(row, "finland")
+        db.storeToDb(row, "russia")

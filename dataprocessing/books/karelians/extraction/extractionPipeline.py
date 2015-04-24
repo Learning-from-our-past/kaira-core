@@ -10,6 +10,7 @@ from books.karelians.extraction.extractors.omakotitaloextractor import Omakotita
 from books.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from books.karelians.extraction.extractors.locationExtractor import BirthdayLocationExtractor
 from books.karelians.extraction.extractors.karelianlocations import KarelianLocationsExtractor
+from books.karelians.extraction.extractors.finnishlocations import FinnishLocationsExtractor
 
 class ExtractionPipeline():
 
@@ -42,6 +43,9 @@ class ExtractionPipeline():
         karelianLocExt = KarelianLocationsExtractor(entry, eLogger, self.xmlDocument)
         karelianLocations = karelianLocExt.extract(text, entry)
 
+        finnishLocExt = FinnishLocationsExtractor(entry, eLogger, self.xmlDocument)
+        finnishLocations = finnishLocExt.extract(text, entry)
+
         omakotitaloExt = OmakotitaloExtractor(entry, eLogger, self.xmlDocument)
         omakotitalo = omakotitaloExt.extract(text, entry)
 
@@ -55,5 +59,6 @@ class ExtractionPipeline():
         d.update(birthday)
         d.update(birthdayLocation)
         d.update(karelianLocations)
+        d.update(finnishLocations)
 
         return d

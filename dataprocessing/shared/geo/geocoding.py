@@ -7,8 +7,7 @@ class GeoCoder():
         self.db = DatabaseHandler()
 
     def get_coordinates(self, location_name, collection):
-        locations = self.db.getFromDb({"$text": {"$search": location_name}}, collection)
-        print(locations)
+        locations = self.db.getFromDb({"$text": {"$search": "\"" + location_name + "\""}}, collection)
         if len(locations) == 0:
             raise LocationNotFound()
         else:
@@ -21,7 +20,7 @@ class GeoCoder():
 class LocationNotFound(Exception):
     message = u"Coordinates not found from database"
     details = u""
-    eType = "OTHER"
+    eType = "COORDINATES NOT FOUND"
 
     def __init__(self):
         pass
@@ -32,4 +31,4 @@ class LocationNotFound(Exception):
 
 if __name__ == "__main__":
     coder = GeoCoder()
-    print(coder.get_coordinates("Kirvu", "russia"))
+    #print(coder.get_coordinates("Kilpola", "russia"))
