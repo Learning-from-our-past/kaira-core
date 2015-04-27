@@ -23,7 +23,7 @@ class ResultCsvBuilder():
         self._writeCsvHeaders()
 
     def _writeCsvHeaders(self):
-        self.csvWriter.writerow(["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "karelian locations", "omakotitalo", "imagepath"])
+        self.csvWriter.writerow(["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath"])
 
 
     def writeRow(self, dataDict):
@@ -37,9 +37,8 @@ class ResultCsvBuilder():
                persondatadict[KEYS["origfamily"]].value, persondatadict[KEYS["birthDay"]].value,
                persondatadict[KEYS["birthMonth"]].value, persondatadict[KEYS["birthYear"]].value,
                persondatadict[KEYS["birthLocation"]].value, persondatadict[KEYS["profession"]].value,
-               persondatadict[KEYS["karelianlocations"]].value,
                persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,]
-        self._addKarelianLocations(persondatadict)
+        row = row + self._addKarelianLocations(persondatadict)
         return row
 
     def _addKarelianLocations(self, persondatadict):
@@ -56,6 +55,7 @@ class ResultCsvBuilder():
 
         print("asdasdsasd")
         print(lrow)
+        return lrow
 
     def _addSpouseDataToRow(self,row, persondatadict):
         pass

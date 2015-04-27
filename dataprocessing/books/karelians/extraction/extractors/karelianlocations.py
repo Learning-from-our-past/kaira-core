@@ -17,7 +17,7 @@ class KarelianLocationsExtractor(BaseExtractor):
 
         self.LOCATION_PATTERN = r"Asuinp\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))" #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.SPLIT_PATTERN1 = r"(?P<place>[A-ZÄ-Öa-zä-ö\s-]+)\s(?P<years>[\d,\.\s—-]*)"
+        self.SPLIT_PATTERN1 =  r"(?P<place>[A-ZÄ-Öa-zä-ö-]+)\s?(?P<years>[\d,\.\s—-]*)" #r"(?P<place>[A-ZÄ-Öa-zä-ö\s-]+)\s(?P<years>[\d,\.\s—-]*)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
         self.coordinates_notfound = False   #used to limit error logging to only single time
         self.returned = ""
@@ -41,6 +41,9 @@ class KarelianLocationsExtractor(BaseExtractor):
         self.locations = self.locations.strip(",")
         self.locations = self.locations.strip(".")
         self.locations = self.locations.strip()
+        print(self.locations)
+        self.locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", self.locations)
+        print(self.locations)
         self.locations = self.locations.lstrip()
 
     def _split_locations(self):
@@ -48,6 +51,8 @@ class KarelianLocationsExtractor(BaseExtractor):
         count = 0
         for m in foundLocations:
             count += 1
+            print(m.string)
+            print(m.groups())
             self._process_location(m.group("place"), m.group("years"))
             #print("Place: " + m.group("place") + " Years: " + m.group("years") + " Year count: " + str(self._count_years(m.group("years"))))
 
@@ -103,7 +108,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         except LocationNotFound as e:
             if not self.coordinates_notfound:
                 self.coordinates_notfound = True
-                self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
+                #self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
 
 
 

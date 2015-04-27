@@ -45,8 +45,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         foundLocations = regexUtils.regexIter(self.SPLIT_PATTERN1, self.locations, self.SPLIT_OPTIONS1)
         count = 0
         for m in foundLocations:
-            print(m.string)
-            print(m.groups())
+
             count += 1
             self._process_location(m.group("place"), m.group("years"))
             #print("Place: " + m.group("place") + " Years: " + m.group("years") + " Year count: " + str(self._count_years(m.group("years"))))
@@ -102,7 +101,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         except LocationNotFound as e:
             if not self.coordinates_notfound:
                 self.coordinates_notfound = True
-                self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
+                #self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
 
         self.locationlisting.append(ValueWrapper({KEYS["otherlocation"] : ValueWrapper(place), KEYS["othercoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
 

@@ -59,7 +59,7 @@ class XmlImport(QObject):
             xmlDataDocument = self._getXMLroot(self.file[0])
             #TODO: Lue xml:n metadata
             try:
-
+                #TODO: Moniprosarituki?
                 self.processor = route_gui.Router.get_processdata_class(xmlDataDocument.attrib["bookseries"])(self._processUpdateCallback)
                 result = self.processor.startExtractionProcess(xmlDataDocument, self.file[0])
                 self.threadResultsSignal.emit(result)
