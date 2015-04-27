@@ -75,6 +75,7 @@ class BirthdayLocationExtractor(BaseExtractor):
             self.foundLocation = self.locationExtractor.extract(text)
             self._checkIfLocationIsValid(text, self.foundLocation)
             self.location = self.foundLocation.group("location")
+            self.location = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", self.location)
             self._setFinalMatchPosition()
         except LocationException as e:
             self.errorLogger.logError(ManLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
