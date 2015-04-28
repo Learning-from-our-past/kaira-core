@@ -39,6 +39,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         self.locations = self.locations.strip(",")
         self.locations = self.locations.strip(".")
         self.locations = self.locations.strip()
+        self.locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", self.locations)
         self.locations = self.locations.lstrip()
 
     def _split_locations(self):
