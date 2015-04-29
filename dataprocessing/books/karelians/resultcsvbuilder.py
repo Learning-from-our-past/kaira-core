@@ -26,7 +26,7 @@ class ResultCsvBuilder():
 
 
     def _writeCsvHeaders(self):
-        headers = ["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath"]
+        headers = ["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "hasSpouse", "spouseName"]
 
         for i in range(0, self.karelianLocationsMax):
             headers = headers + ["karelianLocation" + str(i), "movedIn" + str(i), "movedOut" + str(i), "latitude" + str(i), "longitude" + str(i)]
@@ -46,10 +46,9 @@ class ResultCsvBuilder():
                persondatadict[KEYS["origfamily"]].value, persondatadict[KEYS["birthDay"]].value,
                persondatadict[KEYS["birthMonth"]].value, persondatadict[KEYS["birthYear"]].value,
                persondatadict[KEYS["birthLocation"]].value, persondatadict[KEYS["profession"]].value,
-               persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,] }
+               persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,
+               persondatadict[KEYS["spouse"]].value[KEYS["hasSpouse"]].value, persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,] }
         row["karelianLocations"] = self._addKarelianLocations(persondatadict)
-        #add required empty rows:
-
         row["otherLocations"] = self._addOtherLocations(persondatadict)
         print(row)
         return row

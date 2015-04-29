@@ -38,7 +38,10 @@ KEYS = {
       "hobbies" : "Hobbies",
       "hasSpouse" : "HasSpouse",
       "weddingYear" : "WeddingYear",
+
+      "spouse": "Spouse",
       "spouseName" : "SpouseName",
+      "spouseProfession" : "SpouseProfession",
       "spouseBirthData" : "SpouseBirthData",
       "spouseDeathData" : "SpouseDeathData",
       "children" : "Children",
