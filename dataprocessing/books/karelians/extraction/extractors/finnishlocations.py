@@ -14,11 +14,12 @@ class FinnishLocationsExtractor(BaseExtractor):
     geocoder = GeoCoder()
 
     def extract(self, text, entry):
-        self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)" #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
+        self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)" #r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.SPLIT_PATTERN1 = r"(?P<place>[A-ZÄ-Öa-zä-ö-]+)\s?(?P<years>[\d,\.\s—-]*)" #r"(?P<place>[A-ZÄ-Öa-zä-ö\s-]+)\s(?P<years>[\d,\.\s—-]*)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
-        self.coordinates_notfound = False   #used to limit error logging to only single time
+        self.LOCATION_THRESHOLD = 3
+        self.coordinates_notfound_threshold = self.LOCATION_THRESHOLD   #used to detect when the locations end. To remove noplace words.
         self.locations = ""
         self.locationlisting = []
         self._find_locations(text)
@@ -30,6 +31,8 @@ class FinnishLocationsExtractor(BaseExtractor):
             foundLocations = regexUtils.safeSearch(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             self.matchFinalPosition = foundLocations.end()
             self.locations = foundLocations.group("asuinpaikat")
+            if self.locations is None:
+                raise regexUtils.RegexNoneMatchException("asd")
             self._clean_locations()
             self._split_locations()
         except regexUtils.RegexNoneMatchException as e:
@@ -61,7 +64,10 @@ class FinnishLocationsExtractor(BaseExtractor):
             self._handle_returning_person(place, years)
         else:
             move_years = self._get_move_years(years)
-            self._create_location_entry(place, move_years)
+            if self.coordinates_notfound_threshold > 0:
+                self._create_location_entry(place, move_years)
+            else:
+                self.locationlisting = self.locationlisting[:-3]
 
     def _handle_returning_person(self, place, years):
         """This function simply creates recursively a duplicate location with new years"""
@@ -99,10 +105,10 @@ class FinnishLocationsExtractor(BaseExtractor):
 
         try:
             geocoordinates = self.geocoder.get_coordinates(place, "finland")
+            self.coordinates_notfound_threshold = self.LOCATION_THRESHOLD
         except LocationNotFound as e:
-            if not self.coordinates_notfound:
-                self.coordinates_notfound = True
-                #self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
+            self.coordinates_notfound_threshold -= 1
+            #self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
 
         self.locationlisting.append(ValueWrapper({KEYS["otherlocation"] : ValueWrapper(place), KEYS["othercoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
 
