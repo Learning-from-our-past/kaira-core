@@ -9,6 +9,8 @@ from books.karelians.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 from shared import regexUtils
 from books.karelians.extraction.extractors.professionextractor import ProfessionExtractor
+from books.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from books.karelians.extraction.extractors.locationExtractor import BirthdayLocationExtractor
 
 class SpouseExtractor(BaseExtractor):
 
@@ -25,6 +27,8 @@ class SpouseExtractor(BaseExtractor):
         self.hasSpouse = False
         self.spouseName = ""
         self.profession = {KEYS["profession"] : ValueWrapper("")}
+        self.birthday = {KEYS["birthDay"]:  ValueWrapper(""), KEYS["birthMonth"]:  ValueWrapper(""),
+                KEYS["birthYear"]:  ValueWrapper(""), KEYS["birthLocation"]:  ValueWrapper("")}
 
         self.initVars(text)
         self._findSpouse(text)
@@ -46,15 +50,25 @@ class SpouseExtractor(BaseExtractor):
         try:
             name = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
             self.spouseName = name.group("name").strip()
-            self._findProfession(text[name.end():])
+            self._findSpouseDetails(text[name.end():])
         except regexUtils.RegexNoneMatchException:
             self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
 
-    def _findProfession(self, text):
+    def _findSpouseDetails(self, text):
+        print("ammatti")
         professionExt = ProfessionExtractor(self.entry, self.errorLogger, self.xmlDocument)
         professionExt.setDependencyMatchPositionToZero()
         self.profession = professionExt.extract(text, self.entry)
 
+
+        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthdayExt.setDependencyMatchPositionToZero()
+        self.birthday = birthdayExt.extract(text, self.entry)
+
+        birthLocExt = BirthdayLocationExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthLocExt.dependsOnMatchPositionOf(birthdayExt)
+        birthdayLocation = birthLocExt.extract(text)
+        self.birthday[KEYS["birthLocation"]] = birthdayLocation[KEYS["birthLocation"]]
 
     def _setFinalMatchPosition(self):
         #Dirty fix for inaccuracy in positions which would screw the Location extraction
@@ -62,4 +76,7 @@ class SpouseExtractor(BaseExtractor):
 
     def _constructReturnDict(self):
         print(self.profession)
-        return {KEYS["spouse"]: ValueWrapper({ KEYS["hasSpouse"]:  ValueWrapper(self.hasSpouse),KEYS["spouseName"]:  ValueWrapper(self.spouseName), KEYS["spouseProfession"]: ValueWrapper(self.profession[KEYS["profession"]].value) })}
+        return {KEYS["spouse"]: ValueWrapper({ KEYS["hasSpouse"]:  ValueWrapper(self.hasSpouse),
+                                               KEYS["spouseName"]:  ValueWrapper(self.spouseName),
+                                               KEYS["spouseProfession"]: ValueWrapper(self.profession[KEYS["profession"]].value),
+                                               KEYS["spouseBirthData"]: ValueWrapper(self.birthday)})}
