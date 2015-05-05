@@ -11,7 +11,7 @@ class ProfessionExtractor(BaseExtractor):
     SEARCH_SPACE = 60
 
     def extract(self, text, entry):
-        self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö, ]*) synt"
+        self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.professions = ""
         self._find_profession(text)
@@ -32,7 +32,7 @@ class ProfessionExtractor(BaseExtractor):
             self.matchFinalPosition = foundProfession.end()
             self.professions = foundProfession.group("profession")
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(ProfessionException.eType, self.currentChild)
+            pass
 
     def _clean_professions(self):
         self.professions = self.professions.strip(",")
