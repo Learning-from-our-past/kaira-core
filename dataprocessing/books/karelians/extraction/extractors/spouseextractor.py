@@ -11,6 +11,7 @@ from shared import regexUtils
 from books.karelians.extraction.extractors.professionextractor import ProfessionExtractor
 from books.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from books.karelians.extraction.extractors.locationExtractor import BirthdayLocationExtractor
+from books.karelians.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
 
 class SpouseExtractor(BaseExtractor):
 
@@ -19,7 +20,7 @@ class SpouseExtractor(BaseExtractor):
         super(SpouseExtractor, self).extract(text)
         self.entry = entry
         self.PATTERN = r"Puol\.?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"
-        self.NAMEPATTERN = r"(?P<name>^[\w\s\.-]*)"
+        self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)    #TODO: TRY IGNORE CASE?
         self.REQUIRES_MATCH_POSITION = False
         self.SUBSTRING_WIDTH = 100
@@ -29,6 +30,7 @@ class SpouseExtractor(BaseExtractor):
         self.profession = {KEYS["profession"] : ValueWrapper("")}
         self.birthday = {KEYS["birthDay"]:  ValueWrapper(""), KEYS["birthMonth"]:  ValueWrapper(""),
                 KEYS["birthYear"]:  ValueWrapper(""), KEYS["birthLocation"]:  ValueWrapper("")}
+        self.origFamily = {KEYS["origfamily"] : ValueWrapper("")}
 
         self.initVars(text)
         self._findSpouse(text)
@@ -50,14 +52,19 @@ class SpouseExtractor(BaseExtractor):
         try:
             name = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
             self.spouseName = name.group("name").strip()
-            self._findSpouseDetails(text[name.end():])
+            self.spouseName = re.sub(r"\so$","", self.spouseName)
+            self._findSpouseDetails(text[name.end()-2:])
         except regexUtils.RegexNoneMatchException:
             self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
 
     def _findSpouseDetails(self, text):
-        print("ammatti")
+        origFamilyExt = OrigFamilyExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        origFamilyExt.setDependencyMatchPositionToZero()
+        self.origFamily = origFamilyExt.extract(text, self.entry)
+
+
         professionExt = ProfessionExtractor(self.entry, self.errorLogger, self.xmlDocument)
-        professionExt.setDependencyMatchPositionToZero()
+        professionExt.dependsOnMatchPositionOf(origFamilyExt)
         self.profession = professionExt.extract(text, self.entry)
 
 
@@ -78,5 +85,6 @@ class SpouseExtractor(BaseExtractor):
         print(self.profession)
         return {KEYS["spouse"]: ValueWrapper({ KEYS["hasSpouse"]:  ValueWrapper(self.hasSpouse),
                                                KEYS["spouseName"]:  ValueWrapper(self.spouseName),
+                                               KEYS["spouseOrigFamily"]: ValueWrapper(self.origFamily[KEYS["origfamily"]].value),
                                                KEYS["spouseProfession"]: ValueWrapper(self.profession[KEYS["profession"]].value),
                                                KEYS["spouseBirthData"]: ValueWrapper(self.birthday)})}

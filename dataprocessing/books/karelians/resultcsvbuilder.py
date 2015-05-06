@@ -26,7 +26,7 @@ class ResultCsvBuilder():
 
 
     def _writeCsvHeaders(self):
-        headers = ["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "hasSpouse", "spouseName", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation" ]
+        headers = ["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "hasSpouse", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation" ]
 
         for i in range(0, self.karelianLocationsMax):
             headers = headers + ["karelianLocation" + str(i), "movedIn" + str(i), "movedOut" + str(i), "latitude" + str(i), "longitude" + str(i)]
@@ -48,6 +48,7 @@ class ResultCsvBuilder():
                persondatadict[KEYS["birthLocation"]].value, persondatadict[KEYS["profession"]].value,
                persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["hasSpouse"]].value, persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,
+               persondatadict[KEYS["spouse"]].value[KEYS["spouseOrigFamily"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseProfession"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthDay"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthMonth"]].value,
