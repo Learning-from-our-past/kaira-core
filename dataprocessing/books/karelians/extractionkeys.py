@@ -44,6 +44,7 @@ KEYS = {
       "spouseProfession" : "SpouseProfession",
       "spouseBirthData" : "SpouseBirthData",
       "spouseDeathData" : "SpouseDeathData",
+      "spouseOrigFamily" : "SpouseOriginalFamily",
       "children" : "Children",
       "separated" : "Separated",
       "miehEd" : "ManPreviousMarriage",

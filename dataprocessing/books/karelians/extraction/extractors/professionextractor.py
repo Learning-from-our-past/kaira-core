@@ -49,6 +49,9 @@ class ProfessionExtractor(BaseExtractor):
         self.professions = self.professions.strip()
         self.professions = self.professions.lstrip()
 
+        if len(self.professions) < 3:
+            self.professions = ""
+
         if self.professions == "":
             self.errorLogger.logError(ProfessionException.eType, self.currentChild)
 
