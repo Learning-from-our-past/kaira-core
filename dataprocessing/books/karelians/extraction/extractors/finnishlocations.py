@@ -22,11 +22,16 @@ class FinnishLocationsExtractor(BaseExtractor):
         self.coordinates_notfound_threshold = self.LOCATION_THRESHOLD   #used to detect when the locations end. To remove noplace words.
         self.locations = ""
         self.locationlisting = []
-        self._find_locations(text)
+
+        try:
+            self._find_locations(text)
+        except LocationThresholdException:
+            pass
 
         return self._constructReturnDict()
 
     def _find_locations(self, text):
+
         try:
             foundLocations = regexUtils.safeSearch(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             self.matchFinalPosition = foundLocations.end()
@@ -34,6 +39,10 @@ class FinnishLocationsExtractor(BaseExtractor):
             if self.locations is None:
                 raise regexUtils.RegexNoneMatchException("asd")
             self._clean_locations()
+            print("TIEDOT")
+            print(text)
+            print("LOCATION")
+            print(self.locations)
             self._split_locations()
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
@@ -68,6 +77,7 @@ class FinnishLocationsExtractor(BaseExtractor):
                 self._create_location_entry(place, move_years)
             else:
                 self.locationlisting = self.locationlisting[:-3]
+                raise LocationThresholdException()
 
     def _handle_returning_person(self, place, years):
         """This function simply creates recursively a duplicate location with new years"""
@@ -91,6 +101,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         return y
 
     def _create_location_entry(self, place, move_years):
+        print(place)
         place = place.strip()
         #create the final(?) entry
         movedOut = ""
@@ -111,11 +122,16 @@ class FinnishLocationsExtractor(BaseExtractor):
             #self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
 
         self.locationlisting.append(ValueWrapper({KEYS["otherlocation"] : ValueWrapper(place), KEYS["othercoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
-
+        print("KAIKKI OK")
 
     def _count_years(self, text):
         years = regexUtils.regexIter(r"\d\d", text, self.SPLIT_OPTIONS1)
         return len(list(years))
 
     def _constructReturnDict(self):
-        return {KEYS["otherlocations"] : ValueWrapper(self.locationlisting)}
+        return {KEYS["otherlocations"] : ValueWrapper(self.locationlisting), KEYS["otherlocationsCount"] : ValueWrapper(len(self.locationlisting))}
+
+class LocationThresholdException(Exception):
+    message = "Locations couldn't be found from db"
+    def __unicode__(self):
+        return repr(self.message)

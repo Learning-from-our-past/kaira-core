@@ -9,7 +9,9 @@ KEYS = {
       "karelianlocation" : "KarelianLocation",
       "returnedkarelia": "ReturnedToKarelia",
       "kareliancoordinate": "KarelianCoordinates",
+      "karelianlocationsCount": "KarelianLocationCount",
       "otherlocations" : "OtherLocations",
+      "otherlocationsCount" : "OtherLocationCount",
       "otherlocation" : "OtherLocation",
       "othercoordinate": "OtherCoordinates",
 
