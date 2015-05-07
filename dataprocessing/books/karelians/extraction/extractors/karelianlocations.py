@@ -62,8 +62,7 @@ class KarelianLocationsExtractor(BaseExtractor):
     def _process_location(self, place, years):
 
         if self._count_years(years) > 2:
-            #split the years and mark the return to Karelia
-            self.returned = place
+            #split the years
             self._handle_returning_person(place, years)
         else:
             move_years = self._get_move_years(years)
@@ -110,7 +109,11 @@ class KarelianLocationsExtractor(BaseExtractor):
                 self.coordinates_notfound = True
                 #self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
 
-
+        try:
+            if int(movedIn) >= 41 and int(movedIn) <= 43:
+                self.returned = True
+        except ValueError:
+            pass
 
         self.locationlisting.append(ValueWrapper({KEYS["karelianlocation"] : ValueWrapper(place), KEYS["kareliancoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
 
@@ -120,4 +123,6 @@ class KarelianLocationsExtractor(BaseExtractor):
         return len(list(years))
 
     def _constructReturnDict(self):
-        return {KEYS["karelianlocations"] : ValueWrapper(self.locationlisting), KEYS["returnedkarelia"] : ValueWrapper(self.returned)}
+        return {KEYS["karelianlocations"] : ValueWrapper(self.locationlisting),
+                KEYS["returnedkarelia"] : ValueWrapper(self.returned),
+                KEYS["karelianlocationsCount"] : ValueWrapper(len(self.locationlisting))}
