@@ -13,7 +13,8 @@ class GeoCoder():
         else:
             return {"latitude": locations[0]["latitude"], "longitude": locations[0]["longitude"]}
 
-
+    def get_empty_coordinates(self):
+        return {"latitude" : "", "longitude": ""}
 
 
 

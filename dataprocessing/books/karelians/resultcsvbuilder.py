@@ -17,6 +17,7 @@ class ResultCsvBuilder():
         self.filename = ntpath.basename(self.filepath)
         self._initCsv()
         self.karelianLocationsMax = 0
+        self.childrenMax = 0
         self.otherLocationsMax = 0
         self.rowsofcsv = []
 
@@ -30,6 +31,11 @@ class ResultCsvBuilder():
 
     def _writeCsvHeaders(self):
         headers = ["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "returnedToKarelia", "hasSpouse", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation" ]
+
+        headers = headers + ["ChildCount"]
+        for i in range(0, self.childrenMax):
+            headers = headers + ["Child" + str(i), "ChildBirthYear" + str(i), "childBirthLocation" + str(i), "childBirthLatitude" + str(i), "childBirthLongitude" + str(i)]
+
 
         headers = headers + [KEYS["karelianlocationsCount"]]
         for i in range(0, self.karelianLocationsMax):
@@ -62,7 +68,7 @@ class ResultCsvBuilder():
                persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthLocation"]].value,
 
                ] }
-
+        row["children"] = self._addChildren(persondatadict)
         row["karelianLocations"] = self._addKarelianLocations(persondatadict)
         row["otherLocations"] = self._addOtherLocations(persondatadict)
         print(row)
@@ -74,6 +80,33 @@ class ResultCsvBuilder():
         else:
             self.coordinatesYearJson[movedIn] = []
             self.coordinatesYearJson[movedIn].append({"lat": lat, "lon": lon})
+
+    def _addChildren(self, persondatadict):
+        lrow = []
+        children = persondatadict[KEYS["children"]].value
+
+        #childcount
+        lrow.append(persondatadict[KEYS["childCount"]].value)
+
+        if len(children) > self.childrenMax:
+            print(len(children))
+            self.childrenMax = len(children)
+
+        for l in children:
+            lrow.append(l.value["name"].value) #name of the child
+            lrow.append(l.value["birthYear"].value) #child's birthYear
+            lrow.append(l.value["locationName"].value) #birthplace
+            lrow.append(l.value["childCoordinates"].value["latitude"].value) #latitude
+            lrow.append(l.value["childCoordinates"].value["longitude"].value) #latitude
+
+            #self._addLocationToJson(l.value[KEYS["kareliancoordinate"]].value["latitude"].value, l.value[KEYS["kareliancoordinate"]].value["longitude"].value, l.value["movedIn"].value)
+            print(lrow)
+
+
+        return lrow
+
+
+
 
     def _addKarelianLocations(self, persondatadict):
         lrow = []
@@ -129,10 +162,17 @@ class ResultCsvBuilder():
     def _writeToFile(self):
         self._writeCsvHeaders()
         for row in self.rowsofcsv:
-            w = row["regular"] + row["karelianLocations"]
-            diff = self.karelianLocationsMax*5 - len(row["karelianLocations"]) +1   #1 for locationcount column
+
+            w = row["regular"] + row["children"]
+            diff = self.childrenMax*5 - len(row["children"]) +1   #1 for childrencount column
             if diff > 0:            #tasaa rivit lisäämällä tyhjää
                 w = w + [""]*diff #5 is the number of cells per location
+
+            w = w + row["karelianLocations"]
+            diff = self.karelianLocationsMax*5 - len(row["karelianLocations"]) +1   #1 for locationcount column
+            if diff > 0:            #tasaa rivit lisäämällä tyhjää
+                w = w + [""]*diff
+
             w = w + row["otherLocations"]
             diff = self.otherLocationsMax*5 - len(row["otherLocations"]) +1 #1 for locationcount column
             if diff > 0:            #tasaa rivit lisäämällä tyhjää

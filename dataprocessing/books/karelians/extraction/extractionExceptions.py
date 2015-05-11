@@ -106,6 +106,18 @@ class KarelianLocationException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
+class NoChildrenException(ExtractionException):
+    eType = "NO CHILDREN FOUND"
+    message = "ERROR in children extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
 class OtherLocationException(ExtractionException):
     eType = "OTHER LOCATION"
     message = "ERROR in other location extraction: "
