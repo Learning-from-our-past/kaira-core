@@ -46,8 +46,10 @@ class ProfessionExtractor(BaseExtractor):
                 self.professions = self.professions[comma:]
 
         self.professions = self.professions.strip(",")
+        self.professions = self.professions.strip(".")
         self.professions = self.professions.strip()
         self.professions = self.professions.lstrip()
+        self.professions = re.sub(r"[a-zä-ö]{1,3}(?:,|\.)\s", "", self.professions, self.PROFESSION_OPTIONS)
 
         if len(self.professions) < 3:
             self.professions = ""

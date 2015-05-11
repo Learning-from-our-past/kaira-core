@@ -39,10 +39,7 @@ class FinnishLocationsExtractor(BaseExtractor):
             if self.locations is None:
                 raise regexUtils.RegexNoneMatchException("asd")
             self._clean_locations()
-            print("TIEDOT")
-            print(text)
-            print("LOCATION")
-            print(self.locations)
+
             self._split_locations()
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
@@ -122,7 +119,6 @@ class FinnishLocationsExtractor(BaseExtractor):
             #self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
 
         self.locationlisting.append(ValueWrapper({KEYS["otherlocation"] : ValueWrapper(place), KEYS["othercoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
-        print("KAIKKI OK")
 
     def _count_years(self, text):
         years = regexUtils.regexIter(r"\d\d", text, self.SPLIT_OPTIONS1)

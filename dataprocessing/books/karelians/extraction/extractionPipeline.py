@@ -12,6 +12,7 @@ from books.karelians.extraction.extractors.locationExtractor import BirthdayLoca
 from books.karelians.extraction.extractors.karelianlocations import KarelianLocationsExtractor
 from books.karelians.extraction.extractors.finnishlocations import FinnishLocationsExtractor
 from books.karelians.extraction.extractors.spouseextractor import SpouseExtractor
+from books.karelians.extraction.extractors.childextractor import ChildExtractor
 
 class ExtractionPipeline():
 
@@ -54,6 +55,9 @@ class ExtractionPipeline():
         spouseExt = SpouseExtractor(entry, eLogger, self.xmlDocument)
         spouse = spouseExt.extract(text, entry)
 
+        childExt = ChildExtractor(entry, eLogger, self.xmlDocument)
+        children = childExt.extract(text, entry)
+
 
 
         d = names.copy()
@@ -66,5 +70,6 @@ class ExtractionPipeline():
         d.update(karelianLocations)
         d.update(finnishLocations)
         d.update(spouse)
+        d.update(children)
 
         return d
