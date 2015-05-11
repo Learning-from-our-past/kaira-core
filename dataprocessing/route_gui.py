@@ -10,6 +10,8 @@ from books.soldiers.resultcsvbuilder import ResultCsvBuilder as SoldierCsvBuilde
 from books.karelians.chunktextfile import PersonPreprocessor as KarelianChunk
 from books.karelians.processData import ProcessData as KarelianProcessdata
 from books.karelians.resultcsvbuilder import ResultCsvBuilder as KarelianCsvBuilder
+from books.karelians.resultjsonbuilder import ResultJsonBuilder as KarelianJsonBuilder
+from books.soldiers.resultjsonbuilder import ResultJsonBuilder as SoldierJsonBuilder
 
 class Router():
 
@@ -41,6 +43,15 @@ class Router():
             return KarelianCsvBuilder
         elif extractor == Router.SOLDIERS:
             return SoldierCsvBuilder
+        else:
+            raise NoExtractorAvailable()
+
+    @staticmethod
+    def get_jsonbuilder_class(extractor):
+        if extractor == Router.KARELIANS:
+            return KarelianJsonBuilder
+        elif extractor == Router.SOLDIERS:
+            return SoldierJsonBuilder
         else:
             raise NoExtractorAvailable()
 

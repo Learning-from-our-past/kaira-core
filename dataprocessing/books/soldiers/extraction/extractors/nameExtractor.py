@@ -23,7 +23,6 @@ class NameExtractor(BaseExtractor):
             self.matchFinalPosition = self.foundNames.end()
 
         except regexUtils.RegexNoneMatchException as e:
-
             raise NameException(text)
 
     def _constructReturnDict(self):
