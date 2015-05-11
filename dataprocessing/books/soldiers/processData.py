@@ -6,6 +6,7 @@ from books.soldiers.extraction.extractionExceptions import *
 from shared.exceptionlogger import ExceptionLogger
 from interface.valuewrapper import ValueWrapper
 from interface.processdatainterface import ProcessDataInterface
+from books.soldiers.extractionkeys import KEYS
 
 XMLPATH = "../xmldata/"
 CSVPATH = "../csv/"
@@ -92,15 +93,15 @@ class ProcessData(ProcessDataInterface):
         return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
 
     def _createResultTemplate(self):
-        return {"surname" : "", "firstnames" : "", "birthDay": "",
-               "birthMonth" : "", "birthYear" : "", "birthLocation" : "",
-               "profession" : "", "address" : "", "deathDay" : "",
-               "deathMonth": "", "deathYear": "", "kaatunut": "",
-               "deathLocation": "", "talvisota": "", "talvisotaregiments": "",
-               "jatkosota": "", "jatkosotaregiments": "","rank": "",
-               "kotiutusDay": "", "kotiutusMonth": "", "kotiutusYear": "",
-               "kotiutusPlace": "", "medals": "","hobbies": "",
-               "hasSpouse": "", "children": "", "childCount": ""}
+        return {KEYS["surname"] : "", KEYS["firstnames"] : "", KEYS["birthDay"]: "",
+               KEYS["birthMonth"] : "", KEYS["birthYear"] : "", KEYS["birthLocation"] : "",
+               KEYS["profession"] : "", KEYS["address"] : "", KEYS["deathDay"] : "",
+               KEYS["deathMonth"]: "", KEYS["deathYear"]: "", KEYS["kaatunut"]: "",
+               KEYS["deathLocation"]: "", KEYS["talvisota"]: "", KEYS["talvisotaregiments"]: "",
+               KEYS["jatkosota"]: "", KEYS["jatkosotaregiments"]: "",KEYS["rank"]: "",
+               KEYS["kotiutusDay"]: "", KEYS["kotiutusMonth"]: "", KEYS["kotiutusYear"]: "",
+               KEYS["kotiutusPlace"]: "", KEYS["medals"]: "",KEYS["hobbies"]: "",
+               KEYS["hasSpouse"]: "", KEYS["children"]: "", KEYS["childCount"]: ""}
 
     def _handleExtractionErrorLogging(self, exception, entry):
         self.errorLogger.logError(exception.eType, entry)

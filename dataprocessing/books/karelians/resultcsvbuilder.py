@@ -4,8 +4,10 @@ import csv
 import json
 from abc import abstractmethod
 from books.karelians.extractionkeys import KEYS
+from interface.valuewrapper import ValueWrapper
+from interface.csvbuilderinterface import ResultCsvBuilderInterface
 
-class ResultCsvBuilder():
+class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     #TODO: POISTA SISÄISEN TOTETUKSEN FUNKTIOT SILLÄ NE VOIVAT VAPAASTI VAIHDELLA
     def __init__(self):
@@ -25,8 +27,6 @@ class ResultCsvBuilder():
     def _initCsv(self):
         self.openedCsv = open(self.filepath, "w", newline='', encoding="utf-8")
         self.csvWriter = csv.writer(self.openedCsv, delimiter="&")
-
-        self.coordinatesYearJson = {}
 
 
     def _writeCsvHeaders(self):
@@ -48,6 +48,31 @@ class ResultCsvBuilder():
 
     def writeRow(self, dataDict):
         self.rowsofcsv.append(self._createRowFromDict(dataDict))
+
+    def _unwrap(self, data):
+        """
+        A recursive function to unwrap all the ValueWrappers and return a pure dict from them.
+        :param valuewrap:
+        :return:
+        """
+        if isinstance(data, ValueWrapper):
+            if isinstance(data.value, dict):
+                result = {}
+                for key, value in data.value.items():
+                    result[key] = self._unwrap(value)
+            elif isinstance(data.value, list):
+                result = []
+                for index, value in enumerate(data.value):
+                    result.append(self._unwrap(value))
+            else:
+                return data.value   #primitive data structure
+        else:
+            return data
+
+        return result
+
+
+
 
 
 
@@ -71,15 +96,9 @@ class ResultCsvBuilder():
         row["children"] = self._addChildren(persondatadict)
         row["karelianLocations"] = self._addKarelianLocations(persondatadict)
         row["otherLocations"] = self._addOtherLocations(persondatadict)
-        print(row)
+
         return row
 
-    def _addLocationToJson(self, lat, lon, movedIn):
-        if movedIn in self.coordinatesYearJson:
-            self.coordinatesYearJson[movedIn].append({"lat": lat, "lon": lon})
-        else:
-            self.coordinatesYearJson[movedIn] = []
-            self.coordinatesYearJson[movedIn].append({"lat": lat, "lon": lon})
 
     def _addChildren(self, persondatadict):
         lrow = []
@@ -89,7 +108,6 @@ class ResultCsvBuilder():
         lrow.append(persondatadict[KEYS["childCount"]].value)
 
         if len(children) > self.childrenMax:
-            print(len(children))
             self.childrenMax = len(children)
 
         for l in children:
@@ -99,8 +117,7 @@ class ResultCsvBuilder():
             lrow.append(l.value["childCoordinates"].value["latitude"].value) #latitude
             lrow.append(l.value["childCoordinates"].value["longitude"].value) #latitude
 
-            #self._addLocationToJson(l.value[KEYS["kareliancoordinate"]].value["latitude"].value, l.value[KEYS["kareliancoordinate"]].value["longitude"].value, l.value["movedIn"].value)
-            print(lrow)
+
 
 
         return lrow
@@ -116,7 +133,6 @@ class ResultCsvBuilder():
         lrow.append(persondatadict[KEYS["karelianlocationsCount"]].value)
 
         if len(locations) > self.karelianLocationsMax:
-            print(len(locations))
             self.karelianLocationsMax = len(locations)
 
         for l in locations:
@@ -126,8 +142,6 @@ class ResultCsvBuilder():
             lrow.append(l.value[KEYS["kareliancoordinate"]].value["latitude"].value) #latitude
             lrow.append(l.value[KEYS["kareliancoordinate"]].value["longitude"].value) #latitude
 
-            self._addLocationToJson(l.value[KEYS["kareliancoordinate"]].value["latitude"].value, l.value[KEYS["kareliancoordinate"]].value["longitude"].value, l.value["movedIn"].value)
-            print(lrow)
 
 
         return lrow
@@ -149,15 +163,9 @@ class ResultCsvBuilder():
             lrow.append(l.value[KEYS["othercoordinate"]].value["latitude"].value) #latitude
             lrow.append(l.value[KEYS["othercoordinate"]].value["longitude"].value) #latitude
 
-            self._addLocationToJson(l.value[KEYS["othercoordinate"]].value["latitude"].value, l.value[KEYS["othercoordinate"]].value["longitude"].value, l.value["movedIn"].value)
 
         return lrow
 
-    def _addSpouseDataToRow(self,row, persondatadict):
-        pass
-
-    def _createWifeRowFromDict(self, wife):
-        pass
 
     def _writeToFile(self):
         self._writeCsvHeaders()
@@ -181,11 +189,6 @@ class ResultCsvBuilder():
 
     @abstractmethod
     def closeCsv(self):
-        print("JSON")
-        f = open("jsoni.json", "w", newline='', encoding="utf-8")
-        f.write(json.dumps(self.coordinatesYearJson, indent=4))
-
         self._writeToFile()
-
         self.openedCsv.close()
         self.openedCsv = None
