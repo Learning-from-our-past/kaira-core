@@ -13,11 +13,13 @@ from books.karelians.extraction.extractors.karelianlocations import KarelianLoca
 from books.karelians.extraction.extractors.finnishlocations import FinnishLocationsExtractor
 from books.karelians.extraction.extractors.spouseextractor import SpouseExtractor
 from books.karelians.extraction.extractors.childextractor import ChildExtractor
+from shared.genderExtract import Gender
 
 class ExtractionPipeline():
 
     def __init__(self, xmlDocument):
         self.xmlDocument = xmlDocument
+        Gender.load_names()
 
 
     def process(self, text, entry, eLogger):

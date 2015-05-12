@@ -48,6 +48,7 @@ KEYS = {
       "spouseDeathData" : "SpouseDeathData",
       "spouseOrigFamily" : "SpouseOriginalFamily",
       "children" : "Children",
+      "gender" : "Gender",
 
 
       "separated" : "Separated",
