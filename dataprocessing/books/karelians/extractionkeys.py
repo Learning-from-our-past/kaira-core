@@ -14,6 +14,7 @@ KEYS = {
       "otherlocationsCount" : "OtherLocationCount",
       "otherlocation" : "OtherLocation",
       "othercoordinate": "OtherCoordinates",
+      "manymarriages" : "MaybePreviousMarriages",
 
 
       "birthDay" :  "BirthDay",
