@@ -49,33 +49,6 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
     def writeRow(self, dataDict):
         self.rowsofcsv.append(self._createRowFromDict(dataDict))
 
-    def _unwrap(self, data):
-        """
-        A recursive function to unwrap all the ValueWrappers and return a pure dict from them.
-        :param valuewrap:
-        :return:
-        """
-        if isinstance(data, ValueWrapper):
-            if isinstance(data.value, dict):
-                result = {}
-                for key, value in data.value.items():
-                    result[key] = self._unwrap(value)
-            elif isinstance(data.value, list):
-                result = []
-                for index, value in enumerate(data.value):
-                    result.append(self._unwrap(value))
-            else:
-                return data.value   #primitive data structure
-        else:
-            return data
-
-        return result
-
-
-
-
-
-
     #make a dict of row content divided based on the content
     def _createRowFromDict(self, persondatadict):
         row = {"regular" : [persondatadict[KEYS["surname"]].value, persondatadict[KEYS["firstnames"]].value,
@@ -117,10 +90,6 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
             lrow.append(l.value["locationName"].value) #birthplace
             lrow.append(l.value["childCoordinates"].value["latitude"].value) #latitude
             lrow.append(l.value["childCoordinates"].value["longitude"].value) #latitude
-
-
-
-
         return lrow
 
 
