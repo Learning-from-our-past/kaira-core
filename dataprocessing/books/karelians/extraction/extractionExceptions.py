@@ -93,6 +93,18 @@ class SpouseNameException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
+class MultipleMarriagesException(ExtractionException):
+    eType = "MAYBE CHILDREN FROM MANY MARRIAGES"
+    message = "Found words to indicate previous marriages: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
 
 class KarelianLocationException(ExtractionException):
     eType = "KARELIAN LOCATION"

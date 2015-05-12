@@ -30,7 +30,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
 
     def _writeCsvHeaders(self):
-        headers = ["Surname", "first names", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "returnedToKarelia", "hasSpouse", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation" ]
+        headers = ["Surname", "first names", "gender", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "returnedToKarelia", "hasSpouse", "maybePreviousMarriages", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation" ]
 
         headers = headers + ["ChildCount"]
         for i in range(0, self.childrenMax):
@@ -51,13 +51,15 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     #make a dict of row content divided based on the content
     def _createRowFromDict(self, persondatadict):
-        row = {"regular" : [persondatadict[KEYS["surname"]].value, persondatadict[KEYS["firstnames"]].value,
+        row = {"regular" : [persondatadict[KEYS["surname"]].value,
+                            persondatadict[KEYS["firstnames"]].value,persondatadict[KEYS["gender"]].value,
                persondatadict[KEYS["origfamily"]].value, persondatadict[KEYS["birthDay"]].value,
                persondatadict[KEYS["birthMonth"]].value, persondatadict[KEYS["birthYear"]].value,
                persondatadict[KEYS["birthLocation"]].value, persondatadict[KEYS["profession"]].value,
                persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,
                persondatadict[KEYS["returnedkarelia"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["hasSpouse"]].value, persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,
+               persondatadict[KEYS["spouse"]].value[KEYS["hasSpouse"]].value, persondatadict[KEYS["manymarriages"]].value,
+               persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseOrigFamily"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseProfession"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthDay"]].value,

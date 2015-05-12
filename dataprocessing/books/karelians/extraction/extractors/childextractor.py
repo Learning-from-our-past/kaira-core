@@ -1,13 +1,14 @@
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
-from books.karelians.extraction.extractionExceptions import NoChildrenException
+from books.karelians.extraction.extractionExceptions import NoChildrenException, MultipleMarriagesException
 from shared import regexUtils
 from shared import textUtils
 import re
 import regex
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 from shared.genderExtract import Gender
+
 
 class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
@@ -17,6 +18,8 @@ class ChildExtractor(BaseExtractor):
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika)(;|:)(?P<children>.*?)Asuinp{s<=1}"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
+        self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
+        self.many_marriages = False
         self.SPLIT_PATTERN1 = r"(?P<child>[A-ZÄ-Öa-zä-ö\d\s-]{3,})"
         self.NAME_PATTERN = r"^(?P<name>[a-zä-ö\s-]+)"
         self.YEAR_PATTERN = r"(?P<year>(\d\d))"
@@ -32,12 +35,19 @@ class ChildExtractor(BaseExtractor):
             foundChildren= regexUtils.safeSearch(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
             self.matchFinalPosition = foundChildren.end()
             self.children_str = foundChildren.group("children")
-
+            self._check_many_marriages(self.children_str)
             self._clean_children()
             self._split_children()
 
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
+
+    def _check_many_marriages(self, text):
+        marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
+        if marriage is not None:
+            self.many_marriages = True
+            self.errorLogger.logError(MultipleMarriagesException.eType, self.currentChild)
+
 
     def _clean_children(self):
         self.children_str = self.children_str.strip(",")
@@ -111,4 +121,4 @@ class ChildExtractor(BaseExtractor):
         """KEYS["karelianlocations"] : ValueWrapper(self.locationlisting),
                 KEYS["returnedkarelia"] : ValueWrapper(self.returned),
                 KEYS["karelianlocationsCount"] : ValueWrapper(len(self.locationlisting))"""
-        return {KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list))}
+        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list))}
