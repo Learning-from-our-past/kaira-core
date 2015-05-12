@@ -7,6 +7,7 @@ from shared import textUtils
 import re
 import regex
 from shared.geo.geocoding import GeoCoder, LocationNotFound
+from shared.genderExtract import Gender
 
 class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
@@ -64,12 +65,13 @@ class ChildExtractor(BaseExtractor):
                     c.value["locationName"].value = birthLoc.group("location")
             return
 
-        if child.find("Syntyneet") != -1:
-            print("SYNTYNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET")
+
         try:
             name = regexUtils.safeSearch(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
             name = name.strip()
             name = name.strip("-")
+            name = name.strip(" ")
+            gender = Gender.find_gender(name)
             try:
                 yearMatch = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
                 year = yearMatch.group("year")
@@ -86,7 +88,7 @@ class ChildExtractor(BaseExtractor):
                 location = ""
                 coordinates = self.geocoder.get_empty_coordinates()
 
-            self.child_list.append(ValueWrapper({"name" : ValueWrapper(name), "birthYear" : ValueWrapper(year),
+            self.child_list.append(ValueWrapper({"name" : ValueWrapper(name), "gender" : ValueWrapper(gender), "birthYear" : ValueWrapper(year),
                                                  "locationName" : ValueWrapper(location),
                                                  "childCoordinates" : ValueWrapper({"latitude": ValueWrapper(coordinates["latitude"]), "longitude": ValueWrapper(coordinates["longitude"])})}))
         except regexUtils.RegexNoneMatchException:

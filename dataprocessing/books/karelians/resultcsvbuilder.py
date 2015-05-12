@@ -34,7 +34,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
         headers = headers + ["ChildCount"]
         for i in range(0, self.childrenMax):
-            headers = headers + ["Child" + str(i), "ChildBirthYear" + str(i), "childBirthLocation" + str(i), "childBirthLatitude" + str(i), "childBirthLongitude" + str(i)]
+            headers = headers + ["Child" + str(i), "Gender" + str(i), "ChildBirthYear" + str(i), "childBirthLocation" + str(i), "childBirthLatitude" + str(i), "childBirthLongitude" + str(i)]
 
 
         headers = headers + [KEYS["karelianlocationsCount"]]
@@ -112,6 +112,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
         for l in children:
             lrow.append(l.value["name"].value) #name of the child
+            lrow.append(l.value["gender"].value)
             lrow.append(l.value["birthYear"].value) #child's birthYear
             lrow.append(l.value["locationName"].value) #birthplace
             lrow.append(l.value["childCoordinates"].value["latitude"].value) #latitude
@@ -172,9 +173,9 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
         for row in self.rowsofcsv:
 
             w = row["regular"] + row["children"]
-            diff = self.childrenMax*5 - len(row["children"]) +1   #1 for childrencount column
+            diff = self.childrenMax*6 - len(row["children"]) +1   #1 for childrencount column
             if diff > 0:            #tasaa rivit lisäämällä tyhjää
-                w = w + [""]*diff #5 is the number of cells per location
+                w = w + [""]*diff #6 is the number of cells per child
 
             w = w + row["karelianLocations"]
             diff = self.karelianLocationsMax*5 - len(row["karelianLocations"]) +1   #1 for locationcount column
