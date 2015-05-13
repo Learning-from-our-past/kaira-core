@@ -5,7 +5,7 @@ class Gender():
     @staticmethod
     def load_names():
         if len(Gender.male_names) == 0:
-            f = open("shared/names/men.names", "r", encoding="utf8")
+            f = open("./names/men.names", "r", encoding="utf8")
             for row in f:
                 row = row.strip("\n")
                 row = row.lower()
