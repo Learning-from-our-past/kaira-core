@@ -30,7 +30,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
 
     def _writeCsvHeaders(self):
-        headers = ["Surname", "first names", "gender", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "returnedToKarelia", "hasSpouse", "maybePreviousMarriages", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation" ]
+        headers = ["Surname", "first names", "gender", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "returnedToKarelia", "hasSpouse", "maybePreviousMarriages", "weddingYear", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation", "spouseDeathYear" ]
 
         headers = headers + ["ChildCount"]
         for i in range(0, self.childrenMax):
@@ -58,7 +58,9 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                persondatadict[KEYS["birthLocation"]].value, persondatadict[KEYS["profession"]].value,
                persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,
                persondatadict[KEYS["returnedkarelia"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["hasSpouse"]].value, persondatadict[KEYS["manymarriages"]].value,
+               persondatadict[KEYS["spouse"]].value[KEYS["hasSpouse"]].value,
+               persondatadict[KEYS["manymarriages"]].value,
+               persondatadict[KEYS["spouse"]].value[KEYS["weddingYear"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseOrigFamily"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseProfession"]].value,
@@ -66,6 +68,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthMonth"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthYear"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthLocation"]].value,
+               persondatadict[KEYS["spouse"]].value[KEYS["spouseDeathYear"]].value,
 
                ] }
         row["children"] = self._addChildren(persondatadict)
