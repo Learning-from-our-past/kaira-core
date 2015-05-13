@@ -15,7 +15,8 @@ class Mainwindow(QMainWindow):
 
     updateEntriesListSignal = pyqtSignal(name="updatelist")
 
-    def __init__(self, parent=None):
+    def __init__(self, app, parent=None):
+        self._app = app
         self.dataEntries = []
         self.missingDataEntries = {}
         self.missingDataListing = []
@@ -200,9 +201,10 @@ class Mainwindow(QMainWindow):
 def start():
     import sys
     app = QApplication(sys.argv)
-    fixingtool = Mainwindow()
+    fixingtool = Mainwindow(app)
     fixingtool.show()
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     start()
