@@ -10,12 +10,12 @@ from qtgui.savefile import *
 from qtgui.createnewperson import NewPersonDialog
 from qtgui.importocrdialog import ImportOcrDialog
 
-
 class Mainwindow(QMainWindow):
 
     updateEntriesListSignal = pyqtSignal(name="updatelist")
 
     def __init__(self, app, parent=None):
+
         self._app = app
         self.dataEntries = []
         self.missingDataEntries = {}
