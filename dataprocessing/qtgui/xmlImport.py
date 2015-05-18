@@ -102,14 +102,15 @@ class XmlImport(QObject):
             print(result)
         print("prossut päällä")
 
-    """
+
 
     def _partitionXml(self, l, chunks):
-        """ Yield successive n-length chunks from l.
-        """
+
         n = int(math.ceil(len(l) / chunks))
         for i in range(0, len(l), n):
             yield l[i:i+n]
+
+    """
 
     @pyqtSlot(int, int)
     def _updateProgressBarInMainThread(self, i, max):
