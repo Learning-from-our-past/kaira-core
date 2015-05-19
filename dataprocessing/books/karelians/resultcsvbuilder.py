@@ -30,7 +30,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
 
     def _writeCsvHeaders(self):
-        headers = ["Surname", "first names", "gender", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "returnedToKarelia", "hasSpouse", "maybePreviousMarriages", "weddingYear", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation", "spouseDeathYear" ]
+        headers = ["Surname", "first names", "gender", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "approximatePageNumber", "returnedToKarelia", "hasSpouse", "maybePreviousMarriages", "weddingYear", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation", "spouseDeathYear" ]
 
         headers = headers + ["ChildCount"]
         for i in range(0, self.childrenMax):
@@ -56,7 +56,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                persondatadict[KEYS["origfamily"]].value, persondatadict[KEYS["birthDay"]].value,
                persondatadict[KEYS["birthMonth"]].value, persondatadict[KEYS["birthYear"]].value,
                persondatadict[KEYS["birthLocation"]].value, persondatadict[KEYS["profession"]].value,
-               persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value,
+               persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value, persondatadict[KEYS["approximatePage"]].value,
                persondatadict[KEYS["returnedkarelia"]].value,
                persondatadict[KEYS["spouse"]].value[KEYS["hasSpouse"]].value,
                persondatadict[KEYS["manymarriages"]].value,
