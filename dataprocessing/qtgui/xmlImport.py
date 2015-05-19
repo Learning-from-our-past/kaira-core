@@ -74,44 +74,6 @@ class XmlImport(QObject):
                 print(e)
                 self.threadExceptionSignal.emit(e)
 
-    #Experimental, not working
-    """
-    def _extractMultiprocessing(self):
-        processors = multiprocessing.cpu_count()
-        xmlDataDocument = self._getXMLroot(self.file[0])
-        chunks = list(self._partitionXml(xmlDataDocument, processors))
-        resultList = list() #lista tuloslistoista:
-        for x in range(0, processors):
-            resultList.append(list())
-
-        #luo prosessit jokaiselle palaselle:
-        id = 0
-        jobs = []
-        progress_queue = multiprocessing.Queue()
-        for part in chunks:
-            q = multiprocessing.Queue()             #luo prosessille jono johon palauttaa tulokset
-            p = Worker(id, part, q, progress_queue)  #varsinainen prosessi
-            jobs.append((p, q))
-            p.start()
-            id += 1;
-
-         #odota kunnes prosessit ovat valmiita:
-        for val in jobs:
-            val[0].join()                       #odottaja
-            result = val[1].get()
-            print(result)
-        print("prossut päällä")
-
-
-
-    def _partitionXml(self, l, chunks):
-
-        n = int(math.ceil(len(l) / chunks))
-        for i in range(0, len(l), n):
-            yield l[i:i+n]
-
-    """
-
     @pyqtSlot(int, int)
     def _updateProgressBarInMainThread(self, i, max):
         self.progressDialog.setRange(0, max)
@@ -120,8 +82,12 @@ class XmlImport(QObject):
     @pyqtSlot(object)
     def _loadingFailed(self, e):
         self.progressDialog.cancel()
+        import pymongo
+        errMessage = "Error in data-file. Extraction failed. Is the xml valid and in utf-8 format? More info: "
+        if isinstance(e, pymongo.errors.ServerSelectionTimeoutError):
+            errMessage = "Couldn't connect to database. Try going to '/mongodb/data/db' in application directory and deleting 'mongod.lock' file and restart application. More info: "
         msgbox = QMessageBox()
-        msgbox.information(self.parent, "Extraction failed", "Error in data-file. Extraction failed. Is the xml valid and in utf-8 format? More info: " + str(e))
+        msgbox.information(self.parent, "Extraction failed", errMessage + str(e))
         msgbox.show()
 
     @pyqtSlot(dict)
@@ -138,8 +104,6 @@ class XmlImport(QObject):
 
         #read the data in XML-format to be processed
         tree = etree.parse(filepath) #ET.parse(filepath)
-
-
         return tree.getroot()
 
 
@@ -152,20 +116,3 @@ class MetadataException(Exception):
         return repr(self.msg)
 
 
-class Worker(multiprocessing.Process):
-
-    def __init__(self, threadID, xmlDocument, resultqueue, updatequeue):
-        super(Worker, self).__init__()  #muuta
-        self.threadID = threadID
-        self.xmlDocument = xmlDocument
-        self.resultqueue = resultqueue              #jono johon tulokset lopuksi palautetaan
-        self.updatequeue = updatequeue
-
-    def _processUpdateCallback(self):
-        self.updatequeue.put(1)
-
-    def run(self):
-        self.processor = route_gui.Router.get_processdata_class(self.xmlDocument.attrib["bookseries"])(self._processUpdateCallback)
-        result = self.processor.startExtractionProcess(self.xmlDocument, self.file[0])
-        self.resultqueue.put(result)
-        return

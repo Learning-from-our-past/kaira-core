@@ -3,8 +3,11 @@ import subprocess
 
 
 def start_mongodb():
-    subprocess.Popen(['mongodb/bin/mongod', '--dbpath', "mongodb/data/db"])
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    return subprocess.Popen(['mongodb/bin/mongod', '--dbpath', "mongodb/data/db"], startupinfo=startupinfo)
 
 
-start_mongodb()
-startApp()
+
+mongo = start_mongodb()
+startApp(mongo)

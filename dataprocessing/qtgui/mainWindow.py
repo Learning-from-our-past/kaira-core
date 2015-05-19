@@ -197,14 +197,16 @@ class Mainwindow(QMainWindow):
                 next.text = self.ui.nextEntryTextEdit.toPlainText()
 
 
-
-def start():
-    import sys
+import sys
+def start(mongodb):
     app = QApplication(sys.argv)
     fixingtool = Mainwindow(app)
     fixingtool.show()
-    sys.exit(app.exec_())
+    exit(app.exec_(), mongodb)
 
+def exit(exitcode, mongodb):
+    mongodb.kill()  #close the db process
+    sys.exit(exitcode)
 
 if __name__ == '__main__':
     start()

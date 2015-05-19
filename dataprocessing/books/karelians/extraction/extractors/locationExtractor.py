@@ -59,6 +59,7 @@ class BirthdayLocationExtractor(BaseExtractor):
     def extract(self, text):
         super(BirthdayLocationExtractor, self).extract(text)
         self.initVars(text)
+
         self._findLocation(self.preparedText)
         return self._constructReturnDict()
 
