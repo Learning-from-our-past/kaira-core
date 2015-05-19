@@ -17,6 +17,7 @@ class NameExtractor(BaseExtractor):
             self._split_names(namestr)
         except KeyError as e:
             self.errorLogger.logError(NameException.eType, self.currentChild)
+
         return self._constructReturnDict()
 
     def _split_names(self, name):

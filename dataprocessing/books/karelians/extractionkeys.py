@@ -4,6 +4,7 @@ KEYS = {
       "origfamily" : "OriginalFamily",
       "profession" : "Profession/Status",
       "imagepath": "ImagePath",
+      "approximatePage" : "ApproximatePageNumber",
       "omakotitalo" : "Omakotitalo",
       "karelianlocations" : "KarelianLocations",
       "karelianlocation" : "KarelianLocation",
