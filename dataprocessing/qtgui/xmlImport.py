@@ -103,7 +103,8 @@ class XmlImport(QObject):
     def _getXMLroot(self, filepath):
 
         #read the data in XML-format to be processed
-        tree = etree.parse(filepath) #ET.parse(filepath)
+        parser = etree.XMLParser(encoding="utf-8")
+        tree = etree.parse(filepath, parser=parser) #ET.parse(filepath)
         return tree.getroot()
 
 

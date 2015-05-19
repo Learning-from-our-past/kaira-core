@@ -31,7 +31,6 @@ class BirthdayExtractor(BaseExtractor):
     def initVars(self,text):
         self.dateExtractor = DateExtractor()
         self.preparedText = self._prepareTextForExtraction(text)
-        print(self.preparedText)
 
     def _prepareTextForExtraction(self, text):
         t = textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition, self.SUBSTRING_WIDTH)

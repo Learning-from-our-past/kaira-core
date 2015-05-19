@@ -55,7 +55,6 @@ class ChildExtractor(BaseExtractor):
         self.children_str = self.children_str.strip()
 
     def _split_children(self):
-        print(self.children_str)
         foundChildren = regexUtils.regexIter(self.SPLIT_PATTERN1, self.children_str, self.SPLIT_OPTIONS1)
         count = 0
         for m in foundChildren:

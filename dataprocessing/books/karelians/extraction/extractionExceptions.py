@@ -57,8 +57,8 @@ class BirthdayException(ExtractionException):
         return repr(self.message)
 
 
-class ManLocationException(ExtractionException):
-    eType = "MANLOCATION"
+class BirthLocationException(ExtractionException):
+    eType = "BIRTHLOCATION MISSING"
     message = "ERROR in location extraction: "
     details = u""
 
