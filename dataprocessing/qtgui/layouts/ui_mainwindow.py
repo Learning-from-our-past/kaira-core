@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Fri Apr 10 11:40:29 2015
-#      by: PyQt5 UI code generator 5.4
+# Created by: PyQt5 UI code generator 5.4.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -108,8 +107,6 @@ class Ui_MainWindow(object):
         self.menuExport.setObjectName("menuExport")
         self.menuImport = QtWidgets.QMenu(self.menuFile)
         self.menuImport.setObjectName("menuImport")
-        self.menuQuit = QtWidgets.QMenu(self.menubar)
-        self.menuQuit.setObjectName("menuQuit")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -146,7 +143,6 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.menuExport.menuAction())
         self.menuFile.addAction(self.menuImport.menuAction())
         self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuQuit.menuAction())
         self.toolBar.addAction(self.actionCreate_a_new_Person)
 
         self.retranslateUi(MainWindow)
@@ -163,7 +159,6 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuExport.setTitle(_translate("MainWindow", "Export"))
         self.menuImport.setTitle(_translate("MainWindow", "Import"))
-        self.menuQuit.setTitle(_translate("MainWindow", "Quit"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.actionOpen_XML_for_analyze.setText(_translate("MainWindow", "Open xml"))
         self.actionCsv.setText(_translate("MainWindow", "CSV"))

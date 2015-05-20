@@ -215,13 +215,7 @@ background-color: white;
     <addaction name="menuExport"/>
     <addaction name="menuImport"/>
    </widget>
-   <widget class="QMenu" name="menuQuit">
-    <property name="title">
-     <string>Quit</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuQuit"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
