@@ -41,7 +41,6 @@ class Mainwindow(QMainWindow):
         self.ui.actionSave_changes_to_xml.triggered.connect(self.saveFile.choose_place_to_save_xml)
         self.ui.actionSave.triggered.connect(self.saveFile.save_xml)
 
-
         #shortcuts
         self.ui.actionSave.setShortcut('Ctrl+S')
         self.ui.actionOpen_XML_for_analyze.setShortcut('Ctrl+O')
