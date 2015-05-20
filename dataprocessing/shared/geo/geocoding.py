@@ -16,6 +16,34 @@ class GeoCoder():
     def get_empty_coordinates(self):
         return {"latitude" : "", "longitude": ""}
 
+    def get_coordinates_geojson(self, location_name, collection):
+        location = self.get_coordinates(location_name, collection)
+
+        return {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [float(location["longitude"]),float(location["latitude"])],
+        },
+        "properties": {
+                "locationName": location_name
+            }
+
+        }
+
+    def get_empty_geojson(self):
+         return {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": ["",""],
+        },
+        "properties": {
+                "locationName": ""
+            }
+
+        }
+
 
 
 class LocationNotFound(Exception):

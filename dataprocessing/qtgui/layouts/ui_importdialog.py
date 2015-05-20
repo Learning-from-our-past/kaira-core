@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'importdialog.ui'
 #
-# Created: Fri Apr 10 12:56:59 2015
-#      by: PyQt5 UI code generator 5.4
+# Created by: PyQt5 UI code generator 5.4.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ImportDialog(object):
     def setupUi(self, ImportDialog):
         ImportDialog.setObjectName("ImportDialog")
-        ImportDialog.resize(400, 215)
+        ImportDialog.resize(379, 238)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(ImportDialog)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
@@ -55,9 +54,13 @@ class Ui_ImportDialog(object):
         self.soldierRadio.setObjectName("soldierRadio")
         self.verticalLayout_3.addWidget(self.soldierRadio)
         self.karelianRadio = QtWidgets.QRadioButton(self.groupBox)
-        self.karelianRadio.setChecked(True)
+        self.karelianRadio.setChecked(False)
         self.karelianRadio.setObjectName("karelianRadio")
         self.verticalLayout_3.addWidget(self.karelianRadio)
+        self.farmersRadio = QtWidgets.QRadioButton(self.groupBox)
+        self.farmersRadio.setChecked(True)
+        self.farmersRadio.setObjectName("farmersRadio")
+        self.verticalLayout_3.addWidget(self.farmersRadio)
         self.verticalLayout_2.addWidget(self.groupBox)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem1)
@@ -85,4 +88,5 @@ class Ui_ImportDialog(object):
         self.groupBox.setTitle(_translate("ImportDialog", "Book series:"))
         self.soldierRadio.setText(_translate("ImportDialog", "Suomen Rintamamiehet 1939-43"))
         self.karelianRadio.setText(_translate("ImportDialog", "Siirtokarjalaisten tie"))
+        self.farmersRadio.setText(_translate("ImportDialog", "Suomen pienviljelijät"))
 

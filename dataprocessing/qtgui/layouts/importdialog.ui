@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>215</height>
+    <width>379</width>
+    <height>238</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -105,6 +105,16 @@
        <widget class="QRadioButton" name="karelianRadio">
         <property name="text">
          <string>Siirtokarjalaisten tie</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="farmersRadio">
+        <property name="text">
+         <string>Suomen pienviljelijät</string>
         </property>
         <property name="checked">
          <bool>true</bool>
