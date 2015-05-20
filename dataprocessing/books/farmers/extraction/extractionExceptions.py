@@ -141,3 +141,28 @@ class OtherLocationException(ExtractionException):
 
     def __unicode__(self):
         return repr(self.message)
+
+
+class OwnerYearException(ExtractionException):
+    eType = "NO OWNERSHIP YEAR"
+    message = "ERROR in ownership year: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
+class OwnerNameException(ExtractionException):
+    eType = "NO OWNER NAME FOUND"
+    message = "ERROR in ownership name: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)

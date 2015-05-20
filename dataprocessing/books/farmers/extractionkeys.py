@@ -1,9 +1,13 @@
 KEYS = {
       "name" : "name",
       "farmLocation" : "FarmLocation",
-
+      "ownerFrom" : "OwnerFrom",
+      "ownerName" : "OwnerName",
       "surname" : "Surname",
       "firstnames" : "FirstNames",
+
+
+
       "origfamily" : "OriginalFamily",
       "profession" : "Profession/Status",
       "imagepath": "ImagePath",

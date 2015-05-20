@@ -7,7 +7,7 @@ from books.farmers.extraction.extractors.metadataextractor import MetadataExtrac
 from books.farmers.extraction.extractors.nameextractor import NameExtractor
 
 from books.farmers.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
-from books.farmers.extraction.extractors.professionextractor import ProfessionExtractor
+from books.farmers.extraction.extractors.ownerextractor import OwnerExtractor
 
 from books.farmers.extraction.extractors.omakotitaloextractor import OmakotitaloExtractor
 from books.farmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
@@ -29,6 +29,10 @@ class ExtractionPipeline():
     def process(self, text, entry, eLogger):
         metaExt = MetadataExtractor(entry, eLogger, self.xmlDocument)
         meta = metaExt.extract(text, entry)
+
+        ownerExt = OwnerExtractor(entry, eLogger, self.xmlDocument)
+        ownerExt.setDependencyMatchPositionToZero()
+        ownerdata = ownerExt.extract(text, entry)
 
         """origFamilyExt = OrigFamilyExtractor(entry, eLogger, self.xmlDocument)
         origFamilyExt.setDependencyMatchPositionToZero()
@@ -65,6 +69,7 @@ class ExtractionPipeline():
 
 
         d = meta.copy()
+        d.update(ownerdata)
         """
         d = names.copy()
         d.update(image)
