@@ -7,17 +7,25 @@ without modifying GUI-code.
 from books.soldiers.chunktextfile import ChunkTextFile as SoldierChunk
 from books.soldiers.processData import ProcessData as SoldierProcessdata
 from books.soldiers.resultcsvbuilder import ResultCsvBuilder as SoldierCsvBuilder
+from books.soldiers.resultjsonbuilder import ResultJsonBuilder as SoldierJsonBuilder
+
 from books.karelians.chunktextfile import PersonPreprocessor as KarelianChunk
 from books.karelians.processData import ProcessData as KarelianProcessdata
 from books.karelians.resultcsvbuilder import ResultCsvBuilder as KarelianCsvBuilder
 from books.karelians.resultjsonbuilder import ResultJsonBuilder as KarelianJsonBuilder
-from books.soldiers.resultjsonbuilder import ResultJsonBuilder as SoldierJsonBuilder
+
+from books.farmers.chunktextfile import PersonPreprocessor as FarmersChunk
+from books.farmers.processData import ProcessData as FarmersProcessdata
+from books.farmers.resultcsvbuilder import ResultCsvBuilder as FarmersCsvBuilder
+from books.farmers.resultjsonbuilder import ResultJsonBuilder as FarmersJsonBuilder
+
 
 class Router():
 
     #these are equivalent of the "bookseries" attribute in xml datafiles.
     SOLDIERS = "Suomen rintamamiehet"
     KARELIANS = "Siirtokarjalaisten tie"
+    FARMERS = "Suomen pienviljelijat"
 
     @staticmethod
     def get_chunktext_class(extractor):
@@ -25,6 +33,8 @@ class Router():
             return KarelianChunk
         elif extractor == Router.SOLDIERS:
             return SoldierChunk
+        elif extractor == Router.FARMERS:
+            return FarmersChunk
         else:
             raise NoExtractorAvailable()
 
@@ -34,6 +44,8 @@ class Router():
             return KarelianProcessdata
         elif extractor == Router.SOLDIERS:
             return SoldierProcessdata
+        elif extractor == Router.FARMERS:
+            return FarmersProcessdata
         else:
             raise NoExtractorAvailable()
 
@@ -43,6 +55,8 @@ class Router():
             return KarelianCsvBuilder
         elif extractor == Router.SOLDIERS:
             return SoldierCsvBuilder
+        elif extractor == Router.FARMERS:
+            return FarmersCsvBuilder
         else:
             raise NoExtractorAvailable()
 
@@ -52,6 +66,8 @@ class Router():
             return KarelianJsonBuilder
         elif extractor == Router.SOLDIERS:
             return SoldierJsonBuilder
+        elif extractor == Router.FARMERS:
+            return FarmersJsonBuilder
         else:
             raise NoExtractorAvailable()
 
