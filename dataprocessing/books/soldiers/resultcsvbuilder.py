@@ -43,12 +43,18 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                                   "Spouse's previous marriage2"
                                  ])
 
+
     def writeRow(self, dataDict):
-        row = self._createRowFromDict(dataDict)
-        self.csvWriter.writerow(row)
+        try:
+            row = self._createRowFromDict(dataDict)
+            self.csvWriter.writerow(row)
+        except Exception:
+            #couldn't write the row for whatever reason, most likely tried to write a problematic data entry
+            pass
 
     #tranforms the dict of the entry to a format which can be written into csv
     def _createRowFromDict(self, persondatadict):
+        print(persondatadict)
 
         row = [persondatadict[KEYS["surname"]].value, persondatadict[KEYS["firstnames"]].value, persondatadict[KEYS["birthDay"]].value,
                persondatadict[KEYS["birthMonth"]].value, persondatadict[KEYS["birthYear"]].value, persondatadict[KEYS["birthLocation"]].value,

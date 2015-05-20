@@ -2,6 +2,7 @@ from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 from books.karelians.extraction.extractionExceptions import NameException
+from shared.genderExtract import Gender
 import re
 
 class NameExtractor(BaseExtractor):
@@ -16,6 +17,7 @@ class NameExtractor(BaseExtractor):
             self._split_names(namestr)
         except KeyError as e:
             self.errorLogger.logError(NameException.eType, self.currentChild)
+
         return self._constructReturnDict()
 
     def _split_names(self, name):
@@ -29,4 +31,5 @@ class NameExtractor(BaseExtractor):
             self.errorLogger.logError(NameException.eType, self.currentChild)
 
     def _constructReturnDict(self):
-        return {KEYS["firstnames"] : ValueWrapper(self.first_names), KEYS["surname"]: ValueWrapper(self.surname)}
+        gender = Gender.find_gender(self.first_names)
+        return {KEYS["firstnames"] : ValueWrapper(self.first_names), KEYS["gender"] : ValueWrapper(gender),KEYS["surname"]: ValueWrapper(self.surname)}

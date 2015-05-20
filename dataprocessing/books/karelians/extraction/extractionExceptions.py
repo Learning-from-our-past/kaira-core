@@ -57,8 +57,8 @@ class BirthdayException(ExtractionException):
         return repr(self.message)
 
 
-class ManLocationException(ExtractionException):
-    eType = "MANLOCATION"
+class BirthLocationException(ExtractionException):
+    eType = "BIRTHLOCATION MISSING"
     message = "ERROR in location extraction: "
     details = u""
 
@@ -72,6 +72,67 @@ class ManLocationException(ExtractionException):
 class LocationException(ExtractionException):
     eType = "LOCATION"
     message = "ERROR in location extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
+class SpouseNameException(ExtractionException):
+    eType = "SPOUSENAME"
+    message = "ERROR in spouse name extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
+class MultipleMarriagesException(ExtractionException):
+    eType = "MAYBE CHILDREN FROM MANY MARRIAGES"
+    message = "Found words to indicate previous marriages: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
+
+class KarelianLocationException(ExtractionException):
+    eType = "KARELIAN LOCATION"
+    message = "ERROR in karelian location extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
+class NoChildrenException(ExtractionException):
+    eType = "NO CHILDREN FOUND"
+    message = "ERROR in children extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
+
+class OtherLocationException(ExtractionException):
+    eType = "OTHER LOCATION"
+    message = "ERROR in other location extraction: "
     details = u""
 
     def __init__(self, text):

@@ -14,7 +14,7 @@ from interface.valuewrapper import ValueWrapper
 #Also return match object to be used by caller
 
 class LocationExtractor():
-    PATTERN = r'(?:\d+| s)(?: |,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
+    PATTERN = r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
     OPTIONS = re.UNICODE
     matchFinalPosition = 0
     foundLocation = None
@@ -59,6 +59,7 @@ class BirthdayLocationExtractor(BaseExtractor):
     def extract(self, text):
         super(BirthdayLocationExtractor, self).extract(text)
         self.initVars(text)
+
         self._findLocation(self.preparedText)
         return self._constructReturnDict()
 
@@ -75,9 +76,10 @@ class BirthdayLocationExtractor(BaseExtractor):
             self.foundLocation = self.locationExtractor.extract(text)
             self._checkIfLocationIsValid(text, self.foundLocation)
             self.location = self.foundLocation.group("location")
+            self.location = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", self.location)
             self._setFinalMatchPosition()
         except LocationException as e:
-            self.errorLogger.logError(ManLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
+            self.errorLogger.logError(BirthLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
             self._locationExtractionFailed()
 
     def _checkIfLocationIsValid(self, text, foundLocation):

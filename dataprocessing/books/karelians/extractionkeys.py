@@ -4,7 +4,19 @@ KEYS = {
       "origfamily" : "OriginalFamily",
       "profession" : "Profession/Status",
       "imagepath": "ImagePath",
+      "approximatePage" : "ApproximatePageNumber",
       "omakotitalo" : "Omakotitalo",
+      "karelianlocations" : "KarelianLocations",
+      "karelianlocation" : "KarelianLocation",
+      "returnedkarelia": "ReturnedToKarelia",
+      "kareliancoordinate": "KarelianCoordinates",
+      "karelianlocationsCount": "KarelianLocationCount",
+      "otherlocations" : "OtherLocations",
+      "otherlocationsCount" : "OtherLocationCount",
+      "otherlocation" : "OtherLocation",
+      "othercoordinate": "OtherCoordinates",
+      "manymarriages" : "MaybePreviousMarriages",
+      "spouseDeathYear": "spouseDeathYear",
 
 
       "birthDay" :  "BirthDay",
@@ -31,10 +43,17 @@ KEYS = {
       "hobbies" : "Hobbies",
       "hasSpouse" : "HasSpouse",
       "weddingYear" : "WeddingYear",
+
+      "spouse": "Spouse",
       "spouseName" : "SpouseName",
+      "spouseProfession" : "SpouseProfession",
       "spouseBirthData" : "SpouseBirthData",
       "spouseDeathData" : "SpouseDeathData",
+      "spouseOrigFamily" : "SpouseOriginalFamily",
       "children" : "Children",
+      "gender" : "Gender",
+
+
       "separated" : "Separated",
       "miehEd" : "ManPreviousMarriage",
       "nyk" : "ManCurrentMarriage",

@@ -1,6 +1,8 @@
 dataprocessing/build
 dataprocessing/dist
 dataprocessing/siirtokarjalaiset
+dataprocessing/mongodb
+dataprocessing/build
 *.pyc
 *.csv
 *.xml

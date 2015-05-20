@@ -5,6 +5,8 @@ from PyQt5.QtCore import pyqtSlot, QObject
 from books.soldiers import processData
 import route_gui
 from lxml import etree
+import multiprocessing
+import math
 
 
 class XmlImport(QObject):
@@ -59,7 +61,7 @@ class XmlImport(QObject):
             xmlDataDocument = self._getXMLroot(self.file[0])
             #TODO: Lue xml:n metadata
             try:
-
+                #TODO: Moniprosarituki?
                 self.processor = route_gui.Router.get_processdata_class(xmlDataDocument.attrib["bookseries"])(self._processUpdateCallback)
                 result = self.processor.startExtractionProcess(xmlDataDocument, self.file[0])
                 self.threadResultsSignal.emit(result)
@@ -72,7 +74,6 @@ class XmlImport(QObject):
                 print(e)
                 self.threadExceptionSignal.emit(e)
 
-
     @pyqtSlot(int, int)
     def _updateProgressBarInMainThread(self, i, max):
         self.progressDialog.setRange(0, max)
@@ -81,8 +82,12 @@ class XmlImport(QObject):
     @pyqtSlot(object)
     def _loadingFailed(self, e):
         self.progressDialog.cancel()
+        import pymongo
+        errMessage = "Error in data-file. Extraction failed. Is the xml valid and in utf-8 format? More info: "
+        if isinstance(e, pymongo.errors.ServerSelectionTimeoutError):
+            errMessage = "Couldn't connect to database. Try going to '/mongodb/data/db' in application directory and deleting 'mongod.lock' file and restart application. More info: "
         msgbox = QMessageBox()
-        msgbox.information(self.parent, "Extraction failed", "Error in data-file. Extraction failed. Is the xml valid and in utf-8 format? More info: " + str(e))
+        msgbox.information(self.parent, "Extraction failed", errMessage + str(e))
         msgbox.show()
 
     @pyqtSlot(dict)
@@ -98,9 +103,8 @@ class XmlImport(QObject):
     def _getXMLroot(self, filepath):
 
         #read the data in XML-format to be processed
-        tree = etree.parse(filepath) #ET.parse(filepath)
-
-
+        parser = etree.XMLParser(encoding="utf-8")
+        tree = etree.parse(filepath, parser=parser) #ET.parse(filepath)
         return tree.getroot()
 
 
@@ -111,6 +115,5 @@ class MetadataException(Exception):
                    "to generate new xml-file from the source ocr-text or add the missing attribute to the file manually."
     def __str__(self):
         return repr(self.msg)
-
 
 

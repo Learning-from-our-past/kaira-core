@@ -16,6 +16,7 @@ class PersonPreprocessor(ChunkTextInterface):
     def chunk_text(self, text, destination_path):
         self.save_path = destination_path
         print(self.save_path)
+        text = re.sub(r"(\<sup\>)|\<\/sup\>", "", text) #remove sup tags
         parsed = html.document_fromstring( text)
         persons = self.process(parsed)
         print(len(persons))
