@@ -28,7 +28,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
 
     def _writeCsvHeaders(self):
-        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince", "Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages" ]
+        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "MeadowArea ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince", "Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages" ]
 
         headers = headers + ["ChildCount"]
         for i in range(0, self.childrenMax):
@@ -43,9 +43,17 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
     #make a dict of row content divided based on the content
     def _createRowFromDict(self, persondatadict):
         row = {"regular" : [persondatadict[KEYS["name"]].value,
+
                             persondatadict[KEYS["farmLocation"]].value["locationName"].value,
                             persondatadict[KEYS["farmLocation"]].value["latitude"].value,
-                            persondatadict[KEYS["farmLocation"]].value["longitude"].value,
+                            persondatadict[KEYS["farmLocation"]].value["lokngitude"].value,
+
+                            persondatadict[KEYS["farmDetails"]].value[KEYS["wholeArea"]].value,
+                            persondatadict[KEYS["farmDetails"]].value[KEYS["forestArea"]].value,
+                            persondatadict[KEYS["farmDetails"]].value[KEYS["fieldArea"]].value,
+                            persondatadict[KEYS["farmDetails"]].value[KEYS["wasteArea"]].value,
+                            persondatadict[KEYS["farmDetails"]].value[KEYS["meadowArea"]].value,
+
                             persondatadict[KEYS["owner"]].value[KEYS["firstnames"]].value,
                             persondatadict[KEYS["owner"]].value[KEYS["surname"]].value,
                             persondatadict[KEYS["owner"]].value[KEYS["gender"]].value,
