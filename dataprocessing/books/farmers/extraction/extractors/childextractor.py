@@ -15,7 +15,7 @@ class ChildExtractor(BaseExtractor):
 
     def extract(self, text, entry):
 
-        self.CHILD_PATTERN = r"(?:Lapset|tytär|poika|tyttäret|pojat)(;|:)(?P<children>.*?)(?:\.|Tilal{s<=1})"
+        self.CHILD_PATTERN = r"(?:Lapset|tytär|poika|tyttäret|pojat)(;|:)(?P<children>.*?)(?:\.|Tilal{s<=1}|Edelli{s<=1}|hänen{s<=1}|joka{s<=1}|emännän{s<=1}|isännän{s<=1})"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
         self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
@@ -27,6 +27,7 @@ class ChildExtractor(BaseExtractor):
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
         self.children_str = ""
         self.child_list = []
+        self._check_many_marriages(text)
         self._find_children(text)
         return self._constructReturnDict()
 
@@ -35,7 +36,6 @@ class ChildExtractor(BaseExtractor):
             foundChildren= regexUtils.safeSearch(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
             self.matchFinalPosition = foundChildren.end()
             self.children_str = foundChildren.group("children")
-            self._check_many_marriages(self.children_str)
             self._clean_children()
             self._split_children()
 
