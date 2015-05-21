@@ -69,15 +69,16 @@ class ExtractionPipeline():
         #spouse
         spouseExt = SpouseExtractor(entry, eLogger, self.xmlDocument)
         spouse = spouseExt.extract(text, entry)
-
+        """
 
         childExt = ChildExtractor(entry, eLogger, self.xmlDocument)
-        children = childExt.extract(text, entry)"""
+        children = childExt.extract(text, entry)
 
 
         d = meta.copy()
         d.update(ownerdata)
         d.update(hostessdata)
+        d.update(children)
         """
         d = names.copy()
         d.update(image)
@@ -89,7 +90,7 @@ class ExtractionPipeline():
         d.update(karelianLocations)
         d.update(finnishLocations)
         d.update(spouse)
-        d.update(children)
+
         """
 
         return d
