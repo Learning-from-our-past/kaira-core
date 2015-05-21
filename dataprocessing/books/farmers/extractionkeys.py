@@ -5,6 +5,9 @@ KEYS = {
       "ownerName" : "OwnerName",
       "surname" : "Surname",
       "firstnames" : "FirstNames",
+      "owner": "Owner",
+      "ownerBirthData" : "birthData",
+      "hostess": "Hostess",
 
 
 
