@@ -166,3 +166,16 @@ class OwnerNameException(ExtractionException):
 
     def __unicode__(self):
         return repr(self.message)
+
+
+class HostessNameException(ExtractionException):
+    eType = "NO HOSTESS NAME FOUND"
+    message = "ERROR in hostess name: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+
+    def __unicode__(self):
+        return repr(self.message)
