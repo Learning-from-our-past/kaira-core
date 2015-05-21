@@ -28,7 +28,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
 
     def _writeCsvHeaders(self):
-        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "Owner surname", "Owner first names", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince", "Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber",  ]
+        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince", "Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages" ]
 
         headers = headers + ["ChildCount"]
         for i in range(0, self.childrenMax):
@@ -60,14 +60,13 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                             persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthDay"]].value,
                             persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthMonth"]].value,
                             persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthYear"]].value,
-                            persondatadict[KEYS["approximatePage"]].value
+                            persondatadict[KEYS["approximatePage"]].value,
+                            persondatadict[KEYS["manymarriages"]].value
 
 
 
                ] }
         row["children"] = self._addChildren(persondatadict)
-
-
         return row
 
 
@@ -86,11 +85,6 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
             lrow.append(l.value["gender"].value)
             lrow.append(l.value["birthYear"].value) #child's birthYear
         return lrow
-
-
-
-
-
 
     def _writeToFile(self):
         self._writeCsvHeaders()

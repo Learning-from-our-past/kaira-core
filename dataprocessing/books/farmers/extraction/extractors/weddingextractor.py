@@ -14,8 +14,6 @@ class WeddingExtractor(BaseExtractor):
 
     def extract(self, text, entry):
         super(WeddingExtractor, self).extract(text)
-
-
         self.PATTERN = r"(?:avioit)\.?\s?-(?P<year>\d{2,4})"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
