@@ -60,7 +60,8 @@ class OwnerExtractor(BaseExtractor):
         self.surname = names[len(names)-1].strip(" ")
         if len(names) > 1:
             for i in range(0, len(names)-1):
-                self.first_names += names[i] + " "
+                if names[i].strip(" ") != "o.s.":
+                    self.first_names += names[i].strip(" ") + " "
             self.first_names = self.first_names.strip(" ")
             self._find_owner_gender(names[1])
 

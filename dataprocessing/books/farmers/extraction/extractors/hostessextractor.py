@@ -57,7 +57,7 @@ class HostessExtractor(BaseExtractor):
         if len(names) > 1:
             for i in range(0, len(names)-1):
                 if names[i].strip(" ") != "o.s.":
-                    self.first_names += names[i] + " "
+                    self.first_names += names[i].strip(" ") + " "
             self.first_names = self.first_names.strip(" ")
 
 
@@ -67,6 +67,6 @@ class HostessExtractor(BaseExtractor):
                 KEYS["firstnames"] : ValueWrapper(self.first_names),
                 KEYS["surname"] : ValueWrapper(self.surname),
                 KEYS["gender"] : ValueWrapper(self.hostess_gender),
-                KEYS["ownerBirthData"] : ValueWrapper(self.birthday)
+                KEYS["hostessBirthData"] : ValueWrapper(self.birthday)
         })}
 

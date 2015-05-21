@@ -15,7 +15,7 @@ class ChildExtractor(BaseExtractor):
 
     def extract(self, text, entry):
 
-        self.CHILD_PATTERN = r"(?:Lapset|tytär|poika)(;|:)(?P<children>.*?)Asuinp{s<=1}"
+        self.CHILD_PATTERN = r"(?:Lapset|tytär|poika|tyttäret|pojat)(;|:)(?P<children>.*?)(?:\.|Tilal{s<=1})"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
         self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
@@ -59,21 +59,19 @@ class ChildExtractor(BaseExtractor):
         count = 0
         for m in foundChildren:
             count += 1
-            self._process_child(m.group("child"))
+
+            #check if there is "ja" word as separator such as "Seppo -41 ja Jaakko -32.
+            ja_word = regexUtils.search(r"\sja\s",m.group("child"))
+            if ja_word is not None:
+                self._process_child(m.group("child")[0:ja_word.start()])
+                self._process_child(m.group("child")[ja_word.end():])
+            else:
+                self._process_child(m.group("child"))
             #print("Place: " + m.group("place") + " Years: " + m.group("years") + " Year count: " + str(self._count_years(m.group("years"))))
 
 
 
     def _process_child(self, child):
-        #check if syntyneet flag:
-        birthLoc = regexUtils.search("syntyneet{s<=1}\s(?P<location>\w*)", child, self.CHILD_OPTIONS)
-        if birthLoc is not None:
-            #found a "Syntyneet <place>" string. Set it to the previous children.
-            for c in self.child_list:
-                if c.value["locationName"].value == "":
-                    c.value["locationName"].value = birthLoc.group("location")
-            return
-
 
         try:
             name = regexUtils.safeSearch(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
@@ -87,37 +85,15 @@ class ChildExtractor(BaseExtractor):
             except regexUtils.RegexNoneMatchException:
                 year = ""
 
-            try:
-                locMatch = regexUtils.safeSearch(self.LOCATION_PATTERN, child, self.CHILD_OPTIONS)
-                location = locMatch.group("location")
-                location = location.strip()
-                location = location.strip("-")
-                coordinates = self._find_birth_coord(location)
-            except regexUtils.RegexNoneMatchException:
-                location = ""
-                coordinates = self.geocoder.get_empty_coordinates()
-
-            self.child_list.append(ValueWrapper({"name" : ValueWrapper(name), "gender" : ValueWrapper(gender), "birthYear" : ValueWrapper(year),
-                                                 "locationName" : ValueWrapper(location),
-                                                 "childCoordinates" : ValueWrapper({"latitude": ValueWrapper(coordinates["latitude"]), "longitude": ValueWrapper(coordinates["longitude"])})}))
+            self.child_list.append(ValueWrapper({"name" : ValueWrapper(name),
+                                                 "gender" : ValueWrapper(gender), "birthYear" : ValueWrapper(year)}))
         except regexUtils.RegexNoneMatchException:
             pass
 
 
-    def _find_birth_coord(self, location_name):
-        try:
-            geocoordinates = self.geocoder.get_coordinates(location_name, "finland")
-        except LocationNotFound as e:
-            try:
-                geocoordinates = self.geocoder.get_coordinates(location_name, "russia")
-            except LocationNotFound as e:
-                return self.geocoder.get_empty_coordinates()
-        return geocoordinates
 
 
 
     def _constructReturnDict(self):
-        """KEYS["karelianlocations"] : ValueWrapper(self.locationlisting),
-                KEYS["returnedkarelia"] : ValueWrapper(self.returned),
-                KEYS["karelianlocationsCount"] : ValueWrapper(len(self.locationlisting))"""
+
         return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list))}
