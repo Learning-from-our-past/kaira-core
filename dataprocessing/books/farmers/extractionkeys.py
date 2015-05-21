@@ -10,6 +10,13 @@ KEYS = {
       "hostessBirthData" : "birthData",
       "hostess": "Hostess",
 
+      "farmDetails" : "farmDetails",
+      "wholeArea" : "wholeArea",
+      "forestArea" : "forestArea",
+      "fieldArea" : "fieldArea",
+      "wasteArea" : "wasteArea",
+      "meadowArea" : "meadowArea",
+
 
 
 

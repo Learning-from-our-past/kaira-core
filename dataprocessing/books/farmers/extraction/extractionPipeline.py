@@ -17,6 +17,7 @@ from books.farmers.extraction.extractors.karelianlocations import KarelianLocati
 from books.farmers.extraction.extractors.finnishlocations import FinnishLocationsExtractor
 from books.farmers.extraction.extractors.spouseextractor import SpouseExtractor
 from books.farmers.extraction.extractors.childextractor import ChildExtractor
+from books.farmers.extraction.extractors.farmextractor import FarmExtractor
 from books.farmers.extraction.extractors.deathextractor import DeathExtractor
 from shared.genderExtract import Gender
 
@@ -39,6 +40,10 @@ class ExtractionPipeline():
         hostessExt = HostessExtractor(entry, eLogger, self.xmlDocument)
         hostessExt.setDependencyMatchPositionToZero()
         hostessdata = hostessExt.extract(text, entry)
+
+        farmExt = FarmExtractor(entry, eLogger, self.xmlDocument)
+        farmExt.setDependencyMatchPositionToZero()
+        farmdata = farmExt.extract(text, entry)
 
 
         """origFamilyExt = OrigFamilyExtractor(entry, eLogger, self.xmlDocument)
@@ -79,6 +84,7 @@ class ExtractionPipeline():
         d.update(ownerdata)
         d.update(hostessdata)
         d.update(children)
+        d.update(farmdata)
         """
         d = names.copy()
         d.update(image)
