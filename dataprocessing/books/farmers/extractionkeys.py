@@ -17,6 +17,20 @@ KEYS = {
       "wasteArea" : "wasteArea",
       "meadowArea" : "meadowArea",
 
+      "flags" : "flags",
+      "oat" : "oat",
+      "barley" : "barley",
+      "hay" : "hay",
+      "potatoes" : "potatoes",
+      "wheat" : "wheat",
+      "sugarbeet" : "sugarbeet",
+      "puimakone" : "puimakone",
+      "tractor" : "tractor",
+      "horse" : "horse",
+      "chicken" : "chicken",
+      "siirtotila" : "siirtotila",
+      "kantatila" : "kantatila",
+
 
 
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This class defines the progress and order of the extraction process by initializing and calling
 required extractors.
@@ -18,6 +19,8 @@ from books.farmers.extraction.extractors.finnishlocations import FinnishLocation
 from books.farmers.extraction.extractors.spouseextractor import SpouseExtractor
 from books.farmers.extraction.extractors.childextractor import ChildExtractor
 from books.farmers.extraction.extractors.farmextractor import FarmExtractor
+from books.farmers.extraction.extractors.boolextractor import BoolExtractor
+from books.farmers.extractionkeys import KEYS
 from books.farmers.extraction.extractors.deathextractor import DeathExtractor
 from shared.genderExtract import Gender
 
@@ -79,12 +82,30 @@ class ExtractionPipeline():
         childExt = ChildExtractor(entry, eLogger, self.xmlDocument)
         children = childExt.extract(text, entry)
 
+        flagExt = BoolExtractor(entry, eLogger, self.xmlDocument)
+        patterns = {
+            KEYS["oat"] : r"kaura",
+            KEYS["barley"] : r"ohra",
+            KEYS["hay"] : r"heinä",
+            KEYS["potatoes"] : r"peruna",
+            KEYS["wheat"] : r"vehnä",
+            KEYS["sugarbeet"] : r"sokerijuuri",
+            KEYS["puimakone"] : r"puimakone",
+            KEYS["tractor"] : r"traktori",
+            KEYS["horse"] : r"hevonen|hevos",
+            KEYS["chicken"] : r"kanoja|\skanaa",
+            KEYS["siirtotila"] : r"siirtotila",
+            KEYS["kantatila"] : "kantatila"
+        }
+        flagExt.set_patterns_to_find(patterns)
+        flags = flagExt.extract(text, entry)
 
         d = meta.copy()
         d.update(ownerdata)
         d.update(hostessdata)
         d.update(children)
         d.update(farmdata)
+        d.update(flags)
         """
         d = names.copy()
         d.update(image)

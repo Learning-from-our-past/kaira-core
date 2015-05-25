@@ -28,7 +28,9 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
 
     def _writeCsvHeaders(self):
-        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "MeadowArea ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince", "Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages" ]
+        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "MeadowArea ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince"]
+        headers = headers + ["oat", "barley", "hay", "potatoes", "wheat", "sugarbeet", "puimakone", "tractor", "horse", "chicken", "siirtotila", "kantatila"]
+        headers = headers + ["Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages"]
 
         headers = headers + ["ChildCount"]
         for i in range(0, self.childrenMax):
@@ -46,7 +48,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
                             persondatadict[KEYS["farmLocation"]].value["locationName"].value,
                             persondatadict[KEYS["farmLocation"]].value["latitude"].value,
-                            persondatadict[KEYS["farmLocation"]].value["lokngitude"].value,
+                            persondatadict[KEYS["farmLocation"]].value["longitude"].value,
 
                             persondatadict[KEYS["farmDetails"]].value[KEYS["wholeArea"]].value,
                             persondatadict[KEYS["farmDetails"]].value[KEYS["forestArea"]].value,
@@ -61,6 +63,19 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                             persondatadict[KEYS["owner"]].value[KEYS["ownerBirthData"]].value[KEYS["birthMonth"]].value,
                             persondatadict[KEYS["owner"]].value[KEYS["ownerBirthData"]].value[KEYS["birthYear"]].value,
                             persondatadict[KEYS["owner"]].value[KEYS["ownerFrom"]].value,
+
+                            persondatadict[KEYS["flags"]].value[KEYS["oat"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["barley"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["hay"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["potatoes"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["wheat"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["sugarbeet"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["puimakone"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["tractor"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["horse"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["chicken"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["siirtotila"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["kantatila"]].value,
 
                             persondatadict[KEYS["hostess"]].value[KEYS["firstnames"]].value,
                             persondatadict[KEYS["hostess"]].value[KEYS["surname"]].value,
