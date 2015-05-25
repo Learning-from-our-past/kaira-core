@@ -20,6 +20,7 @@ from books.farmers.extraction.extractors.spouseextractor import SpouseExtractor
 from books.farmers.extraction.extractors.childextractor import ChildExtractor
 from books.farmers.extraction.extractors.farmextractor import FarmExtractor
 from books.farmers.extraction.extractors.boolextractor import BoolExtractor
+from books.farmers.extraction.extractors.quantityextractor import QuantityExtractor
 from books.farmers.extractionkeys import KEYS
 from books.farmers.extraction.extractors.deathextractor import DeathExtractor
 from shared.genderExtract import Gender
@@ -102,9 +103,25 @@ class ExtractionPipeline():
             KEYS["muta"] : r"muta",
             KEYS["savi"] : r"savi",
             KEYS["multa"] : r"multa",
+            KEYS["salaojitus"] : r"(salaojitettu|salaojitus)"
         }
         flagExt.set_patterns_to_find(patterns)
         flags = flagExt.extract(text, entry)
+
+        quantityExt = QuantityExtractor(entry, eLogger, self.xmlDocument)
+        qpatterns = {
+            KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",
+            KEYS["lypsylehma"] : r"(?:lypsylehmää){s<=1,i<=1}",
+            KEYS["teuras"] : r"(?:teuras){s<=1,i<=1}",
+            KEYS["lammas"] : r"(?:lammasta){s<=1,i<=1}",
+            KEYS["lihotussika"] : r"(?:lihotus-?sik){s<=1,i<=1}",
+            KEYS["emakko"] : r"(?:emakko){s<=1,i<=1}",
+            KEYS["nuori"] : r"(?:nuori|(?:nuorta{s<=1,i<=1}))",
+            KEYS["kanoja"] : r"(?:kanoja|(?:kanaa{s<=1,i<=1}))"
+         }
+
+        quantityExt.set_patterns_to_find(qpatterns)
+        quantities = quantityExt.extract(text, entry)
 
         d = meta.copy()
         d.update(ownerdata)
@@ -112,6 +129,7 @@ class ExtractionPipeline():
         d.update(children)
         d.update(farmdata)
         d.update(flags)
+        d.update(quantities)
         """
         d = names.copy()
         d.update(image)

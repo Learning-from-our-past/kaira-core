@@ -30,6 +30,7 @@ KEYS = {
       "chicken" : "Chicken",
       "siirtotila" : "Siirtotila",
       "kantatila" : "Kantatila",
+      "salaojitus" : "Salaojitus",
 
       "moreeni" : "Moreeni",
       "hieta" : "Hieta",
@@ -37,6 +38,18 @@ KEYS = {
       "muta" : "Muta",
       "savi" : "Savi",
       "multa" : "Multa",
+
+      "rooms" : "rooms",
+      "lypsylehma" : "lypsylehma",
+      "teuras" : "teuraselain",
+      "lammas" : "lammas",
+      "lihotussika" : "lihotussika",
+      "emakko" : "emakko",
+      "nuori" : "nuori",
+      "kanoja" : "kanoja",
+
+      "quantities" : "quantities",
+
 
 
 

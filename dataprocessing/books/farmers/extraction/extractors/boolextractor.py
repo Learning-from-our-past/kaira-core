@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.farmers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
