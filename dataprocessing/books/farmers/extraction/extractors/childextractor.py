@@ -12,6 +12,7 @@ from shared.genderExtract import Gender
 
 class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
+    #[A-Zä-Ö\s-]+\sja\s[A-Zä-Ö\s-]+-\d\d\D
 
     def extract(self, text, entry):
 
@@ -32,6 +33,8 @@ class ChildExtractor(BaseExtractor):
         return self._constructReturnDict()
 
     def _find_children(self, text):
+        text = re.sub(r"sekä", ",",text)
+
         try:
             foundChildren= regexUtils.safeSearch(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
             self.matchFinalPosition = foundChildren.end()
@@ -63,12 +66,19 @@ class ChildExtractor(BaseExtractor):
             #check if there is "ja" word as separator such as "Seppo -41 ja Jaakko -32.
             ja_word = regexUtils.search(r"\sja\s",m.group("child"))
             if ja_word is not None:
-                self._process_child(m.group("child")[0:ja_word.start()])
-                self._process_child(m.group("child")[ja_word.end():])
+                firstChild = self._process_child(m.group("child")[0:ja_word.start()])
+                secondChild = self._process_child(m.group("child")[ja_word.end():])
+                self._twins_year_handler(firstChild, secondChild)
             else:
                 self._process_child(m.group("child"))
             #print("Place: " + m.group("place") + " Years: " + m.group("years") + " Year count: " + str(self._count_years(m.group("years"))))
 
+    def _twins_year_handler(self, first, second):
+        #if there is twins, the book doesn't explicitly define birthyear for first one.
+        #therefore copy second child's value to first one
+        if first is not None and second is not None:
+            if first.value["birthYear"].value == "" and second.value["birthYear"].value != "":
+                first.value["birthYear"].value = second.value["birthYear"].value
 
 
     def _process_child(self, child):
@@ -84,9 +94,10 @@ class ChildExtractor(BaseExtractor):
                 year = yearMatch.group("year")
             except regexUtils.RegexNoneMatchException:
                 year = ""
-
-            self.child_list.append(ValueWrapper({"name" : ValueWrapper(name),
-                                                 "gender" : ValueWrapper(gender), "birthYear" : ValueWrapper(year)}))
+            result = ValueWrapper({"name" : ValueWrapper(name),
+                                                 "gender" : ValueWrapper(gender), "birthYear" : ValueWrapper(year)})
+            self.child_list.append(result)
+            return result
         except regexUtils.RegexNoneMatchException:
             pass
 
