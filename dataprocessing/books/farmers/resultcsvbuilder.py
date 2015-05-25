@@ -29,7 +29,9 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     def _writeCsvHeaders(self):
         headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "MeadowArea ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince"]
-        headers = headers + ["oat", "barley", "hay", "potatoes", "wheat", "sugarbeet", "puimakone", "tractor", "horse", "chicken", "siirtotila", "kantatila"]
+        headers = headers + ["oat", "barley", "hay", "potatoes", "wheat", "sugarbeet", "puimakone", "tractor", "horse", "chicken", "siirtotila", "kantatila",
+                             "moreeni", "hiesu", "hieta", "muta", "savi", "multa"]
+
         headers = headers + ["Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages"]
 
         headers = headers + ["ChildCount"]
@@ -76,6 +78,15 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                             persondatadict[KEYS["flags"]].value[KEYS["chicken"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["siirtotila"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["kantatila"]].value,
+
+                            persondatadict[KEYS["flags"]].value[KEYS["moreeni"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["hiesu"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["hieta"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["muta"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["savi"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["multa"]].value,
+
+
 
                             persondatadict[KEYS["hostess"]].value[KEYS["firstnames"]].value,
                             persondatadict[KEYS["hostess"]].value[KEYS["surname"]].value,

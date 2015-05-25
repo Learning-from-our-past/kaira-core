@@ -95,7 +95,13 @@ class ExtractionPipeline():
             KEYS["horse"] : r"hevonen|hevos",
             KEYS["chicken"] : r"kanoja|\skanaa",
             KEYS["siirtotila"] : r"siirtotila",
-            KEYS["kantatila"] : "kantatila"
+            KEYS["kantatila"] : r"kantatila",
+            KEYS["moreeni"] : r"moreeni",
+            KEYS["hiesu"] : r"hiesu",
+            KEYS["hieta"] : r"hieta",
+            KEYS["muta"] : r"muta",
+            KEYS["savi"] : r"savi",
+            KEYS["multa"] : r"multa",
         }
         flagExt.set_patterns_to_find(patterns)
         flags = flagExt.extract(text, entry)
