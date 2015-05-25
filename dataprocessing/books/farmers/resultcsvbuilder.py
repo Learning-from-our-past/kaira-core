@@ -30,7 +30,9 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
     def _writeCsvHeaders(self):
         headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "MeadowArea ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince"]
         headers = headers + ["oat", "barley", "hay", "potatoes", "wheat", "sugarbeet", "puimakone", "tractor", "horse", "chicken", "siirtotila", "kantatila",
-                             "moreeni", "hiesu", "hieta", "muta", "savi", "multa"]
+                             "moreeni", "hiesu", "hieta", "muta", "savi", "multa", "salaojitus",
+                             "rooms", "lypsylehmät", "teuraseläimet", "lampaat", "lihotussiat", "emakot", "nuori",
+                             "kanat"]
 
         headers = headers + ["Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages"]
 
@@ -85,8 +87,16 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                             persondatadict[KEYS["flags"]].value[KEYS["muta"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["savi"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["multa"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["salaojitus"]].value,
 
-
+                            persondatadict[KEYS["quantities"]].value[KEYS["rooms"]].value,
+                            persondatadict[KEYS["quantities"]].value[KEYS["lypsylehma"]].value,
+                            persondatadict[KEYS["quantities"]].value[KEYS["teuras"]].value,
+                            persondatadict[KEYS["quantities"]].value[KEYS["lammas"]].value,
+                            persondatadict[KEYS["quantities"]].value[KEYS["lihotussika"]].value,
+                            persondatadict[KEYS["quantities"]].value[KEYS["emakko"]].value,
+                            persondatadict[KEYS["quantities"]].value[KEYS["nuori"]].value,
+                            persondatadict[KEYS["quantities"]].value[KEYS["kanoja"]].value,
 
                             persondatadict[KEYS["hostess"]].value[KEYS["firstnames"]].value,
                             persondatadict[KEYS["hostess"]].value[KEYS["surname"]].value,
