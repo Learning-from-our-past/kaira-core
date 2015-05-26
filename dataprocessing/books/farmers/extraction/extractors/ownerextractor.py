@@ -6,7 +6,7 @@ from books.farmers.extraction.extractionExceptions import OwnerYearException, Ow
 from books.farmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
-from shared.genderExtract import Gender
+from shared.genderExtract import Gender, GenderException
 import re
 
 class OwnerExtractor(BaseExtractor):
@@ -50,7 +50,11 @@ class OwnerExtractor(BaseExtractor):
             self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
 
     def _find_owner_gender(self, name):
-        self.owner_gender = Gender.find_gender(name)
+        try:
+            self.owner_gender = Gender.find_gender(name)
+        except GenderException as e:
+                self.errorLogger.logError(e.eType, self.currentChild)
+                self.owner_gender = ""
 
 
     def _split_names(self, name):
