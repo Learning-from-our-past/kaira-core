@@ -16,10 +16,9 @@ class HostessExtractor(BaseExtractor):
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+)," #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.HOSTESS_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.entry = entry
-        self.hostess_name = ""
-        self.first_names = ""
-        self.surname = ""
-        self.hostess_gender = "Female"
+        self.first_names = ValueWrapper("")
+        self.surname = ValueWrapper("")
+        self.hostess_gender = ValueWrapper("Female")
         self.birthday = {KEYS["birthDay"]:  ValueWrapper(""), KEYS["birthMonth"]:  ValueWrapper(""),
                 KEYS["birthYear"]:  ValueWrapper(""), KEYS["birthLocation"]:  ValueWrapper("")}
         self._find_hostess(text)
@@ -48,25 +47,27 @@ class HostessExtractor(BaseExtractor):
 
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(HostessNameException.eType, self.currentChild)
+            self.first_names.error = HostessNameException.eType
+            self.surname.error = HostessNameException.eType
 
     def _split_names(self, name):
         name = re.sub(r"(?:<|>|&|')", r"", name)
         names = re.split(" ", name)
 
-        self.surname = names[len(names)-1].strip(" ")
+        self.surname.value = names[len(names)-1].strip(" ")
         if len(names) > 1:
             for i in range(0, len(names)-1):
                 if names[i].strip(" ") != "o.s.":
-                    self.first_names += names[i].strip(" ") + " "
-            self.first_names = self.first_names.strip(" ")
+                    self.first_names.value += names[i].strip(" ") + " "
+            self.first_names.value = self.first_names.value.strip(" ")
 
 
 
     def _constructReturnDict(self):
         return {KEYS["hostess"] : ValueWrapper({
-                KEYS["firstnames"] : ValueWrapper(self.first_names),
-                KEYS["surname"] : ValueWrapper(self.surname),
-                KEYS["gender"] : ValueWrapper(self.hostess_gender),
+                KEYS["firstnames"] : self.first_names,
+                KEYS["surname"] : self.surname,
+                KEYS["gender"] : self.hostess_gender,
                 KEYS["hostessBirthData"] : ValueWrapper(self.birthday)
         })}
 

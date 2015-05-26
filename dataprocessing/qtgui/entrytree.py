@@ -211,6 +211,7 @@ class TreeModel(QtCore.QAbstractItemModel):
 class TreeItem(object):
 
       EDITED_ROW_COLOR = QColor(111,199,70)
+      ERROR_ROW_COLOR = QColor(218,85,85)
       def __init__(self, data, xml, parent=None):
           self.parentItem = parent
           self.itemData = data
@@ -243,8 +244,12 @@ class TreeItem(object):
           try:
               if isinstance(self.itemData[column], ValueWrapper):
                   #color the row differently if it has manually edited data
+                  if role == QtCore.Qt.BackgroundRole and self.itemData[column].error != False and not self.itemData[column].manuallyEdited:
+                      return QtCore.QVariant(self.ERROR_ROW_COLOR)
+
                   if role == QtCore.Qt.BackgroundRole and self.itemData[column].manuallyEdited:
                       return QtCore.QVariant(self.EDITED_ROW_COLOR)
+
                   return self.itemData[column].value
 
               else:

@@ -21,7 +21,7 @@ class BirthdayExtractor(BaseExtractor):
         self.dateExtractor = None
         self.foundDate = {}
         self.preparedText = ""
-
+        self.error = False
         self.initVars(text)
         self._findDate(self.preparedText)
         return self._constructReturnDict()
@@ -47,6 +47,7 @@ class BirthdayExtractor(BaseExtractor):
         except DateException as e:
             #TODO: Better idea to have in DateExtractor class maybe?
             self.errorLogger.logError(BirthdayException.eType, self.currentChild)
+            self.error = BirthdayException.eType
             self.foundDate = {"day": "","month": "",
                 "year": "", "cursorLocation": ""}
 
@@ -55,5 +56,12 @@ class BirthdayExtractor(BaseExtractor):
         self.matchFinalPosition = self.dateExtractor.getFinalMatchPosition() + self.matchStartPosition - 4
 
     def _constructReturnDict(self):
-        return {KEYS["birthDay"]:  ValueWrapper(self.foundDate["day"]), KEYS["birthMonth"]:  ValueWrapper(self.foundDate["month"]),
-                KEYS["birthYear"]:  ValueWrapper(self.foundDate["year"])}
+        self.foundDate["day"] = ValueWrapper(self.foundDate["day"])
+        self.foundDate["day"].error = self.error
+        self.foundDate["month"] = ValueWrapper(self.foundDate["month"])
+        self.foundDate["month"].error = self.error
+        self.foundDate["year"] = ValueWrapper(self.foundDate["year"])
+        self.foundDate["year"].error = self.error
+
+        return {KEYS["birthDay"]:  self.foundDate["day"], KEYS["birthMonth"]: self.foundDate["month"],
+                KEYS["birthYear"]:  self.foundDate["year"]}

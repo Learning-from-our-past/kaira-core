@@ -28,6 +28,7 @@ class ChildExtractor(BaseExtractor):
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
         self.children_str = ""
         self.child_list = []
+        self.child_error = False
         self.girls = 0
         self._check_many_marriages(text)
         self._find_children(text)
@@ -46,6 +47,7 @@ class ChildExtractor(BaseExtractor):
 
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
+            self.child_error = NoChildrenException.eType
 
     def _check_many_marriages(self, text):
         marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
@@ -91,13 +93,14 @@ class ChildExtractor(BaseExtractor):
             name = name.strip("-")
             name = name.strip(" ")
             try:
-                gender = Gender.find_gender(name)
+                gender = ValueWrapper(Gender.find_gender(name))
             except GenderException as e:
                 self.errorLogger.logError(e.eType, self.currentChild)
-                gender = ""
+                gender = ValueWrapper("")
+                gender.error = e.eType
 
 
-            if gender == "Female":
+            if gender.value == "Female":
                 self.girls += 1
 
             try:
@@ -110,7 +113,7 @@ class ChildExtractor(BaseExtractor):
             except regexUtils.RegexNoneMatchException:
                 year = ""
             result = ValueWrapper({"name" : ValueWrapper(name),
-                                                 "gender" : ValueWrapper(gender), "birthYear" : ValueWrapper(year)})
+                                                 "gender" : gender, "birthYear" : ValueWrapper(year)})
             self.child_list.append(result)
             return result
         except regexUtils.RegexNoneMatchException:
@@ -121,6 +124,7 @@ class ChildExtractor(BaseExtractor):
 
 
     def _constructReturnDict(self):
-
-        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list)),
+        c = ValueWrapper(self.child_list)
+        c.error = self.child_error
+        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : c, KEYS["childCount"] : ValueWrapper(len(self.child_list)),
                  KEYS["girlCount"] : ValueWrapper(self.girls),  KEYS["boyCount"] : ValueWrapper(len(self.child_list) - self.girls)}

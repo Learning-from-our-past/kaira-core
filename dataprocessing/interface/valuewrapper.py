@@ -10,6 +10,7 @@ class ValueWrapper():
         self.value = val
         self.id = "t" + str(ValueWrapper.idcounter)
         self.manuallyEdited = False
+        self.error = False
 
         if self.id in ValueWrapper.xmlEntry.attrib:
             #there is manual entered value for this field in xml, use it instead
