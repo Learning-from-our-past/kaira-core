@@ -103,6 +103,10 @@ class ChildExtractor(BaseExtractor):
             try:
                 yearMatch = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
                 year = yearMatch.group("year")
+                if float(year) <70:
+                    year = "19" + year
+                else:
+                    year = "18" + year
             except regexUtils.RegexNoneMatchException:
                 year = ""
             result = ValueWrapper({"name" : ValueWrapper(name),
