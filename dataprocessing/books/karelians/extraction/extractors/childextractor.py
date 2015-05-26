@@ -25,6 +25,7 @@ class ChildExtractor(BaseExtractor):
         self.YEAR_PATTERN = r"(?P<year>(\d\d))"
         self.LOCATION_PATTERN = r"\d\d\s(?P<location>[a-zä-ö\s-]+$)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
+        self.girls = 0
         self.children_str = ""
         self.child_list = []
         self._find_children(text)
@@ -81,6 +82,9 @@ class ChildExtractor(BaseExtractor):
             name = name.strip("-")
             name = name.strip(" ")
             gender = Gender.find_gender(name)
+            if gender == "Female":
+                self.girls += 1
+
             try:
                 yearMatch = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
                 year = yearMatch.group("year")
@@ -120,4 +124,5 @@ class ChildExtractor(BaseExtractor):
         """KEYS["karelianlocations"] : ValueWrapper(self.locationlisting),
                 KEYS["returnedkarelia"] : ValueWrapper(self.returned),
                 KEYS["karelianlocationsCount"] : ValueWrapper(len(self.locationlisting))"""
-        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list))}
+        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list)),
+                KEYS["girlCount"] : ValueWrapper(self.girls),  KEYS["boyCount"] : ValueWrapper(len(self.child_list) - self.girls)}
