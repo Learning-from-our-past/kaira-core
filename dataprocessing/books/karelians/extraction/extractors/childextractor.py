@@ -7,7 +7,7 @@ from shared import textUtils
 import re
 import regex
 from shared.geo.geocoding import GeoCoder, LocationNotFound
-from shared.genderExtract import Gender
+from shared.genderExtract import Gender, GenderException
 
 
 class ChildExtractor(BaseExtractor):
@@ -81,7 +81,11 @@ class ChildExtractor(BaseExtractor):
             name = name.strip()
             name = name.strip("-")
             name = name.strip(" ")
-            gender = Gender.find_gender(name)
+            try:
+                gender = Gender.find_gender(name)
+            except GenderException as e:
+                self.errorLogger.logError(e.eType, self.currentChild)
+                gender = ""
             if gender == "Female":
                 self.girls += 1
 

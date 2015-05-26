@@ -2,7 +2,7 @@ from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 from books.karelians.extraction.extractionExceptions import NameException
-from shared.genderExtract import Gender
+from shared.genderExtract import Gender, GenderException
 import re
 
 class NameExtractor(BaseExtractor):
@@ -31,5 +31,9 @@ class NameExtractor(BaseExtractor):
             self.errorLogger.logError(NameException.eType, self.currentChild)
 
     def _constructReturnDict(self):
-        gender = Gender.find_gender(self.first_names)
+        try:
+            gender = Gender.find_gender(self.first_names)
+        except GenderException as e:
+            self.errorLogger.logError(e.eType, self.currentChild)
+            gender = ""
         return {KEYS["firstnames"] : ValueWrapper(self.first_names), KEYS["gender"] : ValueWrapper(gender),KEYS["surname"]: ValueWrapper(self.surname)}
