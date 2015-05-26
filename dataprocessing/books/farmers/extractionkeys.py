@@ -104,6 +104,8 @@ KEYS = {
       "spouseOrigFamily" : "SpouseOriginalFamily",
       "children" : "Children",
       "gender" : "Gender",
+      "girlCount" : "girlCount",
+      "boyCount" : "boyCount",
 
 
       "separated" : "Separated",

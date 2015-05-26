@@ -28,8 +28,10 @@ class ChildExtractor(BaseExtractor):
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
         self.children_str = ""
         self.child_list = []
+        self.girls = 0
         self._check_many_marriages(text)
         self._find_children(text)
+
         return self._constructReturnDict()
 
     def _find_children(self, text):
@@ -89,6 +91,9 @@ class ChildExtractor(BaseExtractor):
             name = name.strip("-")
             name = name.strip(" ")
             gender = Gender.find_gender(name)
+            if gender == "Female":
+                self.girls += 1
+
             try:
                 yearMatch = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
                 year = yearMatch.group("year")
@@ -107,4 +112,5 @@ class ChildExtractor(BaseExtractor):
 
     def _constructReturnDict(self):
 
-        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list))}
+        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list)),
+                 KEYS["girlCount"] : ValueWrapper(self.girls),  KEYS["boyCount"] : ValueWrapper(len(self.child_list) - self.girls)}
