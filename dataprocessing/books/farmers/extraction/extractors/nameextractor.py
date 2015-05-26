@@ -1,7 +1,7 @@
-from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
-from books.karelians.extractionkeys import KEYS
+from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
+from books.farmers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
-from books.karelians.extraction.extractionExceptions import NameException
+from books.farmers.extraction.extractionExceptions import NameException
 from shared.genderExtract import Gender, GenderException
 import re
 
@@ -34,6 +34,6 @@ class NameExtractor(BaseExtractor):
         try:
             gender = Gender.find_gender(self.first_names)
         except GenderException as e:
-            self.errorLogger.logError(e.eType, self.currentChild)
-            gender = ""
+                self.errorLogger.logError(e.eType, self.currentChild)
+                gender = ""
         return {KEYS["firstnames"] : ValueWrapper(self.first_names), KEYS["gender"] : ValueWrapper(gender),KEYS["surname"]: ValueWrapper(self.surname)}

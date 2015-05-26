@@ -68,9 +68,12 @@ class ImportOcrDialog(QDialog):
                 msgbox.information(self.parent, "Done", "OCR conversion done! File saved to the disk.")
                 msgbox.show()
             except Exception as e:
-                msgbox = QMessageBox()
-                msgbox.information(self.parent, "Chunking process failed", "Error in data-file. Was it saved in utf-8/unicode format? More info: " + str(e))
-                msgbox.show()
+                if "DEV" in os.environ and os.environ["DEV"]:
+                    raise e
+                else:
+                    msgbox = QMessageBox()
+                    msgbox.information(self.parent, "Chunking process failed", "Error in data-file. Was it saved in utf-8/unicode format? More info: " + str(e))
+                    msgbox.show()
 
 
 
@@ -86,7 +89,12 @@ class ImportOcrDialog(QDialog):
         if self.ui.soldierRadio.isChecked():
             chunker = route_gui.Router.get_chunktext_class(route_gui.Router.SOLDIERS)()
 
+        if self.ui.farmersRadio.isChecked():
+            chunker = route_gui.Router.get_chunktext_class(route_gui.Router.FARMERS)()
+
         return chunker.chunk_text(text, self.destination_file)
+
+
 
     def _save_to_xml(self, chunkedtext, path):
         print ("Kirjoitetaan ")

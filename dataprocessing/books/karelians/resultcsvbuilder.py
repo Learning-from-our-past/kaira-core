@@ -32,7 +32,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
     def _writeCsvHeaders(self):
         headers = ["Surname", "first names", "gender", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "approximatePageNumber", "returnedToKarelia", "hasSpouse", "maybePreviousMarriages", "weddingYear", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation", "spouseDeathYear" ]
 
-        headers = headers + ["ChildCount"]
+        headers = headers + ["ChildCount", "BoyCount", "GirlCount"]
         for i in range(0, self.childrenMax):
             headers = headers + ["Child" + str(i), "Gender" + str(i), "ChildBirthYear" + str(i), "childBirthLocation" + str(i), "childBirthLatitude" + str(i), "childBirthLongitude" + str(i)]
 
@@ -84,6 +84,8 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
         #childcount
         lrow.append(persondatadict[KEYS["childCount"]].value)
+        lrow.append(persondatadict[KEYS["boyCount"]].value)
+        lrow.append(persondatadict[KEYS["girlCount"]].value)
 
         if len(children) > self.childrenMax:
             self.childrenMax = len(children)
@@ -147,7 +149,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
         for row in self.rowsofcsv:
 
             w = row["regular"] + row["children"]
-            diff = self.childrenMax*6 - len(row["children"]) +1   #1 for childrencount column
+            diff = self.childrenMax*6 - len(row["children"]) +3   #3 for childrencount columns
             if diff > 0:            #tasaa rivit lisäämällä tyhjää
                 w = w + [""]*diff #6 is the number of cells per child
 

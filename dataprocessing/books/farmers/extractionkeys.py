@@ -1,6 +1,58 @@
 KEYS = {
+      "name" : "name",
+      "farmLocation" : "FarmLocation",
+      "ownerFrom" : "OwnerFrom",
+      "ownerName" : "OwnerName",
       "surname" : "Surname",
       "firstnames" : "FirstNames",
+      "owner": "Owner",
+      "ownerBirthData" : "birthData",
+      "hostessBirthData" : "birthData",
+      "hostess": "Hostess",
+
+      "farmDetails" : "farmDetails",
+      "wholeArea" : "wholeArea",
+      "forestArea" : "forestArea",
+      "fieldArea" : "fieldArea",
+      "wasteArea" : "wasteArea",
+      "meadowArea" : "meadowArea",
+
+      "flags" : "flags",
+      "oat" : "Oat",
+      "barley" : "Barley",
+      "hay" : "Hay",
+      "potatoes" : "Potatoes",
+      "wheat" : "Wheat",
+      "sugarbeet" : "Sugarbeet",
+      "puimakone" : "ThreshingMachine",
+      "tractor" : "Tractor",
+      "horse" : "Horse",
+      "chicken" : "Chicken",
+      "siirtotila" : "Siirtotila",
+      "kantatila" : "Kantatila",
+      "salaojitus" : "Salaojitus",
+
+      "moreeni" : "Moreeni",
+      "hieta" : "Hieta",
+      "hiesu" : "Hiesu",
+      "muta" : "Muta",
+      "savi" : "Savi",
+      "multa" : "Multa",
+
+      "rooms" : "rooms",
+      "lypsylehma" : "lypsylehma",
+      "teuras" : "teuraselain",
+      "lammas" : "lammas",
+      "lihotussika" : "lihotussika",
+      "emakko" : "emakko",
+      "nuori" : "nuori",
+      "kanoja" : "kanoja",
+
+      "quantities" : "quantities",
+
+
+
+
       "origfamily" : "OriginalFamily",
       "profession" : "Profession/Status",
       "imagepath": "ImagePath",
