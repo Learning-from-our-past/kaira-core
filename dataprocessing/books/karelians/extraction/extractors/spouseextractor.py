@@ -27,7 +27,7 @@ class SpouseExtractor(BaseExtractor):
         self.SUBSTRING_WIDTH = 100
 
         self.hasSpouse = False
-        self.spouseName = ""
+        self.spouseName = ValueWrapper("")
         self.spouseDeath = ""
         self.weddingYear = ""
         self.profession = {KEYS["profession"] : ValueWrapper("")}
@@ -54,11 +54,12 @@ class SpouseExtractor(BaseExtractor):
     def _findSpouseName(self, text):
         try:
             name = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
-            self.spouseName = name.group("name").strip()
-            self.spouseName = re.sub(r"\so$","", self.spouseName)
+            self.spouseName.value = name.group("name").strip()
+            self.spouseName.value = re.sub(r"\so$","", self.spouseName.value)
             self._findSpouseDetails(text[name.end()-2:])
         except regexUtils.RegexNoneMatchException:
             self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
+            self.spouseName.error = SpouseNameException.eType
 
     def _findSpouseDetails(self, text):
         origFamilyExt = OrigFamilyExtractor(self.entry, self.errorLogger, self.xmlDocument)
@@ -94,11 +95,12 @@ class SpouseExtractor(BaseExtractor):
         self.matchFinalPosition = self.foundSpouse.end() + self.matchStartPosition - 4
 
     def _constructReturnDict(self):
-        print(self.profession)
+        p = ValueWrapper(self.profession[KEYS["profession"]].value)
+        p.error = self.profession[KEYS["profession"]].error         #this is to pass the errors for coloring properly to gui
         return {KEYS["spouse"]: ValueWrapper({ KEYS["hasSpouse"]:  ValueWrapper(self.hasSpouse),
                                                KEYS["weddingYear"]: ValueWrapper(self.weddingYear),
-                                               KEYS["spouseName"]:  ValueWrapper(self.spouseName),
+                                               KEYS["spouseName"]:  self.spouseName,
                                                KEYS["spouseOrigFamily"]: ValueWrapper(self.origFamily[KEYS["origfamily"]].value),
-                                               KEYS["spouseProfession"]: ValueWrapper(self.profession[KEYS["profession"]].value),
+                                               KEYS["spouseProfession"]: p,
                                                KEYS["spouseBirthData"]: ValueWrapper(self.birthday),
                                                KEYS["spouseDeathYear"]: ValueWrapper(self.spouseDeath)})}

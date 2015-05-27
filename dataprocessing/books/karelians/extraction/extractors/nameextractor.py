@@ -10,13 +10,15 @@ class NameExtractor(BaseExtractor):
     name attribute from xml-entry.
     """
     def extract(self, text, entry):
-        self.first_names = ""
-        self.surname = ""
+        self.first_names = ValueWrapper("")
+        self.surname = ValueWrapper("")
         try:
             namestr = entry["xml"].attrib["name"]
             self._split_names(namestr)
         except KeyError as e:
             self.errorLogger.logError(NameException.eType, self.currentChild)
+            self.first_names.error = NameException.eType
+            self.surname.error = NameException.eType
 
         return self._constructReturnDict()
 
@@ -24,16 +26,19 @@ class NameExtractor(BaseExtractor):
         name = re.sub(r"(?:<|>|&|')", r"", name)
         names = re.split("\.|,", name)
 
-        self.surname = names[0].strip(" ")
+        self.surname.value = names[0].strip(" ")
         if len(names) > 1:
-            self.first_names = names[1].strip(" ")
+            self.first_names.value = names[1].strip(" ")
         else:
             self.errorLogger.logError(NameException.eType, self.currentChild)
+            self.first_names.error = NameException.eType
+
 
     def _constructReturnDict(self):
         try:
-            gender = Gender.find_gender(self.first_names)
+            gender = ValueWrapper(Gender.find_gender(self.first_names.value))
         except GenderException as e:
             self.errorLogger.logError(e.eType, self.currentChild)
-            gender = ""
-        return {KEYS["firstnames"] : ValueWrapper(self.first_names), KEYS["gender"] : ValueWrapper(gender),KEYS["surname"]: ValueWrapper(self.surname)}
+            gender = ValueWrapper("")
+            gender.error = e.eType
+        return {KEYS["firstnames"] : self.first_names, KEYS["gender"] : gender,KEYS["surname"]: self.surname}

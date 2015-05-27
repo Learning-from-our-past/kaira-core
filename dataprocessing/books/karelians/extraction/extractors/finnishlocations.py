@@ -22,6 +22,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         self.coordinates_notfound_threshold = self.LOCATION_THRESHOLD   #used to detect when the locations end. To remove noplace words.
         self.locations = ""
         self.locationlisting = []
+        self.location_error = False
 
         try:
             self._find_locations(text)
@@ -43,6 +44,7 @@ class FinnishLocationsExtractor(BaseExtractor):
             self._split_locations()
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
+            self.location_error = OtherLocationException.eType
 
     def _clean_locations(self):
         self.locations = self.locations.strip(",")
@@ -125,7 +127,9 @@ class FinnishLocationsExtractor(BaseExtractor):
         return len(list(years))
 
     def _constructReturnDict(self):
-        return {KEYS["otherlocations"] : ValueWrapper(self.locationlisting), KEYS["otherlocationsCount"] : ValueWrapper(len(self.locationlisting))}
+        loc = ValueWrapper(self.locationlisting)
+        loc.error = self.location_error
+        return {KEYS["otherlocations"] : loc, KEYS["otherlocationsCount"] : ValueWrapper(len(self.locationlisting))}
 
 class LocationThresholdException(Exception):
     message = "Locations couldn't be found from db"

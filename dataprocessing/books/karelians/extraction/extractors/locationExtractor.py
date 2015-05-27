@@ -52,12 +52,11 @@ class BirthdayLocationExtractor(BaseExtractor):
     DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
     REQUIRES_MATCH_POSITION = True
     SUBSTRING_WIDTH = 28
-    locationExtractor = None
-    preparedText = ""
-    location = ""
+
 
     def extract(self, text):
         super(BirthdayLocationExtractor, self).extract(text)
+        self.location = ValueWrapper("")
         self.initVars(text)
 
         self._findLocation(self.preparedText)
@@ -75,12 +74,13 @@ class BirthdayLocationExtractor(BaseExtractor):
         try:
             self.foundLocation = self.locationExtractor.extract(text)
             self._checkIfLocationIsValid(text, self.foundLocation)
-            self.location = self.foundLocation.group("location")
-            self.location = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", self.location)
+            self.location.value = self.foundLocation.group("location")
+            self.location.value = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", self.location.value)
             self._setFinalMatchPosition()
         except LocationException as e:
             self.errorLogger.logError(BirthLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
-            self._locationExtractionFailed()
+            self.location.value("")
+            self.location.error = BirthLocationException.eType
 
     def _checkIfLocationIsValid(self, text, foundLocation):
         #check if the string has data on death. If it is before the location, be careful to not
@@ -90,12 +90,11 @@ class BirthdayLocationExtractor(BaseExtractor):
             if deathPosition < foundLocation.end(): #there is word kaat, or " k " before location match.
                 raise LocationException(text)
 
-    def _locationExtractionFailed(self):
-        self.location = ""
+
 
     def _setFinalMatchPosition(self):
         #Dirty fix for inaccuracy in positions which would screw the Location extraction
         self.matchFinalPosition = self.locationExtractor.getFinalMatchPosition() + self.matchStartPosition - 4  #TODO: Dirty -4 offset
 
     def _constructReturnDict(self):
-        return {KEYS["birthLocation"] :  ValueWrapper(self.location), "cursorLocation" : self.getFinalMatchPosition()}
+        return {KEYS["birthLocation"] :  self.location, "cursorLocation" : self.getFinalMatchPosition()}

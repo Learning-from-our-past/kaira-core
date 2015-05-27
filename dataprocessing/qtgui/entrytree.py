@@ -269,8 +269,8 @@ class TreeItem(object):
       def setData(self, data, column):
           print(self.itemData[column].id)
           self.xml.attrib[self.itemData[column].id] = str(data)  #save manual data to an attribute to the xml entry
-          self.itemData[column].manuallyEdited = True
-          self.itemData[column].value = data
+          self.itemData[column].manualEdit(data)
+
 
       def removeChildren(self):
           self.childItems = []

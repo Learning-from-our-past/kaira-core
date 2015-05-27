@@ -14,6 +14,7 @@ class ProfessionExtractor(BaseExtractor):
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.professions = ""
+        self.profession_error = False
         self._find_profession(text)
         return self._constructReturnDict()
 
@@ -56,7 +57,10 @@ class ProfessionExtractor(BaseExtractor):
 
         if self.professions == "":
             self.errorLogger.logError(ProfessionException.eType, self.currentChild)
+            self.profession_error = ProfessionException.eType
 
     def _constructReturnDict(self):
         self._clean_professions()
-        return {KEYS["profession"] : ValueWrapper(self.professions)}
+        p = ValueWrapper(self.professions)
+        p.error = self.profession_error
+        return {KEYS["profession"] : p}

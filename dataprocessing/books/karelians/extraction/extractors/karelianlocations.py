@@ -23,6 +23,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         self.returned = ""
         self.locations = ""
         self.locationlisting = []
+        self.location_error = False
         self._find_locations(text)
 
         return self._constructReturnDict()
@@ -36,6 +37,7 @@ class KarelianLocationsExtractor(BaseExtractor):
             self._split_locations()
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(KarelianLocationException.eType, self.currentChild)
+            self.location_error = KarelianLocationException.eType
 
     def _clean_locations(self):
         self.locations = self.locations.strip(",")
@@ -121,6 +123,8 @@ class KarelianLocationsExtractor(BaseExtractor):
         return len(list(years))
 
     def _constructReturnDict(self):
-        return {KEYS["karelianlocations"] : ValueWrapper(self.locationlisting),
+        loc = ValueWrapper(self.locationlisting)
+        loc.error = self.location_error
+        return {KEYS["karelianlocations"] : loc,
                 KEYS["returnedkarelia"] : ValueWrapper(self.returned),
                 KEYS["karelianlocationsCount"] : ValueWrapper(len(self.locationlisting))}

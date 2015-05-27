@@ -27,6 +27,7 @@ class ChildExtractor(BaseExtractor):
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
         self.girls = 0
         self.children_str = ""
+        self.children_error = False
         self.child_list = []
         self._find_children(text)
         return self._constructReturnDict()
@@ -42,6 +43,7 @@ class ChildExtractor(BaseExtractor):
 
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
+            self.children_error = NoChildrenException.eType
 
     def _check_many_marriages(self, text):
         marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
@@ -82,11 +84,12 @@ class ChildExtractor(BaseExtractor):
             name = name.strip("-")
             name = name.strip(" ")
             try:
-                gender = Gender.find_gender(name)
+                gender = ValueWrapper(Gender.find_gender(name))
             except GenderException as e:
                 self.errorLogger.logError(e.eType, self.currentChild)
-                gender = ""
-            if gender == "Female":
+                gender = ValueWrapper("")
+                gender.error = e.eType
+            if gender.value == "Female":
                 self.girls += 1
 
             try:
@@ -109,7 +112,7 @@ class ChildExtractor(BaseExtractor):
                 location = ""
                 coordinates = self.geocoder.get_empty_coordinates()
 
-            self.child_list.append(ValueWrapper({"name" : ValueWrapper(name), "gender" : ValueWrapper(gender), "birthYear" : ValueWrapper(year),
+            self.child_list.append(ValueWrapper({"name" : ValueWrapper(name), "gender" : gender, "birthYear" : ValueWrapper(year),
                                                  "locationName" : ValueWrapper(location),
                                                  "childCoordinates" : ValueWrapper({"latitude": ValueWrapper(coordinates["latitude"]), "longitude": ValueWrapper(coordinates["longitude"])})}))
         except regexUtils.RegexNoneMatchException:
@@ -132,5 +135,7 @@ class ChildExtractor(BaseExtractor):
         """KEYS["karelianlocations"] : ValueWrapper(self.locationlisting),
                 KEYS["returnedkarelia"] : ValueWrapper(self.returned),
                 KEYS["karelianlocationsCount"] : ValueWrapper(len(self.locationlisting))"""
-        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : ValueWrapper(self.child_list), KEYS["childCount"] : ValueWrapper(len(self.child_list)),
+        children = ValueWrapper(self.child_list)
+        children.error = self.children_error
+        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : children, KEYS["childCount"] : ValueWrapper(len(self.child_list)),
                 KEYS["girlCount"] : ValueWrapper(self.girls),  KEYS["boyCount"] : ValueWrapper(len(self.child_list) - self.girls)}
