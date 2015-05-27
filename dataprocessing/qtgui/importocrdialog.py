@@ -78,10 +78,11 @@ class ImportOcrDialog(QDialog):
 
 
     def _chunk_text_file(self, filename):
+        working_dir = os.getcwd()
         os.chdir(os.path.dirname(filename))
         f = open(filename, "r", encoding="utf8")
         text = f.read()
-
+        os.chdir(working_dir)
         #TODO: Maybe find a better place for these?
         if self.ui.karelianRadio.isChecked():
             chunker = route_gui.Router.get_chunktext_class(route_gui.Router.KARELIANS)()
