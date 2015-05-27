@@ -79,7 +79,7 @@ class BirthdayLocationExtractor(BaseExtractor):
             self._setFinalMatchPosition()
         except LocationException as e:
             self.errorLogger.logError(BirthLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
-            self.location.value("")
+            self.location.value = ""
             self.location.error = BirthLocationException.eType
 
     def _checkIfLocationIsValid(self, text, foundLocation):

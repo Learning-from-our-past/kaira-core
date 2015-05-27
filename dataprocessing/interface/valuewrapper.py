@@ -16,8 +16,6 @@ class ValueWrapper(object):
             #there is manual entered value for this field in xml, use it instead
             self._value = ValueWrapper.xmlEntry.attrib[self.id]
             self.manuallyEdited = True
-
-        print(self._value)
         ValueWrapper.idcounter += 1
 
 

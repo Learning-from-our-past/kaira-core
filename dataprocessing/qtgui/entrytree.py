@@ -212,6 +212,7 @@ class TreeItem(object):
 
       EDITED_ROW_COLOR = QColor(111,199,70)
       ERROR_ROW_COLOR = QColor(218,85,85)
+      MISSING_ROW_COLOR = QColor(247, 252, 117)
       def __init__(self, data, xml, parent=None):
           self.parentItem = parent
           self.itemData = data
@@ -249,6 +250,9 @@ class TreeItem(object):
 
                   if role == QtCore.Qt.BackgroundRole and self.itemData[column].manuallyEdited:
                       return QtCore.QVariant(self.EDITED_ROW_COLOR)
+
+                  if role == QtCore.Qt.BackgroundRole and (self.itemData[column].value == "" or self.itemData[column].value is None):
+                      return QtCore.QVariant(self.MISSING_ROW_COLOR)
 
                   return self.itemData[column].value
 
