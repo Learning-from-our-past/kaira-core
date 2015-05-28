@@ -4,14 +4,14 @@ This class defines the progress and order of the extraction process by initializ
 required extractors.
 """
 
-from books.farmers.extraction.extractors.metadataextractor import MetadataExtractor
-from books.farmers.extraction.extractors.ownerextractor import OwnerExtractor
-from books.farmers.extraction.extractors.hostessextractor import HostessExtractor
-from books.farmers.extraction.extractors.childextractor import ChildExtractor
-from books.farmers.extraction.extractors.farmextractor import FarmExtractor
-from books.farmers.extraction.extractors.boolextractor import BoolExtractor
-from books.farmers.extraction.extractors.quantityextractor import QuantityExtractor
-from books.farmers.extractionkeys import KEYS
+from books.greatfarmers.extraction.extractors.metadataextractor import MetadataExtractor
+from books.greatfarmers.extraction.extractors.ownerextractor import OwnerExtractor
+from books.greatfarmers.extraction.extractors.hostessextractor import HostessExtractor
+from books.greatfarmers.extraction.extractors.childextractor import ChildExtractor
+from books.greatfarmers.extraction.extractors.farmextractor import FarmExtractor
+from books.greatfarmers.extraction.extractors.boolextractor import BoolExtractor
+from books.greatfarmers.extraction.extractors.quantityextractor import QuantityExtractor
+from books.greatfarmers.extractionkeys import KEYS
 from shared.genderExtract import Gender
 
 class ExtractionPipeline():

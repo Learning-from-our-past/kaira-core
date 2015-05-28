@@ -87,19 +87,9 @@ class PersonPreprocessor(ChunkTextInterface):
         return person
 
     def _add_person(self, person):
-        if person is not None and len(person.text) > 4:
+        if person is not None and len(person.text) > 4 and not self._remove_swedes(person):
             self.persons_document.append(person)
 
-def start():
-    os.chdir("material")
-    f = open("Siirtokarjalaisten tie I fragment_kuvat.html", "r", encoding="utf8")
-    text = f.read()
-    #"Siirtokarjalaisten_whole_book.htm") #Siirtokarjalaisten_whole_book.htm
-    p = PersonPreprocessor()
-    persons = p.chunk_text(text)
-    f = open("results.xml", "wb")
-    f.write(persons.encode("utf8"))
-    f.close()
-
-if __name__ == "__main__":
-    start()
+    def _remove_swedes(self, person):
+        if re.search(r"gärd|ligger|ägare|andra|ägt|Totalarealen", person.text, re.UNICODE|re.IGNORECASE):
+            return True

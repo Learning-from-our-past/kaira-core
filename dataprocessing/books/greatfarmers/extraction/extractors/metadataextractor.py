@@ -1,5 +1,5 @@
-from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
-from books.farmers.extractionkeys import KEYS
+from books.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
+from books.greatfarmers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 import re

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
 
-from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
-from books.farmers.extraction.extractionExceptions import *
-from books.farmers.extraction.extractors.dateExtractor import DateExtractor
+from books.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
+from books.greatfarmers.extraction.extractionExceptions import *
+from books.greatfarmers.extraction.extractors.dateExtractor import DateExtractor
 from shared import textUtils
-from books.farmers.extractionkeys import KEYS
+from books.greatfarmers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 from shared import regexUtils
 
@@ -14,7 +14,7 @@ class BirthdayExtractor(BaseExtractor):
 
     def extract(self, text, entry):
         super(BirthdayExtractor, self).extract(text)
-        self.PATTERN = r"(?:synt)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))" #r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
+        self.PATTERN = r"(?:synt|s)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))" #r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)    #TODO: TRY IGNORE CASE?
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
@@ -41,6 +41,7 @@ class BirthdayExtractor(BaseExtractor):
         return t
 
     def _findDate(self, text):
+        print(text)
         try:
             self.foundDate = self.dateExtractor.extract(text, self.PATTERN, self.OPTIONS)
             self._setFinalMatchPosition()

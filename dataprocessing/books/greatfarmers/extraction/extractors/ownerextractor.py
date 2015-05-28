@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
-from books.farmers.extractionkeys import KEYS
+from books.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
+from books.greatfarmers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
-from books.farmers.extraction.extractionExceptions import OwnerYearException, OwnerNameException
-from books.farmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from books.greatfarmers.extraction.extractionExceptions import OwnerYearException, OwnerNameException
+from books.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 from shared.genderExtract import Gender, GenderException
@@ -13,8 +13,8 @@ class OwnerExtractor(BaseExtractor):
 
     SEARCH_SPACE = 200
     def extract(self, text, entry):
-        self.OWNER_YEAR_PATTERN = r"om(?:\.|,)\s?vuodesta\s(?P<year>\d\d\d\d)"
-        self.OWNER_NAME_PATTERN = r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
+        self.OWNER_YEAR_PATTERN = r"om(?:\.|,)?\s?(?:vuodesta|vsta)\s(?P<year>\d\d\d\d)"
+        self.OWNER_NAME_PATTERN = r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)?\s(?:synt|s)" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.OWNER_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.entry = entry
         self.owner_year = ValueWrapper("")

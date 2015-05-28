@@ -1,9 +1,9 @@
 from shared.exceptionlogger import ExceptionLogger
-from books.farmers.extraction.extractionPipeline import ExtractionPipeline
+from books.greatfarmers.extraction.extractionPipeline import ExtractionPipeline
 from interface.processdatainterface import ProcessDataInterface
 from lxml import etree
 from interface.valuewrapper import ValueWrapper
-from books.farmers.extraction.extractionExceptions import ExtractionException
+from books.greatfarmers.extraction.extractionExceptions import ExtractionException
 class ProcessData(ProcessDataInterface):
 
 

@@ -1,7 +1,7 @@
-from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
-from books.farmers.extractionkeys import KEYS
+from books.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
+from books.greatfarmers.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
-from books.farmers.extraction.extractionExceptions import NoChildrenException, MultipleMarriagesException
+from books.greatfarmers.extraction.extractionExceptions import NoChildrenException, MultipleMarriagesException
 from shared import regexUtils
 from shared import textUtils
 import re
