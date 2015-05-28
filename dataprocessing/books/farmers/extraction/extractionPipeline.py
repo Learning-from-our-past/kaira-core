@@ -43,12 +43,14 @@ class ExtractionPipeline():
 
         flagExt = BoolExtractor(entry, eLogger, self.xmlDocument)
         patterns = {
-            KEYS["oat"] : r"kaura",
+            KEYS["oat"] : r"(kaura(?!nen))",
             KEYS["barley"] : r"ohra",
-            KEYS["hay"] : r"heinä",
+            KEYS["hay"] : r"(heinä(?!mäki))",
             KEYS["potatoes"] : r"peruna",
             KEYS["wheat"] : r"vehnä",
+            KEYS["rye"] : r"ruis",
             KEYS["sugarbeet"] : r"sokerijuuri",
+            KEYS["lanttu"] : r"lanttu",
             KEYS["puimakone"] : r"puimakone",
             KEYS["tractor"] : r"traktori",
             KEYS["horse"] : r"hevonen|hevos",
@@ -57,11 +59,22 @@ class ExtractionPipeline():
             KEYS["kantatila"] : r"kantatila",
             KEYS["moreeni"] : r"moreeni",
             KEYS["hiesu"] : r"hiesu",
-            KEYS["hieta"] : r"hieta",
+            KEYS["hieta"] : r"(hieta(?!nen))",
             KEYS["muta"] : r"muta",
-            KEYS["savi"] : r"savi",
+            KEYS["savi"] : r"(savi(?!taipale))",
             KEYS["multa"] : r"multa",
-            KEYS["salaojitus"] : r"(salaojitettu|salaojitus)"
+            KEYS["salaojitus"] : r"(salaojitettu|salaojitus)",
+
+            KEYS["talli"] : r"(?!auto)talli",
+            KEYS["pine"] : r"mänty(?!nen)",
+            KEYS["spruce"] : r"kuusi(?!nen)",
+            KEYS["birch"] : r"koivu(?!nen|niem)",
+            KEYS["sauna"] : r"sauna",
+            KEYS["navetta"] : r"navetta|navetan",
+            KEYS["lypsykone"] : r"lypsykone",
+            KEYS["autotalli"] : r"autotalli",
+            KEYS["someonedead"] : r"kuoli|kuollut|kaatui|kaatunut",
+
         }
         flagExt.set_patterns_to_find(patterns)
         flags = flagExt.extract(text, entry)

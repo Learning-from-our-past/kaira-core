@@ -29,7 +29,8 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     def _writeCsvHeaders(self):
         headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "MeadowArea ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince"]
-        headers = headers + ["oat", "barley", "hay", "potatoes", "wheat", "sugarbeet", "puimakone", "tractor", "horse", "chicken", "siirtotila", "kantatila",
+        headers = headers + ["oat", "barley", "hay", "potatoes", "wheat", "rye", "sugarbeet", "lanttu", "puimakone", "tractor", "horse", "chicken", "siirtotila", "kantatila",
+                             "talli", "sauna", "navetta", "autotalli", "lypsykone", "pine", "spruce", "birch", "someoneDead",
                              "moreeni", "hiesu", "hieta", "muta", "savi", "multa", "salaojitus",
                              "rooms", "lypsylehmät", "teuraseläimet", "lampaat", "lihotussiat", "emakot", "nuori",
                              "kanat"]
@@ -73,13 +74,27 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                             persondatadict[KEYS["flags"]].value[KEYS["hay"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["potatoes"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["wheat"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["rye"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["sugarbeet"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["lanttu"]].value,
+
                             persondatadict[KEYS["flags"]].value[KEYS["puimakone"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["tractor"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["horse"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["chicken"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["siirtotila"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["kantatila"]].value,
+
+                            persondatadict[KEYS["flags"]].value[KEYS["talli"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["sauna"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["navetta"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["autotalli"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["lypsykone"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["pine"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["spruce"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["birch"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["someonedead"]].value,
+
 
                             persondatadict[KEYS["flags"]].value[KEYS["moreeni"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["hiesu"]].value,
