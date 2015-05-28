@@ -10,10 +10,10 @@ import sys
 base = 'Win32GUI' if sys.platform=='win32' else None
 
 executables = [
-    Executable('start.py', base=base, targetName = 'Matrikels.exe')
+    Executable('start.py', base=base, targetName = 'Kaira.exe')
 ]
 
-setup(name='Matrikels',
+setup(name='Kaira',
       version = '0.7',
       description = '',
       options = dict(build_exe = buildOptions),
