@@ -1,5 +1,5 @@
 """
-This is a temporary class which routes calls from GUI to extractor modules. Idea is that
+This is a class which routes calls from GUI to extractor modules. Idea is that
 using it is should be easy during the development to change between soldier and karelian extractors
 without modifying GUI-code.
 """
@@ -19,6 +19,11 @@ from books.farmers.processData import ProcessData as FarmersProcessdata
 from books.farmers.resultcsvbuilder import ResultCsvBuilder as FarmersCsvBuilder
 from books.farmers.resultjsonbuilder import ResultJsonBuilder as FarmersJsonBuilder
 
+from books.greatfarmers.chunktextfile import PersonPreprocessor as GreatFarmersChunk
+from books.greatfarmers.processData import ProcessData as GreatFarmersProcessdata
+from books.greatfarmers.resultcsvbuilder import ResultCsvBuilder as GreatFarmersCsvBuilder
+from books.greatfarmers.resultjsonbuilder import ResultJsonBuilder as GreatFarmersJsonBuilder
+
 
 class Router():
 
@@ -27,11 +32,9 @@ class Router():
     BOOKSERIES = {
         "SOLDIERS" : "Suomen rintamamiehet",
         "KARELIANS" : "Siirtokarjalaisten tie",
-        "FARMERS" : "Suomen pienviljelijat"
+        "FARMERS" : "Suomen pienviljelijat",
+        "GREATFARMS" : "Suuret maatilat"
     }
-
-
-
 
     @staticmethod
     def get_bookseries_list():
@@ -48,6 +51,8 @@ class Router():
             return SoldierChunk
         elif extractor == Router.BOOKSERIES["FARMERS"]:
             return FarmersChunk
+        elif extractor == Router.BOOKSERIES["GREATFARMS"]:
+            return GreatFarmersChunk
         else:
             raise NoExtractorAvailable()
 
@@ -59,6 +64,8 @@ class Router():
             return SoldierProcessdata
         elif extractor == Router.BOOKSERIES["FARMERS"]:
             return FarmersProcessdata
+        elif extractor == Router.BOOKSERIES["GREATFARMS"]:
+            return GreatFarmersProcessdata
         else:
             raise NoExtractorAvailable()
 
@@ -70,6 +77,8 @@ class Router():
             return SoldierCsvBuilder
         elif extractor == Router.BOOKSERIES["FARMERS"]:
             return FarmersCsvBuilder
+        elif extractor == Router.BOOKSERIES["GREATFARMS"]:
+            return GreatFarmersCsvBuilder
         else:
             raise NoExtractorAvailable()
 
@@ -81,6 +90,8 @@ class Router():
             return SoldierJsonBuilder
         elif extractor == Router.BOOKSERIES["FARMERS"]:
             return FarmersJsonBuilder
+        elif extractor == Router.BOOKSERIES["GREATFARMS"]:
+            return GreatFarmersJsonBuilder
         else:
             raise NoExtractorAvailable()
 
