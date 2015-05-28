@@ -93,35 +93,7 @@
      <property name="title">
       <string>Book series:</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QRadioButton" name="soldierRadio">
-        <property name="text">
-         <string>Suomen Rintamamiehet 1939-43</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="karelianRadio">
-        <property name="text">
-         <string>Siirtokarjalaisten tie</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="farmersRadio">
-        <property name="text">
-         <string>Suomen pienviljelijät</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <layout class="QVBoxLayout" name="verticalLayout_3"/>
     </widget>
    </item>
    <item>

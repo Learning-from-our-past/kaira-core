@@ -22,51 +22,64 @@ from books.farmers.resultjsonbuilder import ResultJsonBuilder as FarmersJsonBuil
 
 class Router():
 
-    #these are equivalent of the "bookseries" attribute in xml datafiles.
-    SOLDIERS = "Suomen rintamamiehet"
-    KARELIANS = "Siirtokarjalaisten tie"
-    FARMERS = "Suomen pienviljelijat"
+    #Bookseries which tool supports. IMPORTANT: The value HAS TO BE same as
+    #bookseries attribute's value in xml files!!!
+    BOOKSERIES = {
+        "SOLDIERS" : "Suomen rintamamiehet",
+        "KARELIANS" : "Siirtokarjalaisten tie",
+        "FARMERS" : "Suomen pienviljelijat"
+    }
+
+
+
+
+    @staticmethod
+    def get_bookseries_list():
+        l = list(Router.BOOKSERIES.values())
+        l.sort()
+        return l
+
 
     @staticmethod
     def get_chunktext_class(extractor):
-        if extractor == Router.KARELIANS:
+        if extractor == Router.BOOKSERIES["KARELIANS"]:
             return KarelianChunk
-        elif extractor == Router.SOLDIERS:
+        elif extractor == Router.BOOKSERIES["SOLDIERS"]:
             return SoldierChunk
-        elif extractor == Router.FARMERS:
+        elif extractor == Router.BOOKSERIES["FARMERS"]:
             return FarmersChunk
         else:
             raise NoExtractorAvailable()
 
     @staticmethod
     def get_processdata_class(extractor):
-        if extractor == Router.KARELIANS:
+        if extractor == Router.BOOKSERIES["KARELIANS"]:
             return KarelianProcessdata
-        elif extractor == Router.SOLDIERS:
+        elif extractor == Router.BOOKSERIES["SOLDIERS"]:
             return SoldierProcessdata
-        elif extractor == Router.FARMERS:
+        elif extractor == Router.BOOKSERIES["FARMERS"]:
             return FarmersProcessdata
         else:
             raise NoExtractorAvailable()
 
     @staticmethod
     def get_csvbuilder_class(extractor):
-        if extractor == Router.KARELIANS:
+        if extractor == Router.BOOKSERIES["KARELIANS"]:
             return KarelianCsvBuilder
-        elif extractor == Router.SOLDIERS:
+        elif extractor == Router.BOOKSERIES["SOLDIERS"]:
             return SoldierCsvBuilder
-        elif extractor == Router.FARMERS:
+        elif extractor == Router.BOOKSERIES["FARMERS"]:
             return FarmersCsvBuilder
         else:
             raise NoExtractorAvailable()
 
     @staticmethod
     def get_jsonbuilder_class(extractor):
-        if extractor == Router.KARELIANS:
+        if extractor == Router.BOOKSERIES["KARELIANS"]:
             return KarelianJsonBuilder
-        elif extractor == Router.SOLDIERS:
+        elif extractor == Router.BOOKSERIES["SOLDIERS"]:
             return SoldierJsonBuilder
-        elif extractor == Router.FARMERS:
+        elif extractor == Router.BOOKSERIES["FARMERS"]:
             return FarmersJsonBuilder
         else:
             raise NoExtractorAvailable()

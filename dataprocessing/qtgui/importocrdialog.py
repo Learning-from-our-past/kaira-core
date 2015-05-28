@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QObject
-from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QDialogButtonBox
+from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QDialogButtonBox, QRadioButton
 from PyQt5.QtCore import QStandardPaths
 from books.soldiers.chunktextfile import ChunkTextFile
 from qtgui.layouts.ui_importdialog import Ui_ImportDialog
@@ -13,9 +13,21 @@ class ImportOcrDialog(QDialog):
         self.parent = parent
         self.ui = Ui_ImportDialog()
         self.ui.setupUi(self)
+        self.radiobuttons = []
+        self._create_radiobuttons()
         self.ui.buttonBox.button(QDialogButtonBox.Ok).setEnabled(False)
         self.ui.sourceButton.clicked.connect(self._browse_sourcefile)
         self.ui.destinationButton.clicked.connect(self._browse_destinationfile)
+
+
+    def _create_radiobuttons(self):
+        series = route_gui.Router.get_bookseries_list()
+        for item in series:
+            r = QRadioButton(self)
+            r.setText(item)
+            self.radiobuttons.append(r)
+            self.ui.groupBox.layout().addWidget(r)
+        self.radiobuttons[0].setChecked(True)
 
     def _browse_sourcefile(self):
         filename = QFileDialog.getOpenFileName(self.parent, "Open text-file containing the data to be chunked.",
@@ -75,23 +87,17 @@ class ImportOcrDialog(QDialog):
                     msgbox.information(self.parent, "Chunking process failed", "Error in data-file. Was it saved in utf-8/unicode format? More info: " + str(e))
                     msgbox.show()
 
-
-
     def _chunk_text_file(self, filename):
         working_dir = os.getcwd()
         os.chdir(os.path.dirname(filename))
         f = open(filename, "r", encoding="utf8")
         text = f.read()
         os.chdir(working_dir)
-        #TODO: Maybe find a better place for these?
-        if self.ui.karelianRadio.isChecked():
-            chunker = route_gui.Router.get_chunktext_class(route_gui.Router.KARELIANS)()
 
-        if self.ui.soldierRadio.isChecked():
-            chunker = route_gui.Router.get_chunktext_class(route_gui.Router.SOLDIERS)()
-
-        if self.ui.farmersRadio.isChecked():
-            chunker = route_gui.Router.get_chunktext_class(route_gui.Router.FARMERS)()
+        for radio in self.radiobuttons:
+            if radio.isChecked():
+                chunker = route_gui.Router.get_chunktext_class(radio.text())()
+                break
 
         return chunker.chunk_text(text, self.destination_file)
 
