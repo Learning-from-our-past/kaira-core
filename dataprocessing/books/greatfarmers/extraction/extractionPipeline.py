@@ -81,13 +81,13 @@ class ExtractionPipeline():
 
         quantityExt = QuantityExtractor(entry, eLogger, self.xmlDocument)
         qpatterns = {
-            KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",
-            KEYS["lypsylehma"] : r"(?:lypsylehmää){s<=1,i<=1}",
-            KEYS["teuras"] : r"(?:teuras){s<=1,i<=1}",
+            KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",    #toimii
+            KEYS["lypsylehma"] : r"(?:(?:lypsävää){s<=1,i<=1}|(?:lypsylehmää){s<=1,i<=1})", #toimii
+            KEYS["teuras"] : r"(?:teurasvasikka){s<=1,i<=1}",                               #toimii
             KEYS["lammas"] : r"(?:lammasta){s<=1,i<=1}",
-            KEYS["lihotussika"] : r"(?:lihotus-?sik){s<=1,i<=1}",
-            KEYS["emakko"] : r"(?:emakko){s<=1,i<=1}",
-            KEYS["nuori"] : r"(?:nuori|(?:nuorta{s<=1,i<=1}))",
+            KEYS["lihotussika"] : r"(?:lihotus-?sik){s<=1,i<=1}",                           #toimii
+            KEYS["emakko"] : r"(?:emakkoja on){s<=1,i<=1}",
+            KEYS["nuori"] : r"(?:(?:nuorta){s<=1,i<=1})",                                   #toimii
             KEYS["kanoja"] : r"(?:kanoja|(?:kanaa{s<=1,i<=1}))"
          }
 

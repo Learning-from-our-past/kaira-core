@@ -14,14 +14,12 @@ class QuantityExtractor(BaseExtractor):
         self.SPLIT_PATTERN1 = r"(?P<number>\d\d?)"
         self.patterns_to_find = {}
         self.results = {}
-
+        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.NUMBER_MAP = {"yksi" : 1, "yhtä": 1, "kahta": 2, "kaksi" : 2, "kolme" : 3, "neljä" : 4, "viisi" : 5, "kuusi" : 6,
                            "seitsemän" : 7, "kahdeksan" : 8, "yhdeksän" : 9, "kymmenen" : 10}
 
 
     def extract(self, text, entry):
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
-
         self._find_patterns(text)
         return self._constructReturnDict()
 
