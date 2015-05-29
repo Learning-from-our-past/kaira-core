@@ -4,7 +4,7 @@ from cx_Freeze import setup, Executable
 # fine tuning.
 buildOptions = dict(packages = ["re", "atexit", "sip", "lxml._elementpath", "lxml.etree", "PyQt5.QtCore"],
                     excludes = [],
-                    icon = "icon.ico")
+                    icon = "qtgui/icon.ico")
 
 import sys
 base = 'Win32GUI' if sys.platform=='win32' else None

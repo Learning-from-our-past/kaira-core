@@ -12,6 +12,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1123, 694)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icons/icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -150,7 +153,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Extraction data editor"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Kaira"))
         self.entriesLabel.setText(_translate("MainWindow", "Entries "))
         self.entriesComboBox.setItemText(0, _translate("MainWindow", "All"))
         self.previousEntryLabel.setText(_translate("MainWindow", "Previous entry"))
@@ -176,5 +179,6 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
         self.actionSave.setText(_translate("MainWindow", "&Save"))
 
-from qtgui.entrytree import EntryTreeView
 from qtgui.entriesModels import EntriesListView
+from qtgui.entrytree import EntryTreeView
+import qtgui.guiresources
