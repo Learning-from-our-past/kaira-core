@@ -1,12 +1,16 @@
 dataprocessing/build
 dataprocessing/dist
 dataprocessing/siirtokarjalaiset
+dataprocessing/mongodb
+dataprocessing/build
 *.pyc
 *.csv
 *.xml
 *.txt
 *.bat
 *.html
+*.htm
 *.jpg
 
 dataprocessing/.idea
+dataprocessing/books/farmers/material/Kymen pienviljelijät_OCR.pdf

@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created: Mon Mar 30 12:54:56 2015
-#      by: PyQt5 UI code generator 5.4
+# Created by: PyQt5 UI code generator 5.4.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,6 +12,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1123, 694)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icons/icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -108,8 +110,6 @@ class Ui_MainWindow(object):
         self.menuExport.setObjectName("menuExport")
         self.menuImport = QtWidgets.QMenu(self.menuFile)
         self.menuImport.setObjectName("menuImport")
-        self.menuQuit = QtWidgets.QMenu(self.menubar)
-        self.menuQuit.setObjectName("menuQuit")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -146,7 +146,6 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.menuExport.menuAction())
         self.menuFile.addAction(self.menuImport.menuAction())
         self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuQuit.menuAction())
         self.toolBar.addAction(self.actionCreate_a_new_Person)
 
         self.retranslateUi(MainWindow)
@@ -154,7 +153,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Extraction data editor"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Kaira"))
         self.entriesLabel.setText(_translate("MainWindow", "Entries "))
         self.entriesComboBox.setItemText(0, _translate("MainWindow", "All"))
         self.previousEntryLabel.setText(_translate("MainWindow", "Previous entry"))
@@ -163,14 +162,13 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuExport.setTitle(_translate("MainWindow", "Export"))
         self.menuImport.setTitle(_translate("MainWindow", "Import"))
-        self.menuQuit.setTitle(_translate("MainWindow", "Quit"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.actionOpen_XML_for_analyze.setText(_translate("MainWindow", "Open xml"))
         self.actionCsv.setText(_translate("MainWindow", "CSV"))
         self.actionJSON.setText(_translate("MainWindow", "JSON"))
         self.actionOpen_txt.setText(_translate("MainWindow", "Open txt"))
         self.actionSave_changes_to_xml.setText(_translate("MainWindow", "Save As..."))
-        self.actionFrom_txt_OCR.setText(_translate("MainWindow", "From txt (OCR)"))
+        self.actionFrom_txt_OCR.setText(_translate("MainWindow", "From OCR"))
         self.actionRun_analysis_for_all.setText(_translate("MainWindow", "Run analysis for all"))
         self.actionRun_analysis_for_all.setToolTip(_translate("MainWindow", "Run analysis for all entries in current file"))
         self.actionRun_analysis_for_all.setShortcut(_translate("MainWindow", "Ctrl+Shift+R"))
@@ -181,5 +179,6 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
         self.actionSave.setText(_translate("MainWindow", "&Save"))
 
-from qtgui.entrytree import EntryTreeView
 from qtgui.entriesModels import EntriesListView
+from qtgui.entrytree import EntryTreeView
+#import qtgui.guiresources

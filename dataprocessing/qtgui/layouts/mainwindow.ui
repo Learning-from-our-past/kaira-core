@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Extraction data editor</string>
+   <string>Kaira</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/guiresources.qrc">
+    <normaloff>:/icons/icon.ico</normaloff>:/icons/icon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -215,13 +219,7 @@ background-color: white;
     <addaction name="menuExport"/>
     <addaction name="menuImport"/>
    </widget>
-   <widget class="QMenu" name="menuQuit">
-    <property name="title">
-     <string>Quit</string>
-    </property>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuQuit"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -263,7 +261,7 @@ background-color: white;
   </action>
   <action name="actionFrom_txt_OCR">
    <property name="text">
-    <string>From txt (OCR)</string>
+    <string>From OCR</string>
    </property>
   </action>
   <action name="actionRun_analysis_for_all">
@@ -314,6 +312,8 @@ background-color: white;
    <header>qtgui/entrytree.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/guiresources.qrc"/>
+ </resources>
  <connections/>
 </ui>
