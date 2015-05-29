@@ -1,7 +1,7 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import pyqtSlot,QSortFilterProxyModel, Qt
-
+from PyQt5.QtGui import QIcon
 from qtgui.layouts.ui_mainwindow import Ui_MainWindow
 from qtgui.xmlImport import XmlImport
 from qtgui.entriesModels import *
@@ -24,9 +24,12 @@ class Mainwindow(QMainWindow):
         self.xmlDocument = None
         self.selectedEntry = None
 
+
         super(Mainwindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        icon = QIcon("icon.ico")
+        self.setWindowIcon(icon)
 
         self.xmlImporter = XmlImport(self)
         self.chunkFile = ImportOcrDialog(self)

@@ -181,4 +181,4 @@ class Ui_MainWindow(object):
 
 from qtgui.entriesModels import EntriesListView
 from qtgui.entrytree import EntryTreeView
-import qtgui.guiresources
+#import qtgui.guiresources
