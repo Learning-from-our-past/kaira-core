@@ -11,8 +11,10 @@ from books.greatfarmers.extraction.extractors.childextractor import ChildExtract
 from books.greatfarmers.extraction.extractors.farmextractor import FarmExtractor
 from books.greatfarmers.extraction.extractors.boolextractor import BoolExtractor
 from books.greatfarmers.extraction.extractors.quantityextractor import QuantityExtractor
+from books.greatfarmers.extraction.extractors.spouseextractor import SpouseExtractor
 from books.greatfarmers.extractionkeys import KEYS
 from shared.genderExtract import Gender
+
 
 class ExtractionPipeline():
 
@@ -29,10 +31,8 @@ class ExtractionPipeline():
         ownerExt.setDependencyMatchPositionToZero()
         ownerdata = ownerExt.extract(text, entry)
 
-
-        hostessExt = HostessExtractor(entry, eLogger, self.xmlDocument)
-        hostessExt.setDependencyMatchPositionToZero()
-        hostessdata = hostessExt.extract(text, entry)
+        spouseExt = SpouseExtractor(entry, eLogger, self.xmlDocument)
+        spouse = spouseExt.extract(text, entry)
 
         farmExt = FarmExtractor(entry, eLogger, self.xmlDocument)
         farmExt.setDependencyMatchPositionToZero()
@@ -40,6 +40,8 @@ class ExtractionPipeline():
 
         childExt = ChildExtractor(entry, eLogger, self.xmlDocument)
         children = childExt.extract(text, entry)
+
+
 
         flagExt = BoolExtractor(entry, eLogger, self.xmlDocument)
         patterns = {
@@ -96,9 +98,9 @@ class ExtractionPipeline():
 
         d = meta.copy()
         d.update(ownerdata)
-        d.update(hostessdata)
         d.update(children)
         d.update(farmdata)
         d.update(flags)
         d.update(quantities)
+        d.update(spouse)
         return d
