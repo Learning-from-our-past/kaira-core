@@ -88,9 +88,9 @@ class ExtractionPipeline():
             KEYS["teuras"] : r"(?:teurasvasikka){s<=1,i<=1}",                               #toimii
             KEYS["lammas"] : r"(?:lammasta){s<=1,i<=1}",
             KEYS["lihotussika"] : r"(?:lihotus-?sik){s<=1,i<=1}",                           #toimii
-            KEYS["emakko"] : r"(?:emakkoja on){s<=1,i<=1}",
+            KEYS["emakko"] : r"(?:(?:(?:emakkoja on\s?){s<=1,i<=1})|(?:\semakkoa))",
             KEYS["nuori"] : r"(?:(?:nuorta){s<=1,i<=1})",                                   #toimii
-            KEYS["kanoja"] : r"(?:kanoja|(?:kanaa{s<=1,i<=1}))"
+            KEYS["kanoja"] : r"(?:(?:(?:kanoja (?:on\s?)?){s<=1,i<=1})|(?:\skanaa))" #r"(?:kanoja|(?:kanaa{s<=1,i<=1}))"
          }
 
         quantityExt.set_patterns_to_find(qpatterns)

@@ -36,7 +36,12 @@ class QuantityExtractor(BaseExtractor):
                 found = regexUtils.safeSearch(usepattern, text, self.OPTIONS)
                 self.results[key] = ValueWrapper(self._process_value(found))
             except regexUtils.RegexNoneMatchException as e:
-                self.results[key] = ValueWrapper("")
+                try:
+                    usepattern =  pattern + self.QUANTITY_PATTERN
+                    found = regexUtils.safeSearch(usepattern, text, self.OPTIONS)
+                    self.results[key] = ValueWrapper(self._process_value(found))
+                except regexUtils.RegexNoneMatchException as e:
+                    self.results[key] = ValueWrapper("")
 
     def _process_value(self, match):
         if match.group("range") is not None:
