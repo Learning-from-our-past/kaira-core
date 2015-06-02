@@ -6,7 +6,6 @@ required extractors.
 
 from books.greatfarmers.extraction.extractors.metadataextractor import MetadataExtractor
 from books.greatfarmers.extraction.extractors.ownerextractor import OwnerExtractor
-from books.greatfarmers.extraction.extractors.hostessextractor import HostessExtractor
 from books.greatfarmers.extraction.extractors.childextractor import ChildExtractor
 from books.greatfarmers.extraction.extractors.farmextractor import FarmExtractor
 from books.greatfarmers.extraction.extractors.boolextractor import BoolExtractor
@@ -66,15 +65,19 @@ class ExtractionPipeline():
             KEYS["savi"] : r"(savi(?!taipale))",
             KEYS["multa"] : r"multa",
             KEYS["salaojitus"] : r"(salaojitettu|salaojitus)",
-
             KEYS["talli"] : r"(?!auto)talli",
             KEYS["pine"] : r"mänty(?!nen)",
             KEYS["spruce"] : r"kuusi(?!nen)",
             KEYS["birch"] : r"koivu(?!nen|niem)",
             KEYS["sauna"] : r"sauna",
             KEYS["navetta"] : r"navetta|navetan",
-            KEYS["lypsykone"] : r"lypsykone",
             KEYS["autotalli"] : r"autotalli",
+            KEYS["viljankuivuri"] : r"viljankuivuri",
+            KEYS["kotitalousmylly"] : r"kotitalousmylly",
+            KEYS["ay-karja"] : r"ay-karja",
+            KEYS["sk-karja"] : r"sk-karja",
+
+
             KEYS["someonedead"] : r"kuoli|kuollut|kaatui|kaatunut",
 
         }
@@ -86,7 +89,7 @@ class ExtractionPipeline():
             KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",    #toimii
             KEYS["lypsylehma"] : r"(?:(?:lypsävää){s<=1,i<=1}|(?:lypsylehmää){s<=1,i<=1})", #toimii
             KEYS["teuras"] : r"(?:teurasvasikka){s<=1,i<=1}",                               #toimii
-            KEYS["lammas"] : r"(?:lammasta){s<=1,i<=1}",
+            KEYS["lammas"] : r"(?:(?:(?:lampaita (?:on\s?)?){s<=1,i<=1})|(?:\slammasta))",
             KEYS["lihotussika"] : r"(?:lihotus-?sik){s<=1,i<=1}",                           #toimii
             KEYS["emakko"] : r"(?:(?:(?:emakkoja on\s?){s<=1,i<=1})|(?:\semakkoa))",
             KEYS["nuori"] : r"(?:(?:nuorta){s<=1,i<=1})",                                   #toimii

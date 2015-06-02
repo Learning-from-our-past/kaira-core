@@ -22,17 +22,6 @@ class NameException(ExtractionException):
         return repr(self.message)
 
 
-class ProfessionException(ExtractionException):
-    eType = "PROFESSION"
-    message = "ERROR in profession extraction: "
-    details = u""
-
-    def __init__(self, text):
-        self.details = text
-
-    def __unicode__(self):
-        return repr(self.message)
-
 class DateException(ExtractionException):
     eType = "DATE"
     message = "ERROR in date extraction: "
@@ -106,17 +95,6 @@ class MultipleMarriagesException(ExtractionException):
         return repr(self.message)
 
 
-class KarelianLocationException(ExtractionException):
-    eType = "KARELIAN LOCATION"
-    message = "ERROR in karelian location extraction: "
-    details = u""
-
-    def __init__(self, text):
-        self.details = text
-
-
-    def __unicode__(self):
-        return repr(self.message)
 
 class NoChildrenException(ExtractionException):
     eType = "NO CHILDREN FOUND"
@@ -130,17 +108,6 @@ class NoChildrenException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
-class OtherLocationException(ExtractionException):
-    eType = "OTHER LOCATION"
-    message = "ERROR in other location extraction: "
-    details = u""
-
-    def __init__(self, text):
-        self.details = text
-
-
-    def __unicode__(self):
-        return repr(self.message)
 
 
 class OwnerYearException(ExtractionException):
@@ -167,10 +134,9 @@ class OwnerNameException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
-
-class HostessNameException(ExtractionException):
-    eType = "NO HOSTESS NAME FOUND"
-    message = "ERROR in hostess name: "
+class ShortEntryException(ExtractionException):
+    eType = "ENTRY REALLY SHORT"
+    message = "Short entry: "
     details = u""
 
     def __init__(self, text):
@@ -179,3 +145,5 @@ class HostessNameException(ExtractionException):
 
     def __unicode__(self):
         return repr(self.message)
+
+

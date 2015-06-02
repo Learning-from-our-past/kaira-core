@@ -41,6 +41,10 @@ KEYS = {
       "birch" : "Birch",
       "spruce" : "Spruce",
       "pine" : "Pine",
+      "viljankuivuri" : "Viljankuivuri",
+      "kotitalousmylly" : "Kotitalousmylly",
+      "ay-karja" : "Aykarja",
+      "sk-karja" : "Skkarja",
       "someonedead" : "SomeoneDead",
 
       "moreeni" : "Moreeni",
@@ -60,7 +64,7 @@ KEYS = {
       "kanoja" : "kanoja",
 
       "quantities" : "quantities",
-
+      "shortentry" : "ShortEntry",
 
 
 
