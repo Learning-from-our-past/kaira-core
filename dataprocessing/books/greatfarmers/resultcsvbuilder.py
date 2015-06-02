@@ -35,7 +35,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                              "rooms", "lypsylehmät", "teuraseläimet", "lampaat", "lihotussiat", "emakot", "nuori",
                              "kanat"]
 
-        headers = headers + ["Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages"]
+        headers = headers + ["Spousefirst names", "Spouse surname", "SpouseBirthday", "SpouseBirthMonth", "SpouseBirthYear", "approximatePageNumber", "maybeManyMarriages"]
 
         headers = headers + ["ChildCount", "BoyCount", "GirlCount"]
         for i in range(0, self.childrenMax):
@@ -113,12 +113,11 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                             persondatadict[KEYS["quantities"]].value[KEYS["nuori"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["kanoja"]].value,
 
-                            persondatadict[KEYS["hostess"]].value[KEYS["firstnames"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["surname"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["gender"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthDay"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthMonth"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthYear"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseOrigFamily"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthDay"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthMonth"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthYear"]].value,
                             persondatadict[KEYS["approximatePage"]].value,
                             persondatadict[KEYS["manymarriages"]].value
 

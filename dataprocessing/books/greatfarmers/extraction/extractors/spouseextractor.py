@@ -16,7 +16,7 @@ class SpouseExtractor(BaseExtractor):
     def extract(self, text, entry):
         super(SpouseExtractor, self).extract(text)
         self.entry = entry
-        self.PATTERN = r"vmo\.?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"
+        self.PATTERN = r"vmo\.?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp|suvulla|tila))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)    #TODO: TRY IGNORE CASE?
         self.REQUIRES_MATCH_POSITION = False

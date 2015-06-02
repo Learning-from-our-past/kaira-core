@@ -66,11 +66,9 @@ class SpouseExtractor(BaseExtractor):
         origFamilyExt.setDependencyMatchPositionToZero()
         self.origFamily = origFamilyExt.extract(text, self.entry)
 
-
         professionExt = ProfessionExtractor(self.entry, self.errorLogger, self.xmlDocument)
         professionExt.dependsOnMatchPositionOf(origFamilyExt)
         self.profession = professionExt.extract(text, self.entry)
-
 
         birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
         birthdayExt.setDependencyMatchPositionToZero()

@@ -14,7 +14,7 @@ class OwnerExtractor(BaseExtractor):
     SEARCH_SPACE = 200
     def extract(self, text, entry):
         self.OWNER_YEAR_PATTERN = r"om(?:\.|,)?\s?(?:vuodesta|vsta)\s(?P<year>\d\d\d\d)"
-        self.OWNER_NAME_PATTERN = r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)?\s(?:synt|s)" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
+        self.OWNER_NAME_PATTERN = r"(om\s)?(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(\s(?:synt|s|\.)|\.)"#r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)?\s(?:synt|s)" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.OWNER_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.entry = entry
         self.owner_year = ValueWrapper("")
@@ -33,11 +33,14 @@ class OwnerExtractor(BaseExtractor):
         self._find_owner_name(text)
         self._find_owner_birthday(text)
 
-    def _find_owner_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
-        birthdayExt.setDependencyMatchPositionToZero()
-        self.birthday = birthdayExt.extract(text, self.entry)
-
+    def _find_owner_year(self, text):
+        try:
+            ownerYear = regexUtils.safeSearch(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
+            self.matchFinalPosition = ownerYear.end()
+            self.owner_year.value = float(ownerYear.group("year"))
+        except regexUtils.RegexNoneMatchException as e:
+            self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
+            self.owner_year.error = OwnerYearException.eType
 
     def _find_owner_name(self, text):
         try:
@@ -50,14 +53,32 @@ class OwnerExtractor(BaseExtractor):
             self.first_names.error = OwnerNameException.eType
             self.surname.error = OwnerNameException.eType
 
-    def _find_owner_gender(self, name):
-        try:
-            self.owner_gender.value = Gender.find_gender(name)
-        except GenderException as e:
-                self.errorLogger.logError(e.eType, self.currentChild)
-                self.owner_gender.value = ""
-                self.owner_gender.error = e.eType
+    def _find_owner_birthday(self, text):
+        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthdayExt.setDependencyMatchPositionToZero()
+        self.birthday = birthdayExt.extract(text, self.entry)
 
+
+
+
+    def _find_owner_gender(self, names):
+
+            print(self.surname.value)
+            print("uga")
+            not_found = False
+            for n in names:
+                try:
+                    if len(n) > 2:
+                        self.owner_gender.value = Gender.find_gender(n)
+                        not_found = False
+                        break
+                except GenderException as e:
+                    not_found = True
+
+            if not_found:
+                self.errorLogger.logError(GenderException.eType, self.currentChild)
+                self.owner_gender.value = ""
+                self.owner_gender.error = GenderException.eType
 
     def _split_names(self, name):
         name = re.sub(r"(?:<|>|&|')", r"", name)
@@ -69,17 +90,10 @@ class OwnerExtractor(BaseExtractor):
                 if names[i].strip(" ") != "o.s.":
                     self.first_names.value += names[i].strip(" ") + " "
             self.first_names.value = self.first_names.value.strip(" ")
-            self._find_owner_gender(names[1])
+            self._find_owner_gender(names)
 
 
-    def _find_owner_year(self, text):
-        try:
-            ownerYear= regexUtils.safeSearch(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
-            self.matchFinalPosition = ownerYear.end()
-            self.owner_year.value = float(ownerYear.group("year"))
-        except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
-            self.owner_year.error = OwnerYearException.eType
+
 
     def _constructReturnDict(self):
         return {KEYS["owner"] : ValueWrapper({ KEYS["ownerFrom"] : self.owner_year,
