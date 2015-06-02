@@ -15,7 +15,7 @@ KEYS = {
       "forestArea" : "forestArea",
       "fieldArea" : "fieldArea",
       "wasteArea" : "wasteArea",
-      "meadowArea" : "meadowArea",
+      "meadowArea" : "luonnonlaidunta",
 
       "flags" : "flags",
       "oat" : "Oat",

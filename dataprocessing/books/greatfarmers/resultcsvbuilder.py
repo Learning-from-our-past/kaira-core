@@ -28,7 +28,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
 
     def _writeCsvHeaders(self):
-        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "MeadowArea ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince"]
+        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "luonnonlaidun ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince"]
         headers = headers + ["oat", "barley", "hay", "potatoes", "wheat", "rye", "sugarbeet", "lanttu", "puimakone", "tractor", "horse", "chicken", "siirtotila", "kantatila",
                              "talli", "sauna", "navetta", "autotalli", "pine", "spruce", "birch", "viljankuivuri", "kotitalousmylly", "ay-karja", "sk-karja",
                              "someoneDead",
