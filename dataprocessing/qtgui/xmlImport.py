@@ -42,6 +42,7 @@ class XmlImport(QObject):
                                                ".", "Person data files (*.xml);;All files (*)")
         if filename[0] != "":
             self.filepath = filename[0]
+            self.parent.setWindowTitle("Kaira " + filename[0])
             self._analyzeOpenedXml(filename)
 
     def _analyzeOpenedXml(self, file):
