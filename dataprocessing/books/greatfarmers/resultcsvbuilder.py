@@ -33,7 +33,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                              "talli", "sauna", "navetta", "autotalli", "pine", "spruce", "birch", "viljankuivuri", "kotitalousmylly", "ay-karja", "sk-karja",
                              "someoneDead",
                              "moreeni", "hiesu", "hieta", "muta", "savi", "multa", "salaojitus",
-                             "rooms", "lypsylehmät", "teuraseläimet", "lampaat", "lihotussiat", "emakot", "nuori",
+                             "rooms", "lypsylehmät", "lampaat", "lihotussiat", "emakot", "nuori",
                              "kanat"]
 
         headers = headers + ["Spousefirst names", "Spouse surname", "SpouseBirthday", "SpouseBirthMonth", "SpouseBirthYear", "approximatePageNumber", "shortEntry", "maybeManyMarriages"]
@@ -111,7 +111,7 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
                             persondatadict[KEYS["quantities"]].value[KEYS["rooms"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["lypsylehma"]].value,
-                            persondatadict[KEYS["quantities"]].value[KEYS["teuras"]].value,
+
                             persondatadict[KEYS["quantities"]].value[KEYS["lammas"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["lihotussika"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["emakko"]].value,

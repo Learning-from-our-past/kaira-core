@@ -52,6 +52,13 @@ class EntriesListItemModel(QStandardItem):
     def getDataEntry(self):
         return self.dataEntry
 
+    def setData(self, value, role=None):
+        if "name" in self.dataEntry["xml"].attrib:
+            self.dataEntry["xml"].attrib["name"] = value
+        super(EntriesListItemModel, self).setData(value, role)
+
+
+
     def _constructText(self):
         if "name" in self.dataEntry["xml"].attrib:
             return utils.makeSubStrForListViews(self.dataEntry["xml"].attrib["name"])

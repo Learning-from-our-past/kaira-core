@@ -88,7 +88,6 @@ class ExtractionPipeline():
         qpatterns = {
             KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",    #toimii
             KEYS["lypsylehma"] : r"(?:(?:lypsävää){s<=1,i<=1}|(?:lypsylehmää){s<=1,i<=1})", #toimii
-            KEYS["teuras"] : r"(?:teurasvasikka){s<=1,i<=1}",                               #toimii
             KEYS["lammas"] : r"(?:(?:(?:lampaita (?:on\s?)?){s<=1,i<=1})|(?:\slammasta))",
             KEYS["lihotussika"] : r"(?:lihotus-?sik){s<=1,i<=1}",                           #toimii
             KEYS["emakko"] : r"(?:(?:(?:emakkoja on\s?){s<=1,i<=1})|(?:\semakkoa))",
