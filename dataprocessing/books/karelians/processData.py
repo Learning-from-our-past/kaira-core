@@ -65,4 +65,13 @@ class ProcessData(ProcessDataInterface):
         return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
 
     def extractOne(self, xmlEntry):
-        pass
+        ValueWrapper.reset_id_counter()
+        entry = self._createEntry(xmlEntry)
+        ValueWrapper.xmlEntry = xmlEntry
+        try:
+            personEntryDict = self.extractor.process(entry["xml"].text, entry, self.errorLogger)
+            entry["extractionResults"] = personEntryDict
+        except ExtractionException as e:
+            pass
+
+        return entry

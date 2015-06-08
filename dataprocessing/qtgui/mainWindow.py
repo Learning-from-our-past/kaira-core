@@ -93,6 +93,7 @@ class Mainwindow(QMainWindow):
         selection = newperson.exec_()
 
         entry = newperson.getPersonEntry()
+        print(entry)
         if entry is not None and selection == 1:
             self.dataEntries.append(entry)
             self._updateEntriesList(self.dataEntries)
