@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.QtCore import pyqtSlot,QSortFilterProxyModel, Qt
 from PyQt5.QtGui import QIcon
 from qtgui.layouts.ui_mainwindow import Ui_MainWindow
@@ -43,6 +43,7 @@ class Mainwindow(QMainWindow):
         self.ui.entriestListView.entrySelectedSignal.connect(self._updateEntryTextFields)
         self.ui.actionSave_changes_to_xml.triggered.connect(self.saveFile.choose_place_to_save_xml)
         self.ui.actionSave.triggered.connect(self.saveFile.save_xml)
+        self.ui.actionAbout.triggered.connect(self._about)
 
         #shortcuts
         self.ui.actionSave.setShortcut('Ctrl+S')
@@ -196,6 +197,11 @@ class Mainwindow(QMainWindow):
             if next is not None:
                 next.text = self.ui.nextEntryTextEdit.toPlainText()
 
+    @pyqtSlot()
+    def _about(self):
+        msgbox = QMessageBox()
+        msgbox.information(self, "About", "Made by Tuomas Salmi 2015\nhttps://github.com/Tumetsu/Kaira\nv. 1.0")
+        msgbox.show()
 
 import sys
 def start(mongodb):
