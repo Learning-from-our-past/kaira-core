@@ -24,14 +24,12 @@ class MetadataExtractor(BaseExtractor):
 
         try:
             self.location_name = entry["xml"].attrib["location"]
-            print(self.location_name)
             try:
                 geo = self.geocoder.get_coordinates(self.location_name.lower(), "finland")
 
             except LocationNotFound as e:
                 geo = self.geocoder.get_empty_coordinates()
 
-            print(geo["latitude"])
             self.location = {"locationName": ValueWrapper(self.location_name),
                              "latitude": ValueWrapper(geo["latitude"]),
                              "longitude": ValueWrapper(geo["longitude"])}

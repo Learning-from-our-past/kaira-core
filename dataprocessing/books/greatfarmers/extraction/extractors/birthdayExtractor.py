@@ -41,7 +41,6 @@ class BirthdayExtractor(BaseExtractor):
         return t
 
     def _findDate(self, text):
-        print(text)
         try:
             self.foundDate = self.dateExtractor.extract(text, self.PATTERN, self.OPTIONS)
             self._setFinalMatchPosition()

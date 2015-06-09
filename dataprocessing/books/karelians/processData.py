@@ -1,7 +1,6 @@
 from shared.exceptionlogger import ExceptionLogger
 from books.karelians.extraction.extractionPipeline import ExtractionPipeline
 from interface.processdatainterface import ProcessDataInterface
-from lxml import etree
 from interface.valuewrapper import ValueWrapper
 from books.karelians.extraction.extractionExceptions import ExtractionException
 class ProcessData(ProcessDataInterface):
@@ -21,8 +20,6 @@ class ProcessData(ProcessDataInterface):
         self.dataFilename = file_path
         self._initProcess()
         self._processAllEntries()
-        #self._finishProcess()
-        #self.processUpdateCallbackFunction(self.xmlDataDocumentLen, self.xmlDataDocumentLen)    #DUMMY
         return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
                 "file": file_path}
 

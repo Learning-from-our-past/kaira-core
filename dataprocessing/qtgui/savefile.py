@@ -39,7 +39,6 @@ class SaveXmlFile(QObject):
         #write modifications to a new xml-file:
         self.dataEntries = self.parent.dataEntries
         self._remove_empty_elements(xmldata)
-        print ("Kirjoitetaan ")
         f = open(path, 'wb')
         f.write(etree.tostring(xmldata, pretty_print=True, encoding='unicode').encode("utf8"))
         f.close()
@@ -51,7 +50,6 @@ class SaveXmlFile(QObject):
             if child.text.strip() == "":
                 xmldocument.remove(child)
                 for i in range(0, len(self.dataEntries)):
-                    print(self.dataEntries[i]["xml"])
                     if self.dataEntries[i]["xml"] == child:
                         removed = True
                         self.dataEntries.pop(i)
@@ -113,7 +111,6 @@ class SaveJsonFile(QObject):
 
     def _save_to_json(self, entries, path):
         #write modifications to a new xml-file:
-        print("tallenna json")
         writer = route_gui.Router.get_jsonbuilder_class(self.parent.xmlDocument.attrib["bookseries"])()
         writer.openJson(path)
         for entry in self.parent.dataEntries:

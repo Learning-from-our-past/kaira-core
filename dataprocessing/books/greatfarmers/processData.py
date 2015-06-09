@@ -34,7 +34,6 @@ class ProcessData(ProcessDataInterface):
 
         self.extractor = ExtractionPipeline(self.xmlDataDocument)
         self.xmlDataDocumentLen = len(self.xmlDataDocument)
-        print ("XML file elements: " + str(len(self.xmlDataDocument)))
 
     def _processAllEntries(self):
         ValueWrapper.reset_id_counter()

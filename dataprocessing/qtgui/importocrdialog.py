@@ -104,7 +104,6 @@ class ImportOcrDialog(QDialog):
 
 
     def _save_to_xml(self, chunkedtext, path):
-        print ("Kirjoitetaan ")
         f = open(path, 'w', encoding="utf8")
         f.write(chunkedtext)
         f.close()

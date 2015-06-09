@@ -93,7 +93,6 @@ class Mainwindow(QMainWindow):
         selection = newperson.exec_()
 
         entry = newperson.getPersonEntry()
-        print(entry)
         if entry is not None and selection == 1:
             self.dataEntries.append(entry)
             self._updateEntriesList(self.dataEntries)
@@ -155,7 +154,6 @@ class Mainwindow(QMainWindow):
             self.ui.previousEntryTextEdit.setPlainText(previous.text)
             self.ui.previousEntryTextEdit.setEnabled(True)
         else:
-            print("disabled previous")
             self.ui.previousEntryTextEdit.setPlainText("")
             self.ui.previousEntryTextEdit.setEnabled(False)
 
@@ -196,7 +194,6 @@ class Mainwindow(QMainWindow):
         if self.selectedEntry is not None:
             next = self.selectedEntry["xml"].getnext()
             if next is not None:
-                print(self.ui.nextEntryTextEdit.toPlainText())
                 next.text = self.ui.nextEntryTextEdit.toPlainText()
 
 

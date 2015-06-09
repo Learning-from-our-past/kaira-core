@@ -60,4 +60,3 @@ class LocationNotFound(Exception):
 
 if __name__ == "__main__":
     coder = GeoCoder()
-    #print(coder.get_coordinates("Kilpola", "russia"))

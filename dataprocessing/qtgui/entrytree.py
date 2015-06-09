@@ -26,7 +26,6 @@ class TreeModel(QtCore.QAbstractItemModel):
 
         if index.isValid() and role == QtCore.Qt.EditRole:
             prev_value = self.getValue(index, role)
-            print(prev_value)
             item = index.internalPointer()
             item.setData(value, index.column())
             return True
@@ -148,7 +147,6 @@ class TreeModel(QtCore.QAbstractItemModel):
 
     def createTreeFromDict(self, data, xml, parent, top=False):
         if top:
-            print(data)
             data = ValueWrapper(data)
 
         if isinstance(data.value, dict):
@@ -174,7 +172,6 @@ class TreeModel(QtCore.QAbstractItemModel):
                     node = TreeItem([key, value.value],xml, parent)
                     parent.appendChild(node)
                 else:
-                    #print("tiedot " + str(key) + " " + str(value.value))
                     node = TreeItem([key, value],xml, parent)
                     parent.appendChild(node)
 
@@ -212,7 +209,6 @@ class TreeItem(object):
           self.childItems = []
           self.xml = xml
           self.editable = True
-          print(data)
 
       def setNotEditable(self):
           self.editable = False
@@ -264,7 +260,6 @@ class TreeItem(object):
           return 0
 
       def setData(self, data, column):
-          print(self.itemData[column].id)
           self.xml.attrib[self.itemData[column].id] = str(data)  #save manual data to an attribute to the xml entry
           self.itemData[column].manualEdit(data)
 

@@ -62,9 +62,6 @@ class OwnerExtractor(BaseExtractor):
 
 
     def _find_owner_gender(self, names):
-
-            print(self.surname.value)
-            print("uga")
             not_found = False
             for n in names:
                 try:
