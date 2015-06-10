@@ -14,7 +14,9 @@ class NewPersonDialog(QDialog):
         self.xmlDocument = xmlDocument
         self.xmlImporter = xmlImporter
         self.newPersonText = ""
+        self.newPersonName = ""
         self.ui.plainTextEdit.textChanged.connect(self._textChanged)
+        self.ui.nameField.textChanged.connect(self._nameChanged)
 
     def setupUi(self):
         pass
@@ -22,10 +24,14 @@ class NewPersonDialog(QDialog):
     def _textChanged(self):
         self.newPersonText = self.ui.plainTextEdit.toPlainText()
 
+    def _nameChanged(self):
+        self.newPersonName = self.ui.nameField.text()
+
     def getPersonEntry(self):
         if self.newPersonText.strip() != "":
             child = etree.SubElement(self.xmlDocument, "PERSON")
             child.text = self.newPersonText
+            child.attrib["name"] = self.newPersonName
             child.attrib["createdFromEditor"] = "True"
             return self.xmlImporter.importOne(child)
         else:

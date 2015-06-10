@@ -13,7 +13,6 @@ class DatabaseHandler:
     def __init__(self):
         self.client = MongoClient(self.mongoDBAddress, self.mongoPort)
         self.db = self.client[self.dbName]
-        #self.db.authenticate(self.dbUserName, self.dbUserPassword)
 
     def checkIfCollectionExists(self, name):
         coll = self.db.collection_names()

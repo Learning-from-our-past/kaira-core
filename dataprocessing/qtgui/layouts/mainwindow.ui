@@ -14,7 +14,7 @@
    <string>Kaira</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/guiresources.qrc">
+   <iconset>
     <normaloff>:/icons/icon.ico</normaloff>:/icons/icon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -218,6 +218,7 @@ background-color: white;
     <addaction name="actionSave_changes_to_xml"/>
     <addaction name="menuExport"/>
     <addaction name="menuImport"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -299,6 +300,11 @@ background-color: white;
     <string>&amp;Save</string>
    </property>
   </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -312,8 +318,6 @@ background-color: white;
    <header>qtgui/entrytree.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/guiresources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

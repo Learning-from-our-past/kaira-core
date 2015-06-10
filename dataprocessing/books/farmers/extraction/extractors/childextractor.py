@@ -75,7 +75,6 @@ class ChildExtractor(BaseExtractor):
                 self._twins_year_handler(firstChild, secondChild)
             else:
                 self._process_child(m.group("child"))
-            #print("Place: " + m.group("place") + " Years: " + m.group("years") + " Year count: " + str(self._count_years(m.group("years"))))
 
     def _twins_year_handler(self, first, second):
         #if there is twins, the book doesn't explicitly define birthyear for first one.

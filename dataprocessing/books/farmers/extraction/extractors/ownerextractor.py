@@ -76,7 +76,7 @@ class OwnerExtractor(BaseExtractor):
         try:
             ownerYear= regexUtils.safeSearch(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
             self.matchFinalPosition = ownerYear.end()
-            self.owner_year.value = float(ownerYear.group("year"))
+            self.owner_year.value = int(ownerYear.group("year"))
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
             self.owner_year.error = OwnerYearException.eType

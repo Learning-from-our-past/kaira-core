@@ -15,13 +15,6 @@ class ResultCsvBuilderInterface:
         self.filename = ntpath.basename(self.filepath)
         self._initCsv()
 
-
-    def _initCsv(self):
-        pass
-
-    def _writeCsvHeaders(self):
-        pass
-
     @abstractmethod
     def writeRow(self, dataDict):
         pass
@@ -30,12 +23,6 @@ class ResultCsvBuilderInterface:
     def _createRowFromDict(self, persondatadict):
         pass
 
-
-    def _addSpouseDataToRow(self,row, persondatadict):
-        pass
-
-    def _createWifeRowFromDict(self, wife):
-        pass
 
     @abstractmethod
     def closeCsv(self):

@@ -20,16 +20,12 @@ class TreeModel(QtCore.QAbstractItemModel):
     def clear(self):
         self.rootItem.removeChildren()
         self.layoutChanged.emit()
-        #self.rootItem = TreeItem([["Attributes"], ["Values"]])
-        #self.setupModelData(self.dbdata, self.rootItem)
-        pass
 
 
     def setData(self, index, value, role):
 
         if index.isValid() and role == QtCore.Qt.EditRole:
             prev_value = self.getValue(index, role)
-            print(prev_value)
             item = index.internalPointer()
             item.setData(value, index.column())
             return True
@@ -68,8 +64,6 @@ class TreeModel(QtCore.QAbstractItemModel):
 
         if role != QtCore.Qt.DisplayRole and role != QtCore.Qt.BackgroundRole:
             return None
-
-
 
         item = index.internalPointer()
         return QtCore.QVariant(item.data(index.column(), role))
@@ -152,10 +146,7 @@ class TreeModel(QtCore.QAbstractItemModel):
 
 
     def createTreeFromDict(self, data, xml, parent, top=False):
-        print("koko jutun tyyppi on " + str(type(data)))
-        #experimental
         if top:
-            print(data)
             data = ValueWrapper(data)
 
         if isinstance(data.value, dict):
@@ -181,7 +172,6 @@ class TreeModel(QtCore.QAbstractItemModel):
                     node = TreeItem([key, value.value],xml, parent)
                     parent.appendChild(node)
                 else:
-                    #print("tiedot " + str(key) + " " + str(value.value))
                     node = TreeItem([key, value],xml, parent)
                     parent.appendChild(node)
 
@@ -219,7 +209,6 @@ class TreeItem(object):
           self.childItems = []
           self.xml = xml
           self.editable = True
-          print(data)
 
       def setNotEditable(self):
           self.editable = False
@@ -268,10 +257,9 @@ class TreeItem(object):
       def row(self):
           if self.parentItem:
               return self.parentItem.childItems.index(self)
-
           return 0
+
       def setData(self, data, column):
-          print(self.itemData[column].id)
           self.xml.attrib[self.itemData[column].id] = str(data)  #save manual data to an attribute to the xml entry
           self.itemData[column].manualEdit(data)
 
@@ -279,63 +267,3 @@ class TreeItem(object):
       def removeChildren(self):
           self.childItems = []
           return True
-
-
-
-"""
-class TreeItem():
-
-    _parent = None
-    _children = []
-    _itemData = []
-    def __init__(self, data, parent):
-        self._parent = parent
-        self._itemData = data
-        #super(TreeItem, self).__init__(data)
-
-    def child(self, number):
-        return self._children[number]
-
-    def childCount(self):
-        return len(self._children)
-
-    def columnCount(self):
-        return len(self._itemData)
-
-    def insertChildren(self, position, data):
-        if position < 0 or position > len(self._itemData):
-            return False
-
-        t = TreeItem(data, self)
-        self._children.append(t)
-        return True
-
-
-    def insertColumns(self, position, columns):
-        pass
-
-    def removeChildren(self, position, columns):
-        pass
-
-    def childNumber(self):
-        if self._parent is not None:
-            return self._parent.childItems.indexOf(self)
-        return None
-
-    def setData(self, column, value):
-        pass
-
-    def parent(self):
-        return self._parent
-
-    def data(self, column):
-        return self._itemData[column]
-
-    def setData(self, column, value):
-        if column < 0 or column > len(self._itemData):
-            return False
-
-        self._itemData[column] = value
-        return True
-"""
-

@@ -14,7 +14,7 @@ class BirthdayExtractor(BaseExtractor):
 
     def extract(self, text, entry):
         super(BirthdayExtractor, self).extract(text)
-        self.PATTERN = r"(?:synt|s)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))" #r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
+        self.PATTERN = r"(?:synt|s)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?—?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))" #r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)    #TODO: TRY IGNORE CASE?
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
@@ -41,7 +41,6 @@ class BirthdayExtractor(BaseExtractor):
         return t
 
     def _findDate(self, text):
-        print(text)
         try:
             self.foundDate = self.dateExtractor.extract(text, self.PATTERN, self.OPTIONS)
             self._setFinalMatchPosition()

@@ -34,7 +34,6 @@ class ProcessData(ProcessDataInterface):
 
         self.extractor = ExtractionPipeline(self.xmlDataDocument)
         self.xmlDataDocumentLen = len(self.xmlDataDocument)
-        print ("XML file elements: " + str(len(self.xmlDataDocument)))
 
     def _processAllEntries(self):
         ValueWrapper.reset_id_counter()
@@ -65,4 +64,12 @@ class ProcessData(ProcessDataInterface):
         return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
 
     def extractOne(self, xmlEntry):
-        pass
+        ValueWrapper.reset_id_counter()
+        entry = self._createEntry(xmlEntry)
+        ValueWrapper.xmlEntry = xmlEntry
+        try:
+            personEntryDict = self.extractor.process(entry["xml"].text, entry, self.errorLogger)
+            entry["extractionResults"] = personEntryDict
+        except ExtractionException as e:
+            pass
+        return entry

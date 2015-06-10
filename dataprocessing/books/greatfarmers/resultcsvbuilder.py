@@ -28,14 +28,15 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
 
     def _writeCsvHeaders(self):
-        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "MeadowArea ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince"]
+        headers = ["FarmName", "FarmLocation", "FarmLatitude", "FarmLongitude", "FarmArea ha", "ForestArea ha", "FieldArea ha", "WasteArea ha", "luonnonlaidun ha", "Owner first names", "Owner surname", "Owner gender", "OwnerBirthday", "OwnerBirthMonth", "OwnerBirthYear", "ownerSince"]
         headers = headers + ["oat", "barley", "hay", "potatoes", "wheat", "rye", "sugarbeet", "lanttu", "puimakone", "tractor", "horse", "chicken", "siirtotila", "kantatila",
-                             "talli", "sauna", "navetta", "autotalli", "lypsykone", "pine", "spruce", "birch", "someoneDead",
+                             "talli", "sauna", "navetta", "autotalli", "pine", "spruce", "birch", "viljankuivuri", "kotitalousmylly", "ay-karja", "sk-karja",
+                             "someoneDead",
                              "moreeni", "hiesu", "hieta", "muta", "savi", "multa", "salaojitus",
-                             "rooms", "lypsylehmät", "teuraseläimet", "lampaat", "lihotussiat", "emakot", "nuori",
+                             "rooms", "lypsylehmät", "lampaat", "lihotussiat", "emakot", "nuori",
                              "kanat"]
 
-        headers = headers + ["Hostess first names", "Hostess surname", "HostessGender", "HostessBirthday", "HostessBirthMonth", "HostessBirthYear", "approximatePageNumber", "maybeManyMarriages"]
+        headers = headers + ["Spousefirst names", "Spouse surname", "SpouseBirthday", "SpouseBirthMonth", "SpouseBirthYear", "approximatePageNumber", "shortEntry", "maybeManyMarriages"]
 
         headers = headers + ["ChildCount", "BoyCount", "GirlCount"]
         for i in range(0, self.childrenMax):
@@ -89,10 +90,14 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
                             persondatadict[KEYS["flags"]].value[KEYS["sauna"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["navetta"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["autotalli"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["lypsykone"]].value,
+
                             persondatadict[KEYS["flags"]].value[KEYS["pine"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["spruce"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["birch"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["viljankuivuri"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["kotitalousmylly"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["ay-karja"]].value,
+                            persondatadict[KEYS["flags"]].value[KEYS["sk-karja"]].value,
                             persondatadict[KEYS["flags"]].value[KEYS["someonedead"]].value,
 
 
@@ -106,20 +111,20 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
                             persondatadict[KEYS["quantities"]].value[KEYS["rooms"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["lypsylehma"]].value,
-                            persondatadict[KEYS["quantities"]].value[KEYS["teuras"]].value,
+
                             persondatadict[KEYS["quantities"]].value[KEYS["lammas"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["lihotussika"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["emakko"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["nuori"]].value,
                             persondatadict[KEYS["quantities"]].value[KEYS["kanoja"]].value,
 
-                            persondatadict[KEYS["hostess"]].value[KEYS["firstnames"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["surname"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["gender"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthDay"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthMonth"]].value,
-                            persondatadict[KEYS["hostess"]].value[KEYS["hostessBirthData"]].value[KEYS["birthYear"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseOrigFamily"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthDay"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthMonth"]].value,
+                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthYear"]].value,
                             persondatadict[KEYS["approximatePage"]].value,
+                            persondatadict[KEYS["shortentry"]].value,
                             persondatadict[KEYS["manymarriages"]].value
 
 

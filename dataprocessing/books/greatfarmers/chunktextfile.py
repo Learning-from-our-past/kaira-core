@@ -18,7 +18,6 @@ class PersonPreprocessor(ChunkTextInterface):
         text = re.sub(r"(\<sup\>)|\<\/sup\>", "", text) #remove sup tags
         parsed = html.document_fromstring( text)
         persons = self.process(parsed)
-        print(len(persons))
         return etree.tostring(persons, pretty_print=True, encoding='unicode')
 
     def process(self, tree):

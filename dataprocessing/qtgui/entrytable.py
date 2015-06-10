@@ -26,12 +26,10 @@ class EntryTableModel(QStandardItemModel):
 
             if type(value) is list:
                 for i in value:
-                    print(type(value))
                     elements = self._getDataFromDict(i)
                     keyColumn = keyColumn + elements["keyColumn"]
                     valueColumn = valueColumn + elements["valueColumn"]
             elif type(value) is dict:
-                print(type(value))
                 elements = self._getDataFromDict(value)
                 keyColumn = keyColumn + elements["keyColumn"]
                 valueColumn = valueColumn + elements["valueColumn"]

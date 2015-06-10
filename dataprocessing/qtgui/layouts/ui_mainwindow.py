@@ -137,6 +137,8 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setObjectName("actionCreate_a_new_Person")
         self.actionSave = QtWidgets.QAction(MainWindow)
         self.actionSave.setObjectName("actionSave")
+        self.actionAbout = QtWidgets.QAction(MainWindow)
+        self.actionAbout.setObjectName("actionAbout")
         self.menuExport.addAction(self.actionCsv)
         self.menuExport.addAction(self.actionJSON)
         self.menuImport.addAction(self.actionFrom_txt_OCR)
@@ -145,6 +147,7 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.actionSave_changes_to_xml)
         self.menuFile.addAction(self.menuExport.menuAction())
         self.menuFile.addAction(self.menuImport.menuAction())
+        self.menuFile.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
         self.toolBar.addAction(self.actionCreate_a_new_Person)
 
@@ -178,7 +181,7 @@ class Ui_MainWindow(object):
         self.actionCreate_a_new_Person.setText(_translate("MainWindow", "Create a  new Person"))
         self.actionCreate_a_new_Person.setToolTip(_translate("MainWindow", "Create a new person from rawtext"))
         self.actionSave.setText(_translate("MainWindow", "&Save"))
+        self.actionAbout.setText(_translate("MainWindow", "About"))
 
 from qtgui.entriesModels import EntriesListView
 from qtgui.entrytree import EntryTreeView
-#import qtgui.guiresources

@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'newpersondialog.ui'
 #
-# Created: Mon Mar 23 16:11:22 2015
-#      by: PyQt5 UI code generator 5.4
+# Created by: PyQt5 UI code generator 5.4.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,11 +11,17 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_CreateNewPersonDialog(object):
     def setupUi(self, CreateNewPersonDialog):
         CreateNewPersonDialog.setObjectName("CreateNewPersonDialog")
-        CreateNewPersonDialog.resize(400, 300)
+        CreateNewPersonDialog.resize(400, 382)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(CreateNewPersonDialog)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
+        self.label_2 = QtWidgets.QLabel(CreateNewPersonDialog)
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout.addWidget(self.label_2)
+        self.nameField = QtWidgets.QLineEdit(CreateNewPersonDialog)
+        self.nameField.setObjectName("nameField")
+        self.verticalLayout.addWidget(self.nameField)
         self.label = QtWidgets.QLabel(CreateNewPersonDialog)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
@@ -39,6 +44,8 @@ class Ui_CreateNewPersonDialog(object):
     def retranslateUi(self, CreateNewPersonDialog):
         _translate = QtCore.QCoreApplication.translate
         CreateNewPersonDialog.setWindowTitle(_translate("CreateNewPersonDialog", "Create new person entry"))
+        self.label_2.setText(_translate("CreateNewPersonDialog", "Name:"))
+        self.nameField.setPlaceholderText(_translate("CreateNewPersonDialog", "Person\'s name here. Not required for soldiers."))
         self.label.setText(_translate("CreateNewPersonDialog", "Person data:"))
         self.plainTextEdit.setPlaceholderText(_translate("CreateNewPersonDialog", "New person\'s text here"))
 
