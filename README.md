@@ -2,6 +2,8 @@
 
 This is a Python software which lets user to convert matrikel old finnish matrikel books to a csv- and json-format. Supported bookseries at the moment are "Suomen Rintamamiehet 1939-43", "Suomen Pienviljelijät", "Siirtokarjalaisten tie" and "Suuret maatilat". The book series were originally published in 1970s and they contain brief descriptions of the peope, their life, children, spouses etc. This data is scientifically interesting but difficult to analyze statistically in a written format. 
 
+Check [Pikakäyttöohje](https://github.com/Tumetsu/Kaira/wiki/Pikak%C3%A4ytt%C3%B6ohje) and developer documentation from [Wiki](https://github.com/Tumetsu/Kaira/wiki).
+
 # What does this tool do?
 Kaira is meant to be used as a tool to extract interesting data from old matrikels books which have been scanned and OCR'd. Extracted data can then be edited and exported into csv- or json-formats for statistical analysis. The tool was originally developed in Lammi Biological Station in collaboration with John Loehr.
 
