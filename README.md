@@ -15,7 +15,7 @@ Kaira is meant to be used as a tool to extract interesting data from old matrike
  4. Kaira then reads the XML-file and runs multiple tailored regexes and other domain-specific logic and generates a csv-file containing the data. At this point user can use GUI to find missing information, edit the xml-file to fix the extraction errors and rerun the process etc.
 
 #GUI
-Kaira includes a simple GUI for user to read, export and edit the OCR files and related content. Check detailed usage instructions from manual. 
+Kaira includes a simple GUI for user to read, export and edit the OCR files and related content. Check detailed usage instructions from wiki. 
 
 #Development
 Check project Wiki to see documentation about how to extend the software with new bookseries and more detailed information about how to set up dev-environment, what you need to know etc.
