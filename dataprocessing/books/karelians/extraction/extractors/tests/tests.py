@@ -52,16 +52,7 @@ class TestProfessionExtractor():
         emäntä, synt.'11. 11. -32 Alajärvellä. Lapset: Jouko -50, Aira
         -52, Leena -54, Veijo -55, Ansa -56. Arto -58, Helena -63, Rauni ja"""
         self.mockXml2.attrib["name"] = "KALLIO, KYÖSTI VILJAMI"
-
-
         self.eLogger = ExceptionLogger()
-
-    def test_profession_extract(self):
-        ValueWrapper.xmlEntry = self.mockXml1
-        ex = ProfessionExtractor(self.mockXml1, self.eLogger, self.mockXml1)
-        ex.setDependencyMatchPositionToZero()
-        result = ex.extract(self.mockXml1.text, {"xml":self.mockXml1})
-        assert_equals(result[KEYS["profession"]].value, "eläkeläinen, vaivaiskoivun kasvattaja")
 
     def test_no_profession(self):
         ValueWrapper.xmlEntry = self.mockXml2

@@ -11,12 +11,9 @@ from shared import regexUtils
 
 class BirthdayExtractor(BaseExtractor):
 
-
-    def extract(self, text, entry):
+    def extract(self, text, entry, spouse=False):
         super(BirthdayExtractor, self).extract(text)
-
-
-        self.PATTERN = r"(?:synt)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))" #r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
+        self.PATTERN = r"(?:synt)\.?,?(?:\s+)?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|\s+|s)\s?(?P<month>\d{1,2})(?:\.|,|:|\s+|s)?(?:\s+)?-?(?P<year>\d{2,4}))|\s?-(?P<yearOnly>\d{2,4})(?!\.|,|\s|\d)(?=\D\D\D\D\D))" #r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)    #TODO: TRY IGNORE CASE?
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
@@ -34,8 +31,8 @@ class BirthdayExtractor(BaseExtractor):
 
     def _prepareTextForExtraction(self, text):
         t = textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition, self.SUBSTRING_WIDTH)
-        t = textUtils.removeSpacesFromText(t)
 
+        #TODO: Sotkeeko tama puolison syntymapaivan irroittamisen ajoittain?
         spouseFound = regexUtils.findFirstPositionWithRegexSearch("puol", t, re.IGNORECASE|re.UNICODE)
         if spouseFound != -1:
             t = t[0:spouseFound]

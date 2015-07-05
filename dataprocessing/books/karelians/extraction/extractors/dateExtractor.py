@@ -22,8 +22,11 @@ class DateExtractor():
         self.PATTERN = PATTERN
         self.OPTIONS = OPTIONS
         preparedText = self._prepareTextForExtraction(text)
-        self.processedText = preparedText
-        self._findDate(preparedText)
+        try:
+            self._findDate(preparedText)
+        except DateException:
+            #non-space pattern match didn't produce results, try with including spaces
+            self._findDate(text)
         return self._constructReturnDict()
 
     def setDatesToAlwaysIn20thCentury(self, boolValue):
