@@ -30,7 +30,6 @@ class EntriesListView(QListView):
         super(EntriesListView, self).__init__(parent)
         self.parent = parent
 
-    @pyqtSlot(int)
     def _selectionChanged(self, selection):
         if len(selection.indexes()) > 0:
             self.entrySelectedSignal.emit(self.model().itemFromIndex(selection.indexes()[0]).getDataEntry())

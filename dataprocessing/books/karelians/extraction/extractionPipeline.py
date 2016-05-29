@@ -16,6 +16,9 @@ from books.karelians.extraction.extractors.childextractor import ChildExtractor
 from books.karelians.extraction.extractors.deathextractor import DeathExtractor
 from shared.genderExtract import Gender
 
+from interface.valuewrapper import ValueWrapper
+
+
 class ExtractionPipeline():
 
     def __init__(self, xmlDocument):
@@ -75,5 +78,5 @@ class ExtractionPipeline():
         d.update(finnishLocations)
         d.update(spouse)
         d.update(children)
-
+        d["originalText"] = ValueWrapper(text)
         return d
