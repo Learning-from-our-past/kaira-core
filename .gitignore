@@ -1,8 +1,8 @@
-dataprocessing/build
-dataprocessing/dist
-dataprocessing/siirtokarjalaiset
-dataprocessing/mongodb
-dataprocessing/build
+dist/
+mongodb/
+build/
+kaira_venv/
+.idea/
 *.pyc
 *.csv
 *.xml
@@ -11,6 +11,3 @@ dataprocessing/build
 *.html
 *.htm
 *.jpg
-
-dataprocessing/.idea
-dataprocessing/books/farmers/material/Kymen pienviljelijät_OCR.pdf
