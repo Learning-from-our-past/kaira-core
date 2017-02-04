@@ -1,0 +1,35 @@
+version: '1.0.{build}'
+
+branches:
+  # whitelist
+  only:
+    - master
+
+platform:
+  - x86
+configuration:
+  - Release
+
+environment:
+  matrix:
+    - PYTHON: "C:\\Python35-x64"
+
+
+before_build:
+  - "%PYTHON%\\python.exe -m pip install -r /dataprocessing/requirements.txt"
+
+build_script:
+  - "%PYTHON%\\python.exe /dataprocessing/cx_setup.py build"
+
+after_build:
+# Zippaa buildin tuotokset
+
+deploy:
+  - provider: GitHub
+    artifact: /.*\.nupkg/           # upload all NuGet packages to release assets
+    draft: false
+    prerelease: false
+    on:
+      branch: master                # release from master branch only
+      appveyor_repo_tag: true       # deploy on tag push only
+
