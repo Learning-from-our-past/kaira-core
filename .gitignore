@@ -6,8 +6,9 @@ kaira_venv/
 *.pyc
 *.csv
 *.xml
-*.txt
 *.bat
 *.html
 *.htm
 *.jpg
+*.zip
+*.tar.gz
