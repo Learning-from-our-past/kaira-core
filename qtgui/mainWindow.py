@@ -3,12 +3,14 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.QtCore import pyqtSlot,QSortFilterProxyModel, Qt
 from PyQt5.QtGui import QIcon
 from qtgui.layouts.ui_mainwindow import Ui_MainWindow
+from qtgui.services.checkupdates import CheckUpdatesOnStartup
 from qtgui.xmlImport import XmlImport
 from qtgui.entriesModels import *
 from qtgui.entrytree import *
 from qtgui.savefile import *
 from qtgui.createnewperson import NewPersonDialog
 from qtgui.importocrdialog import ImportOcrDialog
+from app_information import ABOUT_INFORMATION
 
 class Mainwindow(QMainWindow):
 
@@ -30,6 +32,8 @@ class Mainwindow(QMainWindow):
         self.ui.setupUi(self)
         icon = QIcon("icon.ico")
         self.setWindowIcon(icon)
+
+        self.setWindowTitle("Kaira " + ABOUT_INFORMATION["version"])
 
         self.xmlImporter = XmlImport(self)
         self.chunkFile = ImportOcrDialog(self)
@@ -87,6 +91,7 @@ class Mainwindow(QMainWindow):
         self.ui.treeView.resizeColumnToContents(1)
         self.ui.treeView.expandAll()
 
+        self.update_checker = CheckUpdatesOnStartup()
 
 
     def _createNewPerson(self):
@@ -200,7 +205,7 @@ class Mainwindow(QMainWindow):
     @pyqtSlot()
     def _about(self):
         msgbox = QMessageBox()
-        msgbox.information(self, "About", "Made by Tuomas Salmi 2015\nhttps://github.com/Tumetsu/Kaira\nv. 1.0")
+        msgbox.information(self, "About", "Made by Tuomas Salmi 2015\nhttps://github.com/Tumetsu/Kaira\n" + ABOUT_INFORMATION["version"])
         msgbox.show()
 
 import sys

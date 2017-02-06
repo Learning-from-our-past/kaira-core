@@ -1,4 +1,4 @@
-version: '1.1.{build}'
+version: '1.0.{build}'
 
 platform:
   - x86
@@ -13,6 +13,7 @@ environment:
 before_build:
   - "dir"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
+  - "%PYTHON%\\python.exe deploy_scripts/set_app_version_during_ci.py %APPVEYOR_REPO_TAG_NAME%"
 
 build_script:
   - "%PYTHON%\\python.exe cx_setup.py build"
