@@ -10,6 +10,7 @@ from qtgui.entrytree import *
 from qtgui.savefile import *
 from qtgui.createnewperson import NewPersonDialog
 from qtgui.importocrdialog import ImportOcrDialog
+from app_information import ABOUT_INFORMATION
 
 class Mainwindow(QMainWindow):
 
@@ -31,6 +32,8 @@ class Mainwindow(QMainWindow):
         self.ui.setupUi(self)
         icon = QIcon("icon.ico")
         self.setWindowIcon(icon)
+
+        self.setWindowTitle("Kaira " + ABOUT_INFORMATION["version"])
 
         self.xmlImporter = XmlImport(self)
         self.chunkFile = ImportOcrDialog(self)
@@ -202,7 +205,7 @@ class Mainwindow(QMainWindow):
     @pyqtSlot()
     def _about(self):
         msgbox = QMessageBox()
-        msgbox.information(self, "About", "Made by Tuomas Salmi 2015\nhttps://github.com/Tumetsu/Kaira\nv. 1.0")
+        msgbox.information(self, "About", "Made by Tuomas Salmi 2015\nhttps://github.com/Tumetsu/Kaira\n" + ABOUT_INFORMATION["version"])
         msgbox.show()
 
 import sys
