@@ -13,6 +13,8 @@ environment:
 before_build:
   - "dir"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
+  # Note this works only on tag builds. If Appveyor is changed to build on non tag relase, version will be set to v0.0.0
+  - "%PYTHON%\\python.exe deploy_scripts/set_app_version_during_ci.py %APPVEYOR_REPO_TAG_NAME%
 
 build_script:
   - "%PYTHON%\\python.exe cx_setup.py build"

@@ -1,6 +1,6 @@
 {
-  "version": "v1.0.2",
+  "version": "v0.0.0",
+  "github_api_host": "api.github.com",
   "releases_url": "https://github.com/Learning-from-our-past/Kaira/releases",
-  "github_api_releases_url": "/repos/Learning-from-our-past/Kaira/releases/latest",
-  "github_api_host": "api.github.com"
+  "github_api_releases_url": "/repos/Learning-from-our-past/Kaira/releases/latest"
 }
