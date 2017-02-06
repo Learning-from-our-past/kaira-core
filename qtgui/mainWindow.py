@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5.QtCore import pyqtSlot,QSortFilterProxyModel, Qt
 from PyQt5.QtGui import QIcon
 from qtgui.layouts.ui_mainwindow import Ui_MainWindow
+from qtgui.services.checkupdates import CheckUpdatesOnStartup
 from qtgui.xmlImport import XmlImport
 from qtgui.entriesModels import *
 from qtgui.entrytree import *
@@ -87,6 +88,7 @@ class Mainwindow(QMainWindow):
         self.ui.treeView.resizeColumnToContents(1)
         self.ui.treeView.expandAll()
 
+        self.update_checker = CheckUpdatesOnStartup()
 
 
     def _createNewPerson(self):
