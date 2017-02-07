@@ -25,6 +25,8 @@ artifacts:
   - path: "kaira-%APPVEYOR_BUILD_VERSION%.zip"
     name: Kaira
 
+skip_tags: true
+
 deploy:
   - provider: GitHub
     release: Kaira-v$(appveyor_build_version)
