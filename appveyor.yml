@@ -9,11 +9,11 @@ environment:
   matrix:
     - PYTHON: "C:\\Python35"
 
-
 before_build:
   - "dir"
   - "%PYTHON%\\python.exe -m pip install -r requirements.txt"
-  - "%PYTHON%\\python.exe deploy_scripts/set_app_version_during_ci.py %APPVEYOR_REPO_TAG_NAME%"
+  - "echo v%APPVEYOR_BUILD_VERSION%"
+  - "%PYTHON%\\python.exe deploy_scripts/set_app_version_during_ci.py v%APPVEYOR_BUILD_VERSION%"
 
 build_script:
   - "%PYTHON%\\python.exe cx_setup.py build"
@@ -27,12 +27,13 @@ artifacts:
 
 deploy:
   - provider: GitHub
+    release: Kaira-v$(appveyor_build_version)
     artifact: /.*\.zip/           # upload all zip files
     draft: false
     prerelease: false
     on:
-      appveyor_repo_tag: true # deploy on tag push only
-    description: "Appveyor automatic CI build. Please install by copying contents of the zip file into base install folder."
+      branch: master # deploy on push to master
+    description: "Appveyor automatic build. Please install by copying contents of the zip file into base install folder.\n\n$(APPVEYOR_REPO_COMMIT_MESSAGE)\n\n$(APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED)"
     auth_token:
       secure: dVhUugZ838SU7EjJOeQRNhX/PFvsx9cnsERrZhzLZXkwnmNbP/iKywebkrrFTAzd
 
