@@ -29,7 +29,7 @@ skip_tags: true
 
 deploy:
   - provider: GitHub
-    release: Kaira-v$(appveyor_build_version)
+    release: v$(appveyor_build_version)
     artifact: /.*\.zip/           # upload all zip files
     draft: false
     prerelease: false
