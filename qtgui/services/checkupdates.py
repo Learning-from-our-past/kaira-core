@@ -7,6 +7,7 @@ from PyQt5.QtCore import pyqtSlot, QObject
 from PyQt5.QtWidgets import QDialog
 from app_information import ABOUT_INFORMATION
 from qtgui.layouts.ui_updatedialog import Ui_CheckUpdatesDialog
+from distutils.version import StrictVersion
 
 class UpdateDialog(QDialog):
     """
@@ -84,28 +85,14 @@ class CheckUpdatesWorker(QObject):
 
     def _get_release_version(self, received):
         if not received['prerelease']:
-            # Naive version number comparator
             # tags should be in form of v0.71.1 or v1.2b etc.
             p = re.compile('v\.?\s?(.+)', flags=re.IGNORECASE)
-            m = p.search(received['tag_name'])
-            if m is not None:
-                their_tokens = m.group(1).split('.')[0:3]
-                my_tokens = self.current_version.split('.')[0:3]
-                # Make sure lists are sized 3
-                if len(their_tokens) < 3:
-                    their_tokens = their_tokens + ['0'] * (3-len(their_tokens))
-                if len(my_tokens) < 3:
-                    my_tokens = my_tokens + ['0'] * (3-len(my_tokens))
 
-                there_is_update = False
-                for index, n in enumerate(their_tokens):
-                    their = int(re.sub('[a-zA-z]', '', n))  # remove possible letters
-                    my = int(re.sub('[a-zA-z]', '', my_tokens[index]))  # remove possible letters
-                    if their > my:
-                        there_is_update = True
-                        break
-                return there_is_update
-            return False
+            # Strip v and other letters
+            their_version = p.search(received['tag_name']).group(1)
+            my_version = p.search(self.current_version).group(1)
+
+            return StrictVersion(their_version) > StrictVersion(my_version)
 
     def check_updates(self):
         try:
