@@ -20,3 +20,16 @@ class ResultJsonBuilderInterface:
     @abstractmethod
     def closeJson(self):
         pass
+
+    def int_or_none(self, value):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return None
+
+    def float_or_none(self, value):
+        try:
+            value = value.replace('\w', '')
+            return float(value.replace(',', '.'))
+        except (TypeError, ValueError):
+            return None
