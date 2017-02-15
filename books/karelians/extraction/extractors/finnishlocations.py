@@ -13,6 +13,8 @@ class FinnishLocationsExtractor(BaseExtractor):
     """
     geocoder = GeoCoder()
 
+    OTHER_REGION_ID = 'other'
+
     def extract(self, text, entry):
         self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)" #r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -120,7 +122,7 @@ class FinnishLocationsExtractor(BaseExtractor):
             self.coordinates_notfound_threshold -= 1
             #self.errorLogger.logError(LocationNotFound.eType, self.currentChild )
 
-        self.locationlisting.append(ValueWrapper({KEYS["otherlocation"] : ValueWrapper(place), KEYS["othercoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
+        self.locationlisting.append(ValueWrapper({KEYS["otherlocation"] : ValueWrapper(place), KEYS["othercoordinate"] : ValueWrapper({KEYS["latitude"]: ValueWrapper(geocoordinates["latitude"]), KEYS["longitude"]: ValueWrapper(geocoordinates["longitude"])}), KEYS["movedOut"] : ValueWrapper(movedOut), KEYS["movedIn"] : ValueWrapper(movedIn), KEYS["region"] : self.OTHER_REGION_ID}))
 
     def _count_years(self, text):
         years = regexUtils.regexIter(r"\d\d", text, self.SPLIT_OPTIONS1)
