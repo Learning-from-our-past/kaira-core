@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QDialog
 from app_information import ABOUT_INFORMATION
 from qtgui.layouts.ui_updatedialog import Ui_CheckUpdatesDialog
 from distutils.version import StrictVersion
-
+import os
 class UpdateDialog(QDialog):
     """
     Dialog to check the updates and to navigate to downloads page in Github.
@@ -52,16 +52,18 @@ class CheckUpdatesOnStartup:
     Helper class to check updates automatically on background when application starts up.
     """
     def __init__(self):
-        # Retrieve update information on background:
-        self.worker = CheckUpdatesWorker(ABOUT_INFORMATION['github_api_host'],
-                                         ABOUT_INFORMATION['github_api_releases_url'],
-                                         ABOUT_INFORMATION['version'])
 
-        self.worker.threadResultsSignal.connect(self._updates_information_retrieved)
-        self.thread = QThread()
-        self.worker.moveToThread(self.thread)
-        self.thread.started.connect(self.worker.check_updates)
-        self.thread.start()
+        if not os.environ['DEVELOPMENT']:
+            # Retrieve update information on background:
+            self.worker = CheckUpdatesWorker(ABOUT_INFORMATION['github_api_host'],
+                                             ABOUT_INFORMATION['github_api_releases_url'],
+                                             ABOUT_INFORMATION['version'])
+
+            self.worker.threadResultsSignal.connect(self._updates_information_retrieved)
+            self.thread = QThread()
+            self.worker.moveToThread(self.thread)
+            self.thread.started.connect(self.worker.check_updates)
+            self.thread.start()
 
     def _updates_information_retrieved(self, result):
         self.thread.quit()

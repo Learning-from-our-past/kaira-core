@@ -112,9 +112,9 @@ class ChildExtractor(BaseExtractor):
                 location = ""
                 coordinates = self.geocoder.get_empty_coordinates()
 
-            self.child_list.append(ValueWrapper({"name" : ValueWrapper(name), "gender" : gender, "birthYear" : ValueWrapper(year),
-                                                 "locationName" : ValueWrapper(location),
-                                                 "childCoordinates" : ValueWrapper({"latitude": ValueWrapper(coordinates["latitude"]), "longitude": ValueWrapper(coordinates["longitude"])})}))
+            self.child_list.append(ValueWrapper({KEYS["childName"] : ValueWrapper(name), KEYS["gender"] : gender, KEYS["birthYear"] : ValueWrapper(year),
+                                                 KEYS["childLocationName"] : ValueWrapper(location),
+                                                 KEYS["childCoordinates"] : ValueWrapper({KEYS["latitude"]: ValueWrapper(coordinates["latitude"]), KEYS["longitude"]: ValueWrapper(coordinates["longitude"])})}))
         except regexUtils.RegexNoneMatchException:
             pass
 

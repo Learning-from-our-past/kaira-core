@@ -12,7 +12,7 @@ class KarelianLocationsExtractor(BaseExtractor):
     """ Tries to extract the locations of the person in karelia.
     """
     geocoder = GeoCoder()
-
+    KARELIAN_REGION_ID = 'karelia'
     def extract(self, text, entry):
 
         self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))" #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
@@ -115,7 +115,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         except ValueError:
             pass
 
-        self.locationlisting.append(ValueWrapper({KEYS["karelianlocation"] : ValueWrapper(place), KEYS["kareliancoordinate"] : ValueWrapper({"latitude": ValueWrapper(geocoordinates["latitude"]), "longitude": ValueWrapper(geocoordinates["longitude"])}), "movedOut" : ValueWrapper(movedOut), "movedIn" : ValueWrapper(movedIn)}))
+        self.locationlisting.append(ValueWrapper({KEYS["karelianlocation"] : ValueWrapper(place), KEYS["kareliancoordinate"] : ValueWrapper({KEYS["latitude"] : ValueWrapper(geocoordinates["latitude"]), KEYS["longitude"]: ValueWrapper(geocoordinates["longitude"])}), KEYS["movedOut"] : ValueWrapper(movedOut), KEYS["movedIn"] : ValueWrapper(movedIn), KEYS["region"] : self.KARELIAN_REGION_ID}))
 
 
     def _count_years(self, text):
