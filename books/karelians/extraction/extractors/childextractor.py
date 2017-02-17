@@ -73,8 +73,8 @@ class ChildExtractor(BaseExtractor):
         if birthLoc is not None:
             #found a "Syntyneet <place>" string. Set it to the previous children.
             for c in self.child_list:
-                if c.value["locationName"].value == "":
-                    c.value["locationName"].value = birthLoc.group("location")
+                if c.value[KEYS["childLocationName"]].value == "":
+                    c.value[KEYS["childLocationName"]].value = birthLoc.group("location")
             return
 
 
