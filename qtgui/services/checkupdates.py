@@ -53,7 +53,7 @@ class CheckUpdatesOnStartup:
     """
     def __init__(self):
 
-        if not os.environ['DEVELOPMENT']:
+        if 'DEVELOPMENT' not in os.environ:
             # Retrieve update information on background:
             self.worker = CheckUpdatesWorker(ABOUT_INFORMATION['github_api_host'],
                                              ABOUT_INFORMATION['github_api_releases_url'],
