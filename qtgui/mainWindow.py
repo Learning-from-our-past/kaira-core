@@ -216,7 +216,8 @@ def start(mongodb):
     exit(app.exec_(), mongodb)
 
 def exit(exitcode, mongodb):
-    mongodb.kill()  #close the db process
+    if mongodb is not None:
+        mongodb.kill()  #close the db process
     sys.exit(exitcode)
 
 if __name__ == '__main__':
