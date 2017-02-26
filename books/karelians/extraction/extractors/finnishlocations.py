@@ -102,7 +102,6 @@ class FinnishLocationsExtractor(BaseExtractor):
         return y
 
     def _create_location_entry(self, place, move_years):
-        print(place)
         place = place.strip()
         #create the final(?) entry
         movedOut = ""

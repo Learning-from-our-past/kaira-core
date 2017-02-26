@@ -12,7 +12,7 @@ class KarelianLocationsExtractor(BaseExtractor):
     geocoder = GeoCoder()
     KARELIAN_REGION_ID = 'karelia'
 
-    def extract(self, text, entry):
+    def extract(self, text):
         self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))" # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.SPLIT_PATTERN1 = r"(?P<place>[A-ZÄ-Öa-zä-ö-]+)\s?(?P<years>[\d,\.\s—-]*)" # r"(?P<place>[A-ZÄ-Öa-zä-ö\s-]+)\s(?P<years>[\d,\.\s—-]*)"
@@ -42,6 +42,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         self.locations = self.locations.strip(".")
         self.locations = self.locations.strip()
 
+        # Strip away spaces and hyphens from center of words
         self.locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", self.locations)
 
         self.locations = self.locations.lstrip()

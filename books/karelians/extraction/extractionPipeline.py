@@ -47,7 +47,7 @@ class ExtractionPipeline:
         birthday_location = birth_loc_ext.extract(text)
 
         karelian_loc_ext = KarelianLocationsExtractor(entry, eLogger, self.xml_document)
-        karelian_locations = karelian_loc_ext.extract(text, entry)
+        karelian_locations = karelian_loc_ext.extract(text)
 
         finnish_loc_ext = FinnishLocationsExtractor(entry, eLogger, self.xml_document)
         finnish_locations = finnish_loc_ext.extract(text, entry)
