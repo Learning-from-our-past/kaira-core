@@ -16,7 +16,7 @@ class TestPersonPopulate:
         if os.path.exists(path):
             shutil.rmtree(path)
 
-    def test_json_data_is_exported_in_correct_format(self, json_test_dir):
+    def should_export_json_data_in_correct_format(self, json_test_dir):
         json_export = ResultJsonBuilder()
         file_path = os.path.join(json_test_dir, 'test.json')
         json_export.openJson(file_path)
