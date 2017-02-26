@@ -12,3 +12,4 @@ kaira_venv/
 *.jpg
 *.zip
 *.tar.gz
+.cache/
