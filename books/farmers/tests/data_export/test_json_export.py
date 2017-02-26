@@ -5,7 +5,7 @@ import json
 from books.farmers.resultjsonbuilder import ResultJsonBuilder
 from books.farmers.tests.data_export.mock_person_data import PERSON_DATA, EXPECTED_JSON
 
-class TestPersonPopulate:
+class TestFarmersJsonExport:
     @pytest.yield_fixture(autouse=True)
     def json_test_dir(self):
         path = './temp/json_export_tests'
