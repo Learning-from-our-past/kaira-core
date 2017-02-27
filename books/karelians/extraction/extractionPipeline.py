@@ -14,6 +14,7 @@ from books.karelians.extraction.extractors.finnishlocations import FinnishLocati
 from books.karelians.extraction.extractors.spouseextractor import SpouseExtractor
 from books.karelians.extraction.extractors.childextractor import ChildExtractor
 from shared.genderExtract import Gender
+import re
 
 from interface.valuewrapper import ValueWrapper
 
@@ -25,6 +26,10 @@ class ExtractionPipeline:
         Gender.load_names()
 
     def process(self, text, entry, eLogger):
+
+        # Replace all weird invisible white space characters with regular space
+        text = re.sub(r"\s", r" ", text)
+
         name_ext = NameExtractor(entry, eLogger, self.xml_document)
         names = name_ext.extract(text, entry)
         image_ext = ImageExtractor(entry, eLogger, self.xml_document)
