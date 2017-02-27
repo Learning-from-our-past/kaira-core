@@ -1,6 +1,6 @@
 class ValueWrapper(object):
-    xmlEntry = None     #Processdata sets this every time before extracting a new Entry.
-    idcounter = 1000    #class variable to generate
+    xmlEntry = None     # Processdata sets this every time before extracting a new Entry.
+    idcounter = 1000    # class variable to generate
 
     @staticmethod
     def reset_id_counter():
@@ -12,15 +12,13 @@ class ValueWrapper(object):
         self.manuallyEdited = False
         self.error = False
 
-        if self.id in ValueWrapper.xmlEntry.attrib:
-            #there is manual entered value for this field in xml, use it instead
+        if ValueWrapper.xmlEntry is not None and self.id in ValueWrapper.xmlEntry.attrib:
+            # there is manual entered value for this field in xml, use it instead
             self._value = ValueWrapper.xmlEntry.attrib[self.id]
             self.manuallyEdited = True
         ValueWrapper.idcounter += 1
 
-
-
-    def manualEdit(self,val):
+    def manualEdit(self, val):
         """
         :param val: Meant to manually edit the value from GUI.
         :return:
@@ -32,10 +30,7 @@ class ValueWrapper(object):
     def value(self):
         return self._value
 
-
     @value.setter
     def value(self, value):
         if not self.manuallyEdited:
             self._value = value
-
-

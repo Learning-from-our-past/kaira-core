@@ -26,6 +26,7 @@ KEYS = {
       "movedOut": "movedOut",
       "movedIn": "movedIn",
       "locations": "locations",
+      "village": "village",
 
       "birthDay" :  "birthDay",
       "birthMonth" : "birthMonth",

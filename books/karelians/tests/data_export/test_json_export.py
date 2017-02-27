@@ -5,7 +5,7 @@ import json
 from books.karelians.resultjsonbuilder import ResultJsonBuilder
 from books.karelians.tests.data_export.mock_person_data import PERSON_DATA, EXPECTED_JSON
 
-class TestPersonPopulate:
+class TestKarelianJsonExport:
     @pytest.yield_fixture(autouse=True)
     def json_test_dir(self):
         path = './temp/json_export_tests'
@@ -16,7 +16,7 @@ class TestPersonPopulate:
         if os.path.exists(path):
             shutil.rmtree(path)
 
-    def test_json_data_is_exported_in_correct_format(self, json_test_dir):
+    def should_export_json_data_in_correct_format(self, json_test_dir):
         json_export = ResultJsonBuilder()
         file_path = os.path.join(json_test_dir, 'test.json')
         json_export.openJson(file_path)

@@ -2,8 +2,6 @@
 import re
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extraction.extractionExceptions import *
-from books.karelians.extraction.extractors.dateExtractor import DateExtractor
-from shared import textUtils
 from books.karelians.extractionkeys import KEYS
 from interface.valuewrapper import ValueWrapper
 from shared import regexUtils
@@ -15,7 +13,6 @@ from books.karelians.extraction.extractors.deathextractor import DeathExtractor
 from books.karelians.extraction.extractors.weddingextractor import WeddingExtractor
 
 class SpouseExtractor(BaseExtractor):
-
 
     def extract(self, text, entry):
         super(SpouseExtractor, self).extract(text)
@@ -39,7 +36,7 @@ class SpouseExtractor(BaseExtractor):
         self._findSpouse(text)
         return self._constructReturnDict()
 
-    def initVars(self,text):
+    def initVars(self, text):
         pass
 
     def _findSpouse(self, text):

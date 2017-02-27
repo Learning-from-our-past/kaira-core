@@ -252,12 +252,20 @@ class TreeItem(object):
               return None
 
       def parent(self):
-          return self.parentItem
+          # FIXME: Really. These errors are likely caused by new attributes in data model. Check if there is some simple explanation and remove these try excepts
+          try:
+            return self.parentItem
+          except AttributeError:
+              return None
 
       def row(self):
-          if self.parentItem:
-              return self.parentItem.childItems.index(self)
-          return 0
+          # FIXME: Really. These errors are likely caused by new attributes in data model. Check if there is some simple explanation and remove these try excepts
+          try:
+              if self.parentItem:
+                  return self.parentItem.childItems.index(self)
+              return 0
+          except Exception:
+            return 0
 
       def setData(self, data, column):
           self.xml.attrib[self.itemData[column].id] = str(data)  #save manual data to an attribute to the xml entry
