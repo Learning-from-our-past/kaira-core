@@ -20,6 +20,7 @@ s16 = "Kaukola, Liinamaa -39. 42^44."
 s17 = "    Uusikirkko, Uiskola -39."
 s18 = 'Kaukola, Kortteensalmi -39, Sortavalanmlk'
 s19 = "Laasola 39."
+s20 = "Outokumpu, Mätäsvaara40—41, Revonlahti 44—45, Ylihärmä 45—, Kera va 45—46, Pohjaslahti kk. 46—65, Alahärmä 65—,"
 
 # Useful generic tokens
 scandinavian_letters = 'ÄÖÅäöå-'
@@ -43,7 +44,7 @@ place_or_place_and_municipality = Or([place_or_place_with_year_data, place_with_
 # Rule for extracting locations and migration years from string of migration locations
 locations_extraction_grammar = ZeroOrMore(Group(place_or_place_and_municipality))
 
-result = locations_extraction_grammar.parseString(s2)
+result = locations_extraction_grammar.parseString(s20)
 for x in result:
     x['place'] = ' '.join(x['place'])
     if 'municipality' in x:

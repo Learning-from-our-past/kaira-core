@@ -1,10 +1,10 @@
 import pytest
-from books.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS
+from books.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS, EXPECTED_RESULTS
 from books.karelians.extraction.extractors.karelianlocations import KarelianLocationsExtractor
+from books.karelians.extraction.extractors.finnishlocations import FinnishLocationsExtractor
 from books.karelians.tests.utils.MockErrorLogger import MockExceptionLogger
 from books.karelians.tests.utils.ValueUnWrapper import unwrap
 from books.karelians.extraction.extractors.bnf_parsers.migration_parser import parse_locations
-
 
 class TestMigrationParser:
 
@@ -65,6 +65,31 @@ class TestMigrationParser:
         ]
 
         self.assert_locations(results, expected)
+
+
+class TestFinnishLocationExtraction:
+
+    @pytest.yield_fixture(autouse=True)
+    def exception_logger(self):
+        return MockExceptionLogger()
+
+    @pytest.yield_fixture(autouse=True)
+    def finnish_extractor(self, exception_logger):
+        return FinnishLocationsExtractor(None, exception_logger, None)
+
+    def should_extract_locations(self, finnish_extractor):
+        results = unwrap(finnish_extractor.extract(LOCATION_TEXTS[0]))['otherLocations']
+
+        assert len(results) == 4
+
+        assert results[0] == EXPECTED_RESULTS[0]['finnish_locations'][0]
+        assert results[1] == EXPECTED_RESULTS[0]['finnish_locations'][1]
+        assert results[2] == EXPECTED_RESULTS[0]['finnish_locations'][2]
+        assert results[3] == EXPECTED_RESULTS[0]['finnish_locations'][3]
+
+    def should_return_empty_if_no_finnish_locations_listed(self, finnish_extractor):
+        results = unwrap(finnish_extractor.extract(''))['otherLocations']
+        assert len(results) == 0
 
 
 class TestKarelianLocationExtraction:
