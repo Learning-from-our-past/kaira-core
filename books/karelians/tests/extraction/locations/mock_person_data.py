@@ -19,6 +19,12 @@ LOCATION_TEXTS = [
 ]
 
 LOCATION_HEURISTICS = {
+    'long_name_with_mlk': {
+            'text': "Asuinp. Karjalassa; Viipuri 23—39. Muut asuinp.: Kankaanpää 39— 40, "
+                    "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—44, Kristiinankaupungin mlk 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "
+                    "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
+                    "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
+    },
     'short_white_listed_name': {
             'text': "Asuinp. Karjalassa; Viipuri 23—39. Muut asuinp.: Kankaanpää 39— 40, "
                     "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—44, Utö 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "

@@ -117,6 +117,12 @@ class TestFinnishLocationExtraction:
         assert len(results) == 5
         assert results[4]['locationName'] == 'Ii'
 
+    def should_accept_any_name_if_mlk_pattern_in_the_end(self, finnish_extractor):
+        results = unwrap(finnish_extractor.extract(LOCATION_HEURISTICS['long_name_with_mlk']['text']))['otherLocations']
+
+        assert len(results) == 5
+        assert results[4]['locationName'] == 'Kristiinankaupungin mlk'
+
 
 class TestKarelianLocationExtraction:
 
