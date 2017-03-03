@@ -13,3 +13,4 @@ kaira_venv/
 *.zip
 *.tar.gz
 .cache/
+material/
