@@ -6,6 +6,8 @@ from shared import regexUtils
 import re
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 from books.karelians.extraction.extractors.bnf_parsers import migration_parser
+import json
+
 
 class FinnishLocationsExtractor(BaseExtractor):
     """ Tries to extract the locations of the person in karelia.
@@ -13,6 +15,11 @@ class FinnishLocationsExtractor(BaseExtractor):
     geocoder = GeoCoder()
 
     OTHER_REGION_ID = 'other'
+    MAX_PLACE_NAME_LENGTH = 15
+    MIN_PLACE_NAME_LENGTH = 4
+
+    with open('./names/short_location_names.json', encoding='utf8') as data_file:
+        short_place_names = json.load(data_file)
 
     def extract(self, text):
         self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)" #r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
@@ -44,8 +51,11 @@ class FinnishLocationsExtractor(BaseExtractor):
 
             parsed_locations = migration_parser.parse_locations(self.locations)
 
-            for location in parsed_locations:
-                self._create_location_entry(location)
+            try:
+                for location in parsed_locations:
+                    self._create_location_entry(location)
+            except InvalidLocationException as e:
+                pass
 
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
@@ -75,6 +85,22 @@ class FinnishLocationsExtractor(BaseExtractor):
                 return {"latitude": "", "longitude": ""}
 
         geocoordinates = get_coordinates_by_name(entry_name)
+
+        if len(entry_name) > self.MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] == '' and geocoordinates['longitude'] == '':
+            raise InvalidLocationException(entry_name)
+
+        if len(entry_name) < self.MIN_PLACE_NAME_LENGTH:
+            ln = entry_name.lower()
+            if ln in self.short_place_names:
+                # The name is in white list, so it is ok to use!
+                # Also check if there is known alias for it
+                if 'alias' in self.short_place_names[ln]:
+                    entry_name = self.short_place_names[ln]['alias']
+            else:
+                raise InvalidLocationException(entry_name)
+
+        if village_name is not None and (len(village_name) > self.MAX_PLACE_NAME_LENGTH or len(village_name) < self.MIN_PLACE_NAME_LENGTH):
+            village_name = None
 
         village_coordinates = {"latitude": "", "longitude": ""}
         if village_name is not None:
@@ -137,3 +163,12 @@ class LocationThresholdException(Exception):
 
     def __unicode__(self):
         return repr(self.message)
+
+class InvalidLocationException(Exception):
+    message = "Location name likely not a valid place: "
+
+    def __init__(self, place_name):
+        self._place_name = place_name
+
+    def __unicode__(self):
+        return repr(self.message + self._place_name)
