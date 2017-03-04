@@ -3,8 +3,9 @@ from books.karelians.extraction.extractionPipeline import ExtractionPipeline
 from interface.processdatainterface import ProcessDataInterface
 from interface.valuewrapper import ValueWrapper
 from books.karelians.extraction.extractionExceptions import ExtractionException
-class ProcessData(ProcessDataInterface):
 
+
+class ProcessData(ProcessDataInterface):
 
     def __init__(self, callback):
         self.dataFilename = ""
@@ -56,7 +57,6 @@ class ProcessData(ProcessDataInterface):
         self.readDataEntries.append(entry)
         self.count +=1
         return entry
-
 
     def _createEntry(self, xmlEntry):
         return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
