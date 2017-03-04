@@ -10,7 +10,7 @@ class SmallFarmersExtractor:
         self._results = None
 
     def process(self, xml_document):
-        self._results = self._extractor.startExtractionProcess(xml_document, '')
+        self._results = self._extractor.run_extraction(xml_document, '')
 
     def save_results(self, file, file_format='json'):
         if file_format == 'json':

@@ -26,21 +26,21 @@ class ProcessData(ProcessDataInterface):
         self.processUpdateCallbackFunction = callback
 
     #TODO: Nimeä uudestaan kuvaamaan että se palauttaa valmiin tuloksen?
-    def startExtractionProcess(self, xmlDocument, filePath):
-        self.xmlDataDocument = xmlDocument
-        self.dataFilename = filePath
+    def run_extraction(self, xml_document, file_path):
+        self.xmlDataDocument = xml_document
+        self.dataFilename = file_path
         self._initProcess()
-        self._processAllEntries()
-        self._finishProcess()
+        self._process_all_entries()
+        self._finish_process()
         return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
-                "file": filePath}
+                "file": file_path}
 
 
-    def extractOne(self, xmlEntry):
+    def extract_one(self, xml_entry):
         """Can be used to extract only one entry after the main file"""
         ValueWrapper.reset_id_counter()
-        entry = self._createEntry(xmlEntry)
-        ValueWrapper.xmlEntry = xmlEntry
+        entry = self._create_entry(xml_entry)
+        ValueWrapper.xmlEntry = xml_entry
         try:
             personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
             entry["extractionResults"] = personEntryDict
@@ -63,17 +63,17 @@ class ProcessData(ProcessDataInterface):
         self.xmlDataDocumentLen = len(self.xmlDataDocument)
         print ("XML file elements: " + str(len(self.xmlDataDocument)))
 
-    def _processAllEntries(self):
+    def _process_all_entries(self):
         i = 0
         ValueWrapper.reset_id_counter()
         for child in self.xmlDataDocument:
-            entry = self._createEntry(child)
+            entry = self._create_entry(child)
             ValueWrapper.xmlEntry = child
             try:
-                self._processEntry(entry)
+                self._process_entry(entry)
             except ExtractionException as e:
                 self.readDataEntries.append(entry)    #TODO: Probably better idea to pass dict with keys with empty fields?
-                self._handleExtractionErrorLogging(exception=e, entry=entry)
+                self._handle_extraction_error_logging(exception=e, entry=entry)
 
             i +=1
             ValueWrapper.reset_id_counter() #Resets the id-generator for each datafield of entry
@@ -81,7 +81,7 @@ class ProcessData(ProcessDataInterface):
 
 
 
-    def _processEntry(self, entry):
+    def _process_entry(self, entry):
         personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
         entry["extractionResults"] = personEntryDict
         self.readDataEntries.append(entry)
@@ -89,10 +89,10 @@ class ProcessData(ProcessDataInterface):
         self.count +=1
         return entry
 
-    def _createEntry(self, xmlEntry):
-        return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
+    def _create_entry(self, xmlEntry):
+        return {"xml": xmlEntry, "extractionResults" : self._create_result_template()}
 
-    def _createResultTemplate(self):
+    def _create_result_template(self):
         return {KEYS["surname"] : "", KEYS["firstnames"] : "", KEYS["birthDay"]: "",
                KEYS["birthMonth"] : "", KEYS["birthYear"] : "", KEYS["birthLocation"] : "",
                KEYS["profession"] : "", KEYS["address"] : "", KEYS["deathDay"] : "",
@@ -103,17 +103,17 @@ class ProcessData(ProcessDataInterface):
                KEYS["kotiutusPlace"]: "", KEYS["medals"]: "",KEYS["hobbies"]: "",
                KEYS["hasSpouse"]: "", KEYS["children"]: "", KEYS["childCount"]: ""}
 
-    def _handleExtractionErrorLogging(self, exception, entry):
+    def _handle_extraction_error_logging(self, exception, entry):
         self.errorLogger.logError(exception.eType, entry)
         self.errors +=1
         self.count +=1
 
-    def _finishProcess(self):
-        self._printStatistics()
+    def _finish_process(self):
+        self._print_statistics()
         #self.csvBuilder.closeCsv()
 
 
-    def _printStatistics(self):
+    def _print_statistics(self):
         print ("Errors encountered: " + str(self.errors) + "/" + str(self.count))
         self.errorLogger.printErrorBreakdown()
 

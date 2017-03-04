@@ -1,83 +1,53 @@
 from abc import abstractmethod
-XMLPATH = "../xmldata/"
-CSVPATH = "../csv/"
+
 
 class ProcessDataInterface:
-
 
     def __init__(self, callback):
         pass
 
-    #TODO: Nimeä uudestaan kuvaamaan että se palauttaa valmiin tuloksen?
     @abstractmethod
-    def startExtractionProcess(self, xmlDocument, filePath):
-        """return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
-                "file": filePath}"""
+    def run_extraction(self, xml_document, file_path):
+        """
+
+        :param xml_document:
+        :param file_path:
+        :return:  {
+            "errors": self.errorLogger.getErrors(),
+            "entries": self.readDataEntries,
+            "xmlDocument": self.xmlDataDocument,
+            "file": filePath
+            }
+        """
         pass
 
     @abstractmethod
-    def extractOne(self, xmlEntry):
+    def extract_one(self, xml_entry):
         """Can be used to extract only one entry after the main file"""
-        #return entry
         pass
 
-    #TODO: POISTA NÄMÄ SILLÄ SISÄINEN TOTEUTUS VOI OLLA MITÄ VAIN
-    def _initProcess(self, filePath):
+    def _process_all_entries(self):
         pass
 
-    def _processAllEntries(self):
-        pass
-        """
-        i = 0
-        ValueWrapper.reset_id_counter()
-        for child in self.xmlDataDocument:
-            entry = self._createEntry(child)
-            ValueWrapper.xmlEntry = child
-            try:
-                self._processEntry(entry)
-            except ExtractionException as e:
-                self.readDataEntries.append(entry)
-                self._handleExtractionErrorLogging(exception=e, entry=entry)
-
-            i +=1
-            ValueWrapper.reset_id_counter() #Resets the id-generator for each datafield of entry
-            self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
-        """
-
-
-
-    def _processEntry(self, entry):
-        personEntryDict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
-        entry["extractionResults"] = personEntryDict
+    def _process_entry(self, entry):
+        person_entry_dict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
+        entry["extractionResults"] = person_entry_dict
         self.readDataEntries.append(entry)
-        #self.csvBuilder.writeRow(personEntryDict)
         self.count +=1
         return entry
 
-    def _createEntry(self, xmlEntry):
-        return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
+    def _create_entry(self, xmlEntry):
+        return {"xml": xmlEntry, "extractionResults" : self._create_result_template()}
 
-    def _createResultTemplate(self):
-        pass
-        """return {"surname" : "", "firstnames" : "", "birthDay": "",
-               "birthMonth" : "", "birthYear" : "", "birthLocation" : "",
-               "profession" : "", "address" : "", "deathDay" : "",
-               "deathMonth": "", "deathYear": "", "kaatunut": "",
-               "deathLocation": "", "talvisota": "", "talvisotaregiments": "",
-               "jatkosota": "", "jatkosotaregiments": "","rank": "",
-               "kotiutusDay": "", "kotiutusMonth": "", "kotiutusYear": "",
-               "kotiutusPlace": "", "medals": "","hobbies": "",
-               "hasSpouse": "", "children": "", "childCount": ""}"""
-
-    def _handleExtractionErrorLogging(self, exception, entry):
+    def _create_result_template(self):
         pass
 
-    def _finishProcess(self):
-        self._printStatistics()
+    def _handle_extraction_error_logging(self, exception, entry):
+        pass
 
+    def _finish_process(self):
+        self._print_statistics()
 
-    def _printStatistics(self):
+    def _print_statistics(self):
         print ("Errors encountered: " + str(self.errors) + "/" + str(self.count))
         self.errorLogger.printErrorBreakdown()
-
-
