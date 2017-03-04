@@ -80,7 +80,6 @@ class ResultJsonBuilder(ResultJsonBuilderInterface):
 
 
     def closeJson(self):
-        #self.openedJson.write(json.dumps(self.jsonFormat, indent=4, ensure_ascii=False))
         json.dump(self.jsonFormat,self.openedJson, indent=4, ensure_ascii=False)
         self.openedJson.close()
         self.openedJson = None

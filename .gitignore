@@ -5,7 +5,6 @@ kaira_venv/
 .idea/
 *.pyc
 *.csv
-*.xml
 *.bat
 *.html
 *.htm
@@ -14,3 +13,4 @@ kaira_venv/
 *.tar.gz
 .cache/
 material/
+temp/
