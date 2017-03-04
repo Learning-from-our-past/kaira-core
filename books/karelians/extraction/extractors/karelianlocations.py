@@ -6,12 +6,16 @@ from shared import regexUtils
 import re
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 from books.karelians.extraction.extractors.bnf_parsers import migration_parser
+from names import location_name_white_list
+
 
 class KarelianLocationsExtractor(BaseExtractor):
     """ Tries to extract the locations of the person in karelia.
     """
     geocoder = GeoCoder()
     KARELIAN_REGION_ID = 'karelia'
+    MAX_PLACE_NAME_LENGTH = 15
+    MIN_PLACE_NAME_LENGTH = 4
 
     def extract(self, text):
         self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))" # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
@@ -39,8 +43,11 @@ class KarelianLocationsExtractor(BaseExtractor):
 
             parsed_locations = migration_parser.parse_locations(self.locations)
 
-            for location in parsed_locations:
-                self._create_location_entry(location)
+            try:
+                for location in parsed_locations:
+                    self._create_location_entry(location)
+            except InvalidLocationException:
+                pass
 
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(KarelianLocationException.eType, self.currentChild)
@@ -75,6 +82,37 @@ class KarelianLocationsExtractor(BaseExtractor):
                 return {"latitude": "", "longitude": ""}
 
         geocoordinates = get_coordinates_by_name(entry_name)
+
+        if len(entry_name) > self.MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] == '' and geocoordinates['longitude'] == '':
+            name_is_ok = False
+
+            # Check if there is white list pattern which matches to current name
+            for pattern in location_name_white_list.WHITE_LIST['patterns']:
+                result = pattern['find'].subn(pattern['replace'], entry_name)
+
+                if result[1] > 0:  # Replace success, end loop
+                    entry_name = result[0]
+                    name_is_ok = True
+                    break
+
+            if not name_is_ok:
+                raise InvalidLocationException(entry_name)
+
+        if len(entry_name) < self.MIN_PLACE_NAME_LENGTH:
+            name_is_ok = False
+            ln = entry_name.lower()
+            if ln in location_name_white_list.WHITE_LIST['names']:
+                # The name is in white list, so it is ok to use!
+                # Also check if there is known alias for it
+                name_is_ok = True
+                if 'alias' in location_name_white_list.WHITE_LIST['names'][ln]:
+                    entry_name = location_name_white_list.WHITE_LIST['names'][ln]['alias']
+
+            if not name_is_ok:
+                raise InvalidLocationException(entry_name)
+
+        if village_name is not None and (len(village_name) > self.MAX_PLACE_NAME_LENGTH or len(village_name) < self.MIN_PLACE_NAME_LENGTH):
+            village_name = None
 
         village_coordinates = {"latitude": "", "longitude": ""}
         if village_name is not None:
@@ -132,3 +170,13 @@ class KarelianLocationsExtractor(BaseExtractor):
         return {KEYS["karelianlocations"]: loc,
                 KEYS["returnedkarelia"]: ValueWrapper(self.returned),
                 KEYS["karelianlocationsCount"]: ValueWrapper(len(self.location_listing))}
+
+# FIXME: Move this to common module to be used by both location extractor classes. Or maybe move both location extractor classes to same module...?
+class InvalidLocationException(Exception):
+    message = "Location name likely not a valid place: "
+
+    def __init__(self, place_name):
+        self._place_name = place_name
+
+    def __unicode__(self):
+        return repr(self.message + self._place_name)

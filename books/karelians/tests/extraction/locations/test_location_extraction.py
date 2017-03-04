@@ -204,3 +204,31 @@ class TestKarelianLocationExtraction:
     def should_return_empty_if_no_karelian_locations_listed(self, karelian_extractor):
         results = unwrap(karelian_extractor.extract(''))['karelianLocations']
         assert len(results) == 0
+
+    def should_leave_out_too_long_place_names(self, karelian_extractor):
+        results = unwrap(karelian_extractor.extract(LOCATION_HEURISTICS['long_place_name']['text']))['karelianLocations']
+
+        assert len(results) == 1
+
+    def should_leave_out_too_short_place_names(self, karelian_extractor):
+        results = unwrap(karelian_extractor.extract(LOCATION_HEURISTICS['short_place_name']['text']))['karelianLocations']
+
+        assert len(results) == 1
+
+    def should_extract_short_place_names_if_they_are_in_white_list(self, karelian_extractor):
+        results = unwrap(karelian_extractor.extract(LOCATION_HEURISTICS['short_white_listed_name']['text']))['karelianLocations']
+
+        assert len(results) == 1
+        assert results[0]['locationName'] == 'Eno'
+
+    def should_use_alias_for_short_place_name_if_one_is_available(self, karelian_extractor):
+        results = unwrap(karelian_extractor.extract(LOCATION_HEURISTICS['short_white_listed_alias_name']['text']))['karelianLocations']
+
+        assert len(results) == 1
+        assert results[0]['locationName'] == 'Ii'
+
+    def should_accept_any_name_if_mlk_pattern_in_the_end(self, karelian_extractor):
+        results = unwrap(karelian_extractor.extract(LOCATION_HEURISTICS['long_name_with_mlk']['text']))['karelianLocations']
+
+        assert len(results) == 1
+        assert results[0]['locationName'] == 'Kristiinankaupungin mlk'

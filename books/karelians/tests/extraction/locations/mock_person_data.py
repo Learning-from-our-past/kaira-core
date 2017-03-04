@@ -20,20 +20,20 @@ LOCATION_TEXTS = [
 
 LOCATION_HEURISTICS = {
     'long_name_with_mlk': {
-            'text': "Asuinp. Karjalassa; Viipuri 23—39. Muut asuinp.: Kankaanpää 39— 40, "
+            'text': "Asuinp. Karjalassa; Kristiinankaupungin mlk 23—39. Muut asuinp.: Kankaanpää 39— 40, "
                     "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—44, Kristiinankaupungin mlk 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "
                     "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
                     "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
     },
     'short_white_listed_name': {
-            'text': "Asuinp. Karjalassa; Viipuri 23—39. Muut asuinp.: Kankaanpää 39— 40, "
+            'text': "Asuinp. Karjalassa; Eno 23—39. Muut asuinp.: Kankaanpää 39— 40, "
                     "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—44, Utö 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "
                     "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
                     "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
     },
 
     'short_white_listed_alias_name': {
-            'text': "Asuinp. Karjalassa; Viipuri 23—39. Muut asuinp.: Kankaanpää 39— 40, "
+            'text': "Asuinp. Karjalassa; Ii 23—39. Muut asuinp.: Kankaanpää 39— 40, "
                     "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—44, li 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "
                     "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
                     "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
@@ -41,7 +41,7 @@ LOCATION_HEURISTICS = {
 
 
     'short_place_name': {
-        'text': "Asuinp. Karjalassa; Viipuri 23—39. Muut asuinp.: Kankaanpää, ja 39— 40, "
+        'text': "Asuinp. Karjalassa; Viipuri 23—39, ktr. Muut asuinp.: Kankaanpää, ja 39— 40, "
                 "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—, ktr. Aholat asuvat itse rakentamassaan omakotitalossa. "
                 "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
                 "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
@@ -117,7 +117,7 @@ LOCATION_HEURISTICS = {
         ]
     },
     'long_place_name': {
-        'text': "Asuinp. Karjalassa; Viipuri 23—39. Muut asuinp.: Kankaanpää, Lauhalan koulu 39— 40, "
+        'text': "Asuinp. Karjalassa; Viipuri 23—39, Thisisnotarealplacebutsomenonsensewhichshouldnotbeconsideredasplace. Muut asuinp.: Kankaanpää, Lauhalan koulu 39— 40, "
                 "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—. Aholat asuvat itse rakentamassaan omakotitalossa. "
                 "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
                 "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
