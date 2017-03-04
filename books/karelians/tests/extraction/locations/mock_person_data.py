@@ -18,6 +18,183 @@ LOCATION_TEXTS = [
     "Muut asuinp.: Lottana -44, Kurikka 39—41, Ähtäri, Niemisvesi 44—. Viitaset asuvat"
 ]
 
+LOCATION_HEURISTICS = {
+    'long_name_with_mlk': {
+            'text': "Asuinp. Karjalassa; Kristiinankaupungin mlk 23—39. Muut asuinp.: Kankaanpää 39— 40, "
+                    "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—44, Kristiinankaupungin mlk 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "
+                    "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
+                    "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
+    },
+    'short_white_listed_name': {
+            'text': "Asuinp. Karjalassa; Eno 23—39. Muut asuinp.: Kankaanpää 39— 40, "
+                    "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—44, Utö 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "
+                    "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
+                    "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
+    },
+
+    'short_white_listed_alias_name': {
+            'text': "Asuinp. Karjalassa; Ii 23—39. Muut asuinp.: Kankaanpää 39— 40, "
+                    "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—44, li 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "
+                    "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
+                    "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
+    },
+
+
+    'short_place_name': {
+        'text': "Asuinp. Karjalassa; Viipuri 23—39, ktr. Muut asuinp.: Kankaanpää, ja 39— 40, "
+                "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—, ktr. Aholat asuvat itse rakentamassaan omakotitalossa. "
+                "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
+                "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
+        'expected': [
+          {
+            "movedOut": "40",
+            "village": {
+              "locationName": None,
+              "coordinates": {
+                "longitude": "",
+                "latitude": ""
+              }
+            },
+            "movedIn": "39",
+            "region": "other",
+            "locationName": "Kankaanpää",
+            "coordinates": {
+              "longitude": "21.99682",
+              "latitude": "62.97651"
+            }
+          },
+          {
+            "movedOut": "40",
+            "village": {
+              "locationName": None,
+              "coordinates": {
+                "longitude": "",
+                "latitude": ""
+              }
+            },
+            "movedIn": "",
+            "region": "other",
+            "locationName": "Hirvensalo",
+            "coordinates": {
+              "longitude": "27.89087",
+              "latitude": "61.56453"
+            }
+          },
+          {
+            "movedOut": "40",
+            "village": {
+              "locationName": None,
+              "coordinates": {
+                "longitude": "",
+                "latitude": ""
+              }
+            },
+            "movedIn": "",
+            "region": "other",
+            "locationName": "Perniö",
+            "coordinates": {
+              "longitude": "23.15",
+              "latitude": "60.25"
+            }
+          },
+          {
+            "movedOut": "",
+            "village": {
+              "locationName": "Hankavesi",
+              "coordinates": {
+                "longitude": "26.45",
+                "latitude": "62.43333"
+              }
+            },
+            "movedIn": "41",
+            "region": "other",
+            "locationName": "Ähtäri",
+            "coordinates": {
+              "longitude": "24.21264",
+              "latitude": "62.59465"
+            }
+          }
+        ]
+    },
+    'long_place_name': {
+        'text': "Asuinp. Karjalassa; Viipuri 23—39, Thisisnotarealplacebutsomenonsensewhichshouldnotbeconsideredasplace. Muut asuinp.: Kankaanpää, Lauhalan koulu 39— 40, "
+                "Hirvensalo -40, Perniö -40, Ähtäri, Hankavesi 41—. Aholat asuvat itse rakentamassaan omakotitalossa. "
+                "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
+                "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
+        'expected': [
+            {
+                "region": "other",
+                "locationName": "Kankaanpää",
+                "movedIn": "39",
+                "coordinates": {
+                  "latitude": "62.97651",
+                  "longitude": "21.99682"
+                },
+                "village": {
+                  "coordinates": {
+                    "latitude": "",
+                    "longitude": ""
+                  },
+                  "locationName": "Lauhalankoulu"
+                },
+                "movedOut": "40"
+            },
+            {
+                "region": "other",
+                "locationName": "Hirvensalo",
+                "movedIn": "",
+                "coordinates": {
+                  "latitude": "61.56453",
+                  "longitude": "27.89087"
+                },
+                "village": {
+                  "coordinates": {
+                    "latitude": "",
+                    "longitude": ""
+                  },
+                  "locationName": None
+                },
+                "movedOut": "40"
+           },
+           {
+                "region": "other",
+                "locationName": "Perniö",
+                "movedIn": "",
+                "coordinates": {
+                  "latitude": "60.25",
+                  "longitude": "23.15"
+                },
+                "village": {
+                  "coordinates": {
+                    "latitude": "",
+                    "longitude": ""
+                  },
+                  "locationName": None
+                },
+                "movedOut": "40"
+           },
+           {
+                "region": "other",
+                "locationName": "Ähtäri",
+                "movedIn": "41",
+                "coordinates": {
+                  "latitude": "62.59465",
+                  "longitude": "24.21264"
+                },
+                "village": {
+                  "coordinates": {
+                    "latitude": "62.43333",
+                    "longitude": "26.45"
+                  },
+                  "locationName": "Hankavesi"
+                },
+                "movedOut": ""
+           }
+        ]
+    }
+
+}
+
 # Expected location results for texts
 EXPECTED_RESULTS = [
     {
