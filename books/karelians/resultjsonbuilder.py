@@ -11,14 +11,12 @@ class ResultJsonBuilder(ResultJsonBuilderInterface):
     def __init__(self):
         pass
 
-    def openJson(self, filepath):
-        self.filepath = filepath
-        self.filename = ntpath.basename(self.filepath)
-        self._initJson()
+    def openJson(self, file):
+        if type(file) == str:
+            self.openedJson = open(file, "w", newline='', encoding="utf-8")
+        else:
+            self.openedJson = file
 
-
-    def _initJson(self):
-        self.openedJson = open(self.filepath, "w", newline='', encoding="utf-8")
         self.jsonFormat = []
 
     def writeEntry(self, dataDict):

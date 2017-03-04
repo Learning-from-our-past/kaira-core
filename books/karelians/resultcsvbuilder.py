@@ -9,25 +9,22 @@ from interface.csvbuilderinterface import ResultCsvBuilderInterface
 
 class ResultCsvBuilder(ResultCsvBuilderInterface):
 
-    #TODO: POISTA SISÄISEN TOTETUKSEN FUNKTIOT SILLÄ NE VOIVAT VAPAASTI VAIHDELLA
     def __init__(self):
         pass
 
     @abstractmethod
-    def openCsv(self, filepath):
-        self.filepath = filepath
-        self.filename = ntpath.basename(self.filepath)
-        self._initCsv()
+    def openCsv(self, file):
         self.karelianLocationsMax = 0
         self.childrenMax = 0
         self.otherLocationsMax = 0
         self.rowsofcsv = []
 
+        if type(file) == str:
+            self.openedCsv = open(file, "w", newline='', encoding="utf-8")
+        else:
+            self.openedCsv = file
 
-    def _initCsv(self):
-        self.openedCsv = open(self.filepath, "w", newline='', encoding="utf-8")
         self.csvWriter = csv.writer(self.openedCsv, delimiter="&")
-
 
     def _writeCsvHeaders(self):
         headers = ["Surname", "first names", "gender", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "approximatePageNumber", "returnedToKarelia", "hasSpouse", "maybePreviousMarriages", "weddingYear", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation", "spouseDeathYear" ]
