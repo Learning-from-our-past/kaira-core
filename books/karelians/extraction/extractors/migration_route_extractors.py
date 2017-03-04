@@ -9,6 +9,48 @@ from shared.geo.geocoding import GeoCoder, LocationNotFound
 from books.karelians.extraction.extractors.bnf_parsers import migration_parser
 from names import location_name_white_list
 
+MAX_PLACE_NAME_LENGTH = 15
+MIN_PLACE_NAME_LENGTH = 4
+
+
+def validate_location_name(entry_name, geocoordinates):
+    if len(entry_name) > MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] == '' and geocoordinates['longitude'] == '':
+        name_is_ok = False
+
+        # Check if there is white list pattern which matches to current name
+        for pattern in location_name_white_list.WHITE_LIST['patterns']:
+            result = pattern['find'].subn(pattern['replace'], entry_name)
+
+            if result[1] > 0:  # Replace success, end loop
+                entry_name = result[0]
+                name_is_ok = True
+                break
+
+        if not name_is_ok:
+            raise InvalidLocationException(entry_name)
+
+    if len(entry_name) < MIN_PLACE_NAME_LENGTH:
+        name_is_ok = False
+        ln = entry_name.lower()
+        if ln in location_name_white_list.WHITE_LIST['names']:
+            # The name is in white list, so it is ok to use!
+            # Also check if there is known alias for it
+            name_is_ok = True
+            if 'alias' in location_name_white_list.WHITE_LIST['names'][ln]:
+                entry_name = location_name_white_list.WHITE_LIST['names'][ln]['alias']
+
+        if not name_is_ok:
+            raise InvalidLocationException(entry_name)
+
+    return entry_name
+
+
+def validate_village_name(village_name):
+    if village_name is not None and (len(village_name) > MAX_PLACE_NAME_LENGTH or len(village_name) < MIN_PLACE_NAME_LENGTH):
+        return None
+    else:
+        return village_name
+
 
 class FinnishLocationsExtractor(BaseExtractor):
     """
@@ -17,14 +59,10 @@ class FinnishLocationsExtractor(BaseExtractor):
     geocoder = GeoCoder()
 
     OTHER_REGION_ID = 'other'
-    MAX_PLACE_NAME_LENGTH = 15
-    MIN_PLACE_NAME_LENGTH = 4
 
     def extract(self, text):
         self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)" #r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.LOCATION_THRESHOLD = 3
-        self.coordinates_notfound_threshold = self.LOCATION_THRESHOLD   #used to detect when the locations end. To remove noplace words.
         self.locations = ""
         self.location_listing = []
         self.location_error = False
@@ -83,36 +121,8 @@ class FinnishLocationsExtractor(BaseExtractor):
 
         geocoordinates = get_coordinates_by_name(entry_name)
 
-        if len(entry_name) > self.MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] == '' and geocoordinates['longitude'] == '':
-            name_is_ok = False
-
-            # Check if there is white list pattern which matches to current name
-            for pattern in location_name_white_list.WHITE_LIST['patterns']:
-                result = pattern['find'].subn(pattern['replace'], entry_name)
-
-                if result[1] > 0:  # Replace success, end loop
-                    entry_name = result[0]
-                    name_is_ok = True
-                    break
-
-            if not name_is_ok:
-                raise InvalidLocationException(entry_name)
-
-        if len(entry_name) < self.MIN_PLACE_NAME_LENGTH:
-            name_is_ok = False
-            ln = entry_name.lower()
-            if ln in location_name_white_list.WHITE_LIST['names']:
-                # The name is in white list, so it is ok to use!
-                # Also check if there is known alias for it
-                name_is_ok = True
-                if 'alias' in location_name_white_list.WHITE_LIST['names'][ln]:
-                    entry_name = location_name_white_list.WHITE_LIST['names'][ln]['alias']
-
-            if not name_is_ok:
-                raise InvalidLocationException(entry_name)
-
-        if village_name is not None and (len(village_name) > self.MAX_PLACE_NAME_LENGTH or len(village_name) < self.MIN_PLACE_NAME_LENGTH):
-            village_name = None
+        entry_name = validate_location_name(entry_name, geocoordinates)
+        village_name = validate_village_name(village_name)
 
         village_coordinates = {"latitude": "", "longitude": ""}
         if village_name is not None:
@@ -176,13 +186,10 @@ class KarelianLocationsExtractor(BaseExtractor):
     """
     geocoder = GeoCoder()
     KARELIAN_REGION_ID = 'karelia'
-    MAX_PLACE_NAME_LENGTH = 15
-    MIN_PLACE_NAME_LENGTH = 4
 
     def extract(self, text):
         self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))" # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.coordinates_notfound = False   # used to limit error logging to only single time
         self.returned = ""
         self.locations = ""
         self.location_listing = []
@@ -237,42 +244,12 @@ class KarelianLocationsExtractor(BaseExtractor):
             try:
                 return self.geocoder.get_coordinates(place_name, "russia")
             except LocationNotFound:
-                if not self.coordinates_notfound:
-                    self.coordinates_notfound = True
                 return {"latitude": "", "longitude": ""}
 
         geocoordinates = get_coordinates_by_name(entry_name)
 
-        if len(entry_name) > self.MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] == '' and geocoordinates['longitude'] == '':
-            name_is_ok = False
-
-            # Check if there is white list pattern which matches to current name
-            for pattern in location_name_white_list.WHITE_LIST['patterns']:
-                result = pattern['find'].subn(pattern['replace'], entry_name)
-
-                if result[1] > 0:  # Replace success, end loop
-                    entry_name = result[0]
-                    name_is_ok = True
-                    break
-
-            if not name_is_ok:
-                raise InvalidLocationException(entry_name)
-
-        if len(entry_name) < self.MIN_PLACE_NAME_LENGTH:
-            name_is_ok = False
-            ln = entry_name.lower()
-            if ln in location_name_white_list.WHITE_LIST['names']:
-                # The name is in white list, so it is ok to use!
-                # Also check if there is known alias for it
-                name_is_ok = True
-                if 'alias' in location_name_white_list.WHITE_LIST['names'][ln]:
-                    entry_name = location_name_white_list.WHITE_LIST['names'][ln]['alias']
-
-            if not name_is_ok:
-                raise InvalidLocationException(entry_name)
-
-        if village_name is not None and (len(village_name) > self.MAX_PLACE_NAME_LENGTH or len(village_name) < self.MIN_PLACE_NAME_LENGTH):
-            village_name = None
+        entry_name = validate_location_name(entry_name, geocoordinates)
+        village_name = validate_village_name(village_name)
 
         village_coordinates = {"latitude": "", "longitude": ""}
         if village_name is not None:
