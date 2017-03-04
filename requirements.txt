@@ -4,10 +4,10 @@ lxml==3.7.2
 py==1.4.32
 pymongo==3.4.0
 pyparsing==2.1.10
-PyQt5==5.7.1
 pytest==3.0.6
+pytest-env==0.6.0
 pytz==2016.4
 regex==2017.1.17
-sip==4.19
 unicodecsv==0.14.1
 virtualenv==15.0.2
+wheel==0.24.0
