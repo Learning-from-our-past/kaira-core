@@ -1,9 +1,9 @@
-from books.karelians.processData import ProcessData
-from books.karelians.resultcsvbuilder import ResultCsvBuilder
-from books.karelians.resultjsonbuilder import ResultJsonBuilder
+from books.farmers.processData import ProcessData
+from books.farmers.resultcsvbuilder import ResultCsvBuilder
+from books.farmers.resultjsonbuilder import ResultJsonBuilder
 
 
-class KarelianExtractor:
+class SmallFarmersExtractor:
 
     def __init__(self, update_callback):
         self._extractor = ProcessData(update_callback)

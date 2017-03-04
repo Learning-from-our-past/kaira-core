@@ -2,6 +2,7 @@ import sys
 import argparse
 from lxml import etree
 from books.karelians.main import KarelianExtractor
+from books.farmers.main import SmallFarmersExtractor
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')
 parser.add_argument('-i', nargs='?', type=argparse.FileType('r'), help='Input file to extract data from. Should be XML.', default=sys.stdin)
@@ -24,6 +25,13 @@ def main():
     if book_series == 'Siirtokarjalaisten tie':
         print('Book series:', book_series)
         extractor = KarelianExtractor(callback)
+        extractor.process(xml_document)
+        extractor.save_results(args['o'], file_format='json')
+        print('Process finished successfully.')
+
+    elif book_series == 'Suomen pienviljelijat':
+        print('Book series:', book_series)
+        extractor = SmallFarmersExtractor(callback)
         extractor.process(xml_document)
         extractor.save_results(args['o'], file_format='json')
         print('Process finished successfully.')
