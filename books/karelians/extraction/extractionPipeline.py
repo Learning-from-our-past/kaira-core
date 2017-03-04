@@ -9,8 +9,7 @@ from books.karelians.extraction.extractors.imageextractor import ImageExtractor
 from books.karelians.extraction.extractors.omakotitaloextractor import OmakotitaloExtractor
 from books.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from books.karelians.extraction.extractors.locationExtractor import BirthdayLocationExtractor
-from books.karelians.extraction.extractors.karelianlocations import KarelianLocationsExtractor
-from books.karelians.extraction.extractors.finnishlocations import FinnishLocationsExtractor
+from books.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor
 from books.karelians.extraction.extractors.spouseextractor import SpouseExtractor
 from books.karelians.extraction.extractors.childextractor import ChildExtractor
 from shared.genderExtract import Gender

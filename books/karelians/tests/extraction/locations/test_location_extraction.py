@@ -1,7 +1,6 @@
 import pytest
 from books.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS, EXPECTED_RESULTS, LOCATION_HEURISTICS
-from books.karelians.extraction.extractors.karelianlocations import KarelianLocationsExtractor
-from books.karelians.extraction.extractors.finnishlocations import FinnishLocationsExtractor
+from books.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor
 from books.karelians.tests.utils.MockErrorLogger import MockExceptionLogger
 from books.karelians.tests.utils.ValueUnWrapper import unwrap
 from books.karelians.extraction.extractors.bnf_parsers.migration_parser import parse_locations
