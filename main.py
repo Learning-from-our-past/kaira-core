@@ -5,8 +5,8 @@ from books.karelians.main import KarelianExtractor
 from books.farmers.main import SmallFarmersExtractor
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')
-parser.add_argument('-i', nargs='?', type=argparse.FileType('r'), help='Input file to extract data from. Should be XML.', default=sys.stdin)
-parser.add_argument('-o', nargs='?', type=argparse.FileType('w'), help='Output file to save data to.', default=sys.stdout)
+parser.add_argument('-i', nargs='?', type=argparse.FileType('r', encoding='utf8'), help='Input file to extract data from. Should be XML.', default=sys.stdin)
+parser.add_argument('-o', nargs='?', type=argparse.FileType('w', encoding='utf8'), help='Output file to save data to.', default=sys.stdout)
 
 
 def callback(current, max):
