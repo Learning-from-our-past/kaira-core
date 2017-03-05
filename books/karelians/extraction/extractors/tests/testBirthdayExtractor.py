@@ -3,8 +3,6 @@ from nose.tools import *
 import lxml.etree as etree
 from books.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from shared.exceptionlogger import ExceptionLogger
-from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 
 def build_xml_representation(text, name):
     mockXml = etree.Element("PERSON")

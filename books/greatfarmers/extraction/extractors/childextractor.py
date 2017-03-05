@@ -1,12 +1,9 @@
 from books.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.greatfarmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from books.greatfarmers.extraction.extractionExceptions import NoChildrenException, MultipleMarriagesException
 from shared import regexUtils
-from shared import textUtils
 import re
-import regex
-from shared.geo.geocoding import GeoCoder, LocationNotFound
+from shared.geo.geocoding import GeoCoder
 from shared.genderExtract import Gender, GenderException
 
 
@@ -80,8 +77,8 @@ class ChildExtractor(BaseExtractor):
         #if there is twins, the book doesn't explicitly define birthyear for first one.
         #therefore copy second child's value to first one
         if first is not None and second is not None:
-            if first.value["birthYear"].value == "" and second.value["birthYear"].value != "":
-                first.value["birthYear"].value = second.value["birthYear"].value
+            if first["birthYear"] == "" and second["birthYear"] != "":
+                first["birthYear"] = second["birthYear"]
 
 
     def _process_child(self, child):
@@ -92,14 +89,12 @@ class ChildExtractor(BaseExtractor):
             name = name.strip("-")
             name = name.strip(" ")
             try:
-                gender = ValueWrapper(Gender.find_gender(name))
+                gender = Gender.find_gender(name)
             except GenderException as e:
                 self.errorLogger.logError(e.eType, self.currentChild)
-                gender = ValueWrapper("")
-                gender.error = e.eType
+                gender = ""
 
-
-            if gender.value == "Female":
+            if gender == "Female":
                 self.girls += 1
 
             try:
@@ -111,19 +106,13 @@ class ChildExtractor(BaseExtractor):
                     year = "18" + year
             except regexUtils.RegexNoneMatchException:
                 year = ""
-            result = ValueWrapper({"name" : ValueWrapper(name),
-                                                 "gender" : gender, "birthYear" : ValueWrapper(year)})
+            result = {"name" : name, "gender" : gender, "birthYear" : year}
             self.child_list.append(result)
             return result
         except regexUtils.RegexNoneMatchException:
             pass
 
-
-
-
-
     def _constructReturnDict(self):
-        c = ValueWrapper(self.child_list)
-        c.error = self.child_error
-        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : c, KEYS["childCount"] : ValueWrapper(len(self.child_list)),
-                 KEYS["girlCount"] : ValueWrapper(self.girls),  KEYS["boyCount"] : ValueWrapper(len(self.child_list) - self.girls)}
+        c = self.child_list
+        return {KEYS["manymarriages"] : self.many_marriages, KEYS["children"] : c, KEYS["childCount"] : len(self.child_list),
+                 KEYS["girlCount"] : self.girls,  KEYS["boyCount"] : len(self.child_list) - self.girls}

@@ -1,33 +1,29 @@
 # -*- coding: utf-8 -*-
 import ntpath
 import csv
-import json
 from abc import abstractmethod
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from interface.csvbuilderinterface import ResultCsvBuilderInterface
 
+# FIXME: Rewrite this class. Out of date.
 class ResultCsvBuilder(ResultCsvBuilderInterface):
 
-    #TODO: POISTA SISÄISEN TOTETUKSEN FUNKTIOT SILLÄ NE VOIVAT VAPAASTI VAIHDELLA
     def __init__(self):
         pass
 
     @abstractmethod
-    def openCsv(self, filepath):
-        self.filepath = filepath
-        self.filename = ntpath.basename(self.filepath)
-        self._initCsv()
+    def openCsv(self, file):
         self.karelianLocationsMax = 0
         self.childrenMax = 0
         self.otherLocationsMax = 0
         self.rowsofcsv = []
 
+        if type(file) == str:
+            self.openedCsv = open(file, "w", newline='', encoding="utf-8")
+        else:
+            self.openedCsv = file
 
-    def _initCsv(self):
-        self.openedCsv = open(self.filepath, "w", newline='', encoding="utf-8")
         self.csvWriter = csv.writer(self.openedCsv, delimiter="&")
-
 
     def _writeCsvHeaders(self):
         headers = ["Surname", "first names", "gender", "original family", "birthday", "birthMonth", "birthYear", "birthLocation", "profession/status", "omakotitalo", "imagepath", "approximatePageNumber", "returnedToKarelia", "hasSpouse", "maybePreviousMarriages", "weddingYear", "spouseName", "spouseOrigFamily", "spouseProfession", "spouseBirthday", "spouseBirthMonth", "spouseBirthYear", "spouseBirthLocation", "spouseDeathYear" ]
@@ -51,24 +47,24 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     #make a dict of row content divided based on the content
     def _createRowFromDict(self, persondatadict):
-        row = {"regular" : [persondatadict[KEYS["surname"]].value,
-                            persondatadict[KEYS["firstnames"]].value,persondatadict[KEYS["gender"]].value,
-               persondatadict[KEYS["origfamily"]].value, persondatadict[KEYS["birthDay"]].value,
-               persondatadict[KEYS["birthMonth"]].value, persondatadict[KEYS["birthYear"]].value,
-               persondatadict[KEYS["birthLocation"]].value, persondatadict[KEYS["profession"]].value,
-               persondatadict[KEYS["omakotitalo"]].value, persondatadict[KEYS["imagepath"]].value, persondatadict[KEYS["approximatePage"]].value,
-               persondatadict[KEYS["returnedkarelia"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["hasSpouse"]].value,
-               persondatadict[KEYS["manymarriages"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["weddingYear"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["spouseOrigFamily"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["spouseProfession"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthDay"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthMonth"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthYear"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthLocation"]].value,
-               persondatadict[KEYS["spouse"]].value[KEYS["spouseDeathYear"]].value,
+        row = {"regular" : [persondatadict[KEYS["surname"]],
+                            persondatadict[KEYS["firstnames"]],persondatadict[KEYS["gender"]],
+               persondatadict[KEYS["origfamily"]], persondatadict[KEYS["birthDay"]],
+               persondatadict[KEYS["birthMonth"]], persondatadict[KEYS["birthYear"]],
+               persondatadict[KEYS["birthLocation"]], persondatadict[KEYS["profession"]],
+               persondatadict[KEYS["omakotitalo"]], persondatadict[KEYS["imagepath"]], persondatadict[KEYS["approximatePage"]],
+               persondatadict[KEYS["returnedkarelia"]],
+               persondatadict[KEYS["spouse"]][KEYS["hasSpouse"]],
+               persondatadict[KEYS["manymarriages"]],
+               persondatadict[KEYS["spouse"]][KEYS["weddingYear"]],
+               persondatadict[KEYS["spouse"]][KEYS["spouseName"]],
+               persondatadict[KEYS["spouse"]][KEYS["spouseOrigFamily"]],
+               persondatadict[KEYS["spouse"]][KEYS["spouseProfession"]],
+               persondatadict[KEYS["spouse"]][KEYS["spouseBirthData"]][KEYS["birthDay"]],
+               persondatadict[KEYS["spouse"]][KEYS["spouseBirthData"]][KEYS["birthMonth"]],
+               persondatadict[KEYS["spouse"]][KEYS["spouseBirthData"]][KEYS["birthYear"]],
+               persondatadict[KEYS["spouse"]][KEYS["spouseBirthData"]][KEYS["birthLocation"]],
+               persondatadict[KEYS["spouse"]][KEYS["spouseDeathYear"]],
 
                ] }
         row["children"] = self._addChildren(persondatadict)
@@ -80,23 +76,23 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     def _addChildren(self, persondatadict):
         lrow = []
-        children = persondatadict[KEYS["children"]].value
+        children = persondatadict[KEYS["children"]]
 
         #childcount
-        lrow.append(persondatadict[KEYS["childCount"]].value)
-        lrow.append(persondatadict[KEYS["boyCount"]].value)
-        lrow.append(persondatadict[KEYS["girlCount"]].value)
+        lrow.append(persondatadict[KEYS["childCount"]])
+        lrow.append(persondatadict[KEYS["boyCount"]])
+        lrow.append(persondatadict[KEYS["girlCount"]])
 
         if len(children) > self.childrenMax:
             self.childrenMax = len(children)
 
         for l in children:
-            lrow.append(l.value["name"].value) #name of the child
-            lrow.append(l.value["gender"].value)
-            lrow.append(l.value["birthYear"].value) #child's birthYear
-            lrow.append(l.value["locationName"].value) #birthplace
-            lrow.append(l.value["childCoordinates"].value["latitude"].value) #latitude
-            lrow.append(l.value["childCoordinates"].value["longitude"].value) #latitude
+            lrow.append(l["name"]) #name of the child
+            lrow.append(l["gender"])
+            lrow.append(l["birthYear"]) #child's birthYear
+            lrow.append(l["locationName"]) #birthplace
+            lrow.append(l["childCoordinates"]["latitude"]) #latitude
+            lrow.append(l["childCoordinates"]["longitude"]) #latitude
         return lrow
 
 
@@ -104,20 +100,20 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     def _addKarelianLocations(self, persondatadict):
         lrow = []
-        locations = persondatadict[KEYS["karelianlocations"]].value
+        locations = persondatadict[KEYS["karelianlocations"]]
 
         #location count
-        lrow.append(persondatadict[KEYS["karelianlocationsCount"]].value)
+        lrow.append(persondatadict[KEYS["karelianlocationsCount"]])
 
         if len(locations) > self.karelianLocationsMax:
             self.karelianLocationsMax = len(locations)
 
         for l in locations:
-            lrow.append(l.value[KEYS["karelianlocation"]].value) #name of the place
-            lrow.append(l.value["movedIn"].value) #year when moved in
-            lrow.append(l.value["movedOut"].value) #year when moved out
-            lrow.append(l.value[KEYS["kareliancoordinate"]].value["latitude"].value) #latitude
-            lrow.append(l.value[KEYS["kareliancoordinate"]].value["longitude"].value) #latitude
+            lrow.append(l[KEYS["karelianlocation"]]) #name of the place
+            lrow.append(l["movedIn"]) #year when moved in
+            lrow.append(l["movedOut"]) #year when moved out
+            lrow.append(l[KEYS["kareliancoordinate"]]["latitude"]) #latitude
+            lrow.append(l[KEYS["kareliancoordinate"]]["longitude"]) #latitude
 
 
 
@@ -125,20 +121,20 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     def _addOtherLocations(self, persondatadict):
         lrow = []
-        locations = persondatadict[KEYS["otherlocations"]].value
+        locations = persondatadict[KEYS["otherlocations"]]
 
         #location count
-        lrow.append(persondatadict[KEYS["otherlocationsCount"]].value)
+        lrow.append(persondatadict[KEYS["otherlocationsCount"]])
 
         if len(locations) > self.otherLocationsMax:
             self.otherLocationsMax = len(locations)
 
         for l in locations:
-            lrow.append(l.value[KEYS["otherlocation"]].value) #name of the place
-            lrow.append(l.value["movedIn"].value) #year when moved in
-            lrow.append(l.value["movedOut"].value) #year when moved out
-            lrow.append(l.value[KEYS["othercoordinate"]].value["latitude"].value) #latitude
-            lrow.append(l.value[KEYS["othercoordinate"]].value["longitude"].value) #latitude
+            lrow.append(l[KEYS["otherlocation"]]) #name of the place
+            lrow.append(l["movedIn"]) #year when moved in
+            lrow.append(l["movedOut"]) #year when moved out
+            lrow.append(l[KEYS["othercoordinate"]]["latitude"]) #latitude
+            lrow.append(l[KEYS["othercoordinate"]]["longitude"]) #latitude
 
 
         return lrow

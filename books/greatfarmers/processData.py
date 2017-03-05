@@ -1,8 +1,6 @@
 from shared.exceptionlogger import ExceptionLogger
 from books.greatfarmers.extraction.extractionPipeline import ExtractionPipeline
 from interface.processdatainterface import ProcessDataInterface
-from lxml import etree
-from interface.valuewrapper import ValueWrapper
 from books.greatfarmers.extraction.extractionExceptions import ExtractionException
 class ProcessData(ProcessDataInterface):
 
@@ -16,11 +14,11 @@ class ProcessData(ProcessDataInterface):
         self.processUpdateCallbackFunction = None
         self.processUpdateCallbackFunction = callback
 
-    def startExtractionProcess(self, xmlDocument, file_path):
-        self.xmlDataDocument = xmlDocument
+    def run_extraction(self, xml_document, file_path):
+        self.xmlDataDocument = xml_document
         self.dataFilename = file_path
         self._initProcess()
-        self._processAllEntries()
+        self._process_all_entries()
         #self._finishProcess()
         #self.processUpdateCallbackFunction(self.xmlDataDocumentLen, self.xmlDataDocumentLen)    #DUMMY
         return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
@@ -35,24 +33,21 @@ class ProcessData(ProcessDataInterface):
         self.extractor = ExtractionPipeline(self.xmlDataDocument)
         self.xmlDataDocumentLen = len(self.xmlDataDocument)
 
-    def _processAllEntries(self):
-        ValueWrapper.reset_id_counter()
+    def _process_all_entries(self):
         i = 0
 
         for child in self.xmlDataDocument:
-            entry = self._createEntry(child)
-            ValueWrapper.xmlEntry = child
+            entry = self._create_entry(child)
             try:
-                self._processEntry(entry)
+                self._process_entry(entry)
             except ExtractionException as e:
                 self.readDataEntries.append(entry)
-                self._handleExtractionErrorLogging(exception=e, entry=entry)
+                self._handle_extraction_error_logging(exception=e, entry=entry)
 
             i +=1
-            ValueWrapper.reset_id_counter() #Resets the id-generator for each datafield of entry
             self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
 
-    def _processEntry(self, entry):
+    def _process_entry(self, entry):
         personEntryDict = self.extractor.process(entry["xml"].text, entry, self.errorLogger)
         entry["extractionResults"] = personEntryDict
         self.readDataEntries.append(entry)
@@ -60,13 +55,11 @@ class ProcessData(ProcessDataInterface):
         return entry
 
 
-    def _createEntry(self, xmlEntry):
-        return {"xml": xmlEntry, "extractionResults" : self._createResultTemplate()}
+    def _create_entry(self, xmlEntry):
+        return {"xml": xmlEntry, "extractionResults" : self._create_result_template()}
 
-    def extractOne(self, xmlEntry):
-        ValueWrapper.reset_id_counter()
-        entry = self._createEntry(xmlEntry)
-        ValueWrapper.xmlEntry = xmlEntry
+    def extract_one(self, xml_entry):
+        entry = self._create_entry(xml_entry)
         try:
             personEntryDict = self.extractor.process(entry["xml"].text, entry, self.errorLogger)
             entry["extractionResults"] = personEntryDict

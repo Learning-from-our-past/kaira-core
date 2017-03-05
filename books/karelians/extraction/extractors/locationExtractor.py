@@ -5,7 +5,6 @@ from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extraction.extractionExceptions import *
 from shared import regexUtils, textUtils
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 
 
 #This class extracts a location string from provided substring/text.
@@ -56,7 +55,7 @@ class BirthdayLocationExtractor(BaseExtractor):
 
     def extract(self, text):
         super(BirthdayLocationExtractor, self).extract(text)
-        self.location = ValueWrapper("")
+        self.location = ""
         self.initVars(text)
 
         self._findLocation(self.preparedText)
@@ -74,13 +73,12 @@ class BirthdayLocationExtractor(BaseExtractor):
         try:
             self.foundLocation = self.locationExtractor.extract(text)
             self._checkIfLocationIsValid(text, self.foundLocation)
-            self.location.value = self.foundLocation.group("location")
-            self.location.value = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", self.location.value)
+            self.location = self.foundLocation.group("location")
+            self.location = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", self.location)
             self._setFinalMatchPosition()
         except LocationException as e:
             self.errorLogger.logError(BirthLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
-            self.location.value = ""
-            self.location.error = BirthLocationException.eType
+            self.location = ""
 
     def _checkIfLocationIsValid(self, text, foundLocation):
         #check if the string has data on death. If it is before the location, be careful to not

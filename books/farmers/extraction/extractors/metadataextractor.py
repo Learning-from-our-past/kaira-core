@@ -1,8 +1,6 @@
 from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.farmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from shared.geo.geocoding import GeoCoder, LocationNotFound
-import re
 
 
 class MetadataExtractor(BaseExtractor):
@@ -12,7 +10,7 @@ class MetadataExtractor(BaseExtractor):
 
         self.page = ""
         self.name = ""
-        self.location = {"locationName": ValueWrapper(""), "latitude": ValueWrapper(""), "longitude": ValueWrapper("")}
+        self.location = {"locationName": "", "latitude": "", "longitude": ""}
         self.location_name = ""
 
         try:
@@ -28,9 +26,9 @@ class MetadataExtractor(BaseExtractor):
             except LocationNotFound as e:
                 geo = self.geocoder.get_empty_coordinates()
 
-            self.location = {"locationName": ValueWrapper(self.location_name),
-                             "latitude": ValueWrapper(geo["latitude"]),
-                             "longitude": ValueWrapper(geo["longitude"])}
+            self.location = {"locationName": self.location_name,
+                             "latitude": geo["latitude"],
+                             "longitude": geo["longitude"]}
 
 
         except KeyError as e:
@@ -43,8 +41,6 @@ class MetadataExtractor(BaseExtractor):
         return self._constructReturnDict()
 
     def _constructReturnDict(self):
-
-
-        return {KEYS["name"] : ValueWrapper(self.name), KEYS["approximatePage"] : ValueWrapper(self.page),
-                KEYS["farmLocation"] : ValueWrapper(self.location)
+        return {KEYS["name"] : self.name, KEYS["approximatePage"] : self.page,
+                KEYS["farmLocation"] : self.location
                 }

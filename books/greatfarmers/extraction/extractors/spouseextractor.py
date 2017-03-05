@@ -2,13 +2,11 @@
 import re
 from books.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.greatfarmers.extraction.extractionExceptions import *
-from books.greatfarmers.extraction.extractors.dateExtractor import DateExtractor
-from shared import textUtils
 from books.greatfarmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from shared import regexUtils
 from books.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from books.greatfarmers.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
+
 
 class SpouseExtractor(BaseExtractor):
 
@@ -23,10 +21,10 @@ class SpouseExtractor(BaseExtractor):
         self.SUBSTRING_WIDTH = 100
 
         self.hasSpouse = False
-        self.spouseName = ValueWrapper("")
-        self.birthday = {KEYS["birthDay"]:  ValueWrapper(""), KEYS["birthMonth"]:  ValueWrapper(""),
-                KEYS["birthYear"]:  ValueWrapper(""), KEYS["birthLocation"]:  ValueWrapper("")}
-        self.origFamily = {KEYS["origfamily"] : ValueWrapper("")}
+        self.spouseName = ""
+        self.birthday = {KEYS["birthDay"]:  "", KEYS["birthMonth"]:  "",
+                KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
+        self.origFamily = {KEYS["origfamily"] : ""}
 
         self._findSpouse(text)
         return self._constructReturnDict()
@@ -43,12 +41,11 @@ class SpouseExtractor(BaseExtractor):
     def _findSpouseName(self, text):
         try:
             name = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
-            self.spouseName.value = name.group("name").strip()
-            self.spouseName.value = re.sub(r"\so$","", self.spouseName.value)
+            self.spouseName = name.group("name").strip()
+            self.spouseName = re.sub(r"\so$","", self.spouseName)
             self._findSpouseDetails(text[name.end()-2:])
         except regexUtils.RegexNoneMatchException:
             self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
-            self.spouseName.error = SpouseNameException.eType
 
     def _findSpouseDetails(self, text):
         origFamilyExt = OrigFamilyExtractor(self.entry, self.errorLogger, self.xmlDocument)
@@ -64,7 +61,7 @@ class SpouseExtractor(BaseExtractor):
         self.matchFinalPosition = self.foundSpouse.end() + self.matchStartPosition - 4
 
     def _constructReturnDict(self):
-        return {KEYS["spouse"]: ValueWrapper({ KEYS["hasSpouse"]:  ValueWrapper(self.hasSpouse),
+        return {KEYS["spouse"]: { KEYS["hasSpouse"]:  self.hasSpouse,
                                                KEYS["spouseName"]:  self.spouseName,
-                                               KEYS["spouseOrigFamily"]: ValueWrapper(self.origFamily[KEYS["origfamily"]].value),
-                                               KEYS["spouseBirthData"]: ValueWrapper(self.birthday)})}
+                                               KEYS["spouseOrigFamily"]: self.origFamily[KEYS["origfamily"]],
+                                               KEYS["spouseBirthData"]: self.birthday}}

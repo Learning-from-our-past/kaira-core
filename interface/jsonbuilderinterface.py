@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-import ntpath
-import csv
 from abc import abstractmethod
 
-class ResultJsonBuilderInterface:
 
+class ResultJsonBuilderInterface:
 
     def __init__(self):
         pass

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from books.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.greatfarmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
-import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
 
@@ -34,14 +32,14 @@ class QuantityExtractor(BaseExtractor):
             try:
                 usepattern = self.QUANTITY_PATTERN + pattern
                 found = regexUtils.safeSearch(usepattern, text, self.OPTIONS)
-                self.results[key] = ValueWrapper(self._process_value(found))
+                self.results[key] = self._process_value(found)
             except regexUtils.RegexNoneMatchException as e:
                 try:
                     usepattern =  pattern + self.QUANTITY_PATTERN
                     found = regexUtils.safeSearch(usepattern, text, self.OPTIONS)
-                    self.results[key] = ValueWrapper(self._process_value(found))
+                    self.results[key] = self._process_value(found)
                 except regexUtils.RegexNoneMatchException as e:
-                    self.results[key] = ValueWrapper("")
+                    self.results[key] = ""
 
     def _process_value(self, match):
         if match.group("range") is not None:
@@ -71,4 +69,4 @@ class QuantityExtractor(BaseExtractor):
 
 
     def _constructReturnDict(self):
-        return {KEYS["quantities"] : ValueWrapper(self.results)}
+        return {KEYS["quantities"] : self.results}

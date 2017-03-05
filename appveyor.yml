@@ -17,7 +17,8 @@ before_build:
   - "%PYTHON%\\python.exe deploy_scripts/set_app_version_during_ci.py v%APPVEYOR_BUILD_VERSION%"
 
 build_script:
-  - "%PYTHON%\\python.exe cx_setup.py build"
+  #- "%PYTHON%\\python.exe cx_setup.py build"
+  - "echo Do nothing"
 
 #after_build:
 #  - "7z a kaira-%APPVEYOR_BUILD_VERSION%.zip %APPVEYOR_BUILD_FOLDER%\\build\\exe.win32-3.5"

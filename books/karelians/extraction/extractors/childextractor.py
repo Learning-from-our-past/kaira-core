@@ -1,6 +1,5 @@
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from books.karelians.extraction.extractionExceptions import NoChildrenException, MultipleMarriagesException
 from shared import regexUtils
 from shared import textUtils
@@ -73,8 +72,8 @@ class ChildExtractor(BaseExtractor):
         if birthLoc is not None:
             #found a "Syntyneet <place>" string. Set it to the previous children.
             for c in self.child_list:
-                if c.value[KEYS["childLocationName"]].value == "":
-                    c.value[KEYS["childLocationName"]].value = birthLoc.group("location")
+                if c[KEYS["childLocationName"]] == "":
+                    c[KEYS["childLocationName"]] = birthLoc.group("location")
             return
 
 
@@ -84,12 +83,11 @@ class ChildExtractor(BaseExtractor):
             name = name.strip("-")
             name = name.strip(" ")
             try:
-                gender = ValueWrapper(Gender.find_gender(name))
+                gender = Gender.find_gender(name)
             except GenderException as e:
                 self.errorLogger.logError(e.eType, self.currentChild)
-                gender = ValueWrapper("")
-                gender.error = e.eType
-            if gender.value == "Female":
+                gender = ""
+            if gender == "Female":
                 self.girls += 1
 
             try:
@@ -112,12 +110,12 @@ class ChildExtractor(BaseExtractor):
                 location = ""
                 coordinates = self.geocoder.get_empty_coordinates()
 
-            self.child_list.append(ValueWrapper({KEYS["childName"] : ValueWrapper(name), KEYS["gender"] : gender, KEYS["birthYear"] : ValueWrapper(year),
-                                                 KEYS["childLocationName"] : ValueWrapper(location),
-                                                 KEYS["childCoordinates"] : ValueWrapper({KEYS["latitude"]: ValueWrapper(coordinates["latitude"]), KEYS["longitude"]: ValueWrapper(coordinates["longitude"])})}))
+            self.child_list.append({KEYS["childName"]: name, KEYS["gender"]: gender, KEYS["birthYear"]: year,
+                                                 KEYS["childLocationName"]: location,
+                                                 KEYS["childCoordinates"]: {KEYS["latitude"]: coordinates["latitude"],
+                                                                            KEYS["longitude"]: coordinates["longitude"]}})
         except regexUtils.RegexNoneMatchException:
             pass
-
 
     def _find_birth_coord(self, location_name):
         try:
@@ -129,13 +127,7 @@ class ChildExtractor(BaseExtractor):
                 return self.geocoder.get_empty_coordinates()
         return geocoordinates
 
-
-
     def _constructReturnDict(self):
-        """KEYS["karelianlocations"] : ValueWrapper(self.locationlisting),
-                KEYS["returnedkarelia"] : ValueWrapper(self.returned),
-                KEYS["karelianlocationsCount"] : ValueWrapper(len(self.locationlisting))"""
-        children = ValueWrapper(self.child_list)
-        children.error = self.children_error
-        return {KEYS["manymarriages"] : ValueWrapper(self.many_marriages), KEYS["children"] : children, KEYS["childCount"] : ValueWrapper(len(self.child_list)),
-                KEYS["girlCount"] : ValueWrapper(self.girls),  KEYS["boyCount"] : ValueWrapper(len(self.child_list) - self.girls)}
+        children = self.child_list
+        return {KEYS["manymarriages"]: self.many_marriages, KEYS["children"]: children, KEYS["childCount"]: len(self.child_list),
+                KEYS["girlCount"]: self.girls,  KEYS["boyCount"]: len(self.child_list) - self.girls}

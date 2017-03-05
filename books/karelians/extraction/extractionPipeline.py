@@ -15,7 +15,6 @@ from books.karelians.extraction.extractors.childextractor import ChildExtractor
 from shared.genderExtract import Gender
 import re
 
-from interface.valuewrapper import ValueWrapper
 
 
 class ExtractionPipeline:
@@ -76,5 +75,5 @@ class ExtractionPipeline:
         d.update(finnish_locations)
         d.update(spouse)
         d.update(children)
-        d["originalText"] = ValueWrapper(text)
+        d["originalText"] = text
         return d

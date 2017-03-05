@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.farmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
-import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
 
@@ -31,10 +29,10 @@ class BoolExtractor(BaseExtractor):
         for key, pattern in self.patterns_to_find.items():
             try:
                 found = regexUtils.safeSearch(pattern, text, self.OPTIONS)
-                self.results[key] = ValueWrapper(True)
+                self.results[key] = True
             except regexUtils.RegexNoneMatchException as e:
-                self.results[key] = ValueWrapper(False)
+                self.results[key] = False
                 pass
 
     def _constructReturnDict(self):
-        return {KEYS["flags"] : ValueWrapper(self.results)}
+        return {KEYS["flags"] : self.results}
