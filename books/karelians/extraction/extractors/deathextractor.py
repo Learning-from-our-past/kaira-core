@@ -2,20 +2,15 @@
 import re
 
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
-from books.karelians.extraction.extractionExceptions import *
-from books.karelians.extraction.extractors.dateExtractor import DateExtractor
 from shared import textUtils
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from shared import regexUtils
+
 
 class DeathExtractor(BaseExtractor):
 
-
     def extract(self, text, entry):
         super(DeathExtractor, self).extract(text)
-
-
         self.PATTERN = r"(?:kuoli)\.?\s?-(?P<year>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
@@ -48,4 +43,4 @@ class DeathExtractor(BaseExtractor):
         self.matchFinalPosition = end + self.matchStartPosition - 4
 
     def _constructReturnDict(self):
-        return {KEYS["deathYear"]:  ValueWrapper(self.deathYear)}
+        return {KEYS["deathYear"]:  self.deathYear}

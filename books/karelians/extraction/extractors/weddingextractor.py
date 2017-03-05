@@ -2,15 +2,12 @@
 import re
 
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
-from books.karelians.extraction.extractionExceptions import *
-from books.karelians.extraction.extractors.dateExtractor import DateExtractor
 from shared import textUtils
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from shared import regexUtils
 
-class WeddingExtractor(BaseExtractor):
 
+class WeddingExtractor(BaseExtractor):
 
     def extract(self, text, entry):
         super(WeddingExtractor, self).extract(text)
@@ -48,4 +45,4 @@ class WeddingExtractor(BaseExtractor):
         self.matchFinalPosition = end + self.matchStartPosition - 4
 
     def _constructReturnDict(self):
-        return {KEYS["weddingYear"]:  ValueWrapper(self.weddingYear)}
+        return {KEYS["weddingYear"]:  self.weddingYear}

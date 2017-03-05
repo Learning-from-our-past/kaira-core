@@ -1,7 +1,5 @@
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
-import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
 
@@ -17,10 +15,10 @@ class OmakotitaloExtractor(BaseExtractor):
 
     def _find_omakotitalo(self, text):
         try:
-            found_house= regexUtils.safeSearch(self.OMAKOTITALO_PATTERN, text, self.OMAKOTITALO_OPTIONS)
+            found_house = regexUtils.safeSearch(self.OMAKOTITALO_PATTERN, text, self.OMAKOTITALO_OPTIONS)
             self.omakotitalo = True
         except regexUtils.RegexNoneMatchException as e:
             pass
 
     def _constructReturnDict(self):
-        return {KEYS["omakotitalo"] : ValueWrapper(self.omakotitalo)}
+        return {KEYS["omakotitalo"] : self.omakotitalo}

@@ -1,8 +1,6 @@
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
-from books.karelians.extraction.extractionExceptions import NameException
-import re
+
 
 class ImageExtractor(BaseExtractor):
 
@@ -21,4 +19,4 @@ class ImageExtractor(BaseExtractor):
         return self._constructReturnDict()
 
     def _constructReturnDict(self):
-        return {KEYS["imagepath"] : ValueWrapper(self.image_path), KEYS["approximatePage"] : ValueWrapper(self.page)}
+        return {KEYS["imagepath"]: self.image_path, KEYS["approximatePage"]: self.page}

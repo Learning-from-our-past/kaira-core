@@ -1,6 +1,5 @@
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from books.karelians.extraction.extractionExceptions import OtherLocationException
 from books.karelians.extraction.extractionExceptions import KarelianLocationException
 from shared import regexUtils
@@ -129,28 +128,28 @@ class FinnishLocationsExtractor(BaseExtractor):
             village_coordinates = get_coordinates_by_name(village_name)
 
         village_information = {
-            KEYS["otherlocation"]: ValueWrapper(village_name or None),
-            KEYS["othercoordinate"]: ValueWrapper({
+            KEYS["otherlocation"]: village_name or None,
+            KEYS["othercoordinate"]: {
                 KEYS["latitude"]: village_coordinates["latitude"],
                 KEYS["longitude"]: village_coordinates["longitude"]
-            })
+            }
         }
 
         moved_in = ''
         moved_out = ''
 
         def add_location_to_list():
-            self.location_listing.append(ValueWrapper({
-                KEYS["otherlocation"]: ValueWrapper(entry_name),
-                KEYS["othercoordinate"]: ValueWrapper({
-                    KEYS["latitude"]: ValueWrapper(geocoordinates["latitude"]),
-                    KEYS["longitude"]: ValueWrapper(geocoordinates["longitude"])
-                }),
-                KEYS["movedOut"]: ValueWrapper(moved_out),
-                KEYS["movedIn"]: ValueWrapper(moved_in),
+            self.location_listing.append({
+                KEYS["otherlocation"]: entry_name,
+                KEYS["othercoordinate"]: {
+                    KEYS["latitude"]: geocoordinates["latitude"],
+                    KEYS["longitude"]: geocoordinates["longitude"]
+                },
+                KEYS["movedOut"]: moved_out,
+                KEYS["movedIn"]: moved_in,
                 KEYS["region"]: self.OTHER_REGION_ID,
-                KEYS["village"]: ValueWrapper(village_information)
-            }))
+                KEYS["village"]: village_information
+            })
 
         if 'year_information' in location:
             for migration in location['year_information']:
@@ -175,9 +174,8 @@ class FinnishLocationsExtractor(BaseExtractor):
             add_location_to_list()
 
     def _constructReturnDict(self):
-        loc = ValueWrapper(self.location_listing)
-        loc.error = self.location_error
-        return {KEYS["otherlocations"] : loc, KEYS["otherlocationsCount"] : ValueWrapper(len(self.location_listing))}
+        loc = self.location_listing
+        return {KEYS["otherlocations"]: loc, KEYS["otherlocationsCount"]: len(self.location_listing)}
 
 
 class KarelianLocationsExtractor(BaseExtractor):
@@ -256,28 +254,28 @@ class KarelianLocationsExtractor(BaseExtractor):
             village_coordinates = get_coordinates_by_name(village_name)
 
         village_information = {
-            KEYS["karelianlocation"]: ValueWrapper(village_name or None),
-            KEYS["kareliancoordinate"]: ValueWrapper({
+            KEYS["karelianlocation"]: village_name or None,
+            KEYS["kareliancoordinate"]: {
                 KEYS["latitude"]: village_coordinates["latitude"],
                 KEYS["longitude"]: village_coordinates["longitude"]
-            })
+            }
         }
 
         moved_in = ''
         moved_out = ''
 
         def add_location_to_list():
-            self.location_listing.append(ValueWrapper({
-                KEYS["karelianlocation"]: ValueWrapper(entry_name),
-                KEYS["kareliancoordinate"]: ValueWrapper({
-                    KEYS["latitude"]: ValueWrapper(geocoordinates["latitude"]),
-                    KEYS["longitude"]: ValueWrapper(geocoordinates["longitude"])
-                }),
-                KEYS["movedOut"]: ValueWrapper(moved_out),
-                KEYS["movedIn"]: ValueWrapper(moved_in),
+            self.location_listing.append({
+                KEYS["karelianlocation"]: entry_name,
+                KEYS["kareliancoordinate"]: {
+                    KEYS["latitude"]: geocoordinates["latitude"],
+                    KEYS["longitude"]: geocoordinates["longitude"]
+                },
+                KEYS["movedOut"]: moved_out,
+                KEYS["movedIn"]: moved_in,
                 KEYS["region"]: self.KARELIAN_REGION_ID,
-                KEYS["village"]: ValueWrapper(village_information)
-            }))
+                KEYS["village"]: village_information
+            })
 
         if 'year_information' in location:
             for migration in location['year_information']:
@@ -302,11 +300,10 @@ class KarelianLocationsExtractor(BaseExtractor):
             add_location_to_list()
 
     def _constructReturnDict(self):
-        loc = ValueWrapper(self.location_listing)
-        loc.error = self.location_error
+        loc = self.location_listing
         return {KEYS["karelianlocations"]: loc,
-                KEYS["returnedkarelia"]: ValueWrapper(self.returned),
-                KEYS["karelianlocationsCount"]: ValueWrapper(len(self.location_listing))}
+                KEYS["returnedkarelia"]: self.returned,
+                KEYS["karelianlocationsCount"]: len(self.location_listing)}
 
 
 class LocationThresholdException(Exception):

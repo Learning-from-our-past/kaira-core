@@ -1,6 +1,5 @@
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from books.karelians.extraction.extractionExceptions import ProfessionException
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
@@ -61,6 +60,5 @@ class ProfessionExtractor(BaseExtractor):
 
     def _constructReturnDict(self):
         self._clean_professions()
-        p = ValueWrapper(self.professions)
-        p.error = self.profession_error
+        p = self.professions
         return {KEYS["profession"] : p}

@@ -1,7 +1,5 @@
 from books.karelians.extraction.extractors.baseExtractor import BaseExtractor
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
-from books.karelians.extraction.extractionExceptions import NameException
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
@@ -31,6 +29,6 @@ class OrigFamilyExtractor(BaseExtractor):
             pass
 
     def _constructReturnDict(self):
-        return {KEYS["origfamily"] : ValueWrapper(self.own_family)}
+        return {KEYS["origfamily"] : self.own_family}
 
 

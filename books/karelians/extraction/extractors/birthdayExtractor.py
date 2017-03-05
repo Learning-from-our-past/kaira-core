@@ -6,7 +6,6 @@ from books.karelians.extraction.extractionExceptions import *
 from books.karelians.extraction.extractors.dateExtractor import DateExtractor
 from shared import textUtils
 from books.karelians.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from shared import regexUtils
 
 class BirthdayExtractor(BaseExtractor):
@@ -55,12 +54,9 @@ class BirthdayExtractor(BaseExtractor):
         self.matchFinalPosition = self.dateExtractor.getFinalMatchPosition() + self.matchStartPosition - 4
 
     def _constructReturnDict(self):
-        self.foundDate["day"] = ValueWrapper(self.foundDate["day"])
-        self.foundDate["day"].error = self.error
-        self.foundDate["month"] = ValueWrapper(self.foundDate["month"])
-        self.foundDate["month"].error = self.error
-        self.foundDate["year"] = ValueWrapper(self.foundDate["year"])
-        self.foundDate["year"].error = self.error
+        self.foundDate["day"] = self.foundDate["day"]
+        self.foundDate["month"] = self.foundDate["month"]
+        self.foundDate["year"] = self.foundDate["year"]
 
         return {KEYS["birthDay"]:  self.foundDate["day"], KEYS["birthMonth"]: self.foundDate["month"],
                 KEYS["birthYear"]:  self.foundDate["year"]}
