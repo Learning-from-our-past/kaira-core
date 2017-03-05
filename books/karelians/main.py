@@ -35,3 +35,17 @@ class KarelianExtractor:
                     raise e
 
 
+def get_karelian_data_entry(name, approximated_page, text):
+    """
+    Create extractor compatible dict from given parameters. Input to extractor should
+    consist of dict of this form!
+    :param name:
+    :param approximated_page:
+    :param text:
+    :return:
+    """
+    return {
+        'name': name,
+        'approximated_page': approximated_page,
+        'text': text
+    }

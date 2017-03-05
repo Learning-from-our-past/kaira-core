@@ -3,7 +3,7 @@ import os
 import subprocess
 import argparse
 from lxml import etree
-from books.karelians.main import KarelianExtractor
+from books.karelians.main import KarelianExtractor, get_karelian_data_entry
 from books.farmers.main import SmallFarmersExtractor
 from books.greatfarmers.main import GreatFarmersExtractor
 
@@ -27,6 +27,19 @@ def start_mongodb():
         return None
 
 
+def xml_to_extractor_format(xml_document):
+    """
+    Transform xml file to dict format. This could be skipped if person raw data were saved as
+    json not in xml...
+    :param xml_document:
+    :return:
+    """
+    persons = []
+    for child in xml_document:
+        persons.append(get_karelian_data_entry(child.attrib["name"], child.attrib['approximated_page'], child.text))
+
+    return persons
+
 def main():
     args = vars(parser.parse_args())
     mongodb = None
@@ -35,11 +48,12 @@ def main():
     xml_document = etree.parse(args['i'], parser=xml_parser).getroot()
 
     book_series = xml_document.attrib["bookseries"]
+
     if book_series == 'Siirtokarjalaisten tie':
         print('Book series:', book_series)
         #mongodb = start_mongodb() # FIXME: Invent a sensible way to check if mongo start is required or not
         extractor = KarelianExtractor(callback)
-        extractor.process(xml_document)
+        extractor.process(xml_to_extractor_format(xml_document))
         extractor.save_results(args['o'], file_format='json')
         print('Process finished successfully.')
 
