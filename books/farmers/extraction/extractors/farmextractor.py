@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.farmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
-#from books.farmers.extraction.extractionExceptions import ProfessionException
-import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
 
 class FarmExtractor(BaseExtractor):
-
 
     def extract(self, text, entry):
         self.ALL_AREA_PATTERN = r"(?:(?:kok\.pinta-ala){s<=1,i<=2}|(?:kokonaispinta-ala){s<=1,i<=2}).{0,20}?(?P<area1>\d\d?\d?,?\d\d)\sha"
@@ -51,10 +47,10 @@ class FarmExtractor(BaseExtractor):
 
     def _constructReturnDict(self):
 
-        return {KEYS["farmDetails"] : ValueWrapper({
-            KEYS["wholeArea"] : ValueWrapper(self.whole_area),
-            KEYS["forestArea"] : ValueWrapper(self.forest_area),
-            KEYS["fieldArea"] : ValueWrapper(self.field_area),
-            KEYS["wasteArea"] : ValueWrapper(self.waste_area),
-            KEYS["meadowArea"] : ValueWrapper(self.meadow_area)})
+        return {KEYS["farmDetails"] : {
+            KEYS["wholeArea"] : self.whole_area,
+            KEYS["forestArea"] : self.forest_area,
+            KEYS["fieldArea"] : self.field_area,
+            KEYS["wasteArea"] : self.waste_area,
+            KEYS["meadowArea"] : self.meadow_area}
         }

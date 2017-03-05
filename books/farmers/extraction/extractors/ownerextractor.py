@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from books.farmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.farmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from books.farmers.extraction.extractionExceptions import OwnerYearException, OwnerNameException
 from books.farmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 import shared.textUtils as textUtils
@@ -17,12 +16,12 @@ class OwnerExtractor(BaseExtractor):
         self.OWNER_NAME_PATTERN = r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.OWNER_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.entry = entry
-        self.owner_year = ValueWrapper("")
-        self.first_names = ValueWrapper("")
-        self.surname = ValueWrapper("")
-        self.owner_gender = ValueWrapper("")
-        self.birthday = {KEYS["birthDay"]:  ValueWrapper(""), KEYS["birthMonth"]:  ValueWrapper(""),
-                KEYS["birthYear"]:  ValueWrapper(""), KEYS["birthLocation"]:  ValueWrapper("")}
+        self.owner_year = ""
+        self.first_names = ""
+        self.surname = ""
+        self.owner_gender = ""
+        self.birthday = {KEYS["birthDay"]:  "", KEYS["birthMonth"]:  "",
+                KEYS["birthYear"]: "", KEYS["birthLocation"]: ""}
         self._find_owner(text)
         return self._constructReturnDict()
 
@@ -47,28 +46,24 @@ class OwnerExtractor(BaseExtractor):
 
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
-            self.first_names.error = OwnerNameException.eType
-            self.surname.error = OwnerNameException.eType
 
     def _find_owner_gender(self, name):
         try:
-            self.owner_gender.value = Gender.find_gender(name)
+            self.owner_gender = Gender.find_gender(name)
         except GenderException as e:
                 self.errorLogger.logError(e.eType, self.currentChild)
-                self.owner_gender.value = ""
-                self.owner_gender.error = e.eType
-
+                self.owner_gender = ""
 
     def _split_names(self, name):
         name = re.sub(r"(?:<|>|&|')", r"", name)
         names = re.split(" ", name)
 
-        self.surname.value = names[len(names)-1].strip(" ")
+        self.surname = names[len(names)-1].strip(" ")
         if len(names) > 1:
             for i in range(0, len(names)-1):
                 if names[i].strip(" ") != "o.s.":
-                    self.first_names.value += names[i].strip(" ") + " "
-            self.first_names.value = self.first_names.value.strip(" ")
+                    self.first_names += names[i].strip(" ") + " "
+            self.first_names = self.first_names.strip(" ")
             self._find_owner_gender(names[1])
 
 
@@ -76,15 +71,14 @@ class OwnerExtractor(BaseExtractor):
         try:
             ownerYear= regexUtils.safeSearch(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
             self.matchFinalPosition = ownerYear.end()
-            self.owner_year.value = int(ownerYear.group("year"))
+            self.owner_year = int(ownerYear.group("year"))
         except regexUtils.RegexNoneMatchException as e:
             self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
-            self.owner_year.error = OwnerYearException.eType
 
     def _constructReturnDict(self):
-        return {KEYS["owner"] : ValueWrapper({ KEYS["ownerFrom"] : self.owner_year,
+        return {KEYS["owner"] : { KEYS["ownerFrom"] : self.owner_year,
                 KEYS["firstnames"] : self.first_names,
                 KEYS["surname"] : self.surname,
                 KEYS["gender"] : self.owner_gender,
-                KEYS["ownerBirthData"] : ValueWrapper(self.birthday)
-        })}
+                KEYS["ownerBirthData"] : self.birthday
+        }}
