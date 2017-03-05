@@ -5,6 +5,7 @@ import argparse
 from lxml import etree
 from books.karelians.main import KarelianExtractor
 from books.farmers.main import SmallFarmersExtractor
+from books.greatfarmers.main import GreatFarmersExtractor
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')
 parser.add_argument('-i', nargs='?', type=argparse.FileType('r', encoding='utf8'), help='Input file to extract data from. Should be XML.', default=sys.stdin)
@@ -50,6 +51,13 @@ def main():
         extractor.save_results(args['o'], file_format='json')
         print('Process finished successfully.')
 
+    elif book_series == 'Suuret maatilat':
+        print('Book series:', book_series)
+        #mongodb = start_mongodb()
+        extractor = GreatFarmersExtractor(callback)
+        extractor.process(xml_document)
+        extractor.save_results(args['o'], file_format='json')
+        print('Process finished successfully.')
     else:
         print('Error: File does not contain supported book series data', file = sys.stderr)
         sys.exit(1)
