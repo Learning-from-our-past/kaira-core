@@ -1,8 +1,6 @@
 from shared.exceptionlogger import ExceptionLogger
 from books.greatfarmers.extraction.extractionPipeline import ExtractionPipeline
 from interface.processdatainterface import ProcessDataInterface
-from lxml import etree
-from interface.valuewrapper import ValueWrapper
 from books.greatfarmers.extraction.extractionExceptions import ExtractionException
 class ProcessData(ProcessDataInterface):
 
@@ -36,12 +34,10 @@ class ProcessData(ProcessDataInterface):
         self.xmlDataDocumentLen = len(self.xmlDataDocument)
 
     def _process_all_entries(self):
-        ValueWrapper.reset_id_counter()
         i = 0
 
         for child in self.xmlDataDocument:
             entry = self._create_entry(child)
-            ValueWrapper.xmlEntry = child
             try:
                 self._process_entry(entry)
             except ExtractionException as e:
@@ -49,7 +45,6 @@ class ProcessData(ProcessDataInterface):
                 self._handle_extraction_error_logging(exception=e, entry=entry)
 
             i +=1
-            ValueWrapper.reset_id_counter() #Resets the id-generator for each datafield of entry
             self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
 
     def _process_entry(self, entry):
@@ -64,9 +59,7 @@ class ProcessData(ProcessDataInterface):
         return {"xml": xmlEntry, "extractionResults" : self._create_result_template()}
 
     def extract_one(self, xml_entry):
-        ValueWrapper.reset_id_counter()
         entry = self._create_entry(xml_entry)
-        ValueWrapper.xmlEntry = xml_entry
         try:
             personEntryDict = self.extractor.process(entry["xml"].text, entry, self.errorLogger)
             entry["extractionResults"] = personEntryDict

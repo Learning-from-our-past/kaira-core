@@ -2,7 +2,6 @@
 import ntpath
 import json
 from abc import abstractmethod
-from interface.valuewrapper import ValueWrapper
 from interface.jsonbuilderinterface import ResultJsonBuilderInterface
 
 class ResultJsonBuilder(ResultJsonBuilderInterface):
@@ -28,32 +27,8 @@ class ResultJsonBuilder(ResultJsonBuilderInterface):
         person = {}
         for key, property in dataDict.items():
             if key != "cursorLocation":
-                person[key] = self._unwrap(property)
+                person[key] = property
         self.jsonFormat.append(person)
-
-
-    def _unwrap(self, data):
-        """
-        A recursive function to unwrap all the ValueWrappers and return a pure dict from them.
-        :param valuewrap:
-        :return:
-        """
-        if isinstance(data, ValueWrapper):
-            if isinstance(data.value, dict):
-                result = {}
-                for key, value in data.value.items():
-                    result[key] = self._unwrap(value)
-            elif isinstance(data.value, list):
-                result = []
-                for index, value in enumerate(data.value):
-                    result.append(self._unwrap(value))
-            else:
-                return data.value   #primitive data structure
-        else:
-            return data
-
-        return result
-
 
     def closeJson(self):
         #self.openedJson.write(json.dumps(self.jsonFormat, indent=4, ensure_ascii=False))

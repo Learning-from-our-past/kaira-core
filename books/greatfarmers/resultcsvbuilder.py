@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import ntpath
 import csv
-import json
 from abc import abstractmethod
 from books.greatfarmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
 from interface.csvbuilderinterface import ResultCsvBuilderInterface
 
 class ResultCsvBuilder(ResultCsvBuilderInterface):
@@ -50,82 +48,82 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     #make a dict of row content divided based on the content
     def _createRowFromDict(self, persondatadict):
-        row = {"regular" : [persondatadict[KEYS["name"]].value,
+        row = {"regular" : [persondatadict[KEYS["name"]],
 
-                            persondatadict[KEYS["farmLocation"]].value["locationName"].value,
-                            persondatadict[KEYS["farmLocation"]].value["latitude"].value,
-                            persondatadict[KEYS["farmLocation"]].value["longitude"].value,
+                            persondatadict[KEYS["farmLocation"]]["locationName"],
+                            persondatadict[KEYS["farmLocation"]]["latitude"],
+                            persondatadict[KEYS["farmLocation"]]["longitude"],
 
-                            persondatadict[KEYS["farmDetails"]].value[KEYS["wholeArea"]].value,
-                            persondatadict[KEYS["farmDetails"]].value[KEYS["forestArea"]].value,
-                            persondatadict[KEYS["farmDetails"]].value[KEYS["fieldArea"]].value,
-                            persondatadict[KEYS["farmDetails"]].value[KEYS["wasteArea"]].value,
-                            persondatadict[KEYS["farmDetails"]].value[KEYS["meadowArea"]].value,
+                            persondatadict[KEYS["farmDetails"]][KEYS["wholeArea"]],
+                            persondatadict[KEYS["farmDetails"]][KEYS["forestArea"]],
+                            persondatadict[KEYS["farmDetails"]][KEYS["fieldArea"]],
+                            persondatadict[KEYS["farmDetails"]][KEYS["wasteArea"]],
+                            persondatadict[KEYS["farmDetails"]][KEYS["meadowArea"]],
 
-                            persondatadict[KEYS["owner"]].value[KEYS["firstnames"]].value,
-                            persondatadict[KEYS["owner"]].value[KEYS["surname"]].value,
-                            persondatadict[KEYS["owner"]].value[KEYS["gender"]].value,
-                            persondatadict[KEYS["owner"]].value[KEYS["ownerBirthData"]].value[KEYS["birthDay"]].value,
-                            persondatadict[KEYS["owner"]].value[KEYS["ownerBirthData"]].value[KEYS["birthMonth"]].value,
-                            persondatadict[KEYS["owner"]].value[KEYS["ownerBirthData"]].value[KEYS["birthYear"]].value,
-                            persondatadict[KEYS["owner"]].value[KEYS["ownerFrom"]].value,
+                            persondatadict[KEYS["owner"]][KEYS["firstnames"]],
+                            persondatadict[KEYS["owner"]][KEYS["surname"]],
+                            persondatadict[KEYS["owner"]][KEYS["gender"]],
+                            persondatadict[KEYS["owner"]][KEYS["ownerBirthData"]][KEYS["birthDay"]],
+                            persondatadict[KEYS["owner"]][KEYS["ownerBirthData"]][KEYS["birthMonth"]],
+                            persondatadict[KEYS["owner"]][KEYS["ownerBirthData"]][KEYS["birthYear"]],
+                            persondatadict[KEYS["owner"]][KEYS["ownerFrom"]],
 
-                            persondatadict[KEYS["flags"]].value[KEYS["oat"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["barley"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["hay"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["potatoes"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["wheat"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["rye"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["sugarbeet"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["lanttu"]].value,
+                            persondatadict[KEYS["flags"]][KEYS["oat"]],
+                            persondatadict[KEYS["flags"]][KEYS["barley"]],
+                            persondatadict[KEYS["flags"]][KEYS["hay"]],
+                            persondatadict[KEYS["flags"]][KEYS["potatoes"]],
+                            persondatadict[KEYS["flags"]][KEYS["wheat"]],
+                            persondatadict[KEYS["flags"]][KEYS["rye"]],
+                            persondatadict[KEYS["flags"]][KEYS["sugarbeet"]],
+                            persondatadict[KEYS["flags"]][KEYS["lanttu"]],
 
-                            persondatadict[KEYS["flags"]].value[KEYS["puimakone"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["tractor"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["horse"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["chicken"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["siirtotila"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["kantatila"]].value,
+                            persondatadict[KEYS["flags"]][KEYS["puimakone"]],
+                            persondatadict[KEYS["flags"]][KEYS["tractor"]],
+                            persondatadict[KEYS["flags"]][KEYS["horse"]],
+                            persondatadict[KEYS["flags"]][KEYS["chicken"]],
+                            persondatadict[KEYS["flags"]][KEYS["siirtotila"]],
+                            persondatadict[KEYS["flags"]][KEYS["kantatila"]],
 
-                            persondatadict[KEYS["flags"]].value[KEYS["talli"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["sauna"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["navetta"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["autotalli"]].value,
+                            persondatadict[KEYS["flags"]][KEYS["talli"]],
+                            persondatadict[KEYS["flags"]][KEYS["sauna"]],
+                            persondatadict[KEYS["flags"]][KEYS["navetta"]],
+                            persondatadict[KEYS["flags"]][KEYS["autotalli"]],
 
-                            persondatadict[KEYS["flags"]].value[KEYS["pine"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["spruce"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["birch"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["viljankuivuri"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["kotitalousmylly"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["ay-karja"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["sk-karja"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["someonedead"]].value,
+                            persondatadict[KEYS["flags"]][KEYS["pine"]],
+                            persondatadict[KEYS["flags"]][KEYS["spruce"]],
+                            persondatadict[KEYS["flags"]][KEYS["birch"]],
+                            persondatadict[KEYS["flags"]][KEYS["viljankuivuri"]],
+                            persondatadict[KEYS["flags"]][KEYS["kotitalousmylly"]],
+                            persondatadict[KEYS["flags"]][KEYS["ay-karja"]],
+                            persondatadict[KEYS["flags"]][KEYS["sk-karja"]],
+                            persondatadict[KEYS["flags"]][KEYS["someonedead"]],
 
 
-                            persondatadict[KEYS["flags"]].value[KEYS["moreeni"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["hiesu"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["hieta"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["muta"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["savi"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["multa"]].value,
-                            persondatadict[KEYS["flags"]].value[KEYS["salaojitus"]].value,
+                            persondatadict[KEYS["flags"]][KEYS["moreeni"]],
+                            persondatadict[KEYS["flags"]][KEYS["hiesu"]],
+                            persondatadict[KEYS["flags"]][KEYS["hieta"]],
+                            persondatadict[KEYS["flags"]][KEYS["muta"]],
+                            persondatadict[KEYS["flags"]][KEYS["savi"]],
+                            persondatadict[KEYS["flags"]][KEYS["multa"]],
+                            persondatadict[KEYS["flags"]][KEYS["salaojitus"]],
 
-                            persondatadict[KEYS["quantities"]].value[KEYS["rooms"]].value,
-                            persondatadict[KEYS["quantities"]].value[KEYS["lypsylehma"]].value,
+                            persondatadict[KEYS["quantities"]][KEYS["rooms"]],
+                            persondatadict[KEYS["quantities"]][KEYS["lypsylehma"]],
 
-                            persondatadict[KEYS["quantities"]].value[KEYS["lammas"]].value,
-                            persondatadict[KEYS["quantities"]].value[KEYS["lihotussika"]].value,
-                            persondatadict[KEYS["quantities"]].value[KEYS["emakko"]].value,
-                            persondatadict[KEYS["quantities"]].value[KEYS["nuori"]].value,
-                            persondatadict[KEYS["quantities"]].value[KEYS["kanoja"]].value,
+                            persondatadict[KEYS["quantities"]][KEYS["lammas"]],
+                            persondatadict[KEYS["quantities"]][KEYS["lihotussika"]],
+                            persondatadict[KEYS["quantities"]][KEYS["emakko"]],
+                            persondatadict[KEYS["quantities"]][KEYS["nuori"]],
+                            persondatadict[KEYS["quantities"]][KEYS["kanoja"]],
 
-                            persondatadict[KEYS["spouse"]].value[KEYS["spouseName"]].value,
-                            persondatadict[KEYS["spouse"]].value[KEYS["spouseOrigFamily"]].value,
-                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthDay"]].value,
-                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthMonth"]].value,
-                            persondatadict[KEYS["spouse"]].value[KEYS["spouseBirthData"]].value[KEYS["birthYear"]].value,
-                            persondatadict[KEYS["approximatePage"]].value,
-                            persondatadict[KEYS["shortentry"]].value,
-                            persondatadict[KEYS["manymarriages"]].value
+                            persondatadict[KEYS["spouse"]][KEYS["spouseName"]],
+                            persondatadict[KEYS["spouse"]][KEYS["spouseOrigFamily"]],
+                            persondatadict[KEYS["spouse"]][KEYS["spouseBirthData"]][KEYS["birthDay"]],
+                            persondatadict[KEYS["spouse"]][KEYS["spouseBirthData"]][KEYS["birthMonth"]],
+                            persondatadict[KEYS["spouse"]][KEYS["spouseBirthData"]][KEYS["birthYear"]],
+                            persondatadict[KEYS["approximatePage"]],
+                            persondatadict[KEYS["shortentry"]],
+                            persondatadict[KEYS["manymarriages"]]
 
 
 
@@ -136,20 +134,20 @@ class ResultCsvBuilder(ResultCsvBuilderInterface):
 
     def _addChildren(self, persondatadict):
         lrow = []
-        children = persondatadict[KEYS["children"]].value
+        children = persondatadict[KEYS["children"]]
 
         #childcount
-        lrow.append(persondatadict[KEYS["childCount"]].value)
-        lrow.append(persondatadict[KEYS["boyCount"]].value)
-        lrow.append(persondatadict[KEYS["girlCount"]].value)
+        lrow.append(persondatadict[KEYS["childCount"]])
+        lrow.append(persondatadict[KEYS["boyCount"]])
+        lrow.append(persondatadict[KEYS["girlCount"]])
 
         if len(children) > self.childrenMax:
             self.childrenMax = len(children)
 
         for l in children:
-            lrow.append(l.value["name"].value) #name of the child
-            lrow.append(l.value["gender"].value)
-            lrow.append(l.value["birthYear"].value) #child's birthYear
+            lrow.append(l["name"]) #name of the child
+            lrow.append(l["gender"])
+            lrow.append(l["birthYear"]) #child's birthYear
         return lrow
 
     def _writeToFile(self):

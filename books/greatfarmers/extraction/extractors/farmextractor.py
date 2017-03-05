@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from books.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
 from books.greatfarmers.extractionkeys import KEYS
-from interface.valuewrapper import ValueWrapper
-#from books.greatfarmers.extraction.extractionExceptions import ProfessionException
-import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
 
@@ -51,10 +48,10 @@ class FarmExtractor(BaseExtractor):
 
     def _constructReturnDict(self):
 
-        return {KEYS["farmDetails"] : ValueWrapper({
-            KEYS["wholeArea"] : ValueWrapper(self.whole_area),
-            KEYS["forestArea"] : ValueWrapper(self.forest_area),
-            KEYS["fieldArea"] : ValueWrapper(self.field_area),
-            KEYS["wasteArea"] : ValueWrapper(self.waste_area),
-            KEYS["meadowArea"] : ValueWrapper(self.meadow_area)})
+        return {KEYS["farmDetails"] : {
+            KEYS["wholeArea"] : self.whole_area,
+            KEYS["forestArea"] : self.forest_area,
+            KEYS["fieldArea"] : self.field_area,
+            KEYS["wasteArea"] : self.waste_area,
+            KEYS["meadowArea"] : self.meadow_area}
         }
