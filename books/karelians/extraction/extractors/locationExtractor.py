@@ -53,8 +53,8 @@ class BirthdayLocationExtractor(BaseExtractor):
     SUBSTRING_WIDTH = 28
 
 
-    def extract(self, text):
-        super(BirthdayLocationExtractor, self).extract(text)
+    def extract(self, text, entry):
+        super(BirthdayLocationExtractor, self).extract(text, entry)
         self.location = ""
         self.initVars(text)
 

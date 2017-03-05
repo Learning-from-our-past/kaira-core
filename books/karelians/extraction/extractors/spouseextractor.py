@@ -14,7 +14,7 @@ from books.karelians.extraction.extractors.weddingextractor import WeddingExtrac
 class SpouseExtractor(BaseExtractor):
 
     def extract(self, text, entry):
-        super(SpouseExtractor, self).extract(text)
+        super(SpouseExtractor, self).extract(text, entry)
         self.entry = entry
         self.PATTERN = r"Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
@@ -57,27 +57,27 @@ class SpouseExtractor(BaseExtractor):
             self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
 
     def _findSpouseDetails(self, text):
-        origFamilyExt = OrigFamilyExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        origFamilyExt = OrigFamilyExtractor(self.entry, self.errorLogger)
         origFamilyExt.setDependencyMatchPositionToZero()
         self.origFamily = origFamilyExt.extract(text, self.entry)
 
-        professionExt = ProfessionExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        professionExt = ProfessionExtractor(self.entry, self.errorLogger)
         professionExt.dependsOnMatchPositionOf(origFamilyExt)
         self.profession = professionExt.extract(text, self.entry)
 
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
         birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 
-        birthLocExt = BirthdayLocationExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthLocExt = BirthdayLocationExtractor(self.entry, self.errorLogger)
         birthLocExt.dependsOnMatchPositionOf(birthdayExt)
-        birthdayLocation = birthLocExt.extract(text)
+        birthdayLocation = birthLocExt.extract(text, self.entry)
 
-        spouseDeathExt = DeathExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        spouseDeathExt = DeathExtractor(self.entry, self.errorLogger)
         spouseDeathExt.dependsOnMatchPositionOf(birthLocExt)
         self.spouseDeath = spouseDeathExt.extract(text, self.entry)[KEYS["deathYear"]]
 
-        weddingExt = WeddingExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        weddingExt = WeddingExtractor(self.entry, self.errorLogger)
         weddingExt.dependsOnMatchPositionOf(birthLocExt)
         self.weddingYear = weddingExt.extract(text, self.entry)[KEYS["weddingYear"]]
 

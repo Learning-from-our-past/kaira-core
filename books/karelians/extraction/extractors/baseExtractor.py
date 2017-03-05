@@ -5,19 +5,18 @@ import re
 class BaseExtractor():
     __metaclass__ = ABCMeta
 
-    def __init__(self, currentChild, errorLogger, xmlDocument):
+    def __init__(self, current_person, errorLogger):
         self.regexPattern = r''
         self.currentChild = None
         self.errorLogger = None
         self.REQUIRES_MATCH_POSITION = False   #Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
         self.matchStartPosition = -1         #position in string where to begin match. Only used on certain classes
         self.matchFinalPosition = 0          #after extractor is finished, save the ending position of the match
-        self.currentChild = currentChild
+        self.currentChild = current_person
         self.errorLogger = errorLogger
-        self.xmlDocument = xmlDocument
 
     @abstractmethod
-    def extract(self, text):
+    def extract(self, text, person):
         self._checkIfMatchPositionIsRequiredBeforeExtract()
 
     def getFinalMatchPosition(self):

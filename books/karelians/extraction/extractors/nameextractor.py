@@ -6,13 +6,13 @@ import re
 
 class NameExtractor(BaseExtractor):
     """ Tries to extract the name of the person in this entry. Assumed that it can be found from
-    name attribute from xml-entry.
+    name attribute from person entry.
     """
     def extract(self, text, entry):
         self.first_names = ""
         self.surname = ""
         try:
-            namestr = entry["xml"].attrib["name"]
+            namestr = entry["name"]
             self._split_names(namestr)
         except KeyError as e:
             self.errorLogger.logError(NameException.eType, self.currentChild)

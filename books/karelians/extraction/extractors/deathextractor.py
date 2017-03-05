@@ -10,7 +10,7 @@ from shared import regexUtils
 class DeathExtractor(BaseExtractor):
 
     def extract(self, text, entry):
-        super(DeathExtractor, self).extract(text)
+        super(DeathExtractor, self).extract(text, entry)
         self.PATTERN = r"(?:kuoli)\.?\s?-(?P<year>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
