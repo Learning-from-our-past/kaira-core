@@ -15,37 +15,37 @@ from books.farmers.extractionkeys import KEYS
 from shared.genderExtract import Gender
 import re
 
-class ExtractionPipeline():
 
-    def __init__(self, xmlDocument):
-        self.xmlDocument = xmlDocument
+class ExtractionPipeline:
+
+    def __init__(self, person_data_input):
+        self.person_data = person_data_input
         Gender.load_names()
-
 
     def process(self, text, entry, eLogger):
         # Replace all weird invisible white space characters with regular space
         text = re.sub(r"\s", r" ",text)
 
-        metaExt = MetadataExtractor(entry, eLogger, self.xmlDocument)
-        meta = metaExt.extract(text, entry)
+        meta_ext = MetadataExtractor(entry, eLogger, self.person_data)
+        meta = meta_ext.extract(text, entry)
 
-        ownerExt = OwnerExtractor(entry, eLogger, self.xmlDocument)
-        ownerExt.setDependencyMatchPositionToZero()
-        ownerdata = ownerExt.extract(text, entry)
+        owner_ext = OwnerExtractor(entry, eLogger, self.person_data)
+        owner_ext.setDependencyMatchPositionToZero()
+        owner_data = owner_ext.extract(text, entry)
 
 
-        hostessExt = HostessExtractor(entry, eLogger, self.xmlDocument)
-        hostessExt.setDependencyMatchPositionToZero()
-        hostessdata = hostessExt.extract(text, entry)
+        hostess_ext = HostessExtractor(entry, eLogger, self.person_data)
+        hostess_ext.setDependencyMatchPositionToZero()
+        hostess_data = hostess_ext.extract(text, entry)
 
-        farmExt = FarmExtractor(entry, eLogger, self.xmlDocument)
-        farmExt.setDependencyMatchPositionToZero()
-        farmdata = farmExt.extract(text, entry)
+        farm_ext = FarmExtractor(entry, eLogger, self.person_data)
+        farm_ext.setDependencyMatchPositionToZero()
+        farm_data = farm_ext.extract(text, entry)
 
-        childExt = ChildExtractor(entry, eLogger, self.xmlDocument)
-        children = childExt.extract(text, entry)
+        child_ext = ChildExtractor(entry, eLogger, self.person_data)
+        children = child_ext.extract(text, entry)
 
-        flagExt = BoolExtractor(entry, eLogger, self.xmlDocument)
+        flag_ext = BoolExtractor(entry, eLogger, self.person_data)
         patterns = {
             KEYS["oat"] : r"(kaura(?!nen))",
             KEYS["barley"] : r"ohra",
@@ -80,10 +80,10 @@ class ExtractionPipeline():
             KEYS["someonedead"] : r"kuoli|kuollut|kaatui|kaatunut",
 
         }
-        flagExt.set_patterns_to_find(patterns)
-        flags = flagExt.extract(text, entry)
+        flag_ext.set_patterns_to_find(patterns)
+        flags = flag_ext.extract(text, entry)
 
-        quantityExt = QuantityExtractor(entry, eLogger, self.xmlDocument)
+        quantity_ext = QuantityExtractor(entry, eLogger, self.person_data)
         qpatterns = {
             KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",
             KEYS["lypsylehma"] : r"(?:lypsylehmää){s<=1,i<=1}",
@@ -95,14 +95,14 @@ class ExtractionPipeline():
             KEYS["kanoja"] : r"(?:kanoja|(?:kanaa{s<=1,i<=1}))"
          }
 
-        quantityExt.set_patterns_to_find(qpatterns)
-        quantities = quantityExt.extract(text, entry)
+        quantity_ext.set_patterns_to_find(qpatterns)
+        quantities = quantity_ext.extract(text, entry)
 
         d = meta.copy()
-        d.update(ownerdata)
-        d.update(hostessdata)
+        d.update(owner_data)
+        d.update(hostess_data)
         d.update(children)
-        d.update(farmdata)
+        d.update(farm_data)
         d.update(flags)
         d.update(quantities)
         return d
