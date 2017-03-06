@@ -7,9 +7,11 @@ import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
 
+
 class HostessExtractor(BaseExtractor):
 
     SEARCH_SPACE = 400
+
     def extract(self, text, entry):
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+)," #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.HOSTESS_OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -28,12 +30,10 @@ class HostessExtractor(BaseExtractor):
 
         self._find_hostess_name(text)
 
-
     def _find_hostess_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
         birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
-
 
     def _find_hostess_name(self, text):
         try:
@@ -56,8 +56,6 @@ class HostessExtractor(BaseExtractor):
                 if names[i].strip(" ") != "o.s.":
                     self.first_names += names[i].strip(" ") + " "
             self.first_names = self.first_names.strip(" ")
-
-
 
     def _constructReturnDict(self):
         return {KEYS["hostess"] : {

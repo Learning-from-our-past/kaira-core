@@ -22,30 +22,30 @@ class ExtractionPipeline:
         self.person_data = person_data_input
         Gender.load_names()
 
-    def process(self, text, entry, eLogger):
+
+    def process(self, person, eLogger):
         # Replace all weird invisible white space characters with regular space
-        text = re.sub(r"\s", r" ",text)
+        text = person['text'] = re.sub(r"\s", r" ", person['text'])
 
-        meta_ext = MetadataExtractor(entry, eLogger, self.person_data)
-        meta = meta_ext.extract(text, entry)
+        meta_ext = MetadataExtractor(person, eLogger)
+        meta = meta_ext.extract(text, person)
 
-        owner_ext = OwnerExtractor(entry, eLogger, self.person_data)
+        owner_ext = OwnerExtractor(person, eLogger)
         owner_ext.setDependencyMatchPositionToZero()
-        owner_data = owner_ext.extract(text, entry)
+        owner_data = owner_ext.extract(text, person)
 
-
-        hostess_ext = HostessExtractor(entry, eLogger, self.person_data)
+        hostess_ext = HostessExtractor(person, eLogger)
         hostess_ext.setDependencyMatchPositionToZero()
-        hostess_data = hostess_ext.extract(text, entry)
+        hostess_data = hostess_ext.extract(text, person)
 
-        farm_ext = FarmExtractor(entry, eLogger, self.person_data)
+        farm_ext = FarmExtractor(person, eLogger)
         farm_ext.setDependencyMatchPositionToZero()
-        farm_data = farm_ext.extract(text, entry)
+        farm_data = farm_ext.extract(text, person)
 
-        child_ext = ChildExtractor(entry, eLogger, self.person_data)
-        children = child_ext.extract(text, entry)
+        child_ext = ChildExtractor(person, eLogger)
+        children = child_ext.extract(text, person)
 
-        flag_ext = BoolExtractor(entry, eLogger, self.person_data)
+        flag_ext = BoolExtractor(person, eLogger)
         patterns = {
             KEYS["oat"] : r"(kaura(?!nen))",
             KEYS["barley"] : r"ohra",
@@ -81,9 +81,9 @@ class ExtractionPipeline:
 
         }
         flag_ext.set_patterns_to_find(patterns)
-        flags = flag_ext.extract(text, entry)
+        flags = flag_ext.extract(text, person)
 
-        quantity_ext = QuantityExtractor(entry, eLogger, self.person_data)
+        quantity_ext = QuantityExtractor(person, eLogger)
         qpatterns = {
             KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",
             KEYS["lypsylehma"] : r"(?:lypsylehmää){s<=1,i<=1}",
@@ -96,7 +96,7 @@ class ExtractionPipeline:
          }
 
         quantity_ext.set_patterns_to_find(qpatterns)
-        quantities = quantity_ext.extract(text, entry)
+        quantities = quantity_ext.extract(text, person)
 
         d = meta.copy()
         d.update(owner_data)

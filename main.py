@@ -4,7 +4,7 @@ import subprocess
 import argparse
 from lxml import etree
 from books.karelians.main import KarelianExtractor, get_karelian_data_entry
-from books.farmers.main import SmallFarmersExtractor
+from books.farmers.main import SmallFarmersExtractor, get_small_farmers_data_entry
 from books.greatfarmers.main import GreatFarmersExtractor
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')
@@ -34,9 +34,16 @@ def xml_to_extractor_format(xml_document):
     :param xml_document:
     :return:
     """
+    book_series = xml_document.attrib["bookseries"]
+
     persons = []
-    for child in xml_document:
-        persons.append(get_karelian_data_entry(child.attrib["name"], child.attrib['approximated_page'], child.text))
+
+    if book_series == 'Siirtokarjalaisten tie':
+        for child in xml_document:
+            persons.append(get_karelian_data_entry(child.attrib["name"], child.attrib['approximated_page'], child.text))
+    elif book_series == 'Suomen pienviljelijat':
+        for child in xml_document:
+            persons.append(get_small_farmers_data_entry(child.attrib["name"], child.attrib["location"], child.attrib['approximated_page'], child.text))
 
     return persons
 
@@ -61,7 +68,7 @@ def main():
         print('Book series:', book_series)
         #mongodb = start_mongodb()
         extractor = SmallFarmersExtractor(callback)
-        extractor.process(xml_document)
+        extractor.process(xml_to_extractor_format(xml_document))
         extractor.save_results(args['o'], file_format='json')
         print('Process finished successfully.')
 
