@@ -40,7 +40,11 @@ def xml_to_extractor_format(xml_document):
 
     if book_series == 'Siirtokarjalaisten tie':
         for child in xml_document:
-            persons.append(get_karelian_data_entry(child.attrib["name"], child.attrib['approximated_page'], child.text))
+            if 'img_path' in child.attrib:
+                path = child.attrib['img_path']
+            else:
+                path = ''
+            persons.append(get_karelian_data_entry(child.attrib["name"], child.attrib['approximated_page'], child.text, path))
     elif book_series == 'Suomen pienviljelijat':
         for child in xml_document:
             persons.append(get_small_farmers_data_entry(child.attrib["name"], child.attrib["location"], child.attrib['approximated_page'], child.text))

@@ -35,7 +35,7 @@ class KarelianExtractor:
                     raise e
 
 
-def get_karelian_data_entry(name, approximated_page, text):
+def get_karelian_data_entry(name, approximated_page, text, img_path=''):
     """
     Create extractor compatible dict from given parameters. Input to extractor should
     consist of dict of this form!
@@ -47,5 +47,6 @@ def get_karelian_data_entry(name, approximated_page, text):
     return {
         'name': name,
         'approximated_page': approximated_page,
+        'image_path': img_path,
         'text': text
     }
