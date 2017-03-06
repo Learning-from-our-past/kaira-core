@@ -6,8 +6,8 @@ import re
 
 class QuantityExtractor(BaseExtractor):
 
-    def __init__(self, currentChild, errorLogger, xmlDocument):
-        super(QuantityExtractor, self).__init__(currentChild, errorLogger, xmlDocument)
+    def __init__(self, entry, errorLogger):
+        super(QuantityExtractor, self).__init__(entry, errorLogger)
         self.QUANTITY_PATTERN = r"(?:(?P<range>\d\d?\d?(?:-|—)\d\d?\d?)|(?P<number>\d\d?\d?)|(?P<word>yksi|yhtä|kahta|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen))\s?"
         self.SPLIT_PATTERN1 = r"(?P<number>\d\d?)"
         self.patterns_to_find = {}

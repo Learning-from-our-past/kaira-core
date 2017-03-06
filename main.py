@@ -5,7 +5,7 @@ import argparse
 from lxml import etree
 from books.karelians.main import KarelianExtractor, get_karelian_data_entry
 from books.farmers.main import SmallFarmersExtractor, get_small_farmers_data_entry
-from books.greatfarmers.main import GreatFarmersExtractor
+from books.greatfarmers.main import GreatFarmersExtractor, get_great_farmers_data_entry
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')
 parser.add_argument('-i', nargs='?', type=argparse.FileType('r', encoding='utf8'), help='Input file to extract data from. Should be XML.', default=sys.stdin)
@@ -44,6 +44,9 @@ def xml_to_extractor_format(xml_document):
     elif book_series == 'Suomen pienviljelijat':
         for child in xml_document:
             persons.append(get_small_farmers_data_entry(child.attrib["name"], child.attrib["location"], child.attrib['approximated_page'], child.text))
+    elif book_series == 'Suuret maatilat':
+        for child in xml_document:
+            persons.append(get_great_farmers_data_entry(child.attrib["name"], child.attrib["location"], child.attrib['approximated_page'], child.text))
 
     return persons
 
@@ -76,7 +79,7 @@ def main():
         print('Book series:', book_series)
         #mongodb = start_mongodb()
         extractor = GreatFarmersExtractor(callback)
-        extractor.process(xml_document)
+        extractor.process(xml_to_extractor_format(xml_document))
         extractor.save_results(args['o'], file_format='json')
         print('Process finished successfully.')
     else:

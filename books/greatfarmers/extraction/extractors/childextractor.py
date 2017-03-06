@@ -9,10 +9,8 @@ from shared.genderExtract import Gender, GenderException
 
 class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
-    #[A-Zä-Ö\s-]+\sja\s[A-Zä-Ö\s-]+-\d\d\D
 
     def extract(self, text, entry):
-
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika|tyttäret|pojat)(;|:)(?P<children>.*?)(?:\.|Tilal{s<=1}|Edelli{s<=1}|hänen{s<=1}|joka{s<=1}|emännän{s<=1}|isännän{s<=1})"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
 

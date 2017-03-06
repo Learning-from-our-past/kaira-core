@@ -23,26 +23,26 @@ class ExtractionPipeline():
 
     def process(self, person, eLogger):
         # Replace all weird invisible white space characters with regular space
-        text = re.sub(r"\s", r" ", text)
+        text = person['text'] = re.sub(r"\s", r" ", person['text'])
 
-        meta_ext = MetadataExtractor(person, eLogger, self.person_data)
+        meta_ext = MetadataExtractor(person, eLogger)
         meta = meta_ext.extract(text, person)
 
-        owner_ext = OwnerExtractor(person, eLogger, self.person_data)
+        owner_ext = OwnerExtractor(person, eLogger)
         owner_ext.setDependencyMatchPositionToZero()
         owner_data = owner_ext.extract(text, person)
 
-        spouse_ext = SpouseExtractor(person, eLogger, self.person_data)
+        spouse_ext = SpouseExtractor(person, eLogger)
         spouse = spouse_ext.extract(text, person)
 
-        farm_ext = FarmExtractor(person, eLogger, self.person_data)
+        farm_ext = FarmExtractor(person, eLogger)
         farm_ext.setDependencyMatchPositionToZero()
         farm_data = farm_ext.extract(text, person)
 
-        child_ext = ChildExtractor(person, eLogger, self.person_data)
+        child_ext = ChildExtractor(person, eLogger)
         children = child_ext.extract(text, person)
 
-        flag_ext = BoolExtractor(person, eLogger, self.person_data)
+        flag_ext = BoolExtractor(person, eLogger)
         patterns = {
             KEYS["oat"] : r"(kaura(?!nen))",
             KEYS["barley"] : r"ohra",
@@ -81,7 +81,7 @@ class ExtractionPipeline():
         flag_ext.set_patterns_to_find(patterns)
         flags = flag_ext.extract(text, person)
 
-        quantity_ext = QuantityExtractor(person, eLogger, self.person_data)
+        quantity_ext = QuantityExtractor(person, eLogger)
         qpatterns = {
             KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",    #toimii
             KEYS["lypsylehma"] : r"(?:(?:lypsävää){s<=1,i<=1}|(?:lypsylehmää){s<=1,i<=1})", #toimii
