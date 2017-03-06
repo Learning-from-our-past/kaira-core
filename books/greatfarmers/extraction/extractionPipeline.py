@@ -13,7 +13,7 @@ from books.greatfarmers.extraction.extractors.quantityextractor import QuantityE
 from books.greatfarmers.extraction.extractors.spouseextractor import SpouseExtractor
 from books.greatfarmers.extractionkeys import KEYS
 from shared.genderExtract import Gender
-
+import re
 
 class ExtractionPipeline():
 
@@ -23,6 +23,9 @@ class ExtractionPipeline():
 
 
     def process(self, text, entry, eLogger):
+        # Replace all weird invisible white space characters with regular space
+        text = re.sub(r"\s", r" ",text)
+
         metaExt = MetadataExtractor(entry, eLogger, self.xmlDocument)
         meta = metaExt.extract(text, entry)
 
