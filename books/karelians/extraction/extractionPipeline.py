@@ -16,53 +16,52 @@ from shared.genderExtract import Gender
 import re
 
 
-
 class ExtractionPipeline:
 
-    def __init__(self, xml_document):
-        self.xml_document = xml_document
+    def __init__(self, person_data_input):
+        self.person_data = person_data_input
         Gender.load_names()
 
-    def process(self, text, entry, eLogger):
-
+    def process(self, person, eLogger):
         # Replace all weird invisible white space characters with regular space
-        text = re.sub(r"\s", r" ", text)
+        text = person['text'] = re.sub(r"\s", r" ", person['text'])
 
-        name_ext = NameExtractor(entry, eLogger, self.xml_document)
-        names = name_ext.extract(text, entry)
-        image_ext = ImageExtractor(entry, eLogger, self.xml_document)
-        image = image_ext.extract(text, entry)
+        name_ext = NameExtractor(person, eLogger)
+        names = name_ext.extract(text, person)
 
-        orig_family_ext = OrigFamilyExtractor(entry, eLogger, self.xml_document)
+        image_ext = ImageExtractor(person, eLogger)
+        image = image_ext.extract(text, person)
+
+        orig_family_ext = OrigFamilyExtractor(person, eLogger)
         orig_family_ext.setDependencyMatchPositionToZero()
-        orig_family = orig_family_ext.extract(text, entry)
+        orig_family = orig_family_ext.extract(text, person)
 
-        profession_ext = ProfessionExtractor(entry, eLogger, self.xml_document)
+        profession_ext = ProfessionExtractor(person, eLogger)
         profession_ext.dependsOnMatchPositionOf(orig_family_ext)
-        profession = profession_ext.extract(text, entry)
+        profession = profession_ext.extract(text, person)
 
-        birthday_ext = BirthdayExtractor(entry, eLogger, self.xml_document)
+        birthday_ext = BirthdayExtractor(person, eLogger)
         birthday_ext.dependsOnMatchPositionOf(orig_family_ext)
-        birthday = birthday_ext.extract(text, entry)
+        birthday = birthday_ext.extract(text, person)
 
-        birth_loc_ext = BirthdayLocationExtractor(entry, eLogger, self.xml_document)
+        birth_loc_ext = BirthdayLocationExtractor(person, eLogger)
         birth_loc_ext.dependsOnMatchPositionOf(birthday_ext)
-        birthday_location = birth_loc_ext.extract(text)
+        birthday_location = birth_loc_ext.extract(text, person)
 
-        karelian_loc_ext = KarelianLocationsExtractor(entry, eLogger, self.xml_document)
-        karelian_locations = karelian_loc_ext.extract(text)
+        karelian_loc_ext = KarelianLocationsExtractor(person, eLogger)
+        karelian_locations = karelian_loc_ext.extract(text, person)
 
-        finnish_loc_ext = FinnishLocationsExtractor(entry, eLogger, self.xml_document)
-        finnish_locations = finnish_loc_ext.extract(text)
+        finnish_loc_ext = FinnishLocationsExtractor(person, eLogger)
+        finnish_locations = finnish_loc_ext.extract(text, person)
 
-        omakotitalo_ext = OmakotitaloExtractor(entry, eLogger, self.xml_document)
-        omakotitalo = omakotitalo_ext.extract(text, entry)
+        omakotitalo_ext = OmakotitaloExtractor(person, eLogger)
+        omakotitalo = omakotitalo_ext.extract(text, person)
 
-        spouse_ext = SpouseExtractor(entry, eLogger, self.xml_document)
-        spouse = spouse_ext.extract(text, entry)
+        spouse_ext = SpouseExtractor(person, eLogger)
+        spouse = spouse_ext.extract(text, person)
 
-        child_ext = ChildExtractor(entry, eLogger, self.xml_document)
-        children = child_ext.extract(text, entry)
+        child_ext = ChildExtractor(person, eLogger)
+        children = child_ext.extract(text, person)
 
         d = names.copy()
         d.update(image)

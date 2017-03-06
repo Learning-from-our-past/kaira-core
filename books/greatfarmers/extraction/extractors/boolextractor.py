@@ -5,12 +5,10 @@ import shared.regexUtils as regexUtils
 import re
 
 class BoolExtractor(BaseExtractor):
-
-    def __init__(self, currentChild, errorLogger, xmlDocument):
-        super(BoolExtractor, self).__init__(currentChild, errorLogger, xmlDocument)
+    def __init__(self, entry, errorLogger):
+        super(BoolExtractor, self).__init__(entry, errorLogger)
         self.patterns_to_find = {}
         self.results = {}
-
 
     def extract(self, text, entry):
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)

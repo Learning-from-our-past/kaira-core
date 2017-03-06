@@ -8,12 +8,12 @@ class ImageExtractor(BaseExtractor):
         self.image_path = ""
         self.page = ""
         try:
-            self.image_path = entry["xml"].attrib["img_path"]
+            self.image_path = entry["image_path"]
         except KeyError as e:
             pass
 
         try:
-            self.page = entry["xml"].attrib["approximated_page"]
+            self.page = entry["approximated_page"]
         except KeyError as e:
             pass
         return self._constructReturnDict()

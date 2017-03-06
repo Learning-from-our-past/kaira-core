@@ -10,9 +10,8 @@ from books.greatfarmers.extraction.extractors.origfamilyextractor import OrigFam
 
 class SpouseExtractor(BaseExtractor):
 
-
     def extract(self, text, entry):
-        super(SpouseExtractor, self).extract(text)
+        super(SpouseExtractor, self).extract(text, entry)
         self.entry = entry
         self.PATTERN = r"vmo\.?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp|suvulla|tila))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
@@ -48,11 +47,11 @@ class SpouseExtractor(BaseExtractor):
             self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
 
     def _findSpouseDetails(self, text):
-        origFamilyExt = OrigFamilyExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        origFamilyExt = OrigFamilyExtractor(self.entry, self.errorLogger)
         origFamilyExt.setDependencyMatchPositionToZero()
         self.origFamily = origFamilyExt.extract(text, self.entry)
 
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
         birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 

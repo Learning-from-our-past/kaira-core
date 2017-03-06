@@ -9,8 +9,8 @@ class KarelianExtractor:
         self._extractor = ProcessData(update_callback)
         self._results = None
 
-    def process(self, xml_document):
-        self._results = self._extractor.run_extraction(xml_document, '')
+    def process(self, person_data):
+        self._results = self._extractor.run_extraction(person_data)
 
     def save_results(self, file, file_format='json'):
         if file_format == 'json':
@@ -35,3 +35,18 @@ class KarelianExtractor:
                     raise e
 
 
+def get_karelian_data_entry(name, approximated_page, text, img_path=''):
+    """
+    Create extractor compatible dict from given parameters. Input to extractor should
+    consist of dict of this form!
+    :param name:
+    :param approximated_page:
+    :param text:
+    :return:
+    """
+    return {
+        'name': name,
+        'approximated_page': approximated_page,
+        'image_path': img_path,
+        'text': text
+    }

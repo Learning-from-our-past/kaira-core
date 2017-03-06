@@ -11,6 +11,7 @@ import re
 class OwnerExtractor(BaseExtractor):
 
     SEARCH_SPACE = 200
+
     def extract(self, text, entry):
         self.OWNER_YEAR_PATTERN = r"om(?:\.|,)?\s?(?:vuodesta|vsta)\s(?P<year>\d\d\d\d)"
         self.OWNER_NAME_PATTERN = r"(om\s)?(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(\s(?:synt|s|\.)|\.)"#r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)?\s(?:synt|s)" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
@@ -24,7 +25,6 @@ class OwnerExtractor(BaseExtractor):
                 KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
         self._find_owner(text)
         return self._constructReturnDict()
-
 
     def _find_owner(self, text):
         text = textUtils.takeSubStrBasedOnRange(text, self.matchStartPosition, self.SEARCH_SPACE)
@@ -50,7 +50,7 @@ class OwnerExtractor(BaseExtractor):
             self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
 
     def _find_owner_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
         birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 

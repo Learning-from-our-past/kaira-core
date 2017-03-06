@@ -6,64 +6,53 @@ class ProcessData(ProcessDataInterface):
 
 
     def __init__(self, callback):
-        self.dataFilename = ""
-        self.csvBuilder = None
         self.extractor = None
-        self.xmlDataDocument = None
-        self.readDataEntries = []
+        self.person_data = None
+        self.read_data_entries = []
         self.processUpdateCallbackFunction = None
         self.processUpdateCallbackFunction = callback
 
-    def run_extraction(self, xml_document, file_path):
-        self.xmlDataDocument = xml_document
-        self.dataFilename = file_path
-        self._initProcess()
+    def run_extraction(self, person_data):
+        self.person_data = person_data
+        self._init_process()
         self._process_all_entries()
-        #self._finishProcess()
-        #self.processUpdateCallbackFunction(self.xmlDataDocumentLen, self.xmlDataDocumentLen)    #DUMMY
-        return {"errors": self.errorLogger.getErrors(), "entries": self.readDataEntries, "xmlDocument": self.xmlDataDocument,
-                "file": file_path}
+        return {"errors": self.errorLogger.getErrors(),
+                "entries": self.read_data_entries,
+                }
 
-    def _initProcess(self):
+    def _init_process(self):
         self.errors = 0
         self.count = 0
         self.errorLogger = ExceptionLogger()
 
-
-        self.extractor = ExtractionPipeline(self.xmlDataDocument)
-        self.xmlDataDocumentLen = len(self.xmlDataDocument)
+        self.extractor = ExtractionPipeline(self.person_data)
+        self.person_data_length = len(self.person_data)
 
     def _process_all_entries(self):
         i = 0
 
-        for child in self.xmlDataDocument:
-            entry = self._create_entry(child)
+        for person in self.person_data:
             try:
-                self._process_entry(entry)
+                self.read_data_entries.append(self._process_entry(person))
             except ExtractionException as e:
-                self.readDataEntries.append(entry)
-                self._handle_extraction_error_logging(exception=e, entry=entry)
+                self.read_data_entries.append(person)
+                self._handle_extraction_error_logging(exception=e, entry=person)
 
-            i +=1
-            self.processUpdateCallbackFunction(i, self.xmlDataDocumentLen)
+            i += 1
+            self.processUpdateCallbackFunction(i, self.person_data_length)
 
-    def _process_entry(self, entry):
-        personEntryDict = self.extractor.process(entry["xml"].text, entry, self.errorLogger)
-        entry["extractionResults"] = personEntryDict
-        self.readDataEntries.append(entry)
-        self.count +=1
-        return entry
+    def _process_entry(self, person):
+        person_results = self.extractor.process(person, self.errorLogger)
+        person["extractionResults"] = person_results
+        self.count += 1
+        return person
 
-
-    def _create_entry(self, xmlEntry):
-        return {"xml": xmlEntry, "extractionResults" : self._create_result_template()}
-
-    def extract_one(self, xml_entry):
-        entry = self._create_entry(xml_entry)
+    def extract_one(self, person_input_data):
+        person_results = None
         try:
-            personEntryDict = self.extractor.process(entry["xml"].text, entry, self.errorLogger)
-            entry["extractionResults"] = personEntryDict
+            person_results = self.extractor.process(person_input_data, self.errorLogger)
+            person_results["extractionResults"] = person_results
         except ExtractionException as e:
             pass
 
-        return entry
+        return person_results

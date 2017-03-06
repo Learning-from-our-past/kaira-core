@@ -4,10 +4,11 @@ from books.farmers.extractionkeys import KEYS
 import shared.regexUtils as regexUtils
 import re
 
+
 class QuantityExtractor(BaseExtractor):
 
-    def __init__(self, currentChild, errorLogger, xmlDocument):
-        super(QuantityExtractor, self).__init__(currentChild, errorLogger, xmlDocument)
+    def __init__(self, entry, errorLogger):
+        super(QuantityExtractor, self).__init__(entry, errorLogger)
         self.QUANTITY_PATTERN = r"(?:(?P<range>\d\d?\d?(?:-|—)\d\d?\d?)|(?P<number>\d\d?\d?)|(?P<word>yksi|yhtä|kahta|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen))\s?"
         self.SPLIT_PATTERN1 = r"(?P<number>\d\d?)"
         self.patterns_to_find = {}
@@ -15,7 +16,6 @@ class QuantityExtractor(BaseExtractor):
 
         self.NUMBER_MAP = {"yksi" : 1, "yhtä": 1, "kahta": 2, "kaksi" : 2, "kolme" : 3, "neljä" : 4, "viisi" : 5, "kuusi" : 6,
                            "seitsemän" : 7, "kahdeksan" : 8, "yhdeksän" : 9, "kymmenen" : 10}
-
 
     def extract(self, text, entry):
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)

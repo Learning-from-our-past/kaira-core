@@ -33,7 +33,7 @@ class OwnerExtractor(BaseExtractor):
         self._find_owner_birthday(text)
 
     def _find_owner_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger, self.xmlDocument)
+        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
         birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 

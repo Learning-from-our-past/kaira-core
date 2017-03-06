@@ -9,8 +9,8 @@ class SmallFarmersExtractor:
         self._extractor = ProcessData(update_callback)
         self._results = None
 
-    def process(self, xml_document):
-        self._results = self._extractor.run_extraction(xml_document, '')
+    def process(self, person_data):
+        self._results = self._extractor.run_extraction(person_data)
 
     def save_results(self, file, file_format='json'):
         if file_format == 'json':
@@ -35,3 +35,19 @@ class SmallFarmersExtractor:
                     raise e
 
 
+def get_small_farmers_data_entry(name, location, approximated_page, text):
+    """
+    Create extractor compatible dict from given parameters. Input to extractor should
+    consist of dict of this form!
+    :param name:
+    :param location:
+    :param approximated_page:
+    :param text:
+    :return:
+    """
+    return {
+        'name': name,
+        'location': location,
+        'approximated_page': approximated_page,
+        'text': text
+    }
