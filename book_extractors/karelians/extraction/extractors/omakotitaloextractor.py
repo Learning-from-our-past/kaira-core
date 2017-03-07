@@ -1,4 +1,4 @@
-from book_extractors.karelians.extraction.extractors.baseExtractor import BaseExtractor
+from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.karelians.extractionkeys import KEYS
 import shared.regexUtils as regexUtils
 import re

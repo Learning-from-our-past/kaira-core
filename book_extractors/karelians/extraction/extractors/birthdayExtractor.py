@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-from book_extractors.karelians.extraction.extractors.baseExtractor import BaseExtractor
+from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.karelians.extraction.extractionExceptions import *
 from book_extractors.karelians.extraction.extractors.dateExtractor import DateExtractor
 from shared import textUtils

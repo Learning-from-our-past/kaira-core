@@ -1,4 +1,4 @@
-from book_extractors.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
+from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.greatfarmers.extractionkeys import KEYS
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils

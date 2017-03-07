@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from book_extractors.greatfarmers.extraction.extractors.baseExtractor import BaseExtractor
+from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.greatfarmers.extractionkeys import KEYS
 from book_extractors.greatfarmers.extraction.extractionExceptions import OwnerYearException, OwnerNameException
 from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
