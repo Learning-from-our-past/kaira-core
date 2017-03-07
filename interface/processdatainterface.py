@@ -8,17 +8,6 @@ class ProcessDataInterface:
 
     @abstractmethod
     def run_extraction(self, xml_document, file_path):
-        """
-
-        :param xml_document:
-        :param file_path:
-        :return:  {
-            "errors": self.errorLogger.getErrors(),
-            "entries": self.readDataEntries,
-            "xmlDocument": self.xmlDataDocument,
-            "file": filePath
-            }
-        """
         pass
 
     @abstractmethod
@@ -27,19 +16,6 @@ class ProcessDataInterface:
         pass
 
     def _process_all_entries(self):
-        pass
-
-    def _process_entry(self, entry):
-        person_entry_dict = self.extractor.extraction(entry["xml"].text, entry, self.errorLogger)
-        entry["extractionResults"] = person_entry_dict
-        self.readDataEntries.append(entry)
-        self.count +=1
-        return entry
-
-    def _create_entry(self, xmlEntry):
-        return {"xml": xmlEntry, "extractionResults" : self._create_result_template()}
-
-    def _create_result_template(self):
         pass
 
     def _handle_extraction_error_logging(self, exception, entry):
