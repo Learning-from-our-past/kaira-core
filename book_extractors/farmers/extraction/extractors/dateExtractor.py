@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from shared import regexUtils
 import shared.textUtils as textUtils
-from book_extractors.farmers.extraction.extractionExceptions import *
+from book_extractors.extraction_exceptions import *
 
 #This class extracts date from given string. Substringing has to be made in caller.
 #The interface also differs a bit from other books since this is meant to be used by

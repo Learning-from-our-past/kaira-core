@@ -1,7 +1,6 @@
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.karelians.extractionkeys import KEYS
-from book_extractors.karelians.extraction.extractionExceptions import OtherLocationException
-from book_extractors.karelians.extraction.extractionExceptions import KarelianLocationException
+from book_extractors.extraction_exceptions import OtherLocationException, KarelianLocationException
 from shared import regexUtils
 import re
 from shared.geo.geocoding import GeoCoder, LocationNotFound

@@ -1,6 +1,6 @@
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.karelians.extractionkeys import KEYS
-from book_extractors.karelians.extraction.extractionExceptions import NameException
+from book_extractors.extraction_exceptions import NameException
 from shared.genderExtract import Gender, GenderException
 import re
 

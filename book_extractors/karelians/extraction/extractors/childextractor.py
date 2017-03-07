@@ -1,10 +1,8 @@
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.karelians.extractionkeys import KEYS
-from book_extractors.karelians.extraction.extractionExceptions import NoChildrenException, MultipleMarriagesException
+from book_extractors.extraction_exceptions import NoChildrenException, MultipleMarriagesException
 from shared import regexUtils
-from shared import textUtils
 import re
-import regex
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 from shared.genderExtract import Gender, GenderException
 

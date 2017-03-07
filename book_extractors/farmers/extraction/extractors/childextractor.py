@@ -1,6 +1,6 @@
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.farmers.extractionkeys import KEYS
-from book_extractors.farmers.extraction.extractionExceptions import NoChildrenException, MultipleMarriagesException
+from book_extractors.extraction_exceptions import NoChildrenException, MultipleMarriagesException
 from shared import regexUtils
 import re
 from shared.geo.geocoding import GeoCoder

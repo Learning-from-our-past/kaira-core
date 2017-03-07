@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.farmers.extractionkeys import KEYS
-from book_extractors.farmers.extraction.extractionExceptions import OwnerYearException, OwnerNameException
+from book_extractors.extraction_exceptions import OwnerYearException, OwnerNameException
 from book_extractors.farmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils

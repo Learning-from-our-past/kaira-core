@@ -2,7 +2,7 @@
 import re
 
 from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.karelians.extraction.extractionExceptions import *
+from book_extractors.extraction_exceptions import *
 from book_extractors.karelians.extraction.extractors.dateExtractor import DateExtractor
 from shared import textUtils
 from book_extractors.karelians.extractionkeys import KEYS

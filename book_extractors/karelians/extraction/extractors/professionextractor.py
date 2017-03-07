@@ -1,6 +1,6 @@
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.karelians.extractionkeys import KEYS
-from book_extractors.karelians.extraction.extractionExceptions import ProfessionException
+from book_extractors.extraction_exceptions import ProfessionException
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
