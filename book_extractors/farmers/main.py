@@ -1,12 +1,14 @@
-from book_extractors.farmers.processData import ProcessData
 from book_extractors.farmers.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.farmers.resultjsonbuilder import ResultJsonBuilder
+from book_extractors.processdata import ProcessData
+from book_extractors.farmers.extraction.extractionPipeline import ExtractionPipeline
 
 
 class SmallFarmersExtractor:
 
     def __init__(self, update_callback):
-        self._extractor = ProcessData(update_callback)
+        self._extractor_pipeline = ExtractionPipeline()
+        self._extractor = ProcessData(self._extractor_pipeline, update_callback)
         self._results = None
 
     def process(self, person_data):

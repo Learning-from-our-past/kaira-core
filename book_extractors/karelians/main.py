@@ -1,12 +1,14 @@
-from book_extractors.karelians.processData import ProcessData
+from book_extractors.processdata import ProcessData
 from book_extractors.karelians.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.karelians.resultjsonbuilder import ResultJsonBuilder
+from book_extractors.karelians.extraction.extractionPipeline import ExtractionPipeline
 
 
 class KarelianExtractor:
 
     def __init__(self, update_callback):
-        self._extractor = ProcessData(update_callback)
+        self._extractor_pipeline = ExtractionPipeline()
+        self._extractor = ProcessData(self._extractor_pipeline, update_callback)
         self._results = None
 
     def process(self, person_data):

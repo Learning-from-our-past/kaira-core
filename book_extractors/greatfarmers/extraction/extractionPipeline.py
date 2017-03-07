@@ -15,10 +15,10 @@ from book_extractors.greatfarmers.extractionkeys import KEYS
 from shared.genderExtract import Gender
 import re
 
-class ExtractionPipeline():
 
-    def __init__(self, person_data_input):
-        self.person_data = person_data_input
+class ExtractionPipeline:
+
+    def __init__(self):
         Gender.load_names()
 
     def process(self, person, eLogger):

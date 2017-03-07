@@ -18,8 +18,7 @@ import re
 
 class ExtractionPipeline:
 
-    def __init__(self, person_data_input):
-        self.person_data = person_data_input
+    def __init__(self):
         Gender.load_names()
 
     def process(self, person, eLogger):
