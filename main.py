@@ -3,9 +3,9 @@ import os
 import subprocess
 import argparse
 from lxml import etree
-from books.karelians.main import KarelianExtractor, get_karelian_data_entry
-from books.farmers.main import SmallFarmersExtractor, get_small_farmers_data_entry
-from books.greatfarmers.main import GreatFarmersExtractor, get_great_farmers_data_entry
+from book_extractors.karelians.main import KarelianExtractor, get_karelian_data_entry
+from book_extractors.farmers.main import SmallFarmersExtractor, get_small_farmers_data_entry
+from book_extractors.greatfarmers.main import GreatFarmersExtractor, get_great_farmers_data_entry
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')
 parser.add_argument('-i', nargs='?', type=argparse.FileType('r', encoding='utf8'), help='Input file to extract data from. Should be XML.', default=sys.stdin)
