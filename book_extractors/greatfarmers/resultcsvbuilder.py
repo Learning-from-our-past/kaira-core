@@ -2,8 +2,9 @@
 import ntpath
 import csv
 from abc import abstractmethod
-from book_extractors.greatfarmers.extractionkeys import KEYS
+from book_extractors.common.extraction_keys import KEYS
 from interface.csvbuilderinterface import ResultCsvBuilderInterface
+
 
 class ResultCsvBuilder(ResultCsvBuilderInterface):
 

@@ -1,10 +1,10 @@
 from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.karelians.extractionkeys import KEYS
+from book_extractors.common.extraction_keys import KEYS
 import shared.regexUtils as regexUtils
 import re
 
-class OmakotitaloExtractor(BaseExtractor):
 
+class OmakotitaloExtractor(BaseExtractor):
 
     def extract(self, text, entry):
         self.OMAKOTITALO_PATTERN = r"(?P<omakotitalo>omakotitalo)"

@@ -4,7 +4,7 @@ import lxml.etree as etree
 from book_extractors.karelians.extraction.extractors.nameextractor import NameExtractor
 from book_extractors.karelians.extraction.extractors.professionextractor import ProfessionExtractor
 from shared.exceptionlogger import ExceptionLogger
-from book_extractors.karelians.extractionkeys import KEYS
+from book_extractors.common.extraction_keys import KEYS
 from interface.valuewrapper import ValueWrapper
 
 class TestNameExtractor:

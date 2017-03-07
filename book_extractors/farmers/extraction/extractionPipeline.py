@@ -11,7 +11,7 @@ from book_extractors.farmers.extraction.extractors.childextractor import ChildEx
 from book_extractors.farmers.extraction.extractors.farmextractor import FarmExtractor
 from book_extractors.farmers.extraction.extractors.boolextractor import BoolExtractor
 from book_extractors.farmers.extraction.extractors.quantityextractor import QuantityExtractor
-from book_extractors.farmers.extractionkeys import KEYS
+from book_extractors.common.extraction_keys import KEYS
 from shared.genderExtract import Gender
 import re
 

@@ -2,7 +2,7 @@
 import re
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
-from book_extractors.karelians.extractionkeys import KEYS
+from book_extractors.common.extraction_keys import KEYS
 from shared import regexUtils
 from book_extractors.karelians.extraction.extractors.professionextractor import ProfessionExtractor
 from book_extractors.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
@@ -10,6 +10,7 @@ from book_extractors.karelians.extraction.extractors.locationExtractor import Bi
 from book_extractors.karelians.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
 from book_extractors.karelians.extraction.extractors.deathextractor import DeathExtractor
 from book_extractors.karelians.extraction.extractors.weddingextractor import WeddingExtractor
+
 
 class SpouseExtractor(BaseExtractor):
 

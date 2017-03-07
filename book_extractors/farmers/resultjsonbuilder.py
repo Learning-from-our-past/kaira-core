@@ -27,13 +27,13 @@ class ResultJsonBuilder(ResultJsonBuilderInterface):
         self.jsonFormat.append(self._transform_data_for_export(person))
 
     def _transform_data_for_export(self, data):
-        data['quantities']['lammas'] = self.int_or_none(data['quantities']['lammas'])
+        data['quantities']['sheep'] = self.int_or_none(data['quantities']['sheep'])
         data['quantities']['nuori'] = self.int_or_none(data['quantities']['nuori'])
         data['quantities']['emakko'] = self.int_or_none(data['quantities']['emakko'])
-        data['quantities']['teuraselain'] = self.int_or_none(data['quantities']['teuraselain'])
-        data['quantities']['lypsylehma'] = self.int_or_none(data['quantities']['lypsylehma'])
+        data['quantities']['slaughterAnimal'] = self.int_or_none(data['quantities']['slaughterAnimal'])
+        data['quantities']['dairyCow'] = self.int_or_none(data['quantities']['dairyCow'])
         data['quantities']['lihotussika'] = self.int_or_none(data['quantities']['lihotussika'])
-        data['quantities']['kanoja'] = self.int_or_none(data['quantities']['kanoja'])
+        data['quantities']['chicken'] = self.int_or_none(data['quantities']['chicken'])
         data['quantities']['rooms'] = self.int_or_none(data['quantities']['rooms'])
         data['owner']['ownerFrom'] = self.int_or_none(data['owner']['ownerFrom'])
 

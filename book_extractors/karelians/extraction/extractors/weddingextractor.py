@@ -3,7 +3,7 @@ import re
 
 from book_extractors.common.base_extractor import BaseExtractor
 from shared import textUtils
-from book_extractors.karelians.extractionkeys import KEYS
+from book_extractors.common.extraction_keys import KEYS
 from shared import regexUtils
 
 

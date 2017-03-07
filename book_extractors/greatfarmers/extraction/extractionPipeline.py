@@ -11,7 +11,7 @@ from book_extractors.greatfarmers.extraction.extractors.farmextractor import Far
 from book_extractors.greatfarmers.extraction.extractors.boolextractor import BoolExtractor
 from book_extractors.greatfarmers.extraction.extractors.quantityextractor import QuantityExtractor
 from book_extractors.greatfarmers.extraction.extractors.spouseextractor import SpouseExtractor
-from book_extractors.greatfarmers.extractionkeys import KEYS
+from book_extractors.common.extraction_keys import KEYS
 from shared.genderExtract import Gender
 import re
 

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import ntpath
 import json
-from abc import abstractmethod
-from book_extractors.karelians.extractionkeys import KEYS
+from book_extractors.common.extraction_keys import KEYS
 from interface.jsonbuilderinterface import ResultJsonBuilderInterface
 
 class ResultJsonBuilder(ResultJsonBuilderInterface):
