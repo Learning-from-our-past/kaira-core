@@ -4,10 +4,11 @@ from book_extractors.common.extraction_keys import KEYS
 import shared.regexUtils as regexUtils
 import re
 
+
 class BoolExtractor(BaseExtractor):
-    def __init__(self, entry, errorLogger):
+    def __init__(self, entry, errorLogger, options):
         super(BoolExtractor, self).__init__(entry, errorLogger)
-        self.patterns_to_find = {}
+        self.patterns_to_find = options['patterns']
         self.results = {}
 
     def extract(self, text, entry):
@@ -15,12 +16,6 @@ class BoolExtractor(BaseExtractor):
 
         self._find_patterns(text)
         return self._constructReturnDict()
-
-    def set_patterns_to_find(self, patterns):
-        """
-        :param patterns: Take a dict of key : pattern values to extract.
-        """
-        self.patterns_to_find = patterns
 
     def _find_patterns(self, text):
 

@@ -6,7 +6,7 @@ import re
 class BaseExtractor():
     __metaclass__ = ABCMeta
 
-    def __init__(self, current_person, errorLogger):
+    def __init__(self, current_person, errorLogger, options=None):
         self.regexPattern = r''
         self.currentChild = None
         self.errorLogger = None

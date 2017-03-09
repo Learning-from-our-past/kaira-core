@@ -14,7 +14,7 @@ class ExtractionPipeline:
         extractors = []
 
         for config in self._extractor_configurations:
-            extractor = config['extractor_class'](entry, eLogger)
+            extractor = config['extractor_class'](entry, eLogger, config['extractor_options'])
             extractors.append(extractor)
 
         return extractors
@@ -44,10 +44,11 @@ class ExtractionPipeline:
         return extraction_results
 
 
-def configure_extractor(extractor_class, depends_on_match_position_of_extractor=None, set_dependency_match_position_to_zero=False):
+def configure_extractor(extractor_class, extractor_options=None, depends_on_match_position_of_extractor=None, set_dependency_match_position_to_zero=False):
     """
     Utility function to build configure dict object for extraction pipeline.
     :param extractor_class:
+    :param kwargs_for_extractor: Possible kwargs arguments which can be passed to extractor. Some extractors might need arbitrary extra parametes in their __init__
     :param depends_on_match_position_of_extractor: Extractor class this extractor is dependent on their match position.
     :param set_dependency_match_position_to_zero:
     :return:
@@ -55,7 +56,8 @@ def configure_extractor(extractor_class, depends_on_match_position_of_extractor=
     config = {
         'extractor_class': extractor_class,
         'set_dependency_match_position_to_zero': set_dependency_match_position_to_zero,
-        'depends_on_match_position_of_extractor': depends_on_match_position_of_extractor
+        'depends_on_match_position_of_extractor': depends_on_match_position_of_extractor,
+        'extractor_options': extractor_options
     }
 
     return config

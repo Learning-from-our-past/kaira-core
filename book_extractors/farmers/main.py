@@ -1,15 +1,84 @@
 from book_extractors.farmers.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.farmers.resultjsonbuilder import ResultJsonBuilder
 from book_extractors.processdata import ProcessData
-from book_extractors.farmers.extraction.extractionPipeline import ExtractionPipeline
-
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
+from book_extractors.farmers.extraction.extractors.metadataextractor import MetadataExtractor
+from book_extractors.farmers.extraction.extractors.ownerextractor import OwnerExtractor
+from book_extractors.farmers.extraction.extractors.hostessextractor import HostessExtractor
+from book_extractors.farmers.extraction.extractors.childextractor import ChildExtractor
+from book_extractors.farmers.extraction.extractors.farmextractor import FarmExtractor
+from book_extractors.farmers.extraction.extractors.boolextractor import BoolExtractor
+from book_extractors.farmers.extraction.extractors.quantityextractor import QuantityExtractor
+from book_extractors.common.extraction_keys import KEYS
+from shared.genderExtract import Gender
 
 class SmallFarmersExtractor:
 
     def __init__(self, update_callback):
-        self._extractor_pipeline = ExtractionPipeline()
+        Gender.load_names()
+        self._extractor_pipeline = self._define_extraction_pipeline()
         self._extractor = ProcessData(self._extractor_pipeline, update_callback)
         self._results = None
+
+    @staticmethod
+    def _define_extraction_pipeline():
+        # TODO: Maybe create separate classes with these definitions which then call boolean extractor with these patterns?
+        boolean_flag_patterns = {
+            KEYS["oat"] : r"(kaura(?!nen))",
+            KEYS["barley"] : r"ohra",
+            KEYS["hay"] : r"(heinä(?!mäki))",
+            KEYS["potatoes"] : r"peruna",
+            KEYS["wheat"] : r"vehnä",
+            KEYS["rye"] : r"ruis",
+            KEYS["sugarbeet"] : r"sokerijuuri",
+            KEYS["lanttu"] : r"lanttu",
+            KEYS["puimakone"] : r"puimakone",
+            KEYS["tractor"] : r"traktori",
+            KEYS["horse"] : r"hevonen|hevos",
+            KEYS["chicken"] : r"kanoja|\skanaa",
+            KEYS["siirtotila"] : r"siirtotila",
+            KEYS["kantatila"] : r"kantatila",
+            KEYS["moreeni"] : r"moreeni",
+            KEYS["hiesu"] : r"hiesu",
+            KEYS["hieta"] : r"(hieta(?!nen))",
+            KEYS["muta"] : r"muta",
+            KEYS["savi"] : r"(savi(?!taipale))",
+            KEYS["multa"] : r"multa",
+            KEYS["salaojitus"] : r"(salaojitettu|salaojitus)",
+
+            KEYS["talli"] : r"(?!auto)talli",
+            KEYS["pine"] : r"mänty(?!nen)",
+            KEYS["spruce"] : r"kuusi(?!nen)",
+            KEYS["birch"] : r"koivu(?!nen|niem)",
+            KEYS["sauna"] : r"sauna",
+            KEYS["navetta"] : r"navetta|navetan",
+            KEYS["lypsykone"] : r"lypsykone",
+            KEYS["autotalli"] : r"autotalli",
+            KEYS["someonedead"] : r"kuoli|kuollut|kaatui|kaatunut",
+        }
+
+        quantity_patterns = {
+            KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",
+            KEYS["lypsylehma"] : r"(?:lypsylehmää){s<=1,i<=1}",
+            KEYS["teuras"] : r"(?:teuras){s<=1,i<=1}",
+            KEYS["lammas"] : r"(?:lammasta){s<=1,i<=1}",
+            KEYS["lihotussika"] : r"(?:lihotus-?sik){s<=1,i<=1}",
+            KEYS["emakko"] : r"(?:emakko){s<=1,i<=1}",
+            KEYS["nuori"] : r"(?:nuori|(?:nuorta{s<=1,i<=1}))",
+            KEYS["kanoja"] : r"(?:kanoja|(?:kanaa{s<=1,i<=1}))"
+         }
+
+        pipeline_components = [
+            configure_extractor(MetadataExtractor),
+            configure_extractor(OwnerExtractor, set_dependency_match_position_to_zero=True),
+            configure_extractor(HostessExtractor, set_dependency_match_position_to_zero=True),
+            configure_extractor(FarmExtractor, set_dependency_match_position_to_zero=True),
+            configure_extractor(ChildExtractor),
+            configure_extractor(BoolExtractor, extractor_options={'patterns': boolean_flag_patterns}),
+            configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns})
+        ]
+
+        return ExtractionPipeline(pipeline_components)
 
     def process(self, person_data):
         self._results = self._extractor.run_extraction(person_data)
