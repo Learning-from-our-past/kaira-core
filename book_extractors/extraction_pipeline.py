@@ -31,8 +31,6 @@ class ExtractionPipeline:
             # Instead figure out a way to save match positions to pipeline level outside of extractor class and make extractors stateless.
             # This way we could possibly get rid of reflection and set kind of symbol table to pipeline level where extractors could check
             # the match locations of others when required.
-            if ext[0]['set_dependency_match_position_to_zero']:
-                ext[1].setDependencyMatchPositionToZero()
 
             if ext[0]['depends_on_match_position_of_extractor'] is not None:
                 dependency_extractor = self._find_extractor_by_class_name(ext[0]['depends_on_match_position_of_extractor'], extractors)
@@ -55,7 +53,6 @@ def configure_extractor(extractor_class, extractor_options=None, depends_on_matc
     """
     config = {
         'extractor_class': extractor_class,
-        'set_dependency_match_position_to_zero': set_dependency_match_position_to_zero,
         'depends_on_match_position_of_extractor': depends_on_match_position_of_extractor,
         'extractor_options': extractor_options
     }

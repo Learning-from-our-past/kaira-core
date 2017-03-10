@@ -32,7 +32,6 @@ class HostessExtractor(BaseExtractor):
 
     def _find_hostess_birthday(self, text):
         birthdayExt = BirthdayExtractor(self.entry)
-        birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 
     def _find_hostess_name(self, text):

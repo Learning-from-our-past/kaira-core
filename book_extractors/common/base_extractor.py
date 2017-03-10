@@ -10,7 +10,7 @@ class BaseExtractor():
         self.regexPattern = r''
         self.currentChild = None
         self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
-        self.matchStartPosition = -1            # position in string where to begin match. Only used on certain classes
+        self.matchStartPosition = 0            # position in string where to begin match. Only used on certain classes
         self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
         self.currentChild = current_person
 
@@ -24,11 +24,6 @@ class BaseExtractor():
     def dependsOnMatchPositionOf(self, extractor):
         self.matchStartPosition = extractor.getFinalMatchPosition()
         self.matchFinalPosition = self.matchStartPosition   # in case extractor doesn't find anything, we set finalPos as startPos
-
-    def setDependencyMatchPositionToZero(self):
-        self.matchStartPosition = 0
-        self.matchFinalPosition = self.matchStartPosition   # in case extractor doesn't find anything, we set finalPos as startPos
-
 
     #TODO: REMOVE AND USE regexUtils
     def _executeSearchRegex(self, text, options=re.UNICODE | re.IGNORECASE):

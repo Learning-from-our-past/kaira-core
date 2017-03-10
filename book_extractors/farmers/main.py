@@ -70,9 +70,9 @@ class SmallFarmersExtractor:
 
         pipeline_components = [
             configure_extractor(MetadataExtractor),
-            configure_extractor(OwnerExtractor, set_dependency_match_position_to_zero=True),
-            configure_extractor(HostessExtractor, set_dependency_match_position_to_zero=True),
-            configure_extractor(FarmExtractor, set_dependency_match_position_to_zero=True),
+            configure_extractor(OwnerExtractor),
+            configure_extractor(HostessExtractor),
+            configure_extractor(FarmExtractor),
             configure_extractor(ChildExtractor),
             configure_extractor(BoolExtractor, extractor_options={'patterns': boolean_flag_patterns}),
             configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns})

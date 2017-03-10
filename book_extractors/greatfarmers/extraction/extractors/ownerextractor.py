@@ -53,7 +53,6 @@ class OwnerExtractor(BaseExtractor):
 
     def _find_owner_birthday(self, text):
         birthdayExt = BirthdayExtractor(self.entry)
-        birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 
     def _find_owner_gender(self, names):

@@ -49,11 +49,9 @@ class SpouseExtractor(BaseExtractor):
 
     def _findSpouseDetails(self, text):
         origFamilyExt = OrigFamilyExtractor(self.entry)
-        origFamilyExt.setDependencyMatchPositionToZero()
         self.origFamily = origFamilyExt.extract(text, self.entry)
 
         birthdayExt = BirthdayExtractor(self.entry)
-        birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 
     def _setFinalMatchPosition(self):
