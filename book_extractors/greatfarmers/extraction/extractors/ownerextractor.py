@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.extraction_exceptions import OwnerYearException, OwnerNameException
 from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 from shared.genderExtract import Gender, GenderException
 import re
+
 
 class OwnerExtractor(BaseExtractor):
 
     SEARCH_SPACE = 200
 
     def extract(self, text, entry):
+
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(BirthdayExtractor)
+        ])
         self.OWNER_YEAR_PATTERN = r"om(?:\.|,)?\s?(?:vuodesta|vsta)\s(?P<year>\d\d\d\d)"
         self.OWNER_NAME_PATTERN = r"(om\s)?(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(\s(?:synt|s|\.)|\.)"#r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)?\s(?:synt|s)" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.OWNER_OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -52,8 +57,7 @@ class OwnerExtractor(BaseExtractor):
             pass
 
     def _find_owner_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry)
-        self.birthday = birthdayExt.extract(text, self.entry)
+        self.birthday = self._sub_extraction_pipeline.process({'text': text})
 
     def _find_owner_gender(self, names):
             not_found = False

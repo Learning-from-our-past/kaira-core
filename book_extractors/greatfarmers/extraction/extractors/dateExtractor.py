@@ -2,12 +2,10 @@
 from shared import regexUtils
 import shared.textUtils as textUtils
 from book_extractors.extraction_exceptions import *
+from book_extractors.common.base_extractor import BaseExtractor
 
-#This class extracts date from given string. Substringing has to be made in caller.
-#The interface also differs a bit from other books since this is meant to be used by
-#other books.
-#NOTE: DOESN'T INHERIT BASEEXTRACTOR!
-class DateExtractor():
+
+class DateExtractor(BaseExtractor):
     PATTERN = r""
     OPTIONS = None
     year = ""
@@ -18,12 +16,18 @@ class DateExtractor():
     MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik" : 4,
     "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
 
-    def extract(self, text, PATTERN, OPTIONS):
-        self.PATTERN = PATTERN
-        self.OPTIONS = OPTIONS
+    def __init__(self, entry, options):
+        super(DateExtractor, self).__init__(entry)
+        self.PATTERN = options['PATTERN']
+        self.OPTIONS = options['OPTIONS']
+
+    def extract(self, text, entry):
         preparedText = self._prepareTextForExtraction(text)
-        self.processedText = preparedText
-        self._findDate(preparedText)
+        try:
+            self._findDate(preparedText)
+        except DateException:
+            #non-space pattern match didn't produce results, try with including spaces
+            self._findDate(text)
         return self._constructReturnDict()
 
     def setDatesToAlwaysIn20thCentury(self, boolValue):
@@ -94,6 +98,3 @@ class DateExtractor():
     def _constructReturnDict(self):
         return {"day": self.day,"month": self.month,
                 "year": self.year, "cursorLocation": self.matchFinalPosition}
-
-    def getFinalMatchPosition(self):
-        return self.matchFinalPosition

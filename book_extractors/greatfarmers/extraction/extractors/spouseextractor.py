@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.extraction_exceptions import *
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from book_extractors.common.extraction_keys import KEYS
 from shared import regexUtils
 from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
@@ -12,6 +12,11 @@ class SpouseExtractor(BaseExtractor):
 
     def extract(self, text, entry):
         super(SpouseExtractor, self).extract(text, entry)
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(OrigFamilyExtractor),
+            configure_extractor(BirthdayExtractor)
+        ])
+
         self.entry = entry
         self.PATTERN = r"vmo\.?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp|suvulla|tila))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
@@ -23,7 +28,7 @@ class SpouseExtractor(BaseExtractor):
         self.spouseName = ""
         self.birthday = {KEYS["birthDay"]:  "", KEYS["birthMonth"]:  "",
                 KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
-        self.origFamily = {KEYS["origfamily"] : ""}
+        self.origFamily = ""
 
         self._findSpouse(text)
         return self._constructReturnDict()
@@ -48,11 +53,12 @@ class SpouseExtractor(BaseExtractor):
             pass
 
     def _findSpouseDetails(self, text):
-        origFamilyExt = OrigFamilyExtractor(self.entry)
-        self.origFamily = origFamilyExt.extract(text, self.entry)
+        results = self._sub_extraction_pipeline.process({'text': text})
 
-        birthdayExt = BirthdayExtractor(self.entry)
-        self.birthday = birthdayExt.extract(text, self.entry)
+        self.origFamily = results[KEYS['origfamily']]
+        self.birthday = {KEYS["birthDay"]: results[KEYS['birthDay']],
+                         KEYS["birthMonth"]:  results[KEYS['birthMonth']],
+                         KEYS["birthYear"]:  results[KEYS["birthYear"]]}
 
     def _setFinalMatchPosition(self):
         #Dirty fix for inaccuracy in positions which would screw the Location extraction
@@ -61,5 +67,5 @@ class SpouseExtractor(BaseExtractor):
     def _constructReturnDict(self):
         return {KEYS["spouse"]: { KEYS["hasSpouse"]:  self.hasSpouse,
                                                KEYS["spouseName"]:  self.spouseName,
-                                               KEYS["spouseOrigFamily"]: self.origFamily[KEYS["origfamily"]],
+                                               KEYS["spouseOrigFamily"]: self.origFamily,
                                                KEYS["spouseBirthData"]: self.birthday}}
