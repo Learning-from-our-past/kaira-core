@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.extraction_exceptions import HostessNameException
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from book_extractors.farmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
@@ -13,6 +13,10 @@ class HostessExtractor(BaseExtractor):
     SEARCH_SPACE = 400
 
     def extract(self, text, entry):
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(BirthdayExtractor)
+        ])
+
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+)," #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.HOSTESS_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.entry = entry
@@ -31,8 +35,10 @@ class HostessExtractor(BaseExtractor):
         self._find_hostess_name(text)
 
     def _find_hostess_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry)
-        self.birthday = birthdayExt.extract(text, self.entry)
+        results = self._sub_extraction_pipeline.process({'text': text})
+        self.birthday = {KEYS["birthDay"]: results[KEYS['birthDay']],
+                         KEYS["birthMonth"]: results[KEYS['birthMonth']],
+                         KEYS["birthYear"]: results[KEYS["birthYear"]]}
 
     def _find_hostess_name(self, text):
         try:

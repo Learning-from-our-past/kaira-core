@@ -12,6 +12,7 @@ class MetadataExtractor(BaseExtractor):
         self.name = ""
         self.location = {"locationName": "", "latitude": "", "longitude": ""}
         self.location_name = ""
+        self.original_text = text
 
         try:
             self.name = entry["name"]
@@ -42,5 +43,6 @@ class MetadataExtractor(BaseExtractor):
 
     def _constructReturnDict(self):
         return {KEYS["name"] : self.name, KEYS["approximatePage"] : self.page,
-                KEYS["farmLocation"] : self.location
+                KEYS["farmLocation"] : self.location,
+                KEYS['originalText']: self.original_text
                 }
