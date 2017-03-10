@@ -5,6 +5,7 @@ from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
 from shared import regexUtils, textUtils
 from book_extractors.common.extraction_keys import KEYS
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 
 
 #This class extracts a location string from provided substring/text.
@@ -12,15 +13,15 @@ from book_extractors.common.extraction_keys import KEYS
 #NOTE: DOESN'T INHERIT BASEEXTRACTOR!
 #Also return match object to be used by caller
 
-class LocationExtractor():
+class LocationExtractor(BaseExtractor):
     PATTERN = r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
     OPTIONS = re.UNICODE
     matchFinalPosition = 0
     foundLocation = None
 
-    def extract(self, text):
+    def extract(self, text, entry):
         self._findLocation(text)
-        return self.foundLocation
+        return self._constructReturnDict()
 
     def setCustomPattern(self, pattern, options):
         self.PATTERN = pattern
@@ -37,14 +38,8 @@ class LocationExtractor():
         except regexUtils.RegexNoneMatchException as e:
             raise LocationException(text)
 
-    def getFinalMatchPosition(self):
-        return self.matchFinalPosition
-
-
-
-
-
-
+    def _constructReturnDict(self):
+        return {"locationMatch": self.foundLocation, "cursorLocation": self.matchFinalPosition}
 
 
 class BirthdayLocationExtractor(BaseExtractor):
@@ -52,18 +47,18 @@ class BirthdayLocationExtractor(BaseExtractor):
     REQUIRES_MATCH_POSITION = True
     SUBSTRING_WIDTH = 28
 
-
     def extract(self, text, entry):
         super(BirthdayLocationExtractor, self).extract(text, entry)
+
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(LocationExtractor)
+        ])
+
         self.location = ""
-        self.initVars(text)
+        self.preparedText = self._prepareTextForExtraction(text)
 
         self._findLocation(self.preparedText)
         return self._constructReturnDict()
-
-    def initVars(self,text):
-        self.locationExtractor = LocationExtractor()
-        self.preparedText = self._prepareTextForExtraction(text)
 
     def _prepareTextForExtraction(self, text):
         t = textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition-4, self.SUBSTRING_WIDTH)   #TODO: Dirty -4 offset
@@ -71,11 +66,12 @@ class BirthdayLocationExtractor(BaseExtractor):
 
     def _findLocation(self, text):
         try:
-            self.foundLocation = self.locationExtractor.extract(text)
-            self._checkIfLocationIsValid(text, self.foundLocation)
-            self.location = self.foundLocation.group("location")
+            results = self._sub_extraction_pipeline.process({'text': text})
+            self._checkIfLocationIsValid(text, results['locationMatch'])
+            self.location = results['locationMatch'].group("location")
             self.location = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", self.location)
-            self._setFinalMatchPosition()
+
+            self.matchFinalPosition = results['cursorLocation'] + self.matchStartPosition - 4
         except LocationException as e:
             # TODO: Metadata logging here self.errorLogger.logError(BirthLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
             self.location = ""
@@ -87,12 +83,6 @@ class BirthdayLocationExtractor(BaseExtractor):
         if deathPosition != -1:
             if deathPosition < foundLocation.end(): #there is word kaat, or " k " before location match.
                 raise LocationException(text)
-
-
-
-    def _setFinalMatchPosition(self):
-        #Dirty fix for inaccuracy in positions which would screw the Location extraction
-        self.matchFinalPosition = self.locationExtractor.getFinalMatchPosition() + self.matchStartPosition - 4  #TODO: Dirty -4 offset
 
     def _constructReturnDict(self):
         return {KEYS["birthLocation"] :  self.location, "cursorLocation" : self.getFinalMatchPosition()}
