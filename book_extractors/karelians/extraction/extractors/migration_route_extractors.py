@@ -91,7 +91,7 @@ class FinnishLocationsExtractor(BaseExtractor):
                 pass
 
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
+            # TODO: Metadata logging here: self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
             self.location_error = OtherLocationException.eType
 
     def _clean_locations(self):
@@ -214,7 +214,7 @@ class KarelianLocationsExtractor(BaseExtractor):
                 pass
 
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(KarelianLocationException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(KarelianLocationException.eType, self.currentChild)
             self.location_error = KarelianLocationException.eType
 
     def _clean_locations(self):

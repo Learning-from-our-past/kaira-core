@@ -1,6 +1,5 @@
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.extraction_exceptions import NoChildrenException, MultipleMarriagesException
 from shared import regexUtils
 import re
 from shared.geo.geocoding import GeoCoder, LocationNotFound
@@ -39,14 +38,14 @@ class ChildExtractor(BaseExtractor):
             self._split_children()
 
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
-            self.children_error = NoChildrenException.eType
+            pass
+            # TODO: Metadata logging here: self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
 
     def _check_many_marriages(self, text):
         marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
         if marriage is not None:
             self.many_marriages = True
-            self.errorLogger.logError(MultipleMarriagesException.eType, self.currentChild)
+            # TODO: metadata logging here: self.errorLogger.logError(MultipleMarriagesException.eType, self.currentChild)
 
 
     def _clean_children(self):
@@ -83,7 +82,7 @@ class ChildExtractor(BaseExtractor):
             try:
                 gender = Gender.find_gender(name)
             except GenderException as e:
-                self.errorLogger.logError(e.eType, self.currentChild)
+                # TODO: metadata logging here: self.errorLogger.logError(e.eType, self.currentChild)
                 gender = ""
             if gender == "Female":
                 self.girls += 1

@@ -15,7 +15,8 @@ class NameExtractor(BaseExtractor):
             namestr = entry["name"]
             self._split_names(namestr)
         except KeyError as e:
-            self.errorLogger.logError(NameException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(NameException.eType, self.currentChild)
+            pass
 
         return self._constructReturnDict()
 
@@ -27,12 +28,13 @@ class NameExtractor(BaseExtractor):
         if len(names) > 1:
             self.first_names = names[1].strip(" ")
         else:
-            self.errorLogger.logError(NameException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(NameException.eType, self.currentChild)
+            pass
 
     def _constructReturnDict(self):
         try:
             gender = Gender.find_gender(self.first_names)
         except GenderException as e:
-            self.errorLogger.logError(e.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(e.eType, self.currentChild)
             gender = ""
         return {KEYS["firstnames"] : self.first_names, KEYS["gender"] : gender,KEYS["surname"]: self.surname}

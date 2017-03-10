@@ -38,7 +38,8 @@ class OwnerExtractor(BaseExtractor):
             self.matchFinalPosition = ownerYear.end()
             self.owner_year = int(ownerYear.group("year"))
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
+            pass
 
     def _find_owner_name(self, text):
         try:
@@ -47,10 +48,11 @@ class OwnerExtractor(BaseExtractor):
             self._split_names(ownerName.group("name"))
 
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
+            pass
 
     def _find_owner_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
+        birthdayExt = BirthdayExtractor(self.entry)
         birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 
@@ -66,7 +68,7 @@ class OwnerExtractor(BaseExtractor):
                     not_found = True
 
             if not_found:
-                self.errorLogger.logError(GenderException.eType, self.currentChild)
+                # TODO: Metadata logging here  self.errorLogger.logError(GenderException.eType, self.currentChild)
                 self.owner_gender = ""
 
     def _split_names(self, name):

@@ -1,6 +1,5 @@
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.extraction_exceptions import ProfessionException
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
@@ -55,8 +54,8 @@ class ProfessionExtractor(BaseExtractor):
             self.professions = ""
 
         if self.professions == "":
-            self.errorLogger.logError(ProfessionException.eType, self.currentChild)
-            self.profession_error = ProfessionException.eType
+            # TODO: Metadata logging here  self.errorLogger.logError(ProfessionException.eType, self.currentChild)
+            pass
 
     def _constructReturnDict(self):
         self._clean_professions()

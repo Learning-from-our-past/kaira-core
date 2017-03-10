@@ -41,14 +41,14 @@ class ChildExtractor(BaseExtractor):
             self._split_children()
 
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
-            self.child_error = NoChildrenException.eType
+            # TODO: Metadata logging here self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
+            pass
 
     def _check_many_marriages(self, text):
         marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
         if marriage is not None:
             self.many_marriages = True
-            self.errorLogger.logError(MultipleMarriagesException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(MultipleMarriagesException.eType, self.currentChild)
 
 
     def _clean_children(self):
@@ -89,7 +89,7 @@ class ChildExtractor(BaseExtractor):
             try:
                 gender = Gender.find_gender(name)
             except GenderException as e:
-                self.errorLogger.logError(e.eType, self.currentChild)
+                # TODO: Metadata logging here self.errorLogger.logError(e.eType, self.currentChild)
                 gender = ""
 
             if gender == "Female":

@@ -31,7 +31,7 @@ class HostessExtractor(BaseExtractor):
         self._find_hostess_name(text)
 
     def _find_hostess_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
+        birthdayExt = BirthdayExtractor(self.entry)
         birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 
@@ -44,7 +44,8 @@ class HostessExtractor(BaseExtractor):
             self._find_hostess_birthday(text[self.matchFinalPosition:])
 
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(HostessNameException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(HostessNameException.eType, self.currentChild)
+            pass
 
     def _split_names(self, name):
         name = re.sub(r"(?:<|>|&|')", r"", name)

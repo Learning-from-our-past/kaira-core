@@ -7,8 +7,8 @@ import re
 
 class BoolExtractor(BaseExtractor):
 
-    def __init__(self, entry, errorLogger, options):
-        super(BoolExtractor, self).__init__(entry, errorLogger)
+    def __init__(self, entry, options):
+        super(BoolExtractor, self).__init__(entry)
         self.patterns_to_find = options['patterns']
         self.results = {}
 

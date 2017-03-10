@@ -10,17 +10,17 @@ class ExtractionPipeline:
         return next(e for e in extractors if type(e).__name__ == class_to_find.__name__)
 
     # FIXME: Refactor extractors so that Pipeline is not built for each and every person. Should speed up and save lots of memory
-    def _build_extraction_pipeline(self, entry, eLogger):
+    def _build_extraction_pipeline(self, entry):
         extractors = []
 
         for config in self._extractor_configurations:
-            extractor = config['extractor_class'](entry, eLogger, config['extractor_options'])
+            extractor = config['extractor_class'](entry, config['extractor_options'])
             extractors.append(extractor)
 
         return extractors
 
-    def process(self, entry, eLogger):
-        extractors = self._build_extraction_pipeline(entry, eLogger)
+    def process(self, entry):
+        extractors = self._build_extraction_pipeline(entry)
         extraction_results = {}
 
         # Replace all weird invisible white space characters with regular space

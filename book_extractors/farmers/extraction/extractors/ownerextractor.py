@@ -33,7 +33,7 @@ class OwnerExtractor(BaseExtractor):
         self._find_owner_birthday(text)
 
     def _find_owner_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
+        birthdayExt = BirthdayExtractor(self.entry)
         birthdayExt.setDependencyMatchPositionToZero()
         self.birthday = birthdayExt.extract(text, self.entry)
 
@@ -45,14 +45,15 @@ class OwnerExtractor(BaseExtractor):
             self._split_names(ownerName.group("name"))
 
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
+            pass
 
     def _find_owner_gender(self, name):
         try:
             self.owner_gender = Gender.find_gender(name)
         except GenderException as e:
-                self.errorLogger.logError(e.eType, self.currentChild)
-                self.owner_gender = ""
+            # TODO: Metadata logging here self.errorLogger.logError(e.eType, self.currentChild)
+            self.owner_gender = ""
 
     def _split_names(self, name):
         name = re.sub(r"(?:<|>|&|')", r"", name)
@@ -73,7 +74,7 @@ class OwnerExtractor(BaseExtractor):
             self.matchFinalPosition = ownerYear.end()
             self.owner_year = int(ownerYear.group("year"))
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
+            pass # TODO: Metadata logging here self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
 
     def _constructReturnDict(self):
         return {KEYS["owner"] : { KEYS["ownerFrom"] : self.owner_year,

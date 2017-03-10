@@ -41,7 +41,7 @@ class MetadataExtractor(BaseExtractor):
 
         #note that this entry is short
         if len(text) < 200:
-            self.errorLogger.logError(ShortEntryException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(ShortEntryException.eType, self.currentChild)
             self.short = True
 
         return self._constructReturnDict()

@@ -45,7 +45,7 @@ class BirthdayExtractor(BaseExtractor):
             self._setFinalMatchPosition()
         except DateException as e:
             #TODO: Better idea to have in DateExtractor class maybe?
-            self.errorLogger.logError(BirthdayException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(BirthdayException.eType, self.currentChild)
             self.error = BirthdayException.eType
             self.foundDate = {"day": "","month": "",
                 "year": "", "cursorLocation": ""}
