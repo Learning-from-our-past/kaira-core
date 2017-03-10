@@ -38,7 +38,6 @@ class ExtractionPipeline:
 
             extraction_results.update(ext[1].extract(entry['text'], entry))
 
-        extraction_results["originalText"] = entry['text']  #FIXME: Make own extractor for this. Not a responsibility of this class.
         return extraction_results
 
 

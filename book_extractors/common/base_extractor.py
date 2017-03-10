@@ -7,6 +7,7 @@ class BaseExtractor():
     __metaclass__ = ABCMeta
 
     def __init__(self, current_person, options=None):
+        self._sub_extraction_pipeline = None
         self.regexPattern = r''
         self.currentChild = None
         self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()

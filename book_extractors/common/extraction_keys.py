@@ -28,7 +28,7 @@ KEYS = {
     "movedIn": "movedIn",
     "locations": "locations",
     "village": "village",
-
+    "originalText": "originalText",
     "birthDay":  "birthDay",
     "birthMonth": "birthMonth",
     "birthYear": "birthYear",
