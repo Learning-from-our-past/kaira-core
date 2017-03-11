@@ -17,6 +17,8 @@ class SpouseExtractor(BaseExtractor):
 
     def extract(self, entry, start_position=0):
 
+        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
+
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(OrigFamilyExtractor),
             configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
@@ -25,7 +27,6 @@ class SpouseExtractor(BaseExtractor):
             configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
             configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor)
         ])
-
 
         self.entry = entry
         self.PATTERN = r"Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"

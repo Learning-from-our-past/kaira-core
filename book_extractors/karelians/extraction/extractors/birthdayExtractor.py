@@ -15,6 +15,8 @@ class BirthdayExtractor(BaseExtractor):
         self.PATTERN = r"(?:synt)\.?,?(?:\s+)?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|\s+|s)\s?(?P<month>\d{1,2})(?:\.|,|:|\s+|s)?(?:\s+)?-?(?P<year>\d{2,4}))|\s?-(?P<yearOnly>\d{2,4})(?!\.|,|\s|\d)(?=\D\D\D\D\D))"  # r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)  # TODO: TRY IGNORE CASE?
 
+        self.matchStartPosition = start_position # TODO: Remove once this class is stateless
+
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(DateExtractor, extractor_options={'PATTERN': self.PATTERN, 'OPTIONS': self.OPTIONS})
         ])

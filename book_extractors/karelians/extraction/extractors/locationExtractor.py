@@ -48,10 +48,11 @@ class BirthdayLocationExtractor(BaseExtractor):
     SUBSTRING_WIDTH = 28
 
     def extract(self, entry, start_position=0):
-
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(LocationExtractor)
         ])
+
+        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
 
         self.location = ""
         self.preparedText = self._prepareTextForExtraction(entry['text'])

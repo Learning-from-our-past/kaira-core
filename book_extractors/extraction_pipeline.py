@@ -32,11 +32,12 @@ class ExtractionPipeline:
             # This way we could possibly get rid of reflection and set kind of symbol table to pipeline level where extractors could check
             # the match locations of others when required.
 
+            start_position = 0
             if ext[0]['depends_on_match_position_of_extractor'] is not None:
                 dependency_extractor = self._find_extractor_by_class_name(ext[0]['depends_on_match_position_of_extractor'], extractors)
-                ext[1].dependsOnMatchPositionOf(dependency_extractor)
+                start_position = dependency_extractor.getFinalMatchPosition()
 
-            extraction_results.update(ext[1].extract(entry))
+            extraction_results.update(ext[1].extract(entry, start_position))
 
         return extraction_results
 

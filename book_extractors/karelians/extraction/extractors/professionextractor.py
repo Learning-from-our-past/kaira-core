@@ -12,6 +12,9 @@ class ProfessionExtractor(BaseExtractor):
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.professions = ""
+
+        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
+
         self.profession_error = False
         self._find_profession(entry['text'])
         return self._constructReturnDict()

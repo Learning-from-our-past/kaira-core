@@ -10,6 +10,7 @@ from shared import regexUtils
 class WeddingExtractor(BaseExtractor):
 
     def extract(self, entry, start_position=0):
+        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
 
         self.PATTERN = r"(?:avioit)\.?\s?-(?P<year>\d{2,4})"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)

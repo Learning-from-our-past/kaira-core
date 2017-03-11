@@ -17,10 +17,6 @@ class BaseExtractor():
     def getFinalMatchPosition(self):
         return self.matchFinalPosition
 
-    def dependsOnMatchPositionOf(self, extractor):
-        self.matchStartPosition = extractor.getFinalMatchPosition()
-        self.matchFinalPosition = self.matchStartPosition   # in case extractor doesn't find anything, we set finalPos as startPos
-
     @abstractmethod
     def _constructReturnDict(self, data_results):
         pass

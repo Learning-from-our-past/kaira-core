@@ -12,7 +12,9 @@ class HostessExtractor(BaseExtractor):
 
     SEARCH_SPACE = 400
 
-    def extract(self, entry, start_positions=0):
+    def extract(self, entry, start_position=0):
+
+        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(BirthdayExtractor)
         ])

@@ -12,10 +12,12 @@ class OrigFamilyExtractor(BaseExtractor):
     REQUIRES_MATCH_POSITION = True
     SEARCH_SPACE = 40
 
-    def extract(self, entry, start_positions=0):
+    def extract(self, entry, start_position=0):
         self.FAMILY_PATTERN = r"(((?:o|0)\.? ?s\.?,? )(?P<family>([a-zä-ö-]*)(, ent\.?,? \w*)?)(?:,|\.))|(?P<family>ent\.?,? \w*)"
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.own_family = ""
+
+        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
 
         self._find_family(entry['text'])
         return self._constructReturnDict()

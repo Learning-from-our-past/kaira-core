@@ -17,6 +17,8 @@ class DeathExtractor(BaseExtractor):
         self.deathYear = ""
         self.preparedText = ""
 
+        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
+
         self.initVars(entry['text'])
         self._findDate(self.preparedText)
         return self._constructReturnDict()

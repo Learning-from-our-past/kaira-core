@@ -16,6 +16,8 @@ class OrigFamilyExtractor(BaseExtractor):
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.own_family = ""
 
+        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
+
         self._find_family(entry['text'])
         return self._constructReturnDict()
 
