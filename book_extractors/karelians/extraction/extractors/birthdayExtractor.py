@@ -11,52 +11,47 @@ from shared import regexUtils
 
 class BirthdayExtractor(BaseExtractor):
 
-    def extract(self, entry, start_position=0):
+    def __init__(self, options):
+        super(BirthdayExtractor, self).__init__(options)
         self.PATTERN = r"(?:synt)\.?,?(?:\s+)?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|\s+|s)\s?(?P<month>\d{1,2})(?:\.|,|:|\s+|s)?(?:\s+)?-?(?P<year>\d{2,4}))|\s?-(?P<yearOnly>\d{2,4})(?!\.|,|\s|\d)(?=\D\D\D\D\D))"  # r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)  # TODO: TRY IGNORE CASE?
-
-        self.matchStartPosition = start_position # TODO: Remove once this class is stateless
-
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(DateExtractor, extractor_options={'PATTERN': self.PATTERN, 'OPTIONS': self.OPTIONS})
-        ])
-
+        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
-        self.dateExtractor = None
-        self.foundDate = {}
-        self.preparedText = ""
-        self.error = False
-        self.initVars(entry['text'])
-        self._findDate(self.preparedText)
-        return self._constructReturnDict()
 
-    def initVars(self,text):
-        self.preparedText = self._prepareTextForExtraction(text)
+    def extract(self, entry, start_position=0):
+        self.matchStartPosition = start_position # TODO: Remove once this class is stateless
 
-    def _prepareTextForExtraction(self, text):
-        t = textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition, self.SUBSTRING_WIDTH)
+        prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
+        result = self._find_date(prepared_text, start_position)
 
-        #TODO: Sotkeeko tama puolison syntymapaivan irroittamisen ajoittain?
-        spouseFound = regexUtils.findFirstPositionWithRegexSearch("puol", t, re.IGNORECASE|re.UNICODE)
-        if spouseFound != -1:
-            t = t[0:spouseFound]
+        return self._constructReturnDict({
+            KEYS["birthDay"]:  result[0]["day"],
+            KEYS["birthMonth"]: result[0]["month"],
+            KEYS["birthYear"]:  result[0]["year"]
+        }, result[1])
+
+    def _prepare_text_for_extraction(self, text, start_position):
+        t = textUtils.takeSubStrBasedOnPos(text, start_position, self.SUBSTRING_WIDTH)
+
+        spouse_found = regexUtils.findFirstPositionWithRegexSearch("puol", t, re.IGNORECASE|re.UNICODE)
+        if spouse_found != -1:
+            t = t[0:spouse_found]
 
         return t
 
-    def _findDate(self, text):
+    def _find_date(self, text, start_position):
+        cursor_location = start_position
+        found_date = {"day": "", "month": "", "year": "", "cursorLocation": ""}
+
+        _sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(DateExtractor, extractor_options={'PATTERN': self.PATTERN, 'OPTIONS': self.OPTIONS})
+        ])
+
         try:
-            self.foundDate = self._sub_extraction_pipeline.process({'text': text})
-            self.matchFinalPosition = self.foundDate['cursorLocation'] + self.matchStartPosition - 4
+            found_date = _sub_extraction_pipeline.process({'text': text})
+            cursor_location = found_date['cursorLocation'] + start_position - 4
         except DateException as e:
             #TODO: Metadata logging here
-            self.foundDate = {"day": "","month": "",
-                "year": "", "cursorLocation": ""}
+            pass
 
-    def _constructReturnDict(self):
-        self.foundDate["day"] = self.foundDate["day"]
-        self.foundDate["month"] = self.foundDate["month"]
-        self.foundDate["year"] = self.foundDate["year"]
-
-        return {KEYS["birthDay"]:  self.foundDate["day"], KEYS["birthMonth"]: self.foundDate["month"],
-                KEYS["birthYear"]:  self.foundDate["year"]}
+        return found_date, cursor_location

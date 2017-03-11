@@ -17,9 +17,9 @@ class BaseExtractor():
     def getFinalMatchPosition(self):
         return self.matchFinalPosition
 
-    @abstractmethod
-    def _constructReturnDict(self, data_results):
-        pass
+    def _constructReturnDict(self, data, cursor_location=0):
+        self.matchFinalPosition = cursor_location   # FIXME: Temporary fix until Pipeline is ready and each extractor has access to previous extractors' results (and cursor_location)
+        return {**data, 'cursorLocation': cursor_location}
 
     def _checkIfMatchPositionIsRequiredBeforeExtract(self):
         if self.REQUIRES_MATCH_POSITION and self.matchStartPosition == -1:

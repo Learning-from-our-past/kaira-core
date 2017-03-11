@@ -4,63 +4,69 @@ import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 import re
 
-class ProfessionExtractor(BaseExtractor):
 
+class ProfessionExtractor(BaseExtractor):
     SEARCH_SPACE = 60
 
-    def extract(self, entry, start_position=0):
+    def __init__(self, options):
+        super(ProfessionExtractor, self).__init__(options)
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.professions = ""
 
-        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
+    def extract(self, entry, start_position=0):
+        profession_results = self._find_profession(entry['text'], start_position)
 
-        self.profession_error = False
-        self._find_profession(entry['text'])
-        return self._constructReturnDict()
+        return self._constructReturnDict({
+            KEYS["profession"]: profession_results[0]
+        }, profession_results[1])
 
 
-    def _find_profession(self, text):
-        text = textUtils.takeSubStrBasedOnRange(text, self.matchStartPosition, self.SEARCH_SPACE)
+    def _find_profession(self, text, start_position):
+        text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
+        cursor_location = 0
+        profession = ''
+
         try:
             #limit the search range if there is spouse keyword:
             try:
-                foundSpouseWord =  regexUtils.safeSearch(r"Puol", text, self.PROFESSION_OPTIONS)
-                text = textUtils.takeSubStrBasedOnRange(text, 0, foundSpouseWord.start())
+                found_spouse_word = regexUtils.safeSearch(r"Puol", text, self.PROFESSION_OPTIONS)
+                text = textUtils.takeSubStrBasedOnRange(text, 0, found_spouse_word.start())
             except regexUtils.RegexNoneMatchException as e:
                 pass
 
-            foundProfession= regexUtils.safeSearch(self.PROFESSION_PATTERN, text, self.PROFESSION_OPTIONS)
-            self.matchFinalPosition = foundProfession.end()
-            self.professions = foundProfession.group("profession")
+            found_profession_match = regexUtils.safeSearch(self.PROFESSION_PATTERN, text, self.PROFESSION_OPTIONS)
+
+            cursor_location = found_profession_match.end()
+            profession = found_profession_match.group("profession")
         except regexUtils.RegexNoneMatchException as e:
             pass
 
-    def _clean_professions(self):
-        self.professions = self.professions.strip(",")
-        self.professions = self.professions.strip()
-        self.professions = self.professions.lstrip()
+        result_profession = self._clean_professions(profession)
 
-        uppercase = re.match(r"[A-ZÄ-Ö]", self.professions)
+        return result_profession, cursor_location
+
+    def _clean_professions(self, profession):
+        profession = profession.strip(",")
+        profession = profession.strip()
+        profession = profession.lstrip()
+
+        uppercase = re.match(r"[A-ZÄ-Ö]", profession)
         if uppercase is not None:
-            comma = self.professions.find(",")
+            comma = profession.find(",")
             if comma != -1:
-                self.professions = self.professions[comma:]
+                profession = profession[comma:]
 
-        self.professions = self.professions.strip(",")
-        self.professions = self.professions.strip(".")
-        self.professions = self.professions.strip()
-        self.professions = self.professions.lstrip()
-        self.professions = re.sub(r"[a-zä-ö]{1,3}(?:,|\.)\s", "", self.professions, self.PROFESSION_OPTIONS)
+        profession = profession.strip(",")
+        profession = profession.strip(".")
+        profession = profession.strip()
+        profession = profession.lstrip()
+        profession = re.sub(r"[a-zä-ö]{1,3}(?:,|\.)\s", "", profession, self.PROFESSION_OPTIONS)
 
-        if len(self.professions) < 3:
-            self.professions = ""
+        if len(profession) < 3:
+            profession = ""
 
-        if self.professions == "":
+        if profession == "":
             # TODO: Metadata logging here  self.errorLogger.logError(ProfessionException.eType, self.currentChild)
             pass
 
-    def _constructReturnDict(self):
-        self._clean_professions()
-        p = self.professions
-        return {KEYS["profession"] : p}
+        return profession

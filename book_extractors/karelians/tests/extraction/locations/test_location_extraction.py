@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from book_extractors.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS, EXPECTED_RESULTS, LOCATION_HEURISTICS
 from book_extractors.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor
@@ -69,7 +71,7 @@ class TestFinnishLocationExtraction:
 
     @pytest.yield_fixture(autouse=True)
     def finnish_extractor(self):
-        return FinnishLocationsExtractor()
+        return FinnishLocationsExtractor(None)
 
     def should_extract_locations(self, finnish_extractor):
         results = finnish_extractor.extract({'text': LOCATION_TEXTS[0]})['otherLocations']
@@ -121,7 +123,7 @@ class TestKarelianLocationExtraction:
 
     @pytest.yield_fixture(autouse=True)
     def karelian_extractor(self):
-        return KarelianLocationsExtractor()
+        return KarelianLocationsExtractor(None)
 
     def should_extract_locations_with_village_names(self, karelian_extractor):
         results = karelian_extractor.extract({'text': LOCATION_TEXTS[0]})['karelianLocations']
