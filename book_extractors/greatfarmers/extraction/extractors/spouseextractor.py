@@ -10,8 +10,7 @@ from book_extractors.greatfarmers.extraction.extractors.origfamilyextractor impo
 
 class SpouseExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
-        super(SpouseExtractor, self).extract(text, entry)
+    def extract(self, entry, start_positions=0):
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(OrigFamilyExtractor),
             configure_extractor(BirthdayExtractor)
@@ -30,7 +29,7 @@ class SpouseExtractor(BaseExtractor):
                 KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
         self.origFamily = ""
 
-        self._findSpouse(text)
+        self._findSpouse(entry['text'])
         return self._constructReturnDict()
 
     def _findSpouse(self, text):

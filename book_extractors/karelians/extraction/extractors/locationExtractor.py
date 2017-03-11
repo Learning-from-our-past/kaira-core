@@ -19,8 +19,8 @@ class LocationExtractor(BaseExtractor):
     matchFinalPosition = 0
     foundLocation = None
 
-    def extract(self, text, entry):
-        self._findLocation(text)
+    def extract(self, entry, start_location=0):
+        self._findLocation(entry['text'])
         return self._constructReturnDict()
 
     def setCustomPattern(self, pattern, options):
@@ -47,15 +47,14 @@ class BirthdayLocationExtractor(BaseExtractor):
     REQUIRES_MATCH_POSITION = True
     SUBSTRING_WIDTH = 28
 
-    def extract(self, text, entry):
-        super(BirthdayLocationExtractor, self).extract(text, entry)
+    def extract(self, entry, start_position=0):
 
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(LocationExtractor)
         ])
 
         self.location = ""
-        self.preparedText = self._prepareTextForExtraction(text)
+        self.preparedText = self._prepareTextForExtraction(entry['text'])
 
         self._findLocation(self.preparedText)
         return self._constructReturnDict()

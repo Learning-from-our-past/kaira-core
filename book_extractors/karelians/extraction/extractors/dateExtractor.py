@@ -16,18 +16,19 @@ class DateExtractor(BaseExtractor):
     MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik" : 4,
     "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
 
-    def __init__(self, entry, options):
-        super(DateExtractor, self).__init__(entry)
+    def __init__(self, options):
+        super(DateExtractor, self).__init__(options)
+        self.PATTERN = options['PATTERN']
         self.PATTERN = options['PATTERN']
         self.OPTIONS = options['OPTIONS']
 
-    def extract(self, text, entry):
-        preparedText = self._prepareTextForExtraction(text)
+    def extract(self, entry, start_position=0):
+        preparedText = self._prepareTextForExtraction(entry['text'])
         try:
             self._findDate(preparedText)
         except DateException:
             #non-space pattern match didn't produce results, try with including spaces
-            self._findDate(text)
+            self._findDate(entry['text'])
         return self._constructReturnDict()
 
     def setDatesToAlwaysIn20thCentury(self, boolValue):

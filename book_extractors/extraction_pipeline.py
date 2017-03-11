@@ -14,7 +14,7 @@ class ExtractionPipeline:
         extractors = []
 
         for config in self._extractor_configurations:
-            extractor = config['extractor_class'](entry, config['extractor_options'])
+            extractor = config['extractor_class'](config['extractor_options'])
             extractors.append(extractor)
 
         return extractors
@@ -36,7 +36,7 @@ class ExtractionPipeline:
                 dependency_extractor = self._find_extractor_by_class_name(ext[0]['depends_on_match_position_of_extractor'], extractors)
                 ext[1].dependsOnMatchPositionOf(dependency_extractor)
 
-            extraction_results.update(ext[1].extract(entry['text'], entry))
+            extraction_results.update(ext[1].extract(entry))
 
         return extraction_results
 

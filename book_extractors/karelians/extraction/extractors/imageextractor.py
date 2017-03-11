@@ -4,7 +4,7 @@ from book_extractors.common.extraction_keys import KEYS
 
 class ImageExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
+    def extract(self, entry, start_position=0):
         self.image_path = ""
         self.page = ""
         try:

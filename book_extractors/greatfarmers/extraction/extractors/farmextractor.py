@@ -6,7 +6,7 @@ import re
 
 class FarmExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
+    def extract(self, entry, start_positions=0):
         self.ALL_AREA_PATTERN = r"(?:(?:kok\.pinta-ala){s<=1,i<=2}|(?:kokonaispinta-ala){s<=1,i<=2}).{0,20}?(?P<area1>\d\d?\d?,?\d?\d?)\sha"
         self.FOREST_AREA_PATTERN = r"(?:metsää{s<=1}\s?(?P<area1>\d\d?\d?,?\d?\d?))|(?:(?P<area2>\d\d?\d?,?\d?\d?)\s?ha\s?metsää{s<=1})"
         self.FIELD_AREA_PATTERN = r"(?:(?:(?:salaojitettua\s){s<=1,i<=1})?peltoa{s<=1}\s?(?P<area1>\d\d?\d?,?\d?\d?))|(?:(?P<area2>\d\d?\d?,?\d?\d?)\s?ha\s?(?:salaojitettua\s{s<=1,i<=1})?peltoa{s<=1})"
@@ -20,7 +20,7 @@ class FarmExtractor(BaseExtractor):
         self.waste_area = ""
         self.meadow_area = ""
 
-        self._find_areas(text)
+        self._find_areas(entry['text'])
         return self._constructReturnDict()
 
     def _find_areas(self, text):

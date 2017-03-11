@@ -15,8 +15,7 @@ from book_extractors.extraction_pipeline import ExtractionPipeline, configure_ex
 
 class SpouseExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
-        super(SpouseExtractor, self).extract(text, entry)
+    def extract(self, entry, start_position=0):
 
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(OrigFamilyExtractor),
@@ -44,8 +43,8 @@ class SpouseExtractor(BaseExtractor):
                 KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
         self.origFamily = ""
 
-        self.initVars(text)
-        self._findSpouse(text)
+        self.initVars(entry['text'])
+        self._findSpouse(entry['text'])
         return self._constructReturnDict()
 
     def initVars(self, text):

@@ -10,7 +10,7 @@ from shared.genderExtract import Gender, GenderException
 class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
 
-    def extract(self, text, entry):
+    def extract(self, entry, start_positions=0):
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika|tyttäret|pojat)(;|:)(?P<children>.*?)(?:\.|Tilal{s<=1}|Edelli{s<=1}|hänen{s<=1}|joka{s<=1}|emännän{s<=1}|isännän{s<=1})"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
@@ -25,8 +25,8 @@ class ChildExtractor(BaseExtractor):
         self.child_list = []
         self.child_error = False
         self.girls = 0
-        self._check_many_marriages(text)
-        self._find_children(text)
+        self._check_many_marriages(entry['text'])
+        self._find_children(entry['text'])
 
         return self._constructReturnDict()
 

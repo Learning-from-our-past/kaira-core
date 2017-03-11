@@ -7,8 +7,8 @@ import re
 
 class QuantityExtractor(BaseExtractor):
 
-    def __init__(self, entry, options):
-        super(QuantityExtractor, self).__init__(entry)
+    def __init__(self, options):
+        super(QuantityExtractor, self).__init__(options)
         self.QUANTITY_PATTERN = r"(?:(?P<range>\d\d?\d?(?:-|—)\d\d?\d?)|(?P<number>\d\d?\d?)|(?P<word>yksi|yhtä|kahta|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen))\s?"
         self.SPLIT_PATTERN1 = r"(?P<number>\d\d?)"
         self.patterns_to_find = options['patterns']
@@ -17,10 +17,10 @@ class QuantityExtractor(BaseExtractor):
         self.NUMBER_MAP = {"yksi" : 1, "yhtä": 1, "kahta": 2, "kaksi" : 2, "kolme" : 3, "neljä" : 4, "viisi" : 5, "kuusi" : 6,
                            "seitsemän" : 7, "kahdeksan" : 8, "yhdeksän" : 9, "kymmenen" : 10}
 
-    def extract(self, text, entry):
+    def extract(self, entry, start_positions=0):
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-        self._find_patterns(text)
+        self._find_patterns(entry['text'])
         return self._constructReturnDict()
 
     def set_patterns_to_find(self, patterns):

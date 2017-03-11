@@ -12,8 +12,7 @@ from shared import regexUtils
 
 class BirthdayExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
-        super(BirthdayExtractor, self).extract(text, entry)
+    def extract(self, entry, start_positions=0):
         self.PATTERN = r"(?:synt)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))" #r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)    #TODO: TRY IGNORE CASE?
 
@@ -28,7 +27,7 @@ class BirthdayExtractor(BaseExtractor):
         self.preparedText = ""
         self.error = False
 
-        self.preparedText = self._prepareTextForExtraction(text)
+        self.preparedText = self._prepareTextForExtraction(entry['text'])
         self._findDate(self.preparedText)
         return self._constructReturnDict()
 

@@ -13,7 +13,7 @@ class OwnerExtractor(BaseExtractor):
 
     SEARCH_SPACE = 200
 
-    def extract(self, text, entry):
+    def extract(self, entry, start_positions=0):
 
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(BirthdayExtractor)
@@ -28,7 +28,7 @@ class OwnerExtractor(BaseExtractor):
         self.owner_gender = ""
         self.birthday = {KEYS["birthDay"]:  "", KEYS["birthMonth"]:  "",
                 KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
-        self._find_owner(text)
+        self._find_owner(entry['text'])
         return self._constructReturnDict()
 
     def _find_owner(self, text):

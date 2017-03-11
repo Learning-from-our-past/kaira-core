@@ -6,15 +6,15 @@ import re
 
 
 class BoolExtractor(BaseExtractor):
-    def __init__(self, entry, options):
-        super(BoolExtractor, self).__init__(entry)
+    def __init__(self, options):
+        super(BoolExtractor, self).__init__(options)
         self.patterns_to_find = options['patterns']
         self.results = {}
 
-    def extract(self, text, entry):
+    def extract(self, entry, start_positions=0):
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-        self._find_patterns(text)
+        self._find_patterns(entry['text'])
         return self._constructReturnDict()
 
     def _find_patterns(self, text):

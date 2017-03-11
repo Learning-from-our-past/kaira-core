@@ -8,13 +8,13 @@ class MetadataExtractor(BaseExtractor):
 
     geocoder = GeoCoder()
 
-    def extract(self, text, entry):
+    def extract(self, entry, start_positions=0):
         self.page = ""
         self.name = ""
         self.short = False
         self.location = {"locationName": "", "latitude": "", "longitude": ""}
         self.location_name = ""
-        self.original_text = text
+        self.original_text = entry['text']
 
         try:
             self.name= entry["name"]
@@ -41,7 +41,7 @@ class MetadataExtractor(BaseExtractor):
             pass
 
         #note that this entry is short
-        if len(text) < 200:
+        if len(entry['text']) < 200:
             # TODO: Metadata logging here self.errorLogger.logError(ShortEntryException.eType, self.currentChild)
             self.short = True
 

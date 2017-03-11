@@ -5,14 +5,13 @@ from abc import ABCMeta, abstractmethod
 class BaseExtractor():
     __metaclass__ = ABCMeta
 
-    def __init__(self, current_person, options=None):
-        self._sub_extraction_pipeline = None
+    def __init__(self, options=None):
         self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
         self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes
         self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
 
     @abstractmethod
-    def extract(self, text, person):
+    def extract(self, entry, start_position=0):
         self._checkIfMatchPositionIsRequiredBeforeExtract()
 
     def getFinalMatchPosition(self):
@@ -23,7 +22,7 @@ class BaseExtractor():
         self.matchFinalPosition = self.matchStartPosition   # in case extractor doesn't find anything, we set finalPos as startPos
 
     @abstractmethod
-    def _constructReturnDict(self):
+    def _constructReturnDict(self, data_results):
         pass
 
     def _checkIfMatchPositionIsRequiredBeforeExtract(self):

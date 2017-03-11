@@ -9,8 +9,7 @@ from shared import regexUtils
 
 class DeathExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
-        super(DeathExtractor, self).extract(text, entry)
+    def extract(self, entry, start_position=0):
         self.PATTERN = r"(?:kuoli)\.?\s?-(?P<year>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
@@ -18,7 +17,7 @@ class DeathExtractor(BaseExtractor):
         self.deathYear = ""
         self.preparedText = ""
 
-        self.initVars(text)
+        self.initVars(entry['text'])
         self._findDate(self.preparedText)
         return self._constructReturnDict()
 

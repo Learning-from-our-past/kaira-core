@@ -8,7 +8,7 @@ class NameExtractor(BaseExtractor):
     """ Tries to extract the name of the person in this entry. Assumed that it can be found from
     name attribute from person entry.
     """
-    def extract(self, text, entry):
+    def extract(self, entry, start_position=0):
         self.first_names = ""
         self.surname = ""
         try:

@@ -12,7 +12,7 @@ class HostessExtractor(BaseExtractor):
 
     SEARCH_SPACE = 400
 
-    def extract(self, text, entry):
+    def extract(self, entry, start_positions=0):
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(BirthdayExtractor)
         ])
@@ -25,7 +25,7 @@ class HostessExtractor(BaseExtractor):
         self.hostess_gender = "Female"
         self.birthday = {KEYS["birthDay"]:  "", KEYS["birthMonth"]:  "",
                 KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
-        self._find_hostess(text)
+        self._find_hostess(entry['text'])
         return self._constructReturnDict()
 
 
