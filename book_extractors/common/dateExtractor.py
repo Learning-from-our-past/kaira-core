@@ -17,17 +17,15 @@ class DateExtractor(BaseExtractor):
     "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
 
     def __init__(self, options):
-        super(DateExtractor, self).__init__(options)
-        self.PATTERN = options['PATTERN']
         self.PATTERN = options['PATTERN']
         self.OPTIONS = options['OPTIONS']
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, start_positions=0):
         preparedText = self._prepareTextForExtraction(entry['text'])
         try:
             self._findDate(preparedText)
         except DateException:
-            #non-space pattern match didn't produce results, try with including spaces
+            # non-space pattern match didn't produce results, try with including spaces
             self._findDate(entry['text'])
         return self._constructReturnDict()
 

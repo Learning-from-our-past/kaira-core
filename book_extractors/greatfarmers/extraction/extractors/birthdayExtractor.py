@@ -3,7 +3,7 @@ import re
 
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
-from book_extractors.greatfarmers.extraction.extractors.dateExtractor import DateExtractor
+from book_extractors.common.dateExtractor import DateExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared import textUtils
 from book_extractors.common.extraction_keys import KEYS
