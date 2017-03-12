@@ -11,17 +11,14 @@ class QuantityExtractor(BaseExtractor):
         super(QuantityExtractor, self).__init__(options)
         self.QUANTITY_PATTERN = r"(?:(?P<range>\d\d?\d?(?:-|—)\d\d?\d?)|(?P<number>\d\d?\d?)|(?P<word>yksi|yhtä|kahta|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen))\s?"
         self.SPLIT_PATTERN1 = r"(?P<number>\d\d?)"
+        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.patterns_to_find = options['patterns']
-        self.results = {}
-
         self.NUMBER_MAP = {"yksi" : 1, "yhtä": 1, "kahta": 2, "kaksi" : 2, "kolme" : 3, "neljä" : 4, "viisi" : 5, "kuusi" : 6,
                            "seitsemän" : 7, "kahdeksan" : 8, "yhdeksän" : 9, "kymmenen" : 10}
 
-    def extract(self, entry, start_positions=0):
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
-
-        self._find_patterns(entry['text'])
-        return self._constructReturnDict()
+    def extract(self, entry, start_position=0):
+        result = self._find_patterns(entry['text'])
+        return self._constructReturnDict({KEYS["quantities"]: result}, start_position)
 
     def set_patterns_to_find(self, patterns):
         """
@@ -30,13 +27,16 @@ class QuantityExtractor(BaseExtractor):
         self.patterns_to_find = patterns
 
     def _find_patterns(self, text):
+        results = {}
         for key, pattern in self.patterns_to_find.items():
             try:
                 usepattern = self.QUANTITY_PATTERN + pattern
                 found = regexUtils.safeSearch(usepattern, text, self.OPTIONS)
-                self.results[key] = self._process_value(found)
+                results[key] = self._process_value(found)
             except regexUtils.RegexNoneMatchException as e:
-                self.results[key] = ""
+                results[key] = ""
+
+        return results
 
     def _process_value(self, match):
         if match.group("range") is not None:
@@ -63,6 +63,3 @@ class QuantityExtractor(BaseExtractor):
                 return ""
         except ValueError:
             return ""
-
-    def _constructReturnDict(self):
-        return {KEYS["quantities"] : self.results}
