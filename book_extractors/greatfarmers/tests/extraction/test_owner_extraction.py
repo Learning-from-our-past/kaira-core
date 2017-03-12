@@ -8,11 +8,11 @@ class TestOwnerExtraction:
     @pytest.yield_fixture(autouse=True)
     def owner_extractor(self):
         Gender.load_names()
-        return OwnerExtractor(None)
+        return OwnerExtractor(None, None)
 
     def should_extract_owner_correctly_from_short_entry(self, owner_extractor):
         owner_text = "om Uuno Säämäki. Tila sijaitsee Testilän kylässä. Kokonaispinta-ala on 186,17 ha."
-        result = owner_extractor.extract({'text': owner_text})['owner']
+        result = owner_extractor.extract({'text': owner_text}, {'data': {}, 'cursor_locations': {}})['data']['owner']
 
         assert result['firstNames'] == 'Uuno'
         assert result['surname'] == 'Säämäki'

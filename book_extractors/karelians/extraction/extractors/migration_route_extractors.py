@@ -57,16 +57,16 @@ class FinnishLocationsExtractor(BaseExtractor):
     geocoder = GeoCoder()
     OTHER_REGION_ID = 'other'
 
-    def __init__(self, options):
-        super(FinnishLocationsExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(FinnishLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)"  # r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
         location_listing_results = self._find_locations(entry['text'])
         return self._constructReturnDict({
             KEYS["otherlocations"]: location_listing_results[0]
-        }, location_listing_results[1])
+        }, extraction_results, location_listing_results[1])
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
@@ -181,18 +181,18 @@ class KarelianLocationsExtractor(BaseExtractor):
     geocoder = GeoCoder()
     KARELIAN_REGION_ID = 'karelia'
 
-    def __init__(self, options):
-        super(KarelianLocationsExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(KarelianLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))"  # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
         location_listing_results = self._find_locations(entry['text'])
 
         return self._constructReturnDict({
             KEYS["karelianlocations"]: location_listing_results[0],
             KEYS["returnedkarelia"]: location_listing_results[1]
-        }, location_listing_results[2])
+        }, extraction_results, location_listing_results[2])
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space

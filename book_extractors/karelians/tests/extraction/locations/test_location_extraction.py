@@ -71,10 +71,10 @@ class TestFinnishLocationExtraction:
 
     @pytest.yield_fixture(autouse=True)
     def finnish_extractor(self):
-        return FinnishLocationsExtractor(None)
+        return FinnishLocationsExtractor(None, None)
 
     def should_extract_locations(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_TEXTS[0]})['otherLocations']
+        results = finnish_extractor.extract({'text': LOCATION_TEXTS[0]}, {'data': {}, 'cursor_locations': {}})['data']['otherLocations']
 
         assert len(results) == 4
 
@@ -84,36 +84,36 @@ class TestFinnishLocationExtraction:
         assert results[3] == EXPECTED_RESULTS[0]['finnish_locations'][3]
 
     def should_return_empty_if_no_finnish_locations_listed(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': ''})['otherLocations']
+        results = finnish_extractor.extract({'text': ''}, {'data': {}, 'cursor_locations': {}})['data']['otherLocations']
         assert len(results) == 0
 
     def should_leave_out_too_long_place_names(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']})['otherLocations']
+        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']}, {'data': {}, 'cursor_locations': {}})['data']['otherLocations']
 
         assert len(results) == 4
         assert results == LOCATION_HEURISTICS['long_place_name']['expected']
 
     def should_leave_out_too_short_place_names(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']})['otherLocations']
+        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']}, {'data': {}, 'cursor_locations': {}})['data']['otherLocations']
 
         assert len(results) == 4
         assert results == LOCATION_HEURISTICS['short_place_name']['expected']
 
     def should_extract_short_place_names_if_they_are_in_white_list(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_name']['text']})['otherLocations']
+        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_name']['text']}, {'data': {}, 'cursor_locations': {}})['data']['otherLocations']
 
         assert len(results) == 5
         assert results[4]['locationName'] == 'Utö'
 
     def should_use_alias_for_short_place_name_if_one_is_available(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_alias_name']['text']})[
+        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_alias_name']['text']}, {'data': {}, 'cursor_locations': {}})['data'][
             'otherLocations']
 
         assert len(results) == 5
         assert results[4]['locationName'] == 'Ii'
 
     def should_accept_any_name_if_mlk_pattern_in_the_end(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']})['otherLocations']
+        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']}, {'data': {}, 'cursor_locations': {}})['data']['otherLocations']
 
         assert len(results) == 5
         assert results[4]['locationName'] == 'Kristiinankaupungin mlk'
@@ -123,10 +123,10 @@ class TestKarelianLocationExtraction:
 
     @pytest.yield_fixture(autouse=True)
     def karelian_extractor(self):
-        return KarelianLocationsExtractor(None)
+        return KarelianLocationsExtractor(None, None)
 
     def should_extract_locations_with_village_names(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_TEXTS[0]})['karelianLocations']
+        results = karelian_extractor.extract({'text': LOCATION_TEXTS[0]}, {'data': {}, 'cursor_locations': {}})['data']['karelianLocations']
 
         assert len(results) == 2
 
@@ -155,7 +155,7 @@ class TestKarelianLocationExtraction:
 
 
     def should_extract_locations_with_missing_village_names(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_TEXTS[2]})['karelianLocations']
+        results = karelian_extractor.extract({'text': LOCATION_TEXTS[2]}, {'data': {}, 'cursor_locations': {}})['data']['karelianLocations']
 
         assert len(results) == 3
 
@@ -193,33 +193,33 @@ class TestKarelianLocationExtraction:
         assert results[2]['village']['coordinates']['longitude'] == ''
 
     def should_return_empty_if_no_karelian_locations_listed(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': ''})['karelianLocations']
+        results = karelian_extractor.extract({'text': ''}, {'data': {}, 'cursor_locations': {}})['data']['karelianLocations']
         assert len(results) == 0
 
     def should_leave_out_too_long_place_names(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']})['karelianLocations']
+        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']}, {'data': {}, 'cursor_locations': {}})['data']['karelianLocations']
 
         assert len(results) == 1
 
     def should_leave_out_too_short_place_names(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']})['karelianLocations']
+        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']}, {'data': {}, 'cursor_locations': {}})['data']['karelianLocations']
 
         assert len(results) == 1
 
     def should_extract_short_place_names_if_they_are_in_white_list(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_name']['text']})['karelianLocations']
+        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_name']['text']}, {'data': {}, 'cursor_locations': {}})['data']['karelianLocations']
 
         assert len(results) == 1
         assert results[0]['locationName'] == 'Eno'
 
     def should_use_alias_for_short_place_name_if_one_is_available(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_alias_name']['text']})['karelianLocations']
+        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_alias_name']['text']}, {'data': {}, 'cursor_locations': {}})['data']['karelianLocations']
 
         assert len(results) == 1
         assert results[0]['locationName'] == 'Ii'
 
     def should_accept_any_name_if_mlk_pattern_in_the_end(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']})['karelianLocations']
+        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']}, {'data': {}, 'cursor_locations': {}})['data']['karelianLocations']
 
         assert len(results) == 1
         assert results[0]['locationName'] == 'Kristiinankaupungin mlk'

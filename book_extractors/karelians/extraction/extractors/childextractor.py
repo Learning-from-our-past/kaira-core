@@ -12,8 +12,8 @@ Gender.load_names()
 class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
 
-    def __init__(self, options):
-        super(ChildExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(ChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika)(;|:)(?P<children>.*?)Asuinp{s<=1}"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
@@ -24,12 +24,12 @@ class ChildExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"\d\d\s(?P<location>[a-zä-ö\s-]+$)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
         results = self._find_children(entry['text'])
 
         return self._constructReturnDict({
             KEYS["manymarriages"]: results[1], KEYS["children"]: results[0]
-        }, results[2])
+        }, extraction_results, results[2])
 
     def _find_children(self, text):
         children = []

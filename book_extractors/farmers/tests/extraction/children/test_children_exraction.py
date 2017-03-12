@@ -7,7 +7,7 @@ class TestChildrenExtraction:
 
     @pytest.yield_fixture(autouse=True)
     def child_extractor(self):
-        return ChildExtractor(None)
+        return ChildExtractor(None, None)
 
     @pytest.mark.skip
     def should_extract_twins_correctly(self):
@@ -22,7 +22,7 @@ class TestChildrenExtraction:
         pass
 
     def should_extract_children_correctly(self, child_extractor):
-        children = child_extractor.extract({'text': CHILDREN_TEXTS[0]})['children']
+        children = child_extractor.extract({'text': CHILDREN_TEXTS[0]}, {'data': {}, 'cursor_locations': {}})['data']['children']
 
         assert len(children) == 3
         assert children[0] == EXPECTED_CHILDREN[0]

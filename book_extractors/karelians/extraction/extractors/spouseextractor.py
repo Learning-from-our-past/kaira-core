@@ -14,8 +14,18 @@ from book_extractors.extraction_pipeline import ExtractionPipeline, configure_ex
 
 class SpouseExtractor(BaseExtractor):
 
-    def __init__(self, options):
-        super(SpouseExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(SpouseExtractor, self).__init__(key_of_cursor_location_dependent, options)
+
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(OrigFamilyExtractor),
+            configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
+            configure_extractor(BirthdayExtractor),
+            configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
+            configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
+            configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor)
+        ])
+
         self.PATTERN = r"Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -37,9 +47,10 @@ class SpouseExtractor(BaseExtractor):
             KEYS["hasSpouse"]: False
         }
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         result = self._find_spouse(entry['text'], start_position)
-        return self._constructReturnDict({KEYS['spouse']: result[0]}, cursor_location = result[1])
+        return self._constructReturnDict({KEYS['spouse']: result[0]}, extraction_results, cursor_location=result[1])
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
@@ -64,7 +75,7 @@ class SpouseExtractor(BaseExtractor):
             spouse_name_match = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
             spouse_name = spouse_name_match.group("name").strip()
             spouse_name = re.sub(r"\so$", "", spouse_name)
-            spouse_details = self._find_spouse_details(text[spouse_name_match.end() - 2:])
+            spouse_details = self._find_spouse_details(text[spouse_name_match.end() - 2:])['data']
 
             # Map data to spouse object
             return {
@@ -88,15 +99,5 @@ class SpouseExtractor(BaseExtractor):
 
         return spouse_name, spouse_details
 
-    @staticmethod
-    def _find_spouse_details(text):
-        _sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(OrigFamilyExtractor),
-            configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
-            configure_extractor(BirthdayExtractor),
-            configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
-            configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
-            configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor)
-        ])
-
-        return _sub_extraction_pipeline.process({'text': text})
+    def _find_spouse_details(self, text):
+        return self._sub_extraction_pipeline.process({'text': text})

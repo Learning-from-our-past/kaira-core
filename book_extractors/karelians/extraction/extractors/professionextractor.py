@@ -8,18 +8,18 @@ import re
 class ProfessionExtractor(BaseExtractor):
     SEARCH_SPACE = 60
 
-    def __init__(self, options):
-        super(ProfessionExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(ProfessionExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         profession_results = self._find_profession(entry['text'], start_position)
 
         return self._constructReturnDict({
             KEYS["profession"]: profession_results[0]
-        }, profession_results[1])
-
+        }, extraction_results, profession_results[1])
 
     def _find_profession(self, text, start_position):
         text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)

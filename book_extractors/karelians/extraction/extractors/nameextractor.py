@@ -9,7 +9,7 @@ class NameExtractor(BaseExtractor):
     name attribute from person entry.
     """
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
         result = {
             KEYS["surname"]: '',
             KEYS['firstnames']: ''
@@ -17,17 +17,17 @@ class NameExtractor(BaseExtractor):
 
         try:
             result = self._split_names(entry["name"])
-        except KeyError as e:
+        except KeyError:
             # TODO: Metadata logging here self.errorLogger.logError(NameException.eType, self.currentChild)
             pass
 
         try:
             result[KEYS['gender']] = Gender.find_gender(result[KEYS['firstnames']])
-        except GenderException as e:
+        except GenderException:
             # TODO: Metadata logging here self.errorLogger.logError(e.eType, self.currentChild)
             result[KEYS['gender']] = ""
 
-        return self._constructReturnDict(result)
+        return self._constructReturnDict(result, extraction_results)
 
     @staticmethod
     def _split_names(name):

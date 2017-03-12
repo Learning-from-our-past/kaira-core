@@ -14,7 +14,7 @@ class LocationExtractor(BaseExtractor):
     matchFinalPosition = 0
     foundLocation = None
 
-    def extract(self, entry, start_location=0):
+    def extract(self, entry, extraction_results):
         """
         Note: Returns match-object for caller instead of string.
         :param entry:
@@ -24,7 +24,7 @@ class LocationExtractor(BaseExtractor):
         result = self._find_location(entry['text'])
         return self._constructReturnDict({
             "locationMatch": result[0]
-        }, result[1])
+        }, extraction_results, result[1])
 
     def _find_location(self, text):
         try:
@@ -36,19 +36,26 @@ class LocationExtractor(BaseExtractor):
 
 
 class BirthdayLocationExtractor(BaseExtractor):
-    DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
-    REQUIRES_MATCH_POSITION = True
-    SUBSTRING_WIDTH = 28
 
-    def extract(self, entry, start_position=0):
-        self.matchStartPosition = start_position  # TODO: Remove once this class is stateless
 
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(BirthdayLocationExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(LocationExtractor)
+        ])
+
+        self.DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
+        self.REQUIRES_MATCH_POSITION = True
+        self.SUBSTRING_WIDTH = 28
+
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
         result = self._find_location(prepared_text, start_position)
         return self._constructReturnDict({
             KEYS["birthLocation"]:  result[0]
-        }, result[1])
+        }, extraction_results, result[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
         return textUtils.takeSubStrBasedOnPos(text, start_position-4, self.SUBSTRING_WIDTH)   # Dirty -4 offset
@@ -56,17 +63,13 @@ class BirthdayLocationExtractor(BaseExtractor):
     def _find_location(self, text, start_position):
         cursor_location = start_position
 
-        _sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(LocationExtractor)
-        ])
-
         try:
-            results = _sub_extraction_pipeline.process({'text': text})
-            self._check_if_location_is_valid(text, results['locationMatch'])
-            location = results['locationMatch'].group("location")
+            results = self._sub_extraction_pipeline.process({'text': text})
+            self._check_if_location_is_valid(text, results['data']['locationMatch'])
+            location = results['data']['locationMatch'].group("location")
             location = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", location)
 
-            cursor_location = results['cursorLocation'] + start_position - 4
+            cursor_location = self.get_last_cursor_location(results) + start_position - 4
         except LocationException:
             # TODO: Metadata logging here self.errorLogger.logError(BirthLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
             location = ''

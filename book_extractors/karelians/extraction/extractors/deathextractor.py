@@ -9,18 +9,19 @@ from shared import regexUtils
 
 class DeathExtractor(BaseExtractor):
 
-    def __init__(self, options):
-        super(DeathExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(DeathExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.PATTERN = r"(?:kuoli)\.?\s?-(?P<year>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
         result = self._find_date(prepared_text, start_position)
 
-        return self._constructReturnDict({KEYS["deathYear"]: result[0]}, result[1])
+        return self._constructReturnDict({KEYS["deathYear"]: result[0]}, extraction_results, result[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
         t = textUtils.takeSubStrBasedOnPos(text, start_position, self.SUBSTRING_WIDTH)

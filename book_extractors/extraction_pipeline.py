@@ -44,7 +44,7 @@ def configure_extractor(extractor_class, extractor_options=None, depends_on_matc
 
     depends_on = None
     if depends_on_match_position_of_extractor is not None:
-        depends_on = depends_on_match_position_of_extractor.__class__.__name__
+        depends_on = depends_on_match_position_of_extractor.__name__
 
     config = {
         'extractor_class': extractor_class,

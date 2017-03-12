@@ -12,17 +12,18 @@ class OrigFamilyExtractor(BaseExtractor):
     REQUIRES_MATCH_POSITION = True
     SEARCH_SPACE = 40
     
-    def __init__(self, options):
-        super(OrigFamilyExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(OrigFamilyExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.FAMILY_PATTERN = r"(((?:o|0)\.? ?s\.?,? )(?P<family>([a-zä-ö-]*)(, ent\.?,? \w*)?)(?:,|\.))|(?P<family>ent\.?,? \w*)"
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         result = self._find_family(entry['text'], start_position)
 
         return self._constructReturnDict({
             KEYS["origfamily"]: result[0]
-        }, cursor_location=result[1])
+        }, extraction_results, cursor_location=result[1])
 
     def _find_family(self, text, start_position):
         text = textUtils.takeSubStrBasedOnPos(text, start_position, self.SEARCH_SPACE)
