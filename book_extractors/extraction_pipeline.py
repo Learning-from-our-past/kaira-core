@@ -5,39 +5,29 @@ class ExtractionPipeline:
 
     def __init__(self, extractor_configurations):
         self._extractor_configurations = extractor_configurations
-
-    def _find_extractor_by_class_name(self, class_to_find, extractors):
-        return next(e for e in extractors if type(e).__name__ == class_to_find.__name__)
+        self._extractors = self._build_extraction_pipeline()
 
     # FIXME: Refactor extractors so that Pipeline is not built for each and every person. Should speed up and save lots of memory
-    def _build_extraction_pipeline(self, entry):
+    def _build_extraction_pipeline(self):
         extractors = []
 
         for config in self._extractor_configurations:
-            extractor = config['extractor_class'](config['extractor_options'])
+            extractor = config['extractor_class'](key_of_cursor_location_dependent=config['depends_on_match_position_of_extractor'], options=config['extractor_options'])
             extractors.append(extractor)
 
         return extractors
 
     def process(self, entry):
-        extractors = self._build_extraction_pipeline(entry)
-        extraction_results = {}
+        extraction_results = {
+            'data': {},
+            'cursor_locations': {}
+        }
 
         # Replace all weird invisible white space characters with regular space
         entry['text'] = re.sub(r"\s", r" ", entry['text'])
 
-        for ext in zip(self._extractor_configurations, extractors):
-            # FIXME: Because of how current implementation of extractors, these functions has to be called here. Not ideal.
-            # Instead figure out a way to save match positions to pipeline level outside of extractor class and make extractors stateless.
-            # This way we could possibly get rid of reflection and set kind of symbol table to pipeline level where extractors could check
-            # the match locations of others when required.
-
-            start_position = 0
-            if ext[0]['depends_on_match_position_of_extractor'] is not None:
-                dependency_extractor = self._find_extractor_by_class_name(ext[0]['depends_on_match_position_of_extractor'], extractors)
-                start_position = dependency_extractor.getFinalMatchPosition()
-
-            extraction_results.update(ext[1].extract(entry, start_position))
+        for ext in self._extractors:
+            extraction_results = ext.extract(entry, extraction_results)
 
         return extraction_results
 
@@ -51,9 +41,14 @@ def configure_extractor(extractor_class, extractor_options=None, depends_on_matc
     :param set_dependency_match_position_to_zero:
     :return:
     """
+
+    depends_on = None
+    if depends_on_match_position_of_extractor is not None:
+        depends_on = depends_on_match_position_of_extractor.__class__.__name__
+
     config = {
         'extractor_class': extractor_class,
-        'depends_on_match_position_of_extractor': depends_on_match_position_of_extractor,
+        'depends_on_match_position_of_extractor': depends_on,
         'extractor_options': extractor_options
     }
 

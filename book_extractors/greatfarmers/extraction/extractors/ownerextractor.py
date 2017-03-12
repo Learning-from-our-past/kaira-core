@@ -11,16 +11,21 @@ import re
 
 class OwnerExtractor(BaseExtractor):
 
-    def __init__(self, options):
-        super(OwnerExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(OwnerExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.SEARCH_SPACE = 200
         self.OWNER_YEAR_PATTERN = r"om(?:\.|,)?\s?(?:vuodesta|vsta)\s(?P<year>\d\d\d\d)"
         self.OWNER_NAME_PATTERN = r"(om\s)?(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(\s(?:synt|s|\.)|\.)"  # r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)?\s(?:synt|s)" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.OWNER_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(BirthdayExtractor)
+        ])
+
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         result = self._find_owner(entry['text'], start_position)
-        return self._constructReturnDict({KEYS['owner']: result[0]}, result[1])
+        return self._constructReturnDict({KEYS['owner']: result[0]}, extraction_results, result[1])
 
     def _find_owner(self, text, start_position):
         text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
@@ -28,13 +33,13 @@ class OwnerExtractor(BaseExtractor):
         owner_name_details_result = self._find_owner_name_details(text, start_position)
         owner_birthday_result = self._find_owner_birthday(text)
 
-        cursor_location = max(owner_year_result[1], owner_name_details_result[1], owner_birthday_result['cursorLocation'])
+        cursor_location = max(owner_year_result[1], owner_name_details_result[1], self.get_last_cursor_location(owner_birthday_result))
         result = {
             KEYS["ownerFrom"]: owner_year_result[0],
             KEYS["firstnames"]: owner_name_details_result[0][0],
             KEYS["surname"]: owner_name_details_result[0][1],
             KEYS["gender"]: owner_name_details_result[0][2],
-            KEYS["ownerBirthData"]: owner_birthday_result
+            KEYS["ownerBirthData"]: owner_birthday_result['data']
         }
 
         return result, cursor_location
@@ -64,13 +69,8 @@ class OwnerExtractor(BaseExtractor):
 
         return owner_name_data, cursor_location
 
-    @staticmethod
-    def _find_owner_birthday(text):
-        _sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(BirthdayExtractor)
-        ])
-
-        results = _sub_extraction_pipeline.process({'text': text})
+    def _find_owner_birthday(self, text):
+        results = self._sub_extraction_pipeline.process({'text': text})
         return results
 
     @staticmethod

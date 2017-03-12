@@ -7,8 +7,8 @@ import re
 
 class FarmExtractor(BaseExtractor):
 
-    def __init__(self, options):
-        super(FarmExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(FarmExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.ALL_AREA_PATTERN = r"(?:(?:kok\.pinta-ala){s<=1,i<=2}|(?:kokonaispinta-ala){s<=1,i<=2}).{0,20}?(?P<area1>\d\d?\d?,?\d\d)\sha"
         self.FOREST_AREA_PATTERN = r"(?:metsää{s<=1}\s?(?P<area1>\d\d?\d?,?\d\d))|(?:(?P<area2>\d\d?\d?,\d\d)\s?ha\s?metsää{s<=1})"
         self.FIELD_AREA_PATTERN = r"(?:(?:(?:salaojitettua\s){s<=1,i<=1})?peltoa{s<=1}\s?(?P<area1>\d\d?\d?,?\d\d))|(?:(?P<area2>\d\d?\d?,\d\d)\s?ha\s?(?:salaojitettua\s{s<=1,i<=1})?peltoa{s<=1})"
@@ -16,9 +16,10 @@ class FarmExtractor(BaseExtractor):
         self.MEADOW_AREA_PATTERN = r"(?:niittyä{s<=1}\s?(?P<area1>\d\d?\d?,?\d\d))|(?:(?P<area1>\d\d?\d?,\d\d)\s?ha\s?niittyä{s<=1})"
         self.AREA_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         result = self._find_areas(entry['text'])
-        return self._constructReturnDict({KEYS["farmDetails"] : result}, start_position)
+        return self._constructReturnDict({KEYS["farmDetails"]: result}, extraction_results, start_position)
 
     def _find_areas(self, text):
         whole_area = self._get_area(text, self.ALL_AREA_PATTERN)

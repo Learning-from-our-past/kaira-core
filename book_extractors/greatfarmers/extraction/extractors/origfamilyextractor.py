@@ -10,16 +10,17 @@ class OrigFamilyExtractor(BaseExtractor):
     Tries to find the possible o.s. (omaa sukua) part from entry.
     """
 
-    def __init__(self, options):
-        super(OrigFamilyExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(OrigFamilyExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.REQUIRES_MATCH_POSITION = True
         self.SEARCH_SPACE = 40
         self.FAMILY_PATTERN = r"(?:(?:o|0)\.?\s?s\.?,?\s)(?P<family>[a-zä-ö-]*)"
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         results = self._find_family(entry['text'], start_position)
-        return self._constructReturnDict({KEYS["origfamily"]: results[0]}, results[1])
+        return self._constructReturnDict({KEYS["origfamily"]: results[0]}, extraction_results, results[1])
 
     def _find_family(self, text, start_position):
         cursor_location = start_position

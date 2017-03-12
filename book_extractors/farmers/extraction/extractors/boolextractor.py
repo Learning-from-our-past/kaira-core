@@ -7,14 +7,14 @@ import re
 
 class BoolExtractor(BaseExtractor):
 
-    def __init__(self, options):
-        super(BoolExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(BoolExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.patterns_to_find = options['patterns']
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_positions=0):
+    def extract(self, entry, extraction_results):
         result = self._find_patterns(entry['text'])
-        return self._constructReturnDict({KEYS["flags"]: result}, 0)
+        return self._constructReturnDict({KEYS["flags"]: result}, extraction_results, 0)
 
     def _find_patterns(self, text):
         results = {}

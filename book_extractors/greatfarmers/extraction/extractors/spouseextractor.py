@@ -10,17 +10,23 @@ from book_extractors.greatfarmers.extraction.extractors.origfamilyextractor impo
 
 class SpouseExtractor(BaseExtractor):
 
-    def __init__(self, options):
-        super(SpouseExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(SpouseExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.PATTERN = r"vmo\.?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp|suvulla|tila))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = False
         self.SUBSTRING_WIDTH = 100
 
-    def extract(self, entry, start_position=0):
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(OrigFamilyExtractor),
+            configure_extractor(BirthdayExtractor)
+        ])
+
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         results = self._find_spouse(entry['text'], start_position)
-        return self._constructReturnDict({KEYS['spouse']: results[0]}, cursor_location=results[1])
+        return self._constructReturnDict({KEYS['spouse']: results[0]}, extraction_results, cursor_location=results[1])
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
@@ -60,9 +66,4 @@ class SpouseExtractor(BaseExtractor):
             pass
 
     def _find_spouse_details(self, text):
-        _sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(OrigFamilyExtractor),
-            configure_extractor(BirthdayExtractor)
-        ])
-
-        return _sub_extraction_pipeline.process({'text': text})
+        return self._sub_extraction_pipeline.process({'text': text})['data']

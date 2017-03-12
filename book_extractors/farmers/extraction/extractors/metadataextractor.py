@@ -4,10 +4,9 @@ from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 
 class MetadataExtractor(BaseExtractor):
-
     geocoder = GeoCoder()
 
-    def extract(self, entry, start_positions=0):
+    def extract(self, entry, extraction_results):
         page = ""
         name = ""
         location = {"locationName": "", "latitude": "", "longitude": ""}
@@ -39,4 +38,4 @@ class MetadataExtractor(BaseExtractor):
             KEYS["name"]: name,
             KEYS["approximatePage"]: page,
             KEYS["farmLocation"]: location,
-            KEYS['originalText']: original_text}, 0)
+            KEYS['originalText']: original_text}, extraction_results, 0)

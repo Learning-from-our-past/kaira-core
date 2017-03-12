@@ -7,14 +7,15 @@ from book_extractors.common.base_extractor import BaseExtractor
 
 class DateExtractor(BaseExtractor):
 
-    def __init__(self, options):
-        super(DateExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(DateExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.PATTERN = options['PATTERN']
         self.OPTIONS = options['OPTIONS']
         self.MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik": 4,
                                           "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         prepared_text = self._prepare_text_for_extraction(entry['text'])
 
         try:
@@ -23,7 +24,7 @@ class DateExtractor(BaseExtractor):
             # non-space pattern match didn't produce results, try with including spaces
             result = self._find_date(entry['text'], start_position)
 
-        return self._constructReturnDict(result[0], result[1])
+        return self._constructReturnDict(result[0], extraction_results, result[1])
 
     @staticmethod
     def _prepare_text_for_extraction(text):

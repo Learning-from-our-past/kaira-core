@@ -9,8 +9,8 @@ from shared.genderExtract import Gender, GenderException
 class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
 
-    def __init__(self, options):
-        super(ChildExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(ChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika|tyttäret|pojat)(;|:)(?P<children>.*?)(?:\.|Tilal{s<=1}|Edelli{s<=1}|hänen{s<=1}|joka{s<=1}|emännän{s<=1}|isännän{s<=1})"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
@@ -20,11 +20,12 @@ class ChildExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"\d\d\s(?P<location>[a-zä-ö\s-]+$)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         many_marriages = self._check_many_marriages(entry['text'])
 
         children_results = self._find_children(entry['text'], start_position)
-        return self._constructReturnDict({KEYS["manymarriages"]: many_marriages, KEYS["children"]: children_results[0]}, children_results[1])
+        return self._constructReturnDict({KEYS["manymarriages"]: many_marriages, KEYS["children"]: children_results[0]}, extraction_results, children_results[1])
 
     def _find_children(self, text, start_position):
         cursor_location = start_position

@@ -10,15 +10,20 @@ import re
 
 class HostessExtractor(BaseExtractor):
 
-    def __init__(self, options):
-        super(HostessExtractor, self).__init__(options)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(HostessExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.SEARCH_SPACE = 400
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+),"
         self.HOSTESS_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, start_position=0):
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(BirthdayExtractor)
+        ])
+
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
         results = self._find_hostess(entry['text'], start_position)
-        return self._constructReturnDict({KEYS["hostess"]: results[0]}, results[1])
+        return self._constructReturnDict({KEYS["hostess"]: results[0]}, extraction_results, results[1])
 
     def _find_hostess(self, text, start_position):
         text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
@@ -31,23 +36,20 @@ class HostessExtractor(BaseExtractor):
                 KEYS["firstnames"]: name[0][0],
                 KEYS["surname"]: name[0][1],
                 KEYS["gender"]: 'Female',
-                KEYS["hostessBirthData"]: hostess_birthday
+                KEYS["hostessBirthData"]: hostess_birthday[0]
             }
 
-            cursor_location = max(name[1], hostess_birthday['cursorLocation'])
+            cursor_location = max(name[1], hostess_birthday[1])
             return result, cursor_location
 
         except regexUtils.RegexNoneMatchException:
             # TODO: Metadata logging here self.errorLogger.logError(HostessNameException.eType, self.currentChild)
             return None, 0
 
-    @staticmethod
-    def _find_hostess_birthday(text):
-        _sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(BirthdayExtractor)
-        ])
-
-        return _sub_extraction_pipeline.process({'text': text})
+    def _find_hostess_birthday(self, text):
+        results = self._sub_extraction_pipeline.process({'text': text})
+        final_cursor_location = self.get_last_cursor_location(results)
+        return results['data'], final_cursor_location
 
     def _find_hostess_name(self, text):
         hostess_name_match = regexUtils.safeSearch(self.HOSTESS_NAME_PATTERN, text, self.HOSTESS_OPTIONS)

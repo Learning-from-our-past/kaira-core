@@ -26,6 +26,7 @@ class TestCommandLineSmoke:
 
         assert len(result_data) == 3
 
+    @pytest.mark.only
     def should_process_small_farmers_xml_and_save_to_json(self):
         file_path = 'temp/json_export_tests/results.json'
         results = run(['python', 'main.py', '-i', 'tests/data/small_farmers_smoke_test.xml', '-o', file_path])
@@ -37,6 +38,7 @@ class TestCommandLineSmoke:
 
         assert len(result_data) == 3
 
+    @pytest.mark.only
     def should_process_great_farmers_xml_and_save_to_json(self):
         file_path = 'temp/json_export_tests/results.json'
         results = run(['python', 'main.py', '-i', 'tests/data/great_farmers_smoke_test.xml', '-o', file_path])
