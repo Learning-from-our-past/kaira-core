@@ -9,23 +9,20 @@ class BoolExtractor(BaseExtractor):
     def __init__(self, options):
         super(BoolExtractor, self).__init__(options)
         self.patterns_to_find = options['patterns']
-        self.results = {}
-
-    def extract(self, entry, start_positions=0):
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-        self._find_patterns(entry['text'])
-        return self._constructReturnDict()
+    def extract(self, entry, start_positions=0):
+        results = self._find_patterns(entry['text'])
+        return self._constructReturnDict({KEYS["flags"]: results}, start_positions)
 
     def _find_patterns(self, text):
-
+        results = {}
         for key, pattern in self.patterns_to_find.items():
             try:
-                found = regexUtils.safeSearch(pattern, text, self.OPTIONS)
-                self.results[key] = True
-            except regexUtils.RegexNoneMatchException as e:
-                self.results[key] = False
+                regexUtils.safeSearch(pattern, text, self.OPTIONS)
+                results[key] = True
+            except regexUtils.RegexNoneMatchException:
+                results[key] = False
                 pass
 
-    def _constructReturnDict(self):
-        return {KEYS["flags"] : self.results}
+        return results
