@@ -1,9 +1,10 @@
-from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.common.extraction_keys import KEYS
-from shared import regexUtils
 import re
-from shared.geo.geocoding import GeoCoder
+
+from book_extractors.common.extraction_keys import KEYS
+from book_extractors.common.extractors.base_extractor import BaseExtractor
+from shared import regexUtils
 from shared.genderExtract import Gender, GenderException
+from shared.geo.geocoding import GeoCoder
 
 
 class ChildExtractor(BaseExtractor):

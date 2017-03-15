@@ -1,11 +1,13 @@
-from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.common.extraction_keys import KEYS
-from shared import regexUtils
 import re
-from shared.geo.geocoding import GeoCoder, LocationNotFound
-from shared.genderExtract import Gender, GenderException
+
+from book_extractors.common.extraction_keys import KEYS
+from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import StopExtractionException
+from shared import regexUtils
 from shared.genderExtract import Gender
+from shared.genderExtract import GenderException
+from shared.geo.geocoding import GeoCoder, LocationNotFound
+
 Gender.load_names()
 
 

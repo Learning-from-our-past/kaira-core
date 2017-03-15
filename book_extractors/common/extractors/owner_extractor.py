@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.common.extraction_keys import KEYS
-from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor      # TODO: Tämä parametrisoitava
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-import shared.textUtils as textUtils
-import shared.regexUtils as regexUtils
-from shared.genderExtract import Gender, GenderException
 import re
+
+import shared.regexUtils as regexUtils
+import shared.textUtils as textUtils
+from book_extractors.common.extraction_keys import KEYS
+from book_extractors.common.extractors.base_extractor import BaseExtractor
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
+from shared.genderExtract import Gender, GenderException
 
 
 class CommonOwnerExtractor(BaseExtractor):

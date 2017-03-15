@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from book_extractors.common.birthday_extractor import CommonBirthdayExtractor
+from book_extractors.common.extractors.birthday_extractor import CommonBirthdayExtractor
 
 
 class BirthdayExtractor(CommonBirthdayExtractor):

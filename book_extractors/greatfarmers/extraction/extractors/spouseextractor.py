@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
-from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
+
 from book_extractors.common.extraction_keys import KEYS
-from shared import regexUtils
+from book_extractors.common.extractors.base_extractor import BaseExtractor
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from book_extractors.greatfarmers.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
+from shared import regexUtils
 
 
 class SpouseExtractor(BaseExtractor):

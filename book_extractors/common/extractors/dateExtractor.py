@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from shared import regexUtils
 import shared.textUtils as textUtils
+from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
-from book_extractors.common.base_extractor import BaseExtractor
+from shared import regexUtils
 
 
 class DateExtractor(BaseExtractor):

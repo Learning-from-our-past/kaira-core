@@ -1,11 +1,11 @@
-from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.common.extraction_keys import KEYS
-from book_extractors.extraction_exceptions import OtherLocationException, KarelianLocationException
-from shared import regexUtils
 import re
-from shared.geo.geocoding import GeoCoder, LocationNotFound
+
+from book_extractors.common.extraction_keys import KEYS
+from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers import migration_parser
 from names import location_name_white_list
+from shared import regexUtils
+from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 MAX_PLACE_NAME_LENGTH = 15
 MIN_PLACE_NAME_LENGTH = 4
