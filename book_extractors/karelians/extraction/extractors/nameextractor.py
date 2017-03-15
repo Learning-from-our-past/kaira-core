@@ -1,7 +1,8 @@
-from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.common.extraction_keys import KEYS
-from shared.genderExtract import Gender, GenderException
 import re
+
+from book_extractors.common.extraction_keys import KEYS
+from book_extractors.common.extractors.base_extractor import BaseExtractor
+from shared.genderExtract import Gender, GenderException
 
 
 class NameExtractor(BaseExtractor):

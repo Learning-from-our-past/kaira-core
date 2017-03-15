@@ -1,7 +1,8 @@
-from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.common.extraction_keys import KEYS
-import shared.regexUtils as regexUtils
 import re
+
+import shared.regexUtils as regexUtils
+from book_extractors.common.extraction_keys import KEYS
+from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 
 class OmakotitaloExtractor(BaseExtractor):

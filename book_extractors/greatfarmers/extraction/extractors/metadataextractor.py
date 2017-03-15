@@ -1,6 +1,5 @@
-from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.extraction_exceptions import ShortEntryException
+from book_extractors.common.extractors.base_extractor import BaseExtractor
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 
