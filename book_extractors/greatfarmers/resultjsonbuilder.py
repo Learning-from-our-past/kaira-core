@@ -21,11 +21,27 @@ class ResultJsonBuilder(ResultJsonBuilderInterface):
     def writeEntry(self, dataDict):
         self._writeJsonEntry(dataDict)
 
+    def _remove_cursor_locations(self, l):
+        if type(l) is dict:
+            if 'cursorLocation' in l:
+                del l['cursorLocation']
+
+            for key, value in l.items():
+                if type(value) is list or type(value) is dict:
+                    self._remove_cursor_locations(value)
+
+        if type(l) is list:
+            for value in l:
+                if type(value) is list or type(value) is dict:
+                    self._remove_cursor_locations(value)
+
     def _writeJsonEntry(self, dataDict):
         person = {}
         for key, property in dataDict.items():
             if key != "cursorLocation":
                 person[key] = property
+
+        self._remove_cursor_locations(person)
         self.jsonFormat.append(person)
 
     def closeJson(self):

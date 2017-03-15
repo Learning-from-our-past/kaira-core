@@ -55,126 +55,123 @@ class FinnishLocationsExtractor(BaseExtractor):
     Tries to extract the locations of the person in oter places than karelia
     """
     geocoder = GeoCoder()
-
     OTHER_REGION_ID = 'other'
 
-    def extract(self, text, entry):
-        self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)" #r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(FinnishLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)"  # r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.locations = ""
-        self.location_listing = []
-        self.location_error = False
 
-        try:
-            self._find_locations(text)
-        except LocationThresholdException:
-            pass
-
-        return self._constructReturnDict()
+    def extract(self, entry, extraction_results):
+        location_listing_results = self._find_locations(entry['text'])
+        return self._constructReturnDict({
+            KEYS["otherlocations"]: location_listing_results[0]
+        }, extraction_results, location_listing_results[1])
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
         text = re.sub(r"\s", r" ", text)
 
+        cursor_location = 0
+        location_entries = []
+
+        def _get_location_entries(location):
+            location_records = []
+            # If there is municipality information, use it as an main entry name
+            village_name = None
+
+            if 'municipality' in location:
+                entry_name = location['municipality']
+                village_name = location['place']
+            else:
+                entry_name = location['place']
+
+            def get_coordinates_by_name(place_name):
+                try:
+                    return self.geocoder.get_coordinates(place_name, "finland")
+                except LocationNotFound:
+                    return {"latitude": "", "longitude": ""}
+
+            geocoordinates = get_coordinates_by_name(entry_name)
+
+            entry_name = validate_location_name(entry_name, geocoordinates)
+            village_name = validate_village_name(village_name)
+
+            village_coordinates = {"latitude": "", "longitude": ""}
+            if village_name is not None:
+                village_coordinates = get_coordinates_by_name(village_name)
+
+            village_information = {
+                KEYS["otherlocation"]: village_name or None,
+                KEYS["othercoordinate"]: {
+                    KEYS["latitude"]: village_coordinates["latitude"],
+                    KEYS["longitude"]: village_coordinates["longitude"]
+                }
+            }
+
+            moved_in = ''
+            moved_out = ''
+
+            def get_location_entry():
+                return {
+                    KEYS["otherlocation"]: entry_name,
+                    KEYS["othercoordinate"]: {
+                        KEYS["latitude"]: geocoordinates["latitude"],
+                        KEYS["longitude"]: geocoordinates["longitude"]
+                    },
+                    KEYS["movedOut"]: moved_out,
+                    KEYS["movedIn"]: moved_in,
+                    KEYS["region"]: self.OTHER_REGION_ID,
+                    KEYS["village"]: village_information
+                }
+
+            if 'year_information' in location:
+                for migration in location['year_information']:
+                    if 'moved_in' in migration:
+                        moved_in = migration['moved_in']
+                    else:
+                        moved_in = ''
+
+                    if 'moved_out' in migration:
+                        moved_out = migration['moved_out']
+                    else:
+                        moved_out = ''
+
+                    location_records.append(get_location_entry())
+            else:
+                location_records.append(get_location_entry())
+
+            return location_records
+
         try:
             found_locations = regexUtils.safeSearch(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
-            self.matchFinalPosition = found_locations.end()
-            self.locations = found_locations.group("asuinpaikat")
-            self._clean_locations()
+            cursor_location = found_locations.end()
+            locations = found_locations.group("asuinpaikat")
+            locations = self._clean_locations(locations)
 
-            parsed_locations = migration_parser.parse_locations(self.locations)
+            # Parse location string with BNF parser
+            parsed_locations = migration_parser.parse_locations(locations)
 
             try:
-                for location in parsed_locations:
-                    self._create_location_entry(location)
+                for loc in parsed_locations:
+                    location_entries += _get_location_entries(loc)
             except InvalidLocationException as e:
                 pass
-
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
-            self.location_error = OtherLocationException.eType
+            # TODO: Metadata logging here: self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
+            pass
 
-    def _clean_locations(self):
-        self.locations = self.locations.strip(",")
-        self.locations = self.locations.strip(".")
-        self.locations = self.locations.strip()
-        self.locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", self.locations)
-        self.locations = self.locations.lstrip()
+        return location_entries, cursor_location
 
-    def _create_location_entry(self, location):
-        # If there is municipality information, use it as an main entry name
-        village_name = None
+    @staticmethod
+    def _clean_locations(locations):
+        locations = locations.strip(",")
+        locations = locations.strip(".")
+        locations = locations.strip()
+        locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
+        locations = locations.lstrip()
 
-        if 'municipality' in location:
-            entry_name = location['municipality']
-            village_name = location['place']
-        else:
-            entry_name = location['place']
-
-        def get_coordinates_by_name(place_name):
-            try:
-                return self.geocoder.get_coordinates(place_name, "finland")
-            except LocationNotFound:
-                return {"latitude": "", "longitude": ""}
-
-        geocoordinates = get_coordinates_by_name(entry_name)
-
-        entry_name = validate_location_name(entry_name, geocoordinates)
-        village_name = validate_village_name(village_name)
-
-        village_coordinates = {"latitude": "", "longitude": ""}
-        if village_name is not None:
-            village_coordinates = get_coordinates_by_name(village_name)
-
-        village_information = {
-            KEYS["otherlocation"]: village_name or None,
-            KEYS["othercoordinate"]: {
-                KEYS["latitude"]: village_coordinates["latitude"],
-                KEYS["longitude"]: village_coordinates["longitude"]
-            }
-        }
-
-        moved_in = ''
-        moved_out = ''
-
-        def add_location_to_list():
-            self.location_listing.append({
-                KEYS["otherlocation"]: entry_name,
-                KEYS["othercoordinate"]: {
-                    KEYS["latitude"]: geocoordinates["latitude"],
-                    KEYS["longitude"]: geocoordinates["longitude"]
-                },
-                KEYS["movedOut"]: moved_out,
-                KEYS["movedIn"]: moved_in,
-                KEYS["region"]: self.OTHER_REGION_ID,
-                KEYS["village"]: village_information
-            })
-
-        if 'year_information' in location:
-            for migration in location['year_information']:
-                if 'moved_in' in migration:
-                    moved_in = migration['moved_in']
-                else:
-                    moved_in = ''
-
-                if 'moved_out' in migration:
-                    moved_out = migration['moved_out']
-                else:
-                    moved_out = ''
-
-                try:
-                    if 41 <= int(moved_in) <= 43:
-                        self.returned = True
-                except ValueError:
-                    pass
-
-                add_location_to_list()
-        else:
-            add_location_to_list()
-
-    def _constructReturnDict(self):
-        loc = self.location_listing
-        return {KEYS["otherlocations"]: loc, KEYS["otherlocationsCount"]: len(self.location_listing)}
+        return locations
 
 
 class KarelianLocationsExtractor(BaseExtractor):
@@ -184,125 +181,132 @@ class KarelianLocationsExtractor(BaseExtractor):
     geocoder = GeoCoder()
     KARELIAN_REGION_ID = 'karelia'
 
-    def extract(self, text, entry):
-        self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))" # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(KarelianLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))"  # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.returned = ""
-        self.locations = ""
-        self.location_listing = []
-        self.location_error = False
-        self._find_locations(text)
 
-        return self._constructReturnDict()
+    def extract(self, entry, extraction_results):
+        location_listing_results = self._find_locations(entry['text'])
+
+        return self._constructReturnDict({
+            KEYS["karelianlocations"]: location_listing_results[0],
+            KEYS["returnedkarelia"]: location_listing_results[1]
+        }, extraction_results, location_listing_results[2])
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
         text = re.sub(r"\s", r" ", text)
 
+        cursor_location = 0
+        location_entries = []
+        returned_to_karelia = False
+
+        def _get_location_entries(location):
+            # If there is municipality information, use it as an main entry name
+            village_name = None
+            location_records = []
+
+            if 'municipality' in location:
+                entry_name = location['municipality']
+                village_name = location['place']
+            else:
+                entry_name = location['place']
+
+            def get_coordinates_by_name(place_name):
+                try:
+                    return self.geocoder.get_coordinates(place_name, "russia")
+                except LocationNotFound:
+                    return {"latitude": "", "longitude": ""}
+
+            geocoordinates = get_coordinates_by_name(entry_name)
+
+            entry_name = validate_location_name(entry_name, geocoordinates)
+            village_name = validate_village_name(village_name)
+
+            village_coordinates = {"latitude": "", "longitude": ""}
+            if village_name is not None:
+                village_coordinates = get_coordinates_by_name(village_name)
+
+            village_information = {
+                KEYS["karelianlocation"]: village_name or None,
+                KEYS["kareliancoordinate"]: {
+                    KEYS["latitude"]: village_coordinates["latitude"],
+                    KEYS["longitude"]: village_coordinates["longitude"]
+                }
+            }
+
+            moved_in = ''
+            moved_out = ''
+
+            def get_location_entry():
+                return {
+                    KEYS["karelianlocation"]: entry_name,
+                    KEYS["kareliancoordinate"]: {
+                        KEYS["latitude"]: geocoordinates["latitude"],
+                        KEYS["longitude"]: geocoordinates["longitude"]
+                    },
+                    KEYS["movedOut"]: moved_out,
+                    KEYS["movedIn"]: moved_in,
+                    KEYS["region"]: self.KARELIAN_REGION_ID,
+                    KEYS["village"]: village_information
+                }
+
+            if 'year_information' in location:
+                for migration in location['year_information']:
+                    if 'moved_in' in migration:
+                        moved_in = migration['moved_in']
+                    else:
+                        moved_in = ''
+
+                    if 'moved_out' in migration:
+                        moved_out = migration['moved_out']
+                    else:
+                        moved_out = ''
+
+                    try:
+                        if 41 <= int(moved_in) <= 43:
+                            nonlocal returned_to_karelia
+                            returned_to_karelia = True
+                    except ValueError:
+                        pass
+
+                    location_records.append(get_location_entry())
+            else:
+                location_records.append(get_location_entry())
+
+            return location_records
+
         try:
             found_locations = regexUtils.safeSearch(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
-            self.matchFinalPosition = found_locations.end()
-            self.locations = found_locations.group("asuinpaikat")
-            self._clean_locations()
+            cursor_location = found_locations.end()
+            locations = found_locations.group("asuinpaikat")
+            locations = self._clean_locations(locations)
 
-            parsed_locations = migration_parser.parse_locations(self.locations)
+            # Parse location string with BNF parser
+            parsed_locations = migration_parser.parse_locations(locations)
 
             try:
-                for location in parsed_locations:
-                    self._create_location_entry(location)
-            except InvalidLocationException:
+                for loc in parsed_locations:
+                    location_entries += _get_location_entries(loc)
+            except InvalidLocationException as e:
                 pass
-
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(KarelianLocationException.eType, self.currentChild)
-            self.location_error = KarelianLocationException.eType
+            # TODO: Metadata logging here self.errorLogger.logError(KarelianLocationException.eType, self.currentChild)
+            pass
 
-    def _clean_locations(self):
-        self.locations = self.locations.strip(",")
-        self.locations = self.locations.strip(".")
-        self.locations = self.locations.strip()
+        return location_entries, returned_to_karelia, cursor_location
+
+    @staticmethod
+    def _clean_locations(locations):
+        locations = locations.strip(",")
+        locations = locations.strip(".")
+        locations = locations.strip()
 
         # Strip away spaces and hyphens from center of words
-        self.locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", self.locations)
+        locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
 
-        self.locations = self.locations.lstrip()
-
-    def _create_location_entry(self, location):
-        # If there is municipality information, use it as an main entry name
-        village_name = None
-
-        if 'municipality' in location:
-            entry_name = location['municipality']
-            village_name = location['place']
-        else:
-            entry_name = location['place']
-
-        def get_coordinates_by_name(place_name):
-            try:
-                return self.geocoder.get_coordinates(place_name, "russia")
-            except LocationNotFound:
-                return {"latitude": "", "longitude": ""}
-
-        geocoordinates = get_coordinates_by_name(entry_name)
-
-        entry_name = validate_location_name(entry_name, geocoordinates)
-        village_name = validate_village_name(village_name)
-
-        village_coordinates = {"latitude": "", "longitude": ""}
-        if village_name is not None:
-            village_coordinates = get_coordinates_by_name(village_name)
-
-        village_information = {
-            KEYS["karelianlocation"]: village_name or None,
-            KEYS["kareliancoordinate"]: {
-                KEYS["latitude"]: village_coordinates["latitude"],
-                KEYS["longitude"]: village_coordinates["longitude"]
-            }
-        }
-
-        moved_in = ''
-        moved_out = ''
-
-        def add_location_to_list():
-            self.location_listing.append({
-                KEYS["karelianlocation"]: entry_name,
-                KEYS["kareliancoordinate"]: {
-                    KEYS["latitude"]: geocoordinates["latitude"],
-                    KEYS["longitude"]: geocoordinates["longitude"]
-                },
-                KEYS["movedOut"]: moved_out,
-                KEYS["movedIn"]: moved_in,
-                KEYS["region"]: self.KARELIAN_REGION_ID,
-                KEYS["village"]: village_information
-            })
-
-        if 'year_information' in location:
-            for migration in location['year_information']:
-                if 'moved_in' in migration:
-                    moved_in = migration['moved_in']
-                else:
-                    moved_in = ''
-
-                if 'moved_out' in migration:
-                    moved_out = migration['moved_out']
-                else:
-                    moved_out = ''
-
-                try:
-                    if 41 <= int(moved_in) <= 43:
-                        self.returned = True
-                except ValueError:
-                    pass
-
-                add_location_to_list()
-        else:
-            add_location_to_list()
-
-    def _constructReturnDict(self):
-        loc = self.location_listing
-        return {KEYS["karelianlocations"]: loc,
-                KEYS["returnedkarelia"]: self.returned,
-                KEYS["karelianlocationsCount"]: len(self.location_listing)}
+        return locations.lstrip()
 
 
 class LocationThresholdException(Exception):

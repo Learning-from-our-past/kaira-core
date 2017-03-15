@@ -26,7 +26,23 @@ class ResultJsonBuilder(ResultJsonBuilderInterface):
 
         self.jsonFormat.append(self._transform_data_for_export(person))
 
+    def _remove_cursor_locations(self, l):
+        if type(l) is dict:
+            if 'cursorLocation' in l:
+                del l['cursorLocation']
+
+            for key, value in l.items():
+                if type(value) is list or type(value) is dict:
+                    self._remove_cursor_locations(value)
+
+        if type(l) is list:
+            for value in l:
+                if type(value) is list or type(value) is dict:
+                    self._remove_cursor_locations(value)
+
     def _transform_data_for_export(self, data):
+        self._remove_cursor_locations(data)
+
         data['quantities']['sheep'] = self.int_or_none(data['quantities']['sheep'])
         data['quantities']['nuori'] = self.int_or_none(data['quantities']['nuori'])
         data['quantities']['emakko'] = self.int_or_none(data['quantities']['emakko'])
@@ -47,9 +63,10 @@ class ResultJsonBuilder(ResultJsonBuilderInterface):
         data['farmDetails']['fieldArea'] = self.float_or_none(data['farmDetails']['fieldArea'])
         data['farmDetails']['wasteArea'] = self.float_or_none(data['farmDetails']['wasteArea'])
 
-        data['hostess']['birthData']['birthDay'] = self.int_or_none(data['hostess']['birthData']['birthDay'])
-        data['hostess']['birthData']['birthMonth'] = self.int_or_none(data['hostess']['birthData']['birthMonth'])
-        data['hostess']['birthData']['birthYear'] = self.int_or_none(data['hostess']['birthData']['birthYear'])
+        if data['hostess'] is not None:
+            data['hostess']['birthData']['birthDay'] = self.int_or_none(data['hostess']['birthData']['birthDay'])
+            data['hostess']['birthData']['birthMonth'] = self.int_or_none(data['hostess']['birthData']['birthMonth'])
+            data['hostess']['birthData']['birthYear'] = self.int_or_none(data['hostess']['birthData']['birthYear'])
 
         for child in data['children']:
             child['birthYear'] = self.int_or_none(child['birthYear'])

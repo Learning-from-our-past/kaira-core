@@ -4,19 +4,21 @@ from book_extractors.common.extraction_keys import KEYS
 
 class ImageExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
-        self.image_path = ""
-        self.page = ""
+    def extract(self, entry, extraction_results):
+        image_path = ""
+        page = ""
         try:
-            self.image_path = entry["image_path"]
-        except KeyError as e:
+            image_path = entry["image_path"]
+        except KeyError:
             pass
 
         try:
-            self.page = entry["approximated_page"]
-        except KeyError as e:
+            page = entry["approximated_page"]
+        except KeyError:
             pass
-        return self._constructReturnDict()
 
-    def _constructReturnDict(self):
-        return {KEYS["imagepath"]: self.image_path, KEYS["approximatePage"]: self.page}
+        return self._constructReturnDict({
+            KEYS["imagepath"]: image_path,
+            KEYS["approximatePage"]: page,
+            KEYS["originalText"]: entry['text']
+        }, extraction_results)

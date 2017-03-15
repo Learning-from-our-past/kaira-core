@@ -191,3 +191,11 @@ class ShortEntryException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
+
+class StopExtractionException(Exception):
+
+    def __init__(self, message):
+        self.message = message
+
+    def __unicode__(self):
+        return self.message

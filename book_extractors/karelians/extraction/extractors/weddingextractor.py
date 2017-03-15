@@ -9,39 +9,36 @@ from shared import regexUtils
 
 class WeddingExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
-        super(WeddingExtractor, self).extract(text, entry)
-
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(WeddingExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.PATTERN = r"(?:avioit)\.?\s?-(?P<year>\d{2,4})"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
 
-        self.weddingYear = ""
-        self.preparedText = ""
-        self.initVars(text)
-        self._findDate(self.preparedText)
-        return self._constructReturnDict()
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
+        prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
-    def initVars(self,text):
-        self.preparedText = self._prepareTextForExtraction(text)
+        results = self._find_date(prepared_text, start_position)
+        return self._constructReturnDict({
+            KEYS["weddingYear"]:  results[0]
+        }, extraction_results, results[1])
 
-    def _prepareTextForExtraction(self, text):
-        t = textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition, self.SUBSTRING_WIDTH)
+    def _prepare_text_for_extraction(self, text, start_position):
+        t = textUtils.takeSubStrBasedOnPos(text, start_position, self.SUBSTRING_WIDTH)
         t = textUtils.removeSpacesFromText(t)
         return t
 
-    def _findDate(self, text):
+    def _find_date(self, text, start_position):
+        cursor_location = start_position
         try:
             wedding = regexUtils.safeSearch(self.PATTERN, text, self.OPTIONS)
-            self._setFinalMatchPosition(wedding.end())
-            self.weddingYear = "19" + wedding.group("year")
-        except regexUtils.RegexNoneMatchException as e:
-            self.weddingYear = ""
 
-    def _setFinalMatchPosition(self, end):
-        #Dirty fix for inaccuracy in positions which would screw the Location extraction
-        self.matchFinalPosition = end + self.matchStartPosition - 4
+            # Dirty fix for inaccuracy in positions which would screw the Location extraction
+            cursor_location = wedding.end() + start_position - 4
+            wedding_year = "19" + wedding.group("year")
+        except regexUtils.RegexNoneMatchException:
+            wedding_year = ""
 
-    def _constructReturnDict(self):
-        return {KEYS["weddingYear"]:  self.weddingYear}
+        return wedding_year, cursor_location

@@ -1,4 +1,3 @@
-from shared.exceptionlogger import ExceptionLogger
 from book_extractors.extraction_exceptions import ExtractionException
 
 
@@ -15,14 +14,11 @@ class ProcessData:
         self.person_data = person_input_data
         self._init_process()
         self._process_all_entries()
-        return {"errors": self.errorLogger.getErrors(),
-                "entries": self.read_data_entries
-                }
+        return {"entries": self.read_data_entries}
 
     def _init_process(self):
         self.errors = 0
         self.count = 0
-        self.errorLogger = ExceptionLogger()
         self.person_data_length = len(self.person_data)
 
     def _process_all_entries(self):
@@ -38,13 +34,13 @@ class ProcessData:
             self.processUpdateCallbackFunction(i, self.person_data_length)
 
     def _process_entry(self, person):
-        person_results = self.extraction_pipeline.process(person, self.errorLogger)
-        person["extractionResults"] = person_results
+        person_results = self.extraction_pipeline.process(person)
+        person["extractionResults"] = person_results['data']
         self.count += 1
         return person
 
     def extract_one(self, person_input_data):
-        person_results = self.extraction_pipeline.process(person_input_data, self.errorLogger)
-        person_results["extractionResults"] = person_results
+        person_results = self.extraction_pipeline.process(person_input_data)
+        person_results["extractionResults"] = person_results['data']
 
         return person_results

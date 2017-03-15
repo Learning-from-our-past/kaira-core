@@ -7,21 +7,19 @@ import re
 
 class QuantityExtractor(BaseExtractor):
 
-    def __init__(self, entry, errorLogger):
-        super(QuantityExtractor, self).__init__(entry, errorLogger)
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(QuantityExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.QUANTITY_PATTERN = r"(?:(?P<range>\d\d?\d?(?:-|—)\d\d?\d?)|(?P<number>\d\d?\d?)|(?P<word>yksi|yhtä|kahta|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen))\s?"
         self.SPLIT_PATTERN1 = r"(?P<number>\d\d?)"
-        self.patterns_to_find = {}
-        self.results = {}
-
+        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
+        self.patterns_to_find = options['patterns']
         self.NUMBER_MAP = {"yksi" : 1, "yhtä": 1, "kahta": 2, "kaksi" : 2, "kolme" : 3, "neljä" : 4, "viisi" : 5, "kuusi" : 6,
                            "seitsemän" : 7, "kahdeksan" : 8, "yhdeksän" : 9, "kymmenen" : 10}
 
-    def extract(self, text, entry):
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
-
-        self._find_patterns(text)
-        return self._constructReturnDict()
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
+        result = self._find_patterns(entry['text'])
+        return self._constructReturnDict({KEYS["quantities"]: result}, extraction_results, start_position)
 
     def set_patterns_to_find(self, patterns):
         """
@@ -30,13 +28,16 @@ class QuantityExtractor(BaseExtractor):
         self.patterns_to_find = patterns
 
     def _find_patterns(self, text):
+        results = {}
         for key, pattern in self.patterns_to_find.items():
             try:
                 usepattern = self.QUANTITY_PATTERN + pattern
                 found = regexUtils.safeSearch(usepattern, text, self.OPTIONS)
-                self.results[key] = self._process_value(found)
+                results[key] = self._process_value(found)
             except regexUtils.RegexNoneMatchException as e:
-                self.results[key] = ""
+                results[key] = ""
+
+        return results
 
     def _process_value(self, match):
         if match.group("range") is not None:
@@ -63,6 +64,3 @@ class QuantityExtractor(BaseExtractor):
                 return ""
         except ValueError:
             return ""
-
-    def _constructReturnDict(self):
-        return {KEYS["quantities"] : self.results}

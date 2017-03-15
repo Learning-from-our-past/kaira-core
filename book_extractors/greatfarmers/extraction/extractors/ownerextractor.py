@@ -1,93 +1,103 @@
 # -*- coding: utf-8 -*-
 from book_extractors.common.base_extractor import BaseExtractor
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.extraction_exceptions import OwnerYearException, OwnerNameException
 from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 import shared.textUtils as textUtils
 import shared.regexUtils as regexUtils
 from shared.genderExtract import Gender, GenderException
 import re
 
+
 class OwnerExtractor(BaseExtractor):
 
-    SEARCH_SPACE = 200
-
-    def extract(self, text, entry):
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(OwnerExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self.SEARCH_SPACE = 200
         self.OWNER_YEAR_PATTERN = r"om(?:\.|,)?\s?(?:vuodesta|vsta)\s(?P<year>\d\d\d\d)"
-        self.OWNER_NAME_PATTERN = r"(om\s)?(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(\s(?:synt|s|\.)|\.)"#r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)?\s(?:synt|s)" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
+        self.OWNER_NAME_PATTERN = r"(om\s)?(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(\s(?:synt|s|\.)|\.)"  # r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)?\s(?:synt|s)" #r"(?P<name>[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
         self.OWNER_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.entry = entry
-        self.owner_year = ""
-        self.first_names = ""
-        self.surname = ""
-        self.owner_gender = ""
-        self.birthday = {KEYS["birthDay"]:  "", KEYS["birthMonth"]:  "",
-                KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
-        self._find_owner(text)
-        return self._constructReturnDict()
 
-    def _find_owner(self, text):
-        text = textUtils.takeSubStrBasedOnRange(text, self.matchStartPosition, self.SEARCH_SPACE)
-        self._find_owner_year(text)
-        self._find_owner_name(text)
-        self._find_owner_birthday(text)
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(BirthdayExtractor)
+        ])
 
-    def _find_owner_year(self, text):
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
+        result = self._find_owner(entry['text'], start_position)
+        return self._constructReturnDict({KEYS['owner']: result[0]}, extraction_results, result[1])
+
+    def _find_owner(self, text, start_position):
+        text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
+        owner_year_result = self._find_owner_year(text, start_position)
+        owner_name_details_result = self._find_owner_name_details(text, start_position)
+        owner_birthday_result = self._find_owner_birthday(text)
+
+        cursor_location = max(owner_year_result[1], owner_name_details_result[1], self.get_last_cursor_location(owner_birthday_result))
+        result = {
+            KEYS["ownerFrom"]: owner_year_result[0],
+            KEYS["firstnames"]: owner_name_details_result[0][0],
+            KEYS["surname"]: owner_name_details_result[0][1],
+            KEYS["gender"]: owner_name_details_result[0][2],
+            KEYS["ownerBirthData"]: owner_birthday_result['data']
+        }
+
+        return result, cursor_location
+
+    def _find_owner_year(self, text, start_position):
+        cursor_location = start_position
+        owner_year = None
         try:
-            ownerYear = regexUtils.safeSearch(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
-            self.matchFinalPosition = ownerYear.end()
-            self.owner_year = int(ownerYear.group("year"))
-        except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
+            owner_year = regexUtils.safeSearch(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
+            cursor_location = start_position + owner_year.end()
+            owner_year = int(owner_year.group("year"))
+        except regexUtils.RegexNoneMatchException:
+            pass  # TODO: Metadata logging here self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
 
-    def _find_owner_name(self, text):
+        return owner_year, cursor_location
+
+    def _find_owner_name_details(self, text, start_position):
+        cursor_location = start_position
+        owner_name_data = ('', '', '')
         try:
-            ownerName= regexUtils.safeSearch(self.OWNER_NAME_PATTERN, text, self.OWNER_OPTIONS)
-            self.matchFinalPosition = ownerName.end()
-            self._split_names(ownerName.group("name"))
-
+            owner_name_match = regexUtils.safeSearch(self.OWNER_NAME_PATTERN, text, self.OWNER_OPTIONS)
+            cursor_location = start_position + owner_name_match.end()
+            owner_name_data = self._split_names(owner_name_match.group("name"))
         except regexUtils.RegexNoneMatchException as e:
-            self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
+            pass
+
+        return owner_name_data, cursor_location
 
     def _find_owner_birthday(self, text):
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
-        birthdayExt.setDependencyMatchPositionToZero()
-        self.birthday = birthdayExt.extract(text, self.entry)
+        results = self._sub_extraction_pipeline.process({'text': text})
+        return results
 
-    def _find_owner_gender(self, names):
-            not_found = False
-            for n in names:
-                try:
-                    if len(n) > 2:
-                        self.owner_gender = Gender.find_gender(n)
-                        not_found = False
-                        break
-                except GenderException as e:
-                    not_found = True
+    @staticmethod
+    def _find_owner_gender(names):
+        owner_gender = ''
+        for n in names:
+            try:
+                if len(n) > 2:
+                    owner_gender = Gender.find_gender(n)
+                    break
+            except GenderException:
+                pass
 
-            if not_found:
-                self.errorLogger.logError(GenderException.eType, self.currentChild)
-                self.owner_gender = ""
+        return owner_gender
 
     def _split_names(self, name):
+        first_names = ''
+        owner_gender = ''
         name = re.sub(r"(?:<|>|&|')", r"", name)
         names = re.split(" ", name)
 
-        self.surname = names[len(names)-1].strip(" ")
+        surname = names[len(names)-1].strip(" ")
         if len(names) > 1:
             for i in range(0, len(names)-1):
                 if names[i].strip(" ") != "o.s.":
-                    self.first_names += names[i].strip(" ") + " "
-            self.first_names = self.first_names.strip(" ")
-            self._find_owner_gender(names)
+                    first_names += names[i].strip(" ") + " "
+            first_names = first_names.strip(" ")
+            owner_gender = self._find_owner_gender(names)
 
-
-
-
-    def _constructReturnDict(self):
-        return {KEYS["owner"] : { KEYS["ownerFrom"] : self.owner_year,
-                KEYS["firstnames"] : self.first_names,
-                KEYS["surname"] : self.surname,
-                KEYS["gender"] : self.owner_gender,
-                KEYS["ownerBirthData"] : self.birthday
-        }}
+        return first_names, surname, owner_gender

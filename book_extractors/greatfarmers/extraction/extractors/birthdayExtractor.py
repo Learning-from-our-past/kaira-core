@@ -2,62 +2,59 @@
 import re
 
 from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.extraction_exceptions import *
-from book_extractors.greatfarmers.extraction.extractors.dateExtractor import DateExtractor
-from shared import textUtils
+from book_extractors.common.dateExtractor import DateExtractor
 from book_extractors.common.extraction_keys import KEYS
+from book_extractors.extraction_exceptions import *
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared import regexUtils
+from shared import textUtils
 
+# FIXME: This class is identical to small farmers except maybe patterns. Combine.
 class BirthdayExtractor(BaseExtractor):
 
-
-    def extract(self, text, entry):
-        super(BirthdayExtractor, self).extract(text, entry)
-        self.PATTERN = r"(?:synt|s)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?—?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))" #r'(?:synt)\.?,? ?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)? ?(?P<month>\d{1,2})(?:\.|,|:|s)? ?-?(?P<year>\d{2,4})))'
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)    #TODO: TRY IGNORE CASE?
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(BirthdayExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self.PATTERN = r"(?:synt|s)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?—?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))"
+        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
-        self.dateExtractor = None
-        self.foundDate = {}
-        self.preparedText = ""
-        self.error = False
-        self.initVars(text)
-        self._findDate(self.preparedText)
-        return self._constructReturnDict()
 
-    def initVars(self,text):
-        self.dateExtractor = DateExtractor()
-        self.preparedText = self._prepareTextForExtraction(text)
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(DateExtractor, extractor_options={'PATTERN': self.PATTERN, 'OPTIONS': self.OPTIONS})
+        ])
 
-    def _prepareTextForExtraction(self, text):
-        t = textUtils.takeSubStrBasedOnPos(text, self.matchStartPosition, self.SUBSTRING_WIDTH)
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
+        prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
+        result = self._find_date(prepared_text, start_position)
+
+        return self._constructReturnDict(result[0], extraction_results, result[1])
+
+    def _prepare_text_for_extraction(self, text, start_position):
+        t = textUtils.takeSubStrBasedOnPos(text, start_position, self.SUBSTRING_WIDTH)
         t = textUtils.removeSpacesFromText(t)
 
-        spouseFound = regexUtils.findFirstPositionWithRegexSearch("puol", t, re.IGNORECASE|re.UNICODE)
-        if spouseFound != -1:
-            t = t[0:spouseFound]
+        spouse_found = regexUtils.findFirstPositionWithRegexSearch("puol", t, re.IGNORECASE|re.UNICODE)
+        if spouse_found != -1:
+            t = t[0:spouse_found]
 
         return t
 
-    def _findDate(self, text):
+    def _find_date(self, text, start_position):
+        cursor_location = start_position
+
         try:
-            self.foundDate = self.dateExtractor.extract(text, self.PATTERN, self.OPTIONS)
-            self._setFinalMatchPosition()
-        except DateException as e:
-            #TODO: Better idea to have in DateExtractor class maybe?
-            self.errorLogger.logError(BirthdayException.eType, self.currentChild)
-            self.error = BirthdayException.eType
-            self.foundDate = {"day": "","month": "",
-                "year": "", "cursorLocation": ""}
+            result = self._sub_extraction_pipeline.process({'text': text})
+            found_date = result['data']
+            cursor_location = self.get_last_cursor_location(result) + start_position - 4
+        except DateException:
+            # TODO: Better idea to have in DateExtractor class maybe?
+            # TODO: Metadata logging here self.errorLogger.logError(BirthdayException.eType, self.currentChild)
+            found_date = {"day": "","month": "", "year": "", "cursorLocation": ""}
 
-    def _setFinalMatchPosition(self):
-        #Dirty fix for inaccuracy in positions which would screw the Location extraction
-        self.matchFinalPosition = self.dateExtractor.getFinalMatchPosition() + self.matchStartPosition - 4
+        # Map date to birthDate
+        birth_date = {KEYS["birthDay"]: found_date["day"],
+                      KEYS["birthMonth"]: found_date["month"],
+                      KEYS["birthYear"]: found_date["year"]}
 
-    def _constructReturnDict(self):
-        self.foundDate["day"] = self.foundDate["day"]
-        self.foundDate["month"] = self.foundDate["month"]
-        self.foundDate["year"] = self.foundDate["year"]
-
-        return {KEYS["birthDay"]:  self.foundDate["day"], KEYS["birthMonth"]: self.foundDate["month"],
-                KEYS["birthYear"]:  self.foundDate["year"]}
+        return birth_date, cursor_location

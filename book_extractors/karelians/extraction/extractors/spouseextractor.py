@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 from book_extractors.common.base_extractor import BaseExtractor
-from book_extractors.extraction_exceptions import *
 from book_extractors.common.extraction_keys import KEYS
 from shared import regexUtils
 from book_extractors.karelians.extraction.extractors.professionextractor import ProfessionExtractor
@@ -10,90 +9,95 @@ from book_extractors.karelians.extraction.extractors.locationExtractor import Bi
 from book_extractors.karelians.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
 from book_extractors.karelians.extraction.extractors.deathextractor import DeathExtractor
 from book_extractors.karelians.extraction.extractors.weddingextractor import WeddingExtractor
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 
 
 class SpouseExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
-        super(SpouseExtractor, self).extract(text, entry)
-        self.entry = entry
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(SpouseExtractor, self).__init__(key_of_cursor_location_dependent, options)
+
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(OrigFamilyExtractor),
+            configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
+            configure_extractor(BirthdayExtractor),
+            configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
+            configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
+            configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor)
+        ])
+
         self.PATTERN = r"Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)    #TODO: TRY IGNORE CASE?
+        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = False
         self.SUBSTRING_WIDTH = 100
 
-        self.hasSpouse = False
-        self.spouseName = ""
-        self.spouseDeath = ""
-        self.weddingYear = ""
-        self.profession = {KEYS["profession"] : ""}
-        self.birthday = {KEYS["birthDay"]:  "", KEYS["birthMonth"]:  "",
-                KEYS["birthYear"]:  "", KEYS["birthLocation"]:  ""}
-        self.origFamily = {KEYS["origfamily"] : ""}
+        self.NO_SPOUSE_RESULT = {
+            KEYS["spouseBirthData"]: {
+                KEYS["birthDay"]: None,
+                KEYS["birthYear"]: None,
+                KEYS["birthMonth"]: None,
+                KEYS["birthLocation"]: ""
+            },
+            KEYS["deathYear"]: None,
+            KEYS["origfamily"]: "",
+            KEYS["profession"]: "",
+            KEYS["weddingYear"]: None,
+            KEYS["spouseName"]: "",
+            KEYS["hasSpouse"]: False
+        }
 
-        self.initVars(text)
-        self._findSpouse(text)
-        return self._constructReturnDict()
+    def extract(self, entry, extraction_results):
+        start_position = self.get_starting_position(extraction_results)
+        result = self._find_spouse(entry['text'], start_position)
+        return self._constructReturnDict({KEYS['spouse']: result[0]}, extraction_results, cursor_location=result[1])
 
-    def initVars(self, text):
-        pass
+    def _find_spouse(self, text, start_position):
+        cursor_location = start_position
+        spouse_data = self.NO_SPOUSE_RESULT
 
-    def _findSpouse(self, text):
         try:
-            self.foundSpouse = regexUtils.safeSearch(self.PATTERN, text, self.OPTIONS)
-            self.hasSpouse = True
-            self._findSpouseName(self.foundSpouse.group("spousedata"))
-            self._setFinalMatchPosition()
+            found_spouse_match = regexUtils.safeSearch(self.PATTERN, text, self.OPTIONS)
+            spouse_data = self._find_spouse_data(found_spouse_match.group("spousedata"))
+
+            # Dirty fix for inaccuracy in positions which would screw the Location extraction
+            cursor_location = found_spouse_match.end() + start_position - 4
         except regexUtils.RegexNoneMatchException:
             pass
 
-    def _findSpouseName(self, text):
+        return spouse_data, cursor_location
+
+    def _find_spouse_data(self, text):
+        spouse_name = ''
+        spouse_details = self.NO_SPOUSE_RESULT
+
         try:
-            name = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
-            self.spouseName = name.group("name").strip()
-            self.spouseName = re.sub(r"\so$","", self.spouseName)
-            self._findSpouseDetails(text[name.end()-2:])
+            spouse_name_match = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
+            spouse_name = spouse_name_match.group("name").strip()
+            spouse_name = re.sub(r"\so$", "", spouse_name)
+            spouse_details = self._find_spouse_details(text[spouse_name_match.end() - 2:])['data']
+
+            # Map data to spouse object
+            return {
+                KEYS["spouseBirthData"]: {
+                    KEYS["birthDay"]: spouse_details[KEYS['birthDay']],
+                    KEYS["birthYear"]: spouse_details[KEYS['birthYear']],
+                    KEYS["birthMonth"]: spouse_details[KEYS['birthMonth']],
+                    KEYS["birthLocation"]: spouse_details[KEYS['birthLocation']]
+                },
+                KEYS['spouseDeathYear']: spouse_details[KEYS['deathYear']],
+                KEYS["origfamily"]: spouse_details[KEYS['origfamily']],
+                KEYS["spouseProfession"]: spouse_details[KEYS['profession']],
+                KEYS["weddingYear"]: spouse_details[KEYS['weddingYear']],
+                KEYS["spouseName"]: spouse_name,
+                KEYS["hasSpouse"]: True
+            }
+
         except regexUtils.RegexNoneMatchException:
-            self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
+            # TODO: Metadata logging here self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
+            pass
 
-    def _findSpouseDetails(self, text):
-        origFamilyExt = OrigFamilyExtractor(self.entry, self.errorLogger)
-        origFamilyExt.setDependencyMatchPositionToZero()
-        self.origFamily = origFamilyExt.extract(text, self.entry)
+        return spouse_name, spouse_details
 
-        professionExt = ProfessionExtractor(self.entry, self.errorLogger)
-        professionExt.dependsOnMatchPositionOf(origFamilyExt)
-        self.profession = professionExt.extract(text, self.entry)
-
-        birthdayExt = BirthdayExtractor(self.entry, self.errorLogger)
-        birthdayExt.setDependencyMatchPositionToZero()
-        self.birthday = birthdayExt.extract(text, self.entry)
-
-        birthLocExt = BirthdayLocationExtractor(self.entry, self.errorLogger)
-        birthLocExt.dependsOnMatchPositionOf(birthdayExt)
-        birthdayLocation = birthLocExt.extract(text, self.entry)
-
-        spouseDeathExt = DeathExtractor(self.entry, self.errorLogger)
-        spouseDeathExt.dependsOnMatchPositionOf(birthLocExt)
-        self.spouseDeath = spouseDeathExt.extract(text, self.entry)[KEYS["deathYear"]]
-
-        weddingExt = WeddingExtractor(self.entry, self.errorLogger)
-        weddingExt.dependsOnMatchPositionOf(birthLocExt)
-        self.weddingYear = weddingExt.extract(text, self.entry)[KEYS["weddingYear"]]
-
-        self.birthday[KEYS["birthLocation"]] = birthdayLocation[KEYS["birthLocation"]]
-
-    def _setFinalMatchPosition(self):
-        #Dirty fix for inaccuracy in positions which would screw the Location extraction
-        self.matchFinalPosition = self.foundSpouse.end() + self.matchStartPosition - 4
-
-    def _constructReturnDict(self):
-        p = self.profession[KEYS["profession"]]
-        return {KEYS["spouse"]: { KEYS["hasSpouse"]:  self.hasSpouse,
-                                               KEYS["weddingYear"]: self.weddingYear,
-                                               KEYS["spouseName"]:  self.spouseName,
-                                               KEYS["spouseOrigFamily"]: self.origFamily[KEYS["origfamily"]],
-                                               KEYS["spouseProfession"]: p,
-                                               KEYS["spouseBirthData"]: self.birthday,
-                                               KEYS["spouseDeathYear"]: self.spouseDeath}}
+    def _find_spouse_details(self, text):
+        return self._sub_extraction_pipeline.process({'text': text})

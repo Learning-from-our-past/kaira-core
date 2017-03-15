@@ -29,5 +29,5 @@ class ResultJsonBuilderInterface:
         try:
             value = value.replace('\w', '')
             return float(value.replace(',', '.'))
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, AttributeError):
             return None

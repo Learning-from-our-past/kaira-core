@@ -6,19 +6,20 @@ import re
 
 class OmakotitaloExtractor(BaseExtractor):
 
-    def extract(self, text, entry):
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(OmakotitaloExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.OMAKOTITALO_PATTERN = r"(?P<omakotitalo>omakotitalo)"
         self.OMAKOTITALO_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.omakotitalo = False
-        self._find_omakotitalo(text)
-        return self._constructReturnDict()
+
+    def extract(self, entry, extraction_results):
+        own_house = self._find_omakotitalo(entry['text'])
+        return self._constructReturnDict({KEYS["omakotitalo"]: own_house}, extraction_results)
 
     def _find_omakotitalo(self, text):
         try:
-            found_house = regexUtils.safeSearch(self.OMAKOTITALO_PATTERN, text, self.OMAKOTITALO_OPTIONS)
-            self.omakotitalo = True
-        except regexUtils.RegexNoneMatchException as e:
+            regexUtils.safeSearch(self.OMAKOTITALO_PATTERN, text, self.OMAKOTITALO_OPTIONS)
+            return True
+        except regexUtils.RegexNoneMatchException:
             pass
 
-    def _constructReturnDict(self):
-        return {KEYS["omakotitalo"] : self.omakotitalo}
+        return False

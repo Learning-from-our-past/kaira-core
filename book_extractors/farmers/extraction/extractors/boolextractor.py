@@ -7,32 +7,22 @@ import re
 
 class BoolExtractor(BaseExtractor):
 
-    def __init__(self, entry, errorLogger):
-        super(BoolExtractor, self).__init__(entry, errorLogger)
-        self.patterns_to_find = {}
-        self.results = {}
-
-    def extract(self, text, entry):
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(BoolExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self.patterns_to_find = options['patterns']
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-        self._find_patterns(text)
-        return self._constructReturnDict()
-
-    def set_patterns_to_find(self, patterns):
-        """
-        :param patterns: Take a dict of key : pattern values to extract.
-        """
-        self.patterns_to_find = patterns
+    def extract(self, entry, extraction_results):
+        result = self._find_patterns(entry['text'])
+        return self._constructReturnDict({KEYS["flags"]: result}, extraction_results, 0)
 
     def _find_patterns(self, text):
-
+        results = {}
         for key, pattern in self.patterns_to_find.items():
             try:
-                found = regexUtils.safeSearch(pattern, text, self.OPTIONS)
-                self.results[key] = True
-            except regexUtils.RegexNoneMatchException as e:
-                self.results[key] = False
+                regexUtils.safeSearch(pattern, text, self.OPTIONS)
+                results[key] = True
+            except regexUtils.RegexNoneMatchException:
+                results[key] = False
                 pass
-
-    def _constructReturnDict(self):
-        return {KEYS["flags"] : self.results}
+        return results

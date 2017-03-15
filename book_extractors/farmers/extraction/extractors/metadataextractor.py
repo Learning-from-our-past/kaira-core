@@ -4,43 +4,38 @@ from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 
 class MetadataExtractor(BaseExtractor):
-
     geocoder = GeoCoder()
 
-    def extract(self, text, entry):
-        self.page = ""
-        self.name = ""
-        self.location = {"locationName": "", "latitude": "", "longitude": ""}
-        self.location_name = ""
+    def extract(self, entry, extraction_results):
+        page = ""
+        name = ""
+        location = {"locationName": "", "latitude": "", "longitude": ""}
+        original_text = entry['text']
 
         try:
-            self.name = entry["name"]
-        except KeyError as e:
+            name = entry["name"]
+        except KeyError:
             pass
 
         try:
-            self.location_name = entry["location"]
+            location_name = entry["location"]
             try:
-                geo = self.geocoder.get_coordinates(self.location_name.lower(), "finland")
+                geo = self.geocoder.get_coordinates(location_name.lower(), "finland")
 
-            except LocationNotFound as e:
+            except LocationNotFound:
                 geo = self.geocoder.get_empty_coordinates()
 
-            self.location = {"locationName": self.location_name,
-                             "latitude": geo["latitude"],
-                             "longitude": geo["longitude"]}
-
-
-        except KeyError as e:
+            location = {"locationName": location_name, "latitude": geo["latitude"], "longitude": geo["longitude"]}
+        except KeyError:
             pass
 
         try:
-            self.page = entry["approximated_page"]
-        except KeyError as e:
+            page = entry["approximated_page"]
+        except KeyError:
             pass
-        return self._constructReturnDict()
 
-    def _constructReturnDict(self):
-        return {KEYS["name"] : self.name, KEYS["approximatePage"] : self.page,
-                KEYS["farmLocation"] : self.location
-                }
+        return self._constructReturnDict({
+            KEYS["name"]: name,
+            KEYS["approximatePage"]: page,
+            KEYS["farmLocation"]: location,
+            KEYS['originalText']: original_text}, extraction_results, 0)
