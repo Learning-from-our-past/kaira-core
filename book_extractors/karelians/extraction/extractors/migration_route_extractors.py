@@ -66,9 +66,7 @@ class FinnishLocationsExtractor(BaseExtractor):
 
     def extract(self, entry, extraction_results):
         location_listing_results = self._find_locations(entry['text'])
-        return self._constructReturnDict({
-            KEYS["otherlocations"]: location_listing_results[0]
-        }, extraction_results, location_listing_results[1])
+        return self._constructReturnDict(location_listing_results[0], extraction_results, location_listing_results[1])
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
@@ -328,7 +326,7 @@ class MigrationRouteExtractor(BaseExtractor):
         results = self._sub_extraction_pipeline.process(entry)
 
         return self._constructReturnDict({
-            KEYS["locations"]: results['karelianLocations']['results'][KEYS['karelianlocations']] + results['finnishLocations']['results'][KEYS['otherlocations']],
+            KEYS["locations"]: results['karelianLocations']['results'][KEYS['karelianlocations']] + results['finnishLocations']['results'],
             KEYS["returnedkarelia"]: results['karelianLocations']['results'][KEYS["returnedkarelia"]]
         }, extraction_results, results['finnishLocations']['metadata']['cursorLocation'])
 

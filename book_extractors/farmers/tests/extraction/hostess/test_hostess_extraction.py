@@ -9,9 +9,9 @@ class TestHostessExtraction:
         return HostessExtractor(None, None)
 
     def should_extract_hostess_correctly(self, hostess_extractor):
-        hostess = hostess_extractor.extract({'text': HOSTESS_TEXTS['normal']}, {'data': {}, 'cursor_locations': {}})['data']['hostess']
+        hostess = hostess_extractor.extract({'text': HOSTESS_TEXTS['normal']}, {})['hostess']['results']
         assert hostess == EXPECTED[0]
 
     def should_return_none_if_hostess_is_not_found(self, hostess_extractor):
-        hostess = hostess_extractor.extract({'text': HOSTESS_TEXTS['no_hostess']}, {'data': {}, 'cursor_locations': {}})['data']['hostess']
+        hostess = hostess_extractor.extract({'text': HOSTESS_TEXTS['no_hostess']}, {})['hostess']['results']
         assert hostess == EXPECTED[1]
