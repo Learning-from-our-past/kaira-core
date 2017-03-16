@@ -18,11 +18,7 @@ class ExtractionPipeline:
         return extractors
 
     def process(self, entry):
-        extraction_results = {
-            'data': {},
-            'cursor_locations': {}
-        }
-
+        extraction_results = {}
         # Replace all weird invisible white space characters with regular space
         entry['text'] = re.sub(r"\s", r" ", entry['text'])
 
@@ -44,7 +40,7 @@ def configure_extractor(extractor_class, extractor_options=None, depends_on_matc
 
     depends_on = None
     if depends_on_match_position_of_extractor is not None:
-        depends_on = depends_on_match_position_of_extractor.__name__
+        depends_on = depends_on_match_position_of_extractor.extraction_key
 
     config = {
         'extractor_class': extractor_class,

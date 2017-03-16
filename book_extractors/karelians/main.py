@@ -9,7 +9,7 @@ from book_extractors.karelians.extraction.extractors.imageextractor import Image
 from book_extractors.karelians.extraction.extractors.omakotitaloextractor import OmakotitaloExtractor
 from book_extractors.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from book_extractors.karelians.extraction.extractors.locationExtractor import BirthdayLocationExtractor
-from book_extractors.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor
+from book_extractors.karelians.extraction.extractors.migration_route_extractors import MigrationRouteExtractor
 from book_extractors.karelians.extraction.extractors.spouseextractor import SpouseExtractor
 from book_extractors.karelians.extraction.extractors.childextractor import ChildExtractor
 from shared.genderExtract import Gender
@@ -27,12 +27,11 @@ class KarelianExtractor:
         pipeline_components = [
             configure_extractor(NameExtractor),
             configure_extractor(ImageExtractor),
-            configure_extractor(OrigFamilyExtractor, set_dependency_match_position_to_zero=True),
+            configure_extractor(OrigFamilyExtractor),
             configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
             configure_extractor(BirthdayExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
             configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
-            configure_extractor(KarelianLocationsExtractor),
-            configure_extractor(FinnishLocationsExtractor),
+            configure_extractor(MigrationRouteExtractor),
             configure_extractor(OmakotitaloExtractor),
             configure_extractor(SpouseExtractor),
             configure_extractor(ChildExtractor)

@@ -6,6 +6,7 @@ from shared import regexUtils
 
 
 class DateExtractor(BaseExtractor):
+    extraction_key = 'date'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(DateExtractor, self).__init__(key_of_cursor_location_dependent, options)

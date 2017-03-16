@@ -35,7 +35,7 @@ class ProcessData:
 
     def _process_entry(self, person):
         person_results = self.extraction_pipeline.process(person)
-        person["extractionResults"] = person_results['data']
+        person["extractionResults"] = person_results
         self.count += 1
         return person
 

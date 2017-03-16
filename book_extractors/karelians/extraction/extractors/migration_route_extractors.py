@@ -3,6 +3,7 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers import migration_parser
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from names import location_name_white_list
 from shared import regexUtils
 from shared.geo.geocoding import GeoCoder, LocationNotFound
@@ -56,6 +57,7 @@ class FinnishLocationsExtractor(BaseExtractor):
     """
     geocoder = GeoCoder()
     OTHER_REGION_ID = 'other'
+    extraction_key = 'finnishLocations'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(FinnishLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -180,6 +182,8 @@ class KarelianLocationsExtractor(BaseExtractor):
     """
     geocoder = GeoCoder()
     KARELIAN_REGION_ID = 'karelia'
+
+    extraction_key = 'karelianLocations'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(KarelianLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -307,6 +311,26 @@ class KarelianLocationsExtractor(BaseExtractor):
         locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
 
         return locations.lstrip()
+
+
+class MigrationRouteExtractor(BaseExtractor):
+    extraction_key = 'migrationHistory'
+
+    def __init__(self, key_of_cursor_location_dependent, options):
+        super(MigrationRouteExtractor, self).__init__(key_of_cursor_location_dependent, options)
+
+        self._sub_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(KarelianLocationsExtractor),
+            configure_extractor(FinnishLocationsExtractor),
+        ])
+
+    def extract(self, entry, extraction_results):
+        results = self._sub_extraction_pipeline.process(entry)
+
+        return self._constructReturnDict({
+            KEYS["locations"]: results['karelianLocations']['results'][KEYS['karelianlocations']] + results['finnishLocations']['results'][KEYS['otherlocations']],
+            KEYS["returnedkarelia"]: results['karelianLocations']['results'][KEYS["returnedkarelia"]]
+        }, extraction_results, results['finnishLocations']['metadata']['cursorLocation'])
 
 
 class LocationThresholdException(Exception):

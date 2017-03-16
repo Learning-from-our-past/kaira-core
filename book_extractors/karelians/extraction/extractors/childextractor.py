@@ -13,6 +13,7 @@ Gender.load_names()
 
 class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
+    extraction_key = 'children'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(ChildExtractor, self).__init__(key_of_cursor_location_dependent, options)

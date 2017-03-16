@@ -12,6 +12,7 @@ from shared import textUtils
 
 
 class CommonBirthdayExtractor(BaseExtractor):
+    extraction_key = 'birthday'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(CommonBirthdayExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -53,7 +54,7 @@ class CommonBirthdayExtractor(BaseExtractor):
 
         try:
             result = self._sub_extraction_pipeline.process({'text': text})
-            found_date = result['data']
+            found_date = result['date']['results']
             cursor_location = self.get_last_cursor_location(result) + start_position - 4
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?

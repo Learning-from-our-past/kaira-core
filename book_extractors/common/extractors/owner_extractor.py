@@ -10,6 +10,7 @@ from shared.genderExtract import Gender, GenderException
 
 
 class CommonOwnerExtractor(BaseExtractor):
+    extraction_key = 'owner'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(CommonOwnerExtractor, self).__init__(key_of_cursor_location_dependent, options)

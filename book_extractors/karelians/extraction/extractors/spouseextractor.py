@@ -14,6 +14,7 @@ from shared import regexUtils
 
 
 class SpouseExtractor(BaseExtractor):
+    extraction_key = 'spouse'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(SpouseExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -51,7 +52,7 @@ class SpouseExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_spouse(entry['text'], start_position)
-        return self._constructReturnDict({KEYS['spouse']: result[0]}, extraction_results, cursor_location=result[1])
+        return self._constructReturnDict(result[0], extraction_results, cursor_location=result[1])
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
@@ -76,20 +77,17 @@ class SpouseExtractor(BaseExtractor):
             spouse_name_match = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
             spouse_name = spouse_name_match.group("name").strip()
             spouse_name = re.sub(r"\so$", "", spouse_name)
-            spouse_details = self._find_spouse_details(text[spouse_name_match.end() - 2:])['data']
+            spouse_details = self._find_spouse_details(text[spouse_name_match.end() - 2:])
 
             # Map data to spouse object
             return {
                 KEYS["spouseBirthData"]: {
-                    KEYS["birthDay"]: spouse_details[KEYS['birthDay']],
-                    KEYS["birthYear"]: spouse_details[KEYS['birthYear']],
-                    KEYS["birthMonth"]: spouse_details[KEYS['birthMonth']],
-                    KEYS["birthLocation"]: spouse_details[KEYS['birthLocation']]
+                    **spouse_details['birthday']
                 },
-                KEYS['spouseDeathYear']: spouse_details[KEYS['deathYear']],
-                KEYS["origfamily"]: spouse_details[KEYS['origfamily']],
-                KEYS["spouseProfession"]: spouse_details[KEYS['profession']],
-                KEYS["weddingYear"]: spouse_details[KEYS['weddingYear']],
+                KEYS['spouseDeathYear']: spouse_details['death'],
+                KEYS["origfamily"]: spouse_details['originalFamily'],
+                KEYS["spouseProfession"]: spouse_details['profession'],
+                KEYS["weddingYear"]: spouse_details['wedding'],
                 KEYS["spouseName"]: spouse_name,
                 KEYS["hasSpouse"]: True
             }
