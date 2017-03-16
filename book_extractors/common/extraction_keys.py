@@ -34,6 +34,8 @@ KEYS = {
     "birthYear": "birthYear",
     "birthLocation": "birthLocation",
 
+    "personMetadata": "personMetadata",
+
     "address": "address",
     "deathDay": "deathDay",
     "deathMonth": "deathMonth",
@@ -85,6 +87,7 @@ KEYS = {
     "ownerBirthData": "birthData",
     "hostessBirthData": "birthData",
     "hostess": "hostess",
+    "ownerDetails": "ownerDetails",
 
     "farmDetails": "farmDetails",
     "wholeArea": "wholeArea",

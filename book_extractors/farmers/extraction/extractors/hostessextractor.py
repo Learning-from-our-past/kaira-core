@@ -10,6 +10,7 @@ from book_extractors.farmers.extraction.extractors.birthdayExtractor import Birt
 
 
 class HostessExtractor(BaseExtractor):
+    extraction_key = KEYS['hostess']
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(HostessExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -24,7 +25,7 @@ class HostessExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         results = self._find_hostess(entry['text'], start_position)
-        return self._constructReturnDict({KEYS["hostess"]: results[0]}, extraction_results, results[1])
+        return self._constructReturnDict(results[0], extraction_results, results[1])
 
     def _find_hostess(self, text, start_position):
         text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
@@ -50,7 +51,7 @@ class HostessExtractor(BaseExtractor):
     def _find_hostess_birthday(self, text):
         results = self._sub_extraction_pipeline.process({'text': text})
         final_cursor_location = self.get_last_cursor_location(results)
-        return results['data'], final_cursor_location
+        return results['birthday']['results'], final_cursor_location
 
     def _find_hostess_name(self, text):
         hostess_name_match = regexUtils.safeSearch(self.HOSTESS_NAME_PATTERN, text, self.HOSTESS_OPTIONS)
