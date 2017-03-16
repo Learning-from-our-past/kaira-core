@@ -2,7 +2,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class BaseExtractor():
+class BaseExtractor:
     __metaclass__ = ABCMeta
 
     def __init__(self, key_of_cursor_location_dependent=None, options=None):
@@ -14,9 +14,6 @@ class BaseExtractor():
     @abstractmethod
     def extract(self, entry, extraction_results):
         self._checkIfMatchPositionIsRequiredBeforeExtract()
-
-    def getFinalMatchPosition(self):
-        return self.matchFinalPosition
 
     def get_starting_position(self, extraction_results):
         if self.key_of_cursor_location_dependent is not None:
