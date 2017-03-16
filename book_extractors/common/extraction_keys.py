@@ -80,7 +80,7 @@ KEYS = {
 
     # Small farmers and Great farmers keys
     "name": "name",
-    "farmLocation": "FarmLocation",
+    "farmLocation": "farmLocation",
     "ownerFrom": "ownerFrom",
     "ownerName": "ownerName",
     "owner": "owner",

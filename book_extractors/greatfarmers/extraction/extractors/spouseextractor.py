@@ -10,6 +10,7 @@ from shared import regexUtils
 
 
 class SpouseExtractor(BaseExtractor):
+    extraction_key = KEYS["spouse"]
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(SpouseExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -27,7 +28,7 @@ class SpouseExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         results = self._find_spouse(entry['text'], start_position)
-        return self._constructReturnDict({KEYS['spouse']: results[0]}, extraction_results, cursor_location=results[1])
+        return self._constructReturnDict(results[0], extraction_results, cursor_location=results[1])
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
@@ -54,11 +55,9 @@ class SpouseExtractor(BaseExtractor):
             # Map data to spouse object
             return {
                 KEYS["spouseBirthData"]: {
-                    KEYS["birthDay"]: spouse_details[KEYS['birthDay']],
-                    KEYS["birthYear"]: spouse_details[KEYS['birthYear']],
-                    KEYS["birthMonth"]: spouse_details[KEYS['birthMonth']],
+                    **spouse_details['birthday']
                 },
-                KEYS["origfamily"]: spouse_details[KEYS['origfamily']],
+                KEYS["origfamily"]: spouse_details[KEYS['origfamily']]['results'],
                 KEYS["spouseName"]: spouse_name,
             }
 
@@ -67,4 +66,4 @@ class SpouseExtractor(BaseExtractor):
             pass
 
     def _find_spouse_details(self, text):
-        return self._sub_extraction_pipeline.process({'text': text})['data']
+        return self._sub_extraction_pipeline.process({'text': text})

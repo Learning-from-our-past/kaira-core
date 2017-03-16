@@ -7,6 +7,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 
 class OrigFamilyExtractor(BaseExtractor):
+    extraction_key = KEYS['origfamily']
     """
     Tries to find the possible o.s. (omaa sukua) part from entry.
     """
@@ -21,7 +22,7 @@ class OrigFamilyExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         results = self._find_family(entry['text'], start_position)
-        return self._constructReturnDict({KEYS["origfamily"]: results[0]}, extraction_results, results[1])
+        return self._constructReturnDict(results[0], extraction_results, results[1])
 
     def _find_family(self, text, start_position):
         cursor_location = start_position

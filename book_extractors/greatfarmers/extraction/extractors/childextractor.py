@@ -1,9 +1,11 @@
 import re
 
 from book_extractors.common.extractors.child_extractor import CommonChildExtractor
+from book_extractors.common.extraction_keys import KEYS
 
 
 class ChildExtractor(CommonChildExtractor):
+    extraction_key = KEYS['children']
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(ChildExtractor, self).__init__(key_of_cursor_location_dependent, options)

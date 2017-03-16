@@ -7,6 +7,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 
 class QuantityExtractor(BaseExtractor):
+    extraction_key = KEYS["quantities"]
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(QuantityExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -20,7 +21,7 @@ class QuantityExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         results = self._find_patterns(entry['text'])
-        return self._constructReturnDict({KEYS["quantities"]: results}, extraction_results, start_position)
+        return self._constructReturnDict(results, extraction_results, start_position)
 
     def _find_patterns(self, text):
         results = {}
