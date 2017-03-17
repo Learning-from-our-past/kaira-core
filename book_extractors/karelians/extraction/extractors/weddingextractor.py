@@ -36,8 +36,8 @@ class WeddingExtractor(BaseExtractor):
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = wedding.end() + start_position - 4
-            wedding_year = "19" + wedding.group("year")
+            wedding_year = textUtils.int_or_none("19" + wedding.group("year"))
         except regexUtils.RegexNoneMatchException:
-            wedding_year = ""
+            wedding_year = None
 
         return wedding_year, cursor_location

@@ -5,7 +5,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers import migration_parser
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from names import location_name_white_list
-from shared import regexUtils
+from shared import regexUtils, textUtils
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 MAX_PLACE_NAME_LENGTH = 15
@@ -13,7 +13,7 @@ MIN_PLACE_NAME_LENGTH = 4
 
 
 def validate_location_name(entry_name, geocoordinates):
-    if len(entry_name) > MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] == '' and geocoordinates['longitude'] == '':
+    if len(entry_name) > MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] is None and geocoordinates['longitude'] is None:
         name_is_ok = False
 
         # Check if there is white list pattern which matches to current name
@@ -90,14 +90,14 @@ class FinnishLocationsExtractor(BaseExtractor):
                 try:
                     return self.geocoder.get_coordinates(place_name, "finland")
                 except LocationNotFound:
-                    return {"latitude": "", "longitude": ""}
+                    return {"latitude": None, "longitude": None}
 
             geocoordinates = get_coordinates_by_name(entry_name)
 
             entry_name = validate_location_name(entry_name, geocoordinates)
             village_name = validate_village_name(village_name)
 
-            village_coordinates = {"latitude": "", "longitude": ""}
+            village_coordinates = {"latitude": None, "longitude": None}
             if village_name is not None:
                 village_coordinates = get_coordinates_by_name(village_name)
 
@@ -109,8 +109,8 @@ class FinnishLocationsExtractor(BaseExtractor):
                 }
             }
 
-            moved_in = ''
-            moved_out = ''
+            moved_in = None
+            moved_out = None
 
             def get_location_entry():
                 return {
@@ -128,14 +128,14 @@ class FinnishLocationsExtractor(BaseExtractor):
             if 'year_information' in location:
                 for migration in location['year_information']:
                     if 'moved_in' in migration:
-                        moved_in = migration['moved_in']
+                        moved_in = textUtils.int_or_none(migration['moved_in'])
                     else:
-                        moved_in = ''
+                        moved_in = None
 
                     if 'moved_out' in migration:
-                        moved_out = migration['moved_out']
+                        moved_out = textUtils.int_or_none(migration['moved_out'])
                     else:
-                        moved_out = ''
+                        moved_out = None
 
                     location_records.append(get_location_entry())
             else:
@@ -219,14 +219,14 @@ class KarelianLocationsExtractor(BaseExtractor):
                 try:
                     return self.geocoder.get_coordinates(place_name, "russia")
                 except LocationNotFound:
-                    return {"latitude": "", "longitude": ""}
+                    return {"latitude": None, "longitude": None}
 
             geocoordinates = get_coordinates_by_name(entry_name)
 
             entry_name = validate_location_name(entry_name, geocoordinates)
             village_name = validate_village_name(village_name)
 
-            village_coordinates = {"latitude": "", "longitude": ""}
+            village_coordinates = {"latitude": None, "longitude": None}
             if village_name is not None:
                 village_coordinates = get_coordinates_by_name(village_name)
 
@@ -238,8 +238,8 @@ class KarelianLocationsExtractor(BaseExtractor):
                 }
             }
 
-            moved_in = ''
-            moved_out = ''
+            moved_in = None
+            moved_out = None
 
             def get_location_entry():
                 return {
@@ -257,20 +257,20 @@ class KarelianLocationsExtractor(BaseExtractor):
             if 'year_information' in location:
                 for migration in location['year_information']:
                     if 'moved_in' in migration:
-                        moved_in = migration['moved_in']
+                        moved_in = textUtils.int_or_none(migration['moved_in'])
                     else:
-                        moved_in = ''
+                        moved_in = None
 
                     if 'moved_out' in migration:
-                        moved_out = migration['moved_out']
+                        moved_out = textUtils.int_or_none(migration['moved_out'])
                     else:
-                        moved_out = ''
+                        moved_out = None
 
                     try:
-                        if 41 <= int(moved_in) <= 43:
+                        if 41 <= moved_in <= 43:
                             nonlocal returned_to_karelia
                             returned_to_karelia = True
-                    except ValueError:
+                    except TypeError:
                         pass
 
                     location_records.append(get_location_entry())

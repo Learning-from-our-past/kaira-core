@@ -6,33 +6,33 @@ CHILDREN_TEXTS = [
 
 EXPECTED = [
     {
-        'birthYear': '1945',
+        'birthYear': 1945,
         'gender': 'Female',
         'location': 'Ahlaisissa',
         'name': 'Irja Hellevi',
         'coordinates': {
-            'latitude': '',
-            'longitude': ''
+            'latitude': None,
+            'longitude': None
         }
     },
     {
-        'birthYear': '1947',
+        'birthYear': 1947,
         'gender': 'Female',
         'location': 'Ahlaisissa',
         'name': 'Kirsti Anna-Liisa',
         'coordinates': {
-            'latitude': '',
-            'longitude': ''
+            'latitude': None,
+            'longitude': None
         }
     },
     {
-        'birthYear': '1953',
+        'birthYear': 1953,
         'gender': 'Male',
         'location': 'Ahlaisissa',
         'name': 'Kalervo Viljam',
         'coordinates': {
-            'latitude': '',
-            'longitude': ''
+            'latitude': None,
+            'longitude': None
         }
     }
 ]

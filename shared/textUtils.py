@@ -27,3 +27,18 @@ def removeSpacesFromText(text):
     text = text.replace("\n","")
     text = text.replace(" ","")
     return text.replace(" ","")
+
+
+def int_or_none(value):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def float_or_none(value):
+    try:
+        value = value.replace('\w', '')
+        return float(value.replace(',', '.'))
+    except (TypeError, ValueError, AttributeError):
+        return None

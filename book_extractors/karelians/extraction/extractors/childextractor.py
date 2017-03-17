@@ -3,7 +3,7 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import StopExtractionException
-from shared import regexUtils
+from shared import regexUtils, textUtils
 from shared.genderExtract import Gender
 from shared.genderExtract import GenderException
 from shared.geo.geocoding import GeoCoder, LocationNotFound
@@ -117,7 +117,7 @@ class ChildExtractor(BaseExtractor):
 
         return {KEYS["childName"]: name,
                 KEYS["gender"]: gender,
-                KEYS["birthYear"]: year,
+                KEYS["birthYear"]: textUtils.int_or_none(year),
                 KEYS["childLocationName"]: location,
                 KEYS["childCoordinates"]: {
                     KEYS["latitude"]: coordinates["latitude"],

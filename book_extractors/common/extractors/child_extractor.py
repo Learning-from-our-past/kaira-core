@@ -5,6 +5,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 from shared import regexUtils
 from shared.genderExtract import Gender, GenderException
 from shared.geo.geocoding import GeoCoder
+from shared import textUtils
 
 
 class CommonChildExtractor(BaseExtractor):
@@ -81,7 +82,7 @@ class CommonChildExtractor(BaseExtractor):
         # if there is twins, the book doesn't explicitly define birthyear for first one.
         # therefore copy second child's value to first one
         if first is not None and second is not None:
-            if first["birthYear"] == "" and second["birthYear"] != "":
+            if first["birthYear"] is None and second["birthYear"] is not None:
                 first["birthYear"] = second["birthYear"]
 
     def _process_child(self, child):
@@ -99,12 +100,12 @@ class CommonChildExtractor(BaseExtractor):
             try:
                 year_match = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
                 year = year_match.group("year")
-                if float(year) <70:
-                    year = "19" + year
+                if float(year) < 70:
+                    year = textUtils.int_or_none("19" + year)
                 else:
-                    year = "18" + year
+                    year = textUtils.int_or_none("18" + year)
             except regexUtils.RegexNoneMatchException:
-                year = ""
+                year = None
 
             return {"name": name, "gender": gender, "birthYear": year}
         except regexUtils.RegexNoneMatchException:

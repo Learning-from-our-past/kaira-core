@@ -4,6 +4,7 @@ import re
 import shared.regexUtils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
+from shared import textUtils
 
 
 class QuantityExtractor(BaseExtractor):
@@ -36,21 +37,21 @@ class QuantityExtractor(BaseExtractor):
                 usepattern = self.QUANTITY_PATTERN + pattern
                 found = regexUtils.safeSearch(usepattern, text, self.OPTIONS)
                 results[key] = self._process_value(found)
-            except regexUtils.RegexNoneMatchException as e:
-                results[key] = ""
+            except regexUtils.RegexNoneMatchException:
+                results[key] = None
 
         return results
 
     def _process_value(self, match):
         if match.group("range") is not None:
-             return self._take_average(match.group("range"))
+            return self._take_average(match.group("range"))
         if match.group("number") is not None:
-             return match.group("number")
+            return textUtils.int_or_none(match.group("number"))
         if match.group("word") is not None:
             try:
                 return self.NUMBER_MAP[match.group("word").lower()]
             except KeyError:
-                return ""
+                return None
 
     def _take_average(self, range):
         numbers = regexUtils.regexIter(self.SPLIT_PATTERN1, range)
@@ -63,6 +64,6 @@ class QuantityExtractor(BaseExtractor):
             if len(numbers) > 0:
                 return float(sum/len(numbers))
             else:
-                return ""
+                return None
         except ValueError:
-            return ""
+            return None

@@ -8,10 +8,10 @@ class MetadataExtractor(BaseExtractor):
     geocoder = GeoCoder()
 
     def extract(self, entry, extraction_results):
-        page = ""
-        name = ""
+        page = None
+        name = None
         short = False
-        location = {"locationName": "", "latitude": "", "longitude": ""}
+        location = {"locationName": None, "latitude": None, "longitude": None}
         original_text = entry['text']
 
         try:
@@ -45,6 +45,6 @@ class MetadataExtractor(BaseExtractor):
 
         return self._constructReturnDict({KEYS["name"]: name,
                                           KEYS["approximatePage"]: page,
-                                          KEYS["farmLocation"] : location,
-                                          KEYS["shortentry"] : short,
-                                          KEYS["originalText"] : original_text}, extraction_results, 0)
+                                          KEYS["farmLocation"]: location,
+                                          KEYS["shortentry"]: short,
+                                          KEYS["originalText"]: original_text}, extraction_results, 0)

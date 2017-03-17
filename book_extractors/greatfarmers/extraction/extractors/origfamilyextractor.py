@@ -26,13 +26,13 @@ class OrigFamilyExtractor(BaseExtractor):
 
     def _find_family(self, text, start_position):
         cursor_location = start_position
-        own_family = ''
+        own_family = None
         text = textUtils.takeSubStrBasedOnPos(text, start_position, self.SEARCH_SPACE)
         try:
             found_family_match = regexUtils.safeSearch(self.FAMILY_PATTERN, text, self.FAMILY_OPTIONS)
             cursor_location = start_position + found_family_match.end()
             own_family = found_family_match.group("family")
-        except regexUtils.RegexNoneMatchException as e:
+        except regexUtils.RegexNoneMatchException:
             pass
 
         return own_family, cursor_location

@@ -8,9 +8,9 @@ class MetadataExtractor(BaseExtractor):
     geocoder = GeoCoder()
 
     def extract(self, entry, extraction_results):
-        page = ""
-        name = ""
-        location = {"locationName": "", "latitude": "", "longitude": ""}
+        page = None
+        name = None
+        location = {"locationName": None, "latitude": None, "longitude": None}
         original_text = entry['text']
 
         try:

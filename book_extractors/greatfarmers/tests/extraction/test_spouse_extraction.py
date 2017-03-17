@@ -17,9 +17,9 @@ class TestSpouseExtraction:
             'spouseName': 'Anna-Liisa',
             'birthData': {
                 'results': {
-                    'birthDay': '19',
-                    'birthMonth': '4',
-                    'birthYear': '1921',
+                    'birthDay': 19,
+                    'birthMonth': 4,
+                    'birthYear': 1921,
                 },
                 'metadata': {
                     'cursorLocation': 16
