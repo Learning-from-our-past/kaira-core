@@ -9,6 +9,7 @@ from shared.geo.geocoding import GeoCoder
 
 class CommonChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
+    extraction_key = 'children'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(CommonChildExtractor, self).__init__(key_of_cursor_location_dependent, options)

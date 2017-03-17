@@ -10,6 +10,7 @@ from shared.genderExtract import Gender, GenderException
 
 
 class CommonOwnerExtractor(BaseExtractor):
+    extraction_key = 'owner'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(CommonOwnerExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -25,7 +26,7 @@ class CommonOwnerExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_owner(entry['text'], start_position)
-        return self._constructReturnDict({KEYS['owner']: result[0]}, extraction_results, result[1])
+        return self._constructReturnDict(result[0], extraction_results, result[1])
 
     def _find_owner(self, text, start_position):
         text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
@@ -39,7 +40,7 @@ class CommonOwnerExtractor(BaseExtractor):
             KEYS["firstnames"]: owner_name_details_result[0][0],
             KEYS["surname"]: owner_name_details_result[0][1],
             KEYS["gender"]: owner_name_details_result[0][2],
-            KEYS["ownerBirthData"]: owner_birthday_result['data']
+            KEYS["ownerBirthData"]: owner_birthday_result['birthday']['results']
         }
 
         return result, cursor_location

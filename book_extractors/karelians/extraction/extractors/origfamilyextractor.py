@@ -12,6 +12,7 @@ class OrigFamilyExtractor(BaseExtractor):
     """
     REQUIRES_MATCH_POSITION = True
     SEARCH_SPACE = 40
+    extraction_key = 'originalFamily'
     
     def __init__(self, key_of_cursor_location_dependent, options):
         super(OrigFamilyExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -22,9 +23,7 @@ class OrigFamilyExtractor(BaseExtractor):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_family(entry['text'], start_position)
 
-        return self._constructReturnDict({
-            KEYS["origfamily"]: result[0]
-        }, extraction_results, cursor_location=result[1])
+        return self._constructReturnDict(result[0], extraction_results, cursor_location=result[1])
 
     def _find_family(self, text, start_position):
         text = textUtils.takeSubStrBasedOnPos(text, start_position, self.SEARCH_SPACE)

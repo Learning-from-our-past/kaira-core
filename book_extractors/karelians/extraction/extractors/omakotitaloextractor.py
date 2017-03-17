@@ -6,6 +6,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 
 class OmakotitaloExtractor(BaseExtractor):
+    extraction_key = 'ownHouse'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(OmakotitaloExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -14,7 +15,7 @@ class OmakotitaloExtractor(BaseExtractor):
 
     def extract(self, entry, extraction_results):
         own_house = self._find_omakotitalo(entry['text'])
-        return self._constructReturnDict({KEYS["omakotitalo"]: own_house}, extraction_results)
+        return self._constructReturnDict(own_house, extraction_results)
 
     def _find_omakotitalo(self, text):
         try:

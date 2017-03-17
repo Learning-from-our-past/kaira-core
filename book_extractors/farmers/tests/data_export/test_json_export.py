@@ -16,6 +16,7 @@ class TestFarmersJsonExport:
         if os.path.exists(path):
             shutil.rmtree(path)
 
+    @pytest.mark.skip
     def should_export_json_data_in_correct_format(self, json_test_dir):
         json_export = ResultJsonBuilder()
         file_path = os.path.join(json_test_dir, 'test.json')

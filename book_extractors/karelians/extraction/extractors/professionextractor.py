@@ -8,6 +8,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 class ProfessionExtractor(BaseExtractor):
     SEARCH_SPACE = 60
+    extraction_key = 'profession'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(ProfessionExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -18,9 +19,7 @@ class ProfessionExtractor(BaseExtractor):
         start_position = self.get_starting_position(extraction_results)
         profession_results = self._find_profession(entry['text'], start_position)
 
-        return self._constructReturnDict({
-            KEYS["profession"]: profession_results[0]
-        }, extraction_results, profession_results[1])
+        return self._constructReturnDict(profession_results[0], extraction_results, profession_results[1])
 
     def _find_profession(self, text, start_position):
         text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)

@@ -34,6 +34,8 @@ KEYS = {
     "birthYear": "birthYear",
     "birthLocation": "birthLocation",
 
+    "personMetadata": "personMetadata",
+
     "address": "address",
     "deathDay": "deathDay",
     "deathMonth": "deathMonth",
@@ -78,13 +80,14 @@ KEYS = {
 
     # Small farmers and Great farmers keys
     "name": "name",
-    "farmLocation": "FarmLocation",
+    "farmLocation": "farmLocation",
     "ownerFrom": "ownerFrom",
     "ownerName": "ownerName",
     "owner": "owner",
     "ownerBirthData": "birthData",
     "hostessBirthData": "birthData",
     "hostess": "hostess",
+    "ownerDetails": "ownerDetails",
 
     "farmDetails": "farmDetails",
     "wholeArea": "wholeArea",

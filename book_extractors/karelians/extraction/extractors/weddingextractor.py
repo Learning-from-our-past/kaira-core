@@ -8,6 +8,7 @@ from shared import textUtils
 
 
 class WeddingExtractor(BaseExtractor):
+    extraction_key = 'wedding'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(WeddingExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -21,9 +22,7 @@ class WeddingExtractor(BaseExtractor):
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
         results = self._find_date(prepared_text, start_position)
-        return self._constructReturnDict({
-            KEYS["weddingYear"]:  results[0]
-        }, extraction_results, results[1])
+        return self._constructReturnDict(results[0], extraction_results, results[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
         t = textUtils.takeSubStrBasedOnPos(text, start_position, self.SUBSTRING_WIDTH)

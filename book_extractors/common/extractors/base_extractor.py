@@ -2,7 +2,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class BaseExtractor():
+class BaseExtractor:
     __metaclass__ = ABCMeta
 
     def __init__(self, key_of_cursor_location_dependent=None, options=None):
@@ -15,21 +15,26 @@ class BaseExtractor():
     def extract(self, entry, extraction_results):
         self._checkIfMatchPositionIsRequiredBeforeExtract()
 
-    def getFinalMatchPosition(self):
-        return self.matchFinalPosition
-
     def get_starting_position(self, extraction_results):
         if self.key_of_cursor_location_dependent is not None:
-            return extraction_results['cursor_locations'][self.key_of_cursor_location_dependent]
+            return extraction_results[self.key_of_cursor_location_dependent]['metadata']['cursorLocation']
         else:
             return 0
 
     def get_last_cursor_location(self, extraction_results):
-        return max(extraction_results['cursor_locations'].values())
+        # TODO: Eli kaikkien dictin avainten metadataobjektin cursorLocation results
+        cursor_locations_in_result_metadatas = [x['metadata']['cursorLocation'] for x in extraction_results.values()]
+
+        return max(cursor_locations_in_result_metadatas)
 
     def _constructReturnDict(self, data, extraction_results, cursor_location=0):
-        extraction_results['data'] = {**data, **extraction_results['data']}
-        extraction_results['cursor_locations'][self.__class__.__name__] = cursor_location
+        extraction_results[self.extraction_key] = {
+            'results': data,
+            'metadata': {
+                'cursorLocation': cursor_location
+            }
+        }
+        #extraction_results['cursor_locations'][self.__class__.__name__] = cursor_location
         return extraction_results
 
     def _checkIfMatchPositionIsRequiredBeforeExtract(self):

@@ -7,6 +7,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 
 class BoolExtractor(BaseExtractor):
+    extraction_key = KEYS['flags']
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(BoolExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -15,7 +16,7 @@ class BoolExtractor(BaseExtractor):
 
     def extract(self, entry, extraction_results):
         result = self._find_patterns(entry['text'])
-        return self._constructReturnDict({KEYS["flags"]: result}, extraction_results, 0)
+        return self._constructReturnDict(result, extraction_results, 0)
 
     def _find_patterns(self, text):
         results = {}

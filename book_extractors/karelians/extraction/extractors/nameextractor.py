@@ -9,6 +9,7 @@ class NameExtractor(BaseExtractor):
     """ Tries to extract the name of the person in this entry. Assumed that it can be found from
     name attribute from person entry.
     """
+    extraction_key = 'name'
 
     def extract(self, entry, extraction_results):
         result = {

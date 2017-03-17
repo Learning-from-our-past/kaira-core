@@ -7,6 +7,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 
 class FarmExtractor(BaseExtractor):
+    extraction_key = KEYS['farmDetails']
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(FarmExtractor, self).__init__(key_of_cursor_location_dependent, options)
@@ -20,7 +21,7 @@ class FarmExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_areas(entry['text'])
-        return self._constructReturnDict({KEYS["farmDetails"]: result}, extraction_results, start_position)
+        return self._constructReturnDict(result, extraction_results, start_position)
 
     def _find_areas(self, text):
         whole_area = self._get_area(text, self.ALL_AREA_PATTERN)

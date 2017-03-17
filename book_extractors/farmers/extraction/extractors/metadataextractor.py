@@ -4,6 +4,7 @@ from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 
 class MetadataExtractor(BaseExtractor):
+    extraction_key = KEYS['personMetadata']
     geocoder = GeoCoder()
 
     def extract(self, entry, extraction_results):
