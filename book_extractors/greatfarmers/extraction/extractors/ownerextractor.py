@@ -3,6 +3,7 @@ from book_extractors.common.extractors.owner_extractor import CommonOwnerExtract
 from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
 from book_extractors.common.extraction_keys import KEYS
 
+
 class OwnerExtractor(CommonOwnerExtractor):
     extraction_key = KEYS['ownerDetails']
 

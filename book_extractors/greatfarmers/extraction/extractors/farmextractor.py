@@ -4,7 +4,7 @@ import re
 import shared.regexUtils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-
+from shared import textUtils
 
 class FarmExtractor(BaseExtractor):
     extraction_key = KEYS['farmDetails']
@@ -31,11 +31,11 @@ class FarmExtractor(BaseExtractor):
         meadow_area = self._get_area(text, self.MEADOW_AREA_PATTERN)
 
         return {
-            KEYS["wholeArea"]: whole_area,
-            KEYS["forestArea"]: forest_area,
-            KEYS["fieldArea"]: field_area,
-            KEYS["wasteArea"]: waste_area,
-            KEYS["meadowArea"]: meadow_area
+            KEYS["wholeArea"]: textUtils.float_or_none(whole_area),
+            KEYS["forestArea"]: textUtils.float_or_none(forest_area),
+            KEYS["fieldArea"]: textUtils.float_or_none(field_area),
+            KEYS["wasteArea"]: textUtils.float_or_none(waste_area),
+            KEYS["meadowArea"]: textUtils.float_or_none(meadow_area)
         }
 
     def _get_area(self, text, pattern):

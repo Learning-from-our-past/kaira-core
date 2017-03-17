@@ -27,7 +27,7 @@ class OrigFamilyExtractor(BaseExtractor):
     def _find_family(self, text, start_position):
         cursor_location = start_position
         text = textUtils.takeSubStrBasedOnPos(text, start_position, self.SEARCH_SPACE)
-        family = ''
+        family = None
         try:
             found_family_match = regexUtils.safeSearch(self.FAMILY_PATTERN, text, self.FAMILY_OPTIONS)
             cursor_location = found_family_match.end()
