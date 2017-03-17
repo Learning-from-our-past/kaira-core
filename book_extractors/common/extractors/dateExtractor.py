@@ -3,6 +3,7 @@ import shared.textUtils as textUtils
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
 from shared import regexUtils
+from shared import textUtils
 
 
 class DateExtractor(BaseExtractor):
@@ -49,8 +50,8 @@ class DateExtractor(BaseExtractor):
     @staticmethod
     def _get_month_and_day_from_match(date_match):
         return {
-            'day': date_match.group("day"),
-            'month': date_match.group("month")
+            'day': textUtils.int_or_none(date_match.group("day")),
+            'month': textUtils.int_or_none(date_match.group("month"))
         }
 
     def _if_written_month_names_extract_them(self, date_match):
@@ -68,7 +69,7 @@ class DateExtractor(BaseExtractor):
         if name in self.MONTH_NAME_NUMBER_MAPPING:
             return self.MONTH_NAME_NUMBER_MAPPING[name]
         else:
-            return ""
+            return None
 
     def _get_year_from_match(self, date_match):
         # get the result from correct capturegroup.
@@ -88,7 +89,7 @@ class DateExtractor(BaseExtractor):
         elif int(year) < 1800:
             year = "18" + year
 
-        return year
+        return textUtils.int_or_none(year)
 
     @staticmethod
     def _check_is_year_sensible(year):

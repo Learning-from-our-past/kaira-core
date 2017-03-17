@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 
-from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from shared import regexUtils
 from shared import textUtils
@@ -36,8 +35,8 @@ class DeathExtractor(BaseExtractor):
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = death.end() + start_position - 4
-            death_year = "19" + death.group("year")
+            death_year = textUtils.int_or_none("19" + death.group("year"))
         except regexUtils.RegexNoneMatchException as e:
-            death_year = ""
+            death_year = None
 
         return death_year, cursor_location

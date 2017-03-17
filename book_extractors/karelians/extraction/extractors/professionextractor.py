@@ -24,7 +24,7 @@ class ProfessionExtractor(BaseExtractor):
     def _find_profession(self, text, start_position):
         text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
         cursor_location = 0
-        profession = ''
+        profession = None
 
         try:
             #limit the search range if there is spouse keyword:
@@ -46,6 +46,9 @@ class ProfessionExtractor(BaseExtractor):
         return result_profession, cursor_location
 
     def _clean_professions(self, profession):
+        if profession is None:
+            return profession
+
         profession = profession.strip(",")
         profession = profession.strip()
         profession = profession.lstrip()

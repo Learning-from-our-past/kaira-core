@@ -59,11 +59,11 @@ class CommonBirthdayExtractor(BaseExtractor):
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?
             # TODO: Metadata logging here self.errorLogger.logError(BirthdayException.eType, self.currentChild)
-            found_date = {"day": "","month": "", "year": "", "cursorLocation": ""}
+            found_date = {"day": None, "month": None, "year": None, "cursorLocation": 0}
 
         # Map date to birthDate
-        birth_date = {KEYS["birthDay"]: found_date["day"],
-                      KEYS["birthMonth"]: found_date["month"],
-                      KEYS["birthYear"]: found_date["year"]}
+        birth_date = {KEYS["birthDay"]: textUtils.int_or_none(found_date["day"]),
+                      KEYS["birthMonth"]: textUtils.int_or_none(found_date["month"]),
+                      KEYS["birthYear"]: textUtils.int_or_none(found_date["year"])}
 
         return birth_date, cursor_location

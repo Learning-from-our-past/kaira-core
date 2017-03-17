@@ -6,8 +6,8 @@ class ImageExtractor(BaseExtractor):
     extraction_key = 'personMetadata'
 
     def extract(self, entry, extraction_results):
-        image_path = ""
-        page = ""
+        image_path = None
+        page = None
         try:
             image_path = entry["image_path"]
         except KeyError:

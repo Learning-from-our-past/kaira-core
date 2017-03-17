@@ -51,7 +51,7 @@ class CommonOwnerExtractor(BaseExtractor):
         try:
             owner_year = regexUtils.safeSearch(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
             cursor_location = start_position + owner_year.end()
-            owner_year = int(owner_year.group("year"))
+            owner_year = textUtils.int_or_none(owner_year.group("year"))
         except regexUtils.RegexNoneMatchException:
             pass  # TODO: Metadata logging here self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
 

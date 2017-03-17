@@ -39,13 +39,13 @@ class SpouseExtractor(BaseExtractor):
                 KEYS["birthDay"]: None,
                 KEYS["birthYear"]: None,
                 KEYS["birthMonth"]: None,
-                KEYS["birthLocation"]: ""
+                KEYS["birthLocation"]: None
             },
             KEYS["deathYear"]: None,
-            KEYS["origfamily"]: "",
-            KEYS["profession"]: "",
+            KEYS["origfamily"]: None,
+            KEYS["profession"]: None,
             KEYS["weddingYear"]: None,
-            KEYS["spouseName"]: "",
+            KEYS["spouseName"]: None,
             KEYS["hasSpouse"]: False
         }
 
