@@ -12,9 +12,9 @@ EXPECTED = [
         'gender': 'Female',
         'surname': 'Testinen',
         'birthData': {
-            'birthDay': '21',
-            'birthMonth': '8',
-            'birthYear': '1945'
+            'birthDay': 21,
+            'birthMonth': 8,
+            'birthYear': 1945
         }
     },
     None

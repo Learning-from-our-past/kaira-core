@@ -13,7 +13,7 @@ MIN_PLACE_NAME_LENGTH = 4
 
 
 def validate_location_name(entry_name, geocoordinates):
-    if len(entry_name) > MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] == '' and geocoordinates['longitude'] == '':
+    if len(entry_name) > MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] is None and geocoordinates['longitude'] is None:
         name_is_ok = False
 
         # Check if there is white list pattern which matches to current name

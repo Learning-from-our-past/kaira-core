@@ -11,17 +11,17 @@ TWINS_AND_EXTRA_INFO_CHILDREN = ", om. vuodesta 1963 Lapsi ja Testi Testikäs. I
         "Edelliset omistajat olivat Edellinen ja Edellinenvaimo Testikäs vuosina 1928—63."
 EXPECTED_CHILDREN = [
     {
-        "birthYear": '1937',
+        "birthYear": 1937,
         "gender": "Female",
         "name": "Maija Sanelma"
     },
     {
-        "birthYear": '1939',
+        "birthYear": 1939,
         "gender": "Male",
         "name": "Raimo Juhani"
     },
     {
-        "birthYear": '1942',
+        "birthYear": 1942,
         "gender": "Male",
         "name": "Pentti Kaarlo Kalevi"
     }
