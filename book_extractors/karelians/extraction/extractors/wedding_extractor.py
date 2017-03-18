@@ -22,17 +22,17 @@ class WeddingExtractor(BaseExtractor):
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
         results = self._find_date(prepared_text, start_position)
-        return self._constructReturnDict(results[0], extraction_results, results[1])
+        return self._add_to_extraction_results(results[0], extraction_results, results[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
-        t = textUtils.takeSubStrBasedOnPos(text, start_position, self.SUBSTRING_WIDTH)
-        t = textUtils.removeSpacesFromText(t)
+        t = textUtils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
+        t = textUtils.remove_spaces_from_text(t)
         return t
 
     def _find_date(self, text, start_position):
         cursor_location = start_position
         try:
-            wedding = regexUtils.safeSearch(self.PATTERN, text, self.OPTIONS)
+            wedding = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = wedding.end() + start_position - 4

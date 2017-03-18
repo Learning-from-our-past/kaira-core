@@ -1,5 +1,5 @@
 import pytest
-from book_extractors.greatfarmers.extraction.extractors.spouseextractor import SpouseExtractor
+from book_extractors.greatfarmers.extraction.extractors.spouse_extractor import SpouseExtractor
 
 
 class TestSpouseExtraction:

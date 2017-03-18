@@ -4,8 +4,8 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
-from book_extractors.greatfarmers.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
+from book_extractors.greatfarmers.extraction.extractors.birthday_extractor import BirthdayExtractor
+from book_extractors.greatfarmers.extraction.extractors.original_family_extractor import OrigFamilyExtractor
 from shared import regexUtils
 
 
@@ -28,14 +28,14 @@ class SpouseExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         results = self._find_spouse(entry['text'], start_position)
-        return self._constructReturnDict(results[0], extraction_results, cursor_location=results[1])
+        return self._add_to_extraction_results(results[0], extraction_results, cursor_location=results[1])
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
         spouse_data = None
 
         try:
-            found_spouse_match = regexUtils.safeSearch(self.PATTERN, text, self.OPTIONS)
+            found_spouse_match = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
             spouse_data = self._find_spouse_data(found_spouse_match.group("spousedata"))
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
@@ -47,7 +47,7 @@ class SpouseExtractor(BaseExtractor):
 
     def _find_spouse_data(self, text):
         try:
-            name = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
+            name = regexUtils.safe_search(self.NAMEPATTERN, text, self.OPTIONS)
             spouse_name = name.group("name").strip()
             spouse_name = re.sub(r"\so$","", spouse_name)
             spouse_details = self._find_spouse_details(text[name.end() - 2:])

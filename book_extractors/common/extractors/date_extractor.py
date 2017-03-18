@@ -26,15 +26,15 @@ class DateExtractor(BaseExtractor):
             # non-space pattern match didn't produce results, try with including spaces
             result = self._find_date(entry['text'], start_position)
 
-        return self._constructReturnDict(result[0], extraction_results, result[1])
+        return self._add_to_extraction_results(result[0], extraction_results, result[1])
 
     @staticmethod
     def _prepare_text_for_extraction(text):
-        return textUtils.removeSpacesFromText(text)
+        return textUtils.remove_spaces_from_text(text)
 
     def _find_date(self, text, start_position):
         try:
-            found_date_matches = regexUtils.safeSearch(self.PATTERN, text, self.OPTIONS)
+            found_date_matches = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
             months_and_years_from_words = self._if_written_month_names_extract_them(found_date_matches)
             cursor_location = start_position + found_date_matches.end()
             if months_and_years_from_words is None:

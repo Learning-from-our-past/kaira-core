@@ -21,7 +21,7 @@ class FarmExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_areas(entry['text'])
-        return self._constructReturnDict(result, extraction_results, start_position)
+        return self._add_to_extraction_results(result, extraction_results, start_position)
 
     def _find_areas(self, text):
         whole_area = self._get_area(text, self.ALL_AREA_PATTERN)
@@ -41,7 +41,7 @@ class FarmExtractor(BaseExtractor):
     def _get_area(self, text, pattern):
         area = None
         try:
-            found_area = regexUtils.safeSearch(pattern, text, self.AREA_OPTIONS)
+            found_area = regexUtils.safe_search(pattern, text, self.AREA_OPTIONS)
             if found_area.group("area1") is not None:
                 area = found_area.group("area1")
             elif found_area.group("area2") is not None:

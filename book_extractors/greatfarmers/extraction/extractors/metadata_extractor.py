@@ -43,8 +43,8 @@ class MetadataExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('shortEntry', 10)
             short = True
 
-        return self._constructReturnDict({KEYS["name"]: name,
-                                          KEYS["approximatePage"]: page,
-                                          KEYS["farmLocation"]: location,
-                                          KEYS["shortentry"]: short,
-                                          KEYS["originalText"]: original_text}, extraction_results, 0)
+        return self._add_to_extraction_results({KEYS["name"]: name,
+                                                KEYS["approximatePage"]: page,
+                                                KEYS["farmLocation"]: location,
+                                                KEYS["shortentry"]: short,
+                                                KEYS["originalText"]: original_text}, extraction_results, 0)

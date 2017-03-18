@@ -6,7 +6,7 @@ import shared.textUtils as textUtils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from shared.genderExtract import Gender, GenderException
+from shared.gender_extract import Gender, GenderException
 
 
 class CommonOwnerExtractor(BaseExtractor):
@@ -26,10 +26,10 @@ class CommonOwnerExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_owner(entry['text'], start_position)
-        return self._constructReturnDict(result[0], extraction_results, result[1])
+        return self._add_to_extraction_results(result[0], extraction_results, result[1])
 
     def _find_owner(self, text, start_position):
-        text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
+        text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
         owner_year_result = self._find_owner_year(text, start_position)
         owner_name_details_result = self._find_owner_name_details(text, start_position)
         owner_birthday_result = self._find_owner_birthday(text)
@@ -49,7 +49,7 @@ class CommonOwnerExtractor(BaseExtractor):
         cursor_location = start_position
         owner_year = None
         try:
-            owner_year = regexUtils.safeSearch(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
+            owner_year = regexUtils.safe_search(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
             cursor_location = start_position + owner_year.end()
             owner_year = textUtils.int_or_none(owner_year.group("year"))
         except regexUtils.RegexNoneMatchException:
@@ -61,7 +61,7 @@ class CommonOwnerExtractor(BaseExtractor):
         cursor_location = start_position
         owner_name_data = ('', '', '')
         try:
-            owner_name_match = regexUtils.safeSearch(self.OWNER_NAME_PATTERN, text, self.OWNER_OPTIONS)
+            owner_name_match = regexUtils.safe_search(self.OWNER_NAME_PATTERN, text, self.OWNER_OPTIONS)
             cursor_location = start_position + owner_name_match.end()
             owner_name_data = self._split_names(owner_name_match.group("name"))
         except regexUtils.RegexNoneMatchException:

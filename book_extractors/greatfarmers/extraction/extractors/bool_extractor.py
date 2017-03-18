@@ -15,16 +15,18 @@ class BoolExtractor(BaseExtractor):
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
 
     def extract(self, entry, extraction_results):
-        result = self._find_patterns(entry['text'])
-        return self._constructReturnDict(result, extraction_results, 0)
+        start_position = self.get_starting_position(extraction_results)
+        results = self._find_patterns(entry['text'])
+        return self._add_to_extraction_results(results, extraction_results, start_position)
 
     def _find_patterns(self, text):
         results = {}
         for key, pattern in self.patterns_to_find.items():
             try:
-                regexUtils.safeSearch(pattern, text, self.OPTIONS)
+                regexUtils.safe_search(pattern, text, self.OPTIONS)
                 results[key] = True
             except regexUtils.RegexNoneMatchException:
                 results[key] = False
                 pass
+
         return results

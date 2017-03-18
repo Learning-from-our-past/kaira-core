@@ -1,5 +1,5 @@
 import pytest
-from book_extractors.farmers.extraction.extractors.childextractor import ChildExtractor
+from book_extractors.farmers.extraction.extractors.child_extractor import ChildExtractor
 from book_extractors.farmers.tests.extraction.children.mock_person_data import EXPECTED_CHILDREN, CHILDREN_TEXTS
 
 

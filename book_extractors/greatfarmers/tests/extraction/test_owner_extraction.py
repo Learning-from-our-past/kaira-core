@@ -1,6 +1,6 @@
 import pytest
-from book_extractors.greatfarmers.extraction.extractors.ownerextractor import OwnerExtractor
-from shared.genderExtract import Gender
+from book_extractors.greatfarmers.extraction.extractors.owner_extractor import OwnerExtractor
+from shared.gender_extract import Gender
 
 
 class TestOwnerExtraction:

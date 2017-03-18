@@ -2,14 +2,14 @@ from book_extractors.processdata import ProcessData
 from book_extractors.greatfarmers.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.greatfarmers.resultjsonbuilder import ResultJsonBuilder
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.greatfarmers.extraction.extractors.metadataextractor import MetadataExtractor
-from book_extractors.greatfarmers.extraction.extractors.ownerextractor import OwnerExtractor
-from book_extractors.greatfarmers.extraction.extractors.childextractor import ChildExtractor
-from book_extractors.greatfarmers.extraction.extractors.farmextractor import FarmExtractor
-from book_extractors.greatfarmers.extraction.extractors.boolextractor import BoolExtractor
-from book_extractors.greatfarmers.extraction.extractors.quantityextractor import QuantityExtractor
-from book_extractors.greatfarmers.extraction.extractors.spouseextractor import SpouseExtractor
-from shared.genderExtract import Gender
+from book_extractors.greatfarmers.extraction.extractors.metadata_extractor import MetadataExtractor
+from book_extractors.greatfarmers.extraction.extractors.owner_extractor import OwnerExtractor
+from book_extractors.greatfarmers.extraction.extractors.child_extractor import ChildExtractor
+from book_extractors.greatfarmers.extraction.extractors.farm_extractor import FarmExtractor
+from book_extractors.greatfarmers.extraction.extractors.bool_extractor import BoolExtractor
+from book_extractors.greatfarmers.extraction.extractors.quantity_extractor import QuantityExtractor
+from book_extractors.greatfarmers.extraction.extractors.spouse_extractor import SpouseExtractor
+from shared.gender_extract import Gender
 from book_extractors.common.extraction_keys import KEYS
 
 

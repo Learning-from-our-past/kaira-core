@@ -2,17 +2,17 @@ from book_extractors.processdata import ProcessData
 from book_extractors.karelians.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.karelians.resultjsonbuilder import ResultJsonBuilder
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.karelians.extraction.extractors.nameextractor import NameExtractor
-from book_extractors.karelians.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
-from book_extractors.karelians.extraction.extractors.professionextractor import ProfessionExtractor
-from book_extractors.karelians.extraction.extractors.imageextractor import ImageExtractor
-from book_extractors.karelians.extraction.extractors.omakotitaloextractor import OmakotitaloExtractor
-from book_extractors.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
-from book_extractors.karelians.extraction.extractors.locationExtractor import BirthdayLocationExtractor
+from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
+from book_extractors.karelians.extraction.extractors.original_family_extractor import OrigFamilyExtractor
+from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
+from book_extractors.karelians.extraction.extractors.image_extractor import ImageExtractor
+from book_extractors.karelians.extraction.extractors.omakotitalo_extractor import OmakotitaloExtractor
+from book_extractors.karelians.extraction.extractors.birthday_extractor import BirthdayExtractor
+from book_extractors.karelians.extraction.extractors.location_extractor import BirthdayLocationExtractor
 from book_extractors.karelians.extraction.extractors.migration_route_extractors import MigrationRouteExtractor
-from book_extractors.karelians.extraction.extractors.spouseextractor import SpouseExtractor
-from book_extractors.karelians.extraction.extractors.childextractor import ChildExtractor
-from shared.genderExtract import Gender
+from book_extractors.karelians.extraction.extractors.spouse_extractor import SpouseExtractor
+from book_extractors.karelians.extraction.extractors.child_extractor import ChildExtractor
+from shared.gender_extract import Gender
 
 
 class KarelianExtractor:

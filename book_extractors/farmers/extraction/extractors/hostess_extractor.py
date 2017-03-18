@@ -6,7 +6,7 @@ import shared.textUtils as textUtils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.farmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from book_extractors.farmers.extraction.extractors.birthday_extractor import BirthdayExtractor
 
 
 class HostessExtractor(BaseExtractor):
@@ -25,10 +25,10 @@ class HostessExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         results = self._find_hostess(entry['text'], start_position)
-        return self._constructReturnDict(results[0], extraction_results, results[1])
+        return self._add_to_extraction_results(results[0], extraction_results, results[1])
 
     def _find_hostess(self, text, start_position):
-        text = textUtils.takeSubStrBasedOnRange(text, start_position, self.SEARCH_SPACE)
+        text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
 
         try:
             name = self._find_hostess_name(text)
@@ -54,7 +54,7 @@ class HostessExtractor(BaseExtractor):
         return results['birthday']['results'], final_cursor_location
 
     def _find_hostess_name(self, text):
-        hostess_name_match = regexUtils.safeSearch(self.HOSTESS_NAME_PATTERN, text, self.HOSTESS_OPTIONS)
+        hostess_name_match = regexUtils.safe_search(self.HOSTESS_NAME_PATTERN, text, self.HOSTESS_OPTIONS)
         cursor_location = hostess_name_match.end()
         hostess_name = self._split_names(hostess_name_match.group("name"))
 

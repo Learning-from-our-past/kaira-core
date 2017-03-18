@@ -1,5 +1,5 @@
 import pytest
-from book_extractors.farmers.extraction.extractors.hostessextractor import HostessExtractor
+from book_extractors.farmers.extraction.extractors.hostess_extractor import HostessExtractor
 from book_extractors.farmers.tests.extraction.hostess.mock_person_data import HOSTESS_TEXTS, EXPECTED
 
 

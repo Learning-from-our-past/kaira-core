@@ -2,7 +2,7 @@ import re
 
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared.genderExtract import Gender, GenderException
+from shared.gender_extract import Gender, GenderException
 
 
 class NameExtractor(BaseExtractor):
@@ -28,7 +28,7 @@ class NameExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('genderNotFound', 8)
             result[KEYS['gender']] = ""
 
-        return self._constructReturnDict(result, extraction_results)
+        return self._add_to_extraction_results(result, extraction_results)
 
     def _split_names(self, name):
         name = re.sub(r"(?:<|>|&|')", r"", name)

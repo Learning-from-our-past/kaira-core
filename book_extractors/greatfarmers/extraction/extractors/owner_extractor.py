@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from book_extractors.common.extractors.owner_extractor import CommonOwnerExtractor
-from book_extractors.greatfarmers.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from book_extractors.greatfarmers.extraction.extractors.birthday_extractor import BirthdayExtractor
 from book_extractors.common.extraction_keys import KEYS
 
 

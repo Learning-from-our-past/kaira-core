@@ -1,5 +1,5 @@
 import pytest
-from book_extractors.karelians.extraction.extractors.childextractor import ChildExtractor
+from book_extractors.karelians.extraction.extractors.child_extractor import ChildExtractor
 from book_extractors.karelians.tests.extraction.children.mock_person_data import CHILDREN_TEXTS, EXPECTED
 
 
