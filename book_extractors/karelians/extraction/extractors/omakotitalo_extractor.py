@@ -15,11 +15,11 @@ class OmakotitaloExtractor(BaseExtractor):
 
     def extract(self, entry, extraction_results):
         own_house = self._find_omakotitalo(entry['text'])
-        return self._constructReturnDict(own_house, extraction_results)
+        return self._add_to_extraction_results(own_house, extraction_results)
 
     def _find_omakotitalo(self, text):
         try:
-            regexUtils.safeSearch(self.OMAKOTITALO_PATTERN, text, self.OMAKOTITALO_OPTIONS)
+            regexUtils.safe_search(self.OMAKOTITALO_PATTERN, text, self.OMAKOTITALO_OPTIONS)
             return True
         except regexUtils.RegexNoneMatchException:
             pass

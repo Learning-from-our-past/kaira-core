@@ -1,5 +1,5 @@
 import pytest
-from book_extractors.greatfarmers.extraction.extractors.spouseextractor import SpouseExtractor
+from book_extractors.greatfarmers.extraction.extractors.spouse_extractor import SpouseExtractor
 
 
 class TestSpouseExtraction:
@@ -22,7 +22,8 @@ class TestSpouseExtraction:
                     'birthYear': 1921,
                 },
                 'metadata': {
-                    'cursorLocation': 16
+                    'cursorLocation': 16,
+                    'errors': {}
                 }
 
             }

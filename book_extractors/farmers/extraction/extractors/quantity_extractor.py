@@ -22,7 +22,7 @@ class QuantityExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_patterns(entry['text'])
-        return self._constructReturnDict(result, extraction_results, start_position)
+        return self._add_to_extraction_results(result, extraction_results, start_position)
 
     def set_patterns_to_find(self, patterns):
         """
@@ -35,7 +35,7 @@ class QuantityExtractor(BaseExtractor):
         for key, pattern in self.patterns_to_find.items():
             try:
                 usepattern = self.QUANTITY_PATTERN + pattern
-                found = regexUtils.safeSearch(usepattern, text, self.OPTIONS)
+                found = regexUtils.safe_search(usepattern, text, self.OPTIONS)
                 results[key] = self._process_value(found)
             except regexUtils.RegexNoneMatchException:
                 results[key] = None
@@ -54,7 +54,7 @@ class QuantityExtractor(BaseExtractor):
                 return None
 
     def _take_average(self, range):
-        numbers = regexUtils.regexIter(self.SPLIT_PATTERN1, range)
+        numbers = regexUtils.regex_iter(self.SPLIT_PATTERN1, range)
         numbers = list(numbers)
         sum = 0
         try:

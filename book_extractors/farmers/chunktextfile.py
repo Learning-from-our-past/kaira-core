@@ -2,10 +2,9 @@ from lxml.html import *
 from lxml import etree
 from lxml import html
 import re
-import cProfile
-import os, nturl2path
-import shutil
+import os
 from interface.chunktextinterface import ChunkTextInterface
+
 
 def read_html_file(path):
     return parse(path)
@@ -31,10 +30,8 @@ class PersonPreprocessor(ChunkTextInterface):
         person_document = self._walk_tree(tree)
         return person_document
 
-
     def _walk_tree(self, tree):
         for e in tree.iter():
-
             if e.text is not None:
                 try:
                     if int(e.text) > 10:
@@ -64,7 +61,7 @@ class PersonPreprocessor(ChunkTextInterface):
 
     def _process_element(self, e):
         if len(e.text) > 40:
-            #pyritään huomaamaan ihmiset joiden entry alkaa toisen sisältä
+            # try to notice people who start within other people
             uppercase = re.search("[A-ZÄ-Ö, ]{8,}", e.text)
 
             #TODO: Karkea. Pitäisi muuttaa rekursiiviseksi, jotta jos samassa entryssä on > 2
@@ -93,7 +90,6 @@ def start():
     os.chdir("material")
     f = open("Siirtokarjalaisten tie I fragment_kuvat.html", "r", encoding="utf8")
     text = f.read()
-    #"Siirtokarjalaisten_whole_book.htm") #Siirtokarjalaisten_whole_book.htm
     p = PersonPreprocessor()
     persons = p.chunk_text(text)
     f = open("results.xml", "wb")

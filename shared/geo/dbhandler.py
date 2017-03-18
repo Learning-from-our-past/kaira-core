@@ -5,34 +5,33 @@ import pytz
 
 
 class DatabaseHandler:
-    dbName = 'geonames'  #name of the db where collections are located
-    mongoDBAddress = 'localhost'
-    mongoPort = 27017
-
+    db_name = 'geonames'  # name of the db where collections are located
+    mongo_db_address = 'localhost'
+    mongo_port = 27017
 
     def __init__(self):
-        self.client = MongoClient(self.mongoDBAddress, self.mongoPort)
-        self.db = self.client[self.dbName]
+        self.client = MongoClient(self.mongo_db_address, self.mongo_port)
+        self.db = self.client[self.db_name]
 
-    def checkIfCollectionExists(self, name):
+    def check_if_collection_exists(self, name):
         coll = self.db.collection_names()
         if name in coll:
             return True
         else:
             return False
 
-    def storeToDb(self, entry, collectionName):
-        self.db[collectionName].insert(entry)
+    def store_to_db(self, entry, collection_name):
+        self.db[collection_name].insert(entry)
 
-    def getFromDb(self, query, collectionName):
-        found = list(self.db[collectionName].find(query, { "score": { "$meta": "textScore" } }).sort([("score", {"$meta": "textScore"})]))
+    def get_from_db(self, query, collection_name):
+        found = list(self.db[collection_name].find(query, {"score": {"$meta": "textScore"}}).sort([("score", {"$meta": "textScore"})]))
         return found
 
-    def saveToDb(self, entry, collection):
+    def save_to_db(self, entry, collection):
         collection.save(entry)
 
-    def clearCollection(self, collection):
+    def clear_collection(self, collection):
         collection.remove()
 
-    def dropCollection(self, name):
+    def drop_collection(self, name):
         self.db[name].drop()

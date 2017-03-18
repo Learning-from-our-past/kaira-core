@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from nose.tools import *
 import lxml.etree as etree
-from book_extractors.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
+from book_extractors.karelians.extraction.extractors.birthday_extractor import BirthdayExtractor
 from shared.exceptionlogger import ExceptionLogger
 
 def build_xml_representation(text, name):

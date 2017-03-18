@@ -1,5 +1,5 @@
 import pytest
-from book_extractors.farmers.extraction.extractors.hostessextractor import HostessExtractor
+from book_extractors.farmers.extraction.extractors.hostess_extractor import HostessExtractor
 from book_extractors.farmers.tests.extraction.hostess.mock_person_data import HOSTESS_TEXTS, EXPECTED
 
 
@@ -13,5 +13,6 @@ class TestHostessExtraction:
         assert hostess == EXPECTED[0]
 
     def should_return_none_if_hostess_is_not_found(self, hostess_extractor):
-        hostess = hostess_extractor.extract({'text': HOSTESS_TEXTS['no_hostess']}, {})['hostess']['results']
-        assert hostess == EXPECTED[1]
+        hostess = hostess_extractor.extract({'text': HOSTESS_TEXTS['no_hostess']}, {})['hostess']
+        assert hostess['results'] == EXPECTED[1]
+        assert hostess['metadata']['errors'] == {'hostessNotFound': 4}

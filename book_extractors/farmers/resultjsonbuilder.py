@@ -2,10 +2,11 @@
 import json
 from interface.jsonbuilderinterface import ResultJsonBuilderInterface
 
+
 class ResultJsonBuilder(ResultJsonBuilderInterface):
 
     def __init__(self):
-        pass
+        super(ResultJsonBuilder, self).__init__()
 
     def openJson(self, file):
         if type(file) == str:

@@ -2,15 +2,15 @@ from book_extractors.farmers.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.farmers.resultjsonbuilder import ResultJsonBuilder
 from book_extractors.processdata import ProcessData
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.farmers.extraction.extractors.metadataextractor import MetadataExtractor
-from book_extractors.farmers.extraction.extractors.ownerextractor import OwnerExtractor
-from book_extractors.farmers.extraction.extractors.hostessextractor import HostessExtractor
-from book_extractors.farmers.extraction.extractors.childextractor import ChildExtractor
-from book_extractors.farmers.extraction.extractors.farmextractor import FarmExtractor
-from book_extractors.farmers.extraction.extractors.boolextractor import BoolExtractor
-from book_extractors.farmers.extraction.extractors.quantityextractor import QuantityExtractor
+from book_extractors.farmers.extraction.extractors.metadata_extractor import MetadataExtractor
+from book_extractors.farmers.extraction.extractors.owner_extractor import OwnerExtractor
+from book_extractors.farmers.extraction.extractors.hostess_extractor import HostessExtractor
+from book_extractors.farmers.extraction.extractors.child_extractor import ChildExtractor
+from book_extractors.farmers.extraction.extractors.farm_extractor import FarmExtractor
+from book_extractors.farmers.extraction.extractors.bool_extractor import BoolExtractor
+from book_extractors.farmers.extraction.extractors.quantity_extractor import QuantityExtractor
 from book_extractors.common.extraction_keys import KEYS
-from shared.genderExtract import Gender
+from shared.gender_extract import Gender
 
 class SmallFarmersExtractor:
 

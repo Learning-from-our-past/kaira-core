@@ -35,7 +35,7 @@ class MetadataExtractor(BaseExtractor):
         except KeyError:
             pass
 
-        return self._constructReturnDict({
+        return self._add_to_extraction_results({
             KEYS["name"]: name,
             KEYS["approximatePage"]: page,
             KEYS["farmLocation"]: location,

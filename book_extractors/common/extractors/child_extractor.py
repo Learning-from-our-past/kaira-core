@@ -3,7 +3,7 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from shared import regexUtils
-from shared.genderExtract import Gender, GenderException
+from shared.gender_extract import Gender, GenderException
 from shared.geo.geocoding import GeoCoder
 from shared import textUtils
 
@@ -20,7 +20,7 @@ class CommonChildExtractor(BaseExtractor):
         many_marriages = self._check_many_marriages(entry['text'])
 
         children_results = self._find_children(entry['text'], start_position)
-        return self._constructReturnDict({KEYS["manymarriages"]: many_marriages, KEYS["children"]: children_results[0]}, extraction_results, children_results[1])
+        return self._add_to_extraction_results({KEYS["manymarriages"]: many_marriages, KEYS["children"]: children_results[0]}, extraction_results, children_results[1])
 
     def _find_children(self, text, start_position):
         cursor_location = start_position
@@ -28,15 +28,14 @@ class CommonChildExtractor(BaseExtractor):
         children_entries = []
 
         try:
-            found_children_match = regexUtils.safeSearch(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
+            found_children_match = regexUtils.safe_search(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
             cursor_location = found_children_match.end()
             children_str = found_children_match.group("children")
             cleaned_children = self._clean_children(children_str)
             children_entries = self._split_children(cleaned_children)
 
-        except regexUtils.RegexNoneMatchException as e:
-            # TODO: Metadata logging here self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
-            pass
+        except regexUtils.RegexNoneMatchException:
+            self.metadata_collector.add_error_record('childrenNotFound', 5)
 
         return children_entries, cursor_location
 
@@ -52,7 +51,7 @@ class CommonChildExtractor(BaseExtractor):
         return children_str
 
     def _split_children(self, children_str):
-        found_children_matches = regexUtils.regexIter(self.SPLIT_PATTERN1, children_str, self.SPLIT_OPTIONS1)
+        found_children_matches = regexUtils.regex_iter(self.SPLIT_PATTERN1, children_str, self.SPLIT_OPTIONS1)
         children_entries = []
         for m in found_children_matches:
             # check if there is "ja" word as separator such as "Seppo -41 ja Jaakko -32.
@@ -87,18 +86,18 @@ class CommonChildExtractor(BaseExtractor):
 
     def _process_child(self, child):
         try:
-            name = regexUtils.safeSearch(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
+            name = regexUtils.safe_search(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
             name = name.strip()
             name = name.strip("-")
             name = name.strip(" ")
             try:
                 gender = Gender.find_gender(name)
-            except GenderException as e:
-                # TODO: Metadata logging here self.errorLogger.logError(e.eType, self.currentChild)
-                gender = ""
+            except GenderException:
+                self.metadata_collector.add_error_record('genderNotFound', 2)
+                gender = None
 
             try:
-                year_match = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
+                year_match = regexUtils.safe_search(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
                 year = year_match.group("year")
                 if float(year) < 70:
                     year = textUtils.int_or_none("19" + year)

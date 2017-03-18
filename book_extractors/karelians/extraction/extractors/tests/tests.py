@@ -1,8 +1,8 @@
 from nose.tools import *
 import lxml
 import lxml.etree as etree
-from book_extractors.karelians.extraction.extractors.nameextractor import NameExtractor
-from book_extractors.karelians.extraction.extractors.professionextractor import ProfessionExtractor
+from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
+from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
 from shared.exceptionlogger import ExceptionLogger
 from book_extractors.common.extraction_keys import KEYS
 from interface.valuewrapper import ValueWrapper

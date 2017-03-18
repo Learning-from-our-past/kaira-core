@@ -4,12 +4,12 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.karelians.extraction.extractors.birthdayExtractor import BirthdayExtractor
-from book_extractors.karelians.extraction.extractors.deathextractor import DeathExtractor
-from book_extractors.karelians.extraction.extractors.locationExtractor import BirthdayLocationExtractor
-from book_extractors.karelians.extraction.extractors.origfamilyextractor import OrigFamilyExtractor
-from book_extractors.karelians.extraction.extractors.professionextractor import ProfessionExtractor
-from book_extractors.karelians.extraction.extractors.weddingextractor import WeddingExtractor
+from book_extractors.karelians.extraction.extractors.birthday_extractor import BirthdayExtractor
+from book_extractors.karelians.extraction.extractors.death_extractor import DeathExtractor
+from book_extractors.karelians.extraction.extractors.location_extractor import BirthdayLocationExtractor
+from book_extractors.karelians.extraction.extractors.original_family_extractor import OrigFamilyExtractor
+from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
+from book_extractors.karelians.extraction.extractors.wedding_extractor import WeddingExtractor
 from shared import regexUtils
 
 
@@ -52,14 +52,14 @@ class SpouseExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_spouse(entry['text'], start_position)
-        return self._constructReturnDict(result[0], extraction_results, cursor_location=result[1])
+        return self._add_to_extraction_results(result[0], extraction_results, cursor_location=result[1])
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
         spouse_data = self.NO_SPOUSE_RESULT
 
         try:
-            found_spouse_match = regexUtils.safeSearch(self.PATTERN, text, self.OPTIONS)
+            found_spouse_match = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
             spouse_data = self._find_spouse_data(found_spouse_match.group("spousedata"))
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
@@ -74,7 +74,7 @@ class SpouseExtractor(BaseExtractor):
         spouse_details = self.NO_SPOUSE_RESULT
 
         try:
-            spouse_name_match = regexUtils.safeSearch(self.NAMEPATTERN, text, self.OPTIONS)
+            spouse_name_match = regexUtils.safe_search(self.NAMEPATTERN, text, self.OPTIONS)
             spouse_name = spouse_name_match.group("name").strip()
             spouse_name = re.sub(r"\so$", "", spouse_name)
             spouse_details = self._find_spouse_details(text[spouse_name_match.end() - 2:])
@@ -93,8 +93,7 @@ class SpouseExtractor(BaseExtractor):
             }
 
         except regexUtils.RegexNoneMatchException:
-            # TODO: Metadata logging here self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
-            pass
+            self.metadata_collector.add_error_record('spouseNotFound', 6)
 
         return spouse_name, spouse_details
 

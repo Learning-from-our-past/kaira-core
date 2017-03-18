@@ -4,8 +4,8 @@ from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import StopExtractionException
 from shared import regexUtils, textUtils
-from shared.genderExtract import Gender
-from shared.genderExtract import GenderException
+from shared.gender_extract import Gender
+from shared.gender_extract import GenderException
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 Gender.load_names()
@@ -30,7 +30,7 @@ class ChildExtractor(BaseExtractor):
     def extract(self, entry, extraction_results):
         results = self._find_children(entry['text'])
 
-        return self._constructReturnDict({
+        return self._add_to_extraction_results({
             KEYS["manymarriages"]: results[1], KEYS["children"]: results[0]
         }, extraction_results, results[2])
 
@@ -39,22 +39,20 @@ class ChildExtractor(BaseExtractor):
         cursor_location = 0
         many_marriages = False
         try:
-            found_children = regexUtils.safeSearch(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
+            found_children = regexUtils.safe_search(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
             cursor_location = found_children.end()
             children_str = found_children.group("children")
             many_marriages = self._check_many_marriages(children_str)
             children_str = self._clean_children(children_str)
             children = self._split_children(children_str)
 
-        except regexUtils.RegexNoneMatchException as e:
-            pass
-            # TODO: Metadata logging here: self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
+        except regexUtils.RegexNoneMatchException:
+            self.metadata_collector.add_error_record('childrenNotFound', 5)
 
         return children, many_marriages, cursor_location
 
     def _check_many_marriages(self, text):
         marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
-        # TODO: metadata logging here: self.errorLogger.logError(MultipleMarriagesException.eType, self.currentChild)
         return marriage is not None
 
     @staticmethod
@@ -65,7 +63,7 @@ class ChildExtractor(BaseExtractor):
         return children_str
 
     def _split_children(self, children_str):
-        found_children = regexUtils.regexIter(self.SPLIT_PATTERN1, children_str, self.SPLIT_OPTIONS1)
+        found_children = regexUtils.regex_iter(self.SPLIT_PATTERN1, children_str, self.SPLIT_OPTIONS1)
         children = []
         for m in found_children:
             try:
@@ -84,21 +82,21 @@ class ChildExtractor(BaseExtractor):
                     c[KEYS["childLocationName"]] = birth_loc.group("location")
             raise StopExtractionException('Child extraction should be stopped here. Current child is not valid child.')
 
-        name = regexUtils.safeSearch(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
+        name = regexUtils.safe_search(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
         name = name.strip()
         name = name.strip("-")
         name = name.strip(" ")
 
         try:
             gender = Gender.find_gender(name)
-        except GenderException as e:
-            # TODO: metadata logging here: self.errorLogger.logError(e.eType, self.currentChild)
-            gender = ""
+        except GenderException:
+            self.metadata_collector.add_error_record('genderNotFound', 2)
+            gender = None
 
         try:
-            year_match = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
+            year_match = regexUtils.safe_search(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
             year = year_match.group("year")
-            if float(year) <70:
+            if float(year) < 70:
                 year = "19" + year
             else:
                 year = "18" + year
@@ -106,7 +104,7 @@ class ChildExtractor(BaseExtractor):
             year = ""
 
         try:
-            loc_match = regexUtils.safeSearch(self.LOCATION_PATTERN, child, self.CHILD_OPTIONS)
+            loc_match = regexUtils.safe_search(self.LOCATION_PATTERN, child, self.CHILD_OPTIONS)
             location = loc_match.group("location")
             location = location.strip()
             location = location.strip("-")

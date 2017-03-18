@@ -1,19 +1,20 @@
 from shared.geo.dbhandler import DatabaseHandler
 
 
-class GeoCoder():
+class GeoCoder:
 
     def __init__(self):
         self.db = DatabaseHandler()
 
     def get_coordinates(self, location_name, collection):
-        locations = self.db.getFromDb({"$text": {"$search": "\"" + location_name + "\""}}, collection)
+        locations = self.db.get_from_db({"$text": {"$search": "\"" + location_name + "\""}}, collection)
         if len(locations) == 0:
             raise LocationNotFound()
         else:
             return {"latitude": locations[0]["latitude"], "longitude": locations[0]["longitude"]}
 
-    def get_empty_coordinates(self):
+    @staticmethod
+    def get_empty_coordinates():
         return {"latitude" : None, "longitude": None}
 
     def get_coordinates_geojson(self, location_name, collection):
@@ -43,7 +44,6 @@ class GeoCoder():
             }
 
         }
-
 
 
 class LocationNotFound(Exception):

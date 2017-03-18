@@ -4,7 +4,7 @@ import re
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.common.extractors.dateExtractor import DateExtractor
+from book_extractors.common.extractors.date_extractor import DateExtractor
 from book_extractors.extraction_exceptions import *
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared import regexUtils
@@ -35,15 +35,15 @@ class CommonBirthdayExtractor(BaseExtractor):
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
         result = self._find_date(prepared_text, start_position)
 
-        return self._constructReturnDict(result[0], extraction_results, result[1])
+        return self._add_to_extraction_results(result[0], extraction_results, result[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
-        t = textUtils.takeSubStrBasedOnPos(text, start_position, self.SUBSTRING_WIDTH)
+        t = textUtils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
 
         if self._remove_spaces_from_text:
-            t = textUtils.removeSpacesFromText(t)
+            t = textUtils.remove_spaces_from_text(t)
 
-        spouse_found = regexUtils.findFirstPositionWithRegexSearch("puol", t, re.IGNORECASE|re.UNICODE)
+        spouse_found = regexUtils.find_first_position_with_regex_search("puol", t, re.IGNORECASE | re.UNICODE)
         if spouse_found != -1:
             t = t[0:spouse_found]
 
@@ -58,8 +58,8 @@ class CommonBirthdayExtractor(BaseExtractor):
             cursor_location = self.get_last_cursor_location(result) + start_position - 4
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?
-            # TODO: Metadata logging here self.errorLogger.logError(BirthdayException.eType, self.currentChild)
             found_date = {"day": None, "month": None, "year": None, "cursorLocation": 0}
+            self.metadata_collector.add_error_record('birthDateNotFound', 2)
 
         # Map date to birthDate
         birth_date = {KEYS["birthDay"]: textUtils.int_or_none(found_date["day"]),
