@@ -62,8 +62,7 @@ class SpouseExtractor(BaseExtractor):
             }
 
         except regexUtils.RegexNoneMatchException:
-            # TODO: Metadata logging here self.errorLogger.logError(SpouseNameException.eType, self.currentChild)
-            pass
+            self.metadata_collector.add_error_record('spouseNotFound', 7)
 
     def _find_spouse_details(self, text):
         return self._sub_extraction_pipeline.process({'text': text})

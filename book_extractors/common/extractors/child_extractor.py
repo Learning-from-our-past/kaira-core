@@ -34,9 +34,8 @@ class CommonChildExtractor(BaseExtractor):
             cleaned_children = self._clean_children(children_str)
             children_entries = self._split_children(cleaned_children)
 
-        except regexUtils.RegexNoneMatchException as e:
-            # TODO: Metadata logging here self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
-            pass
+        except regexUtils.RegexNoneMatchException:
+            self.metadata_collector.add_error_record('childrenNotFound', 5)
 
         return children_entries, cursor_location
 
@@ -93,9 +92,9 @@ class CommonChildExtractor(BaseExtractor):
             name = name.strip(" ")
             try:
                 gender = Gender.find_gender(name)
-            except GenderException as e:
-                # TODO: Metadata logging here self.errorLogger.logError(e.eType, self.currentChild)
-                gender = ""
+            except GenderException:
+                self.metadata_collector.add_error_record('genderNotFound', 2)
+                gender = None
 
             try:
                 year_match = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)

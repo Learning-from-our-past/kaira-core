@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
+from book_extractors.common.metadata_helper import MetadataCollector
 
 
 class BaseExtractor:
@@ -10,6 +11,7 @@ class BaseExtractor:
         self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
         self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes
         self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
+        self.metadata_collector = MetadataCollector()
 
     @abstractmethod
     def extract(self, entry, extraction_results):
@@ -28,13 +30,13 @@ class BaseExtractor:
         return max(cursor_locations_in_result_metadatas)
 
     def _constructReturnDict(self, data, extraction_results, cursor_location=0):
+        self.metadata_collector.set_metadata_property('cursorLocation', cursor_location)
         extraction_results[self.extraction_key] = {
             'results': data,
-            'metadata': {
-                'cursorLocation': cursor_location
-            }
+            'metadata': self.metadata_collector.get_metadata()
         }
-        #extraction_results['cursor_locations'][self.__class__.__name__] = cursor_location
+
+        self.metadata_collector.clear()
         return extraction_results
 
     def _checkIfMatchPositionIsRequiredBeforeExtract(self):

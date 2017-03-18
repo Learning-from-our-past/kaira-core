@@ -71,7 +71,7 @@ class BirthdayLocationExtractor(BaseExtractor):
 
             cursor_location = self.get_last_cursor_location(results) + start_position - 4
         except LocationException:
-            # TODO: Metadata logging here self.errorLogger.logError(BirthLocationException.eType, self.currentChild )   #TODO: HOW ABOUT WOMEN?
+            self.metadata_collector.add_error_record('birthLocationNotFound', 2)
             location = ''
 
         return location, cursor_location

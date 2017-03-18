@@ -157,9 +157,8 @@ class FinnishLocationsExtractor(BaseExtractor):
                     location_entries += _get_location_entries(loc)
             except InvalidLocationException as e:
                 pass
-        except regexUtils.RegexNoneMatchException as e:
-            # TODO: Metadata logging here: self.errorLogger.logError(OtherLocationException.eType, self.currentChild)
-            pass
+        except regexUtils.RegexNoneMatchException:
+            self.metadata_collector.add_error_record('otherLocationNotFound', 5)
 
         return location_entries, cursor_location
 
@@ -294,8 +293,7 @@ class KarelianLocationsExtractor(BaseExtractor):
             except InvalidLocationException as e:
                 pass
         except regexUtils.RegexNoneMatchException as e:
-            # TODO: Metadata logging here self.errorLogger.logError(KarelianLocationException.eType, self.currentChild)
-            pass
+            self.metadata_collector.add_error_record('karelianLocationNotFound', 5)
 
         return location_entries, returned_to_karelia, cursor_location
 

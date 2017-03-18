@@ -46,15 +46,13 @@ class ChildExtractor(BaseExtractor):
             children_str = self._clean_children(children_str)
             children = self._split_children(children_str)
 
-        except regexUtils.RegexNoneMatchException as e:
-            pass
-            # TODO: Metadata logging here: self.errorLogger.logError(NoChildrenException.eType, self.currentChild)
+        except regexUtils.RegexNoneMatchException:
+            self.metadata_collector.add_error_record('childrenNotFound', 5)
 
         return children, many_marriages, cursor_location
 
     def _check_many_marriages(self, text):
         marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
-        # TODO: metadata logging here: self.errorLogger.logError(MultipleMarriagesException.eType, self.currentChild)
         return marriage is not None
 
     @staticmethod
@@ -91,14 +89,14 @@ class ChildExtractor(BaseExtractor):
 
         try:
             gender = Gender.find_gender(name)
-        except GenderException as e:
-            # TODO: metadata logging here: self.errorLogger.logError(e.eType, self.currentChild)
-            gender = ""
+        except GenderException:
+            self.metadata_collector.add_error_record('genderNotFound', 2)
+            gender = None
 
         try:
             year_match = regexUtils.safeSearch(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
             year = year_match.group("year")
-            if float(year) <70:
+            if float(year) < 70:
                 year = "19" + year
             else:
                 year = "18" + year

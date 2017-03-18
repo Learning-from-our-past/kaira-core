@@ -45,7 +45,7 @@ class HostessExtractor(BaseExtractor):
             return result, cursor_location
 
         except regexUtils.RegexNoneMatchException:
-            # TODO: Metadata logging here self.errorLogger.logError(HostessNameException.eType, self.currentChild)
+            self.metadata_collector.add_error_record('hostessNotFound', 4)
             return None, 0
 
     def _find_hostess_birthday(self, text):

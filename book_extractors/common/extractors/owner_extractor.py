@@ -53,7 +53,7 @@ class CommonOwnerExtractor(BaseExtractor):
             cursor_location = start_position + owner_year.end()
             owner_year = textUtils.int_or_none(owner_year.group("year"))
         except regexUtils.RegexNoneMatchException:
-            pass  # TODO: Metadata logging here self.errorLogger.logError(OwnerYearException.eType, self.currentChild)
+            self.metadata_collector.add_error_record('ownerYearNotFound', 2)
 
         return owner_year, cursor_location
 
@@ -64,9 +64,8 @@ class CommonOwnerExtractor(BaseExtractor):
             owner_name_match = regexUtils.safeSearch(self.OWNER_NAME_PATTERN, text, self.OWNER_OPTIONS)
             cursor_location = start_position + owner_name_match.end()
             owner_name_data = self._split_names(owner_name_match.group("name"))
-        except regexUtils.RegexNoneMatchException as e:
-            # TODO: Metadata logging here self.errorLogger.logError(OwnerNameException.eType, self.currentChild)
-            pass
+        except regexUtils.RegexNoneMatchException:
+            self.metadata_collector.add_error_record('ownerNameNotFound', 7)
 
         return owner_name_data, cursor_location
 

@@ -43,6 +43,9 @@ class ProfessionExtractor(BaseExtractor):
 
         result_profession = self._clean_professions(profession)
 
+        if result_profession is None:
+            self.metadata_collector.add_error_record('professionNotFound', 4)
+
         return result_profession, cursor_location
 
     def _clean_professions(self, profession):
@@ -66,10 +69,6 @@ class ProfessionExtractor(BaseExtractor):
         profession = re.sub(r"[a-zä-ö]{1,3}(?:,|\.)\s", "", profession, self.PROFESSION_OPTIONS)
 
         if len(profession) < 3:
-            profession = ""
-
-        if profession == "":
-            # TODO: Metadata logging here  self.errorLogger.logError(ProfessionException.eType, self.currentChild)
-            pass
+            profession = None
 
         return profession

@@ -58,8 +58,8 @@ class CommonBirthdayExtractor(BaseExtractor):
             cursor_location = self.get_last_cursor_location(result) + start_position - 4
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?
-            # TODO: Metadata logging here self.errorLogger.logError(BirthdayException.eType, self.currentChild)
             found_date = {"day": None, "month": None, "year": None, "cursorLocation": 0}
+            self.metadata_collector.add_error_record('birthDateNotFound', 2)
 
         # Map date to birthDate
         birth_date = {KEYS["birthDay"]: textUtils.int_or_none(found_date["day"]),

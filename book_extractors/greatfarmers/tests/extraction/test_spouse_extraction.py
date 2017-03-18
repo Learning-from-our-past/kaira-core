@@ -22,7 +22,8 @@ class TestSpouseExtraction:
                     'birthYear': 1921,
                 },
                 'metadata': {
-                    'cursorLocation': 16
+                    'cursorLocation': 16,
+                    'errors': {}
                 }
 
             }
