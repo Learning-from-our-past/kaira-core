@@ -82,7 +82,8 @@ class SpouseExtractor(BaseExtractor):
             # Map data to spouse object
             return {
                 KEYS["spouseBirthData"]: {
-                    **spouse_details['birthday']
+                    **spouse_details['birthday'],
+                    KEYS['birthLocation']: spouse_details['birthLocation']
                 },
                 KEYS['spouseDeathYear']: spouse_details['death'],
                 KEYS["origfamily"]: spouse_details['originalFamily'],
