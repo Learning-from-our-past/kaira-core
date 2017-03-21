@@ -102,8 +102,8 @@ LOCATION_HEURISTICS = {
             "village": {
               "locationName": "Hankavesi",
               "coordinates": {
-                "longitude": "26.45",
-                "latitude": "62.43333"
+                "longitude": None,
+                "latitude": None
               }
             },
             "movedIn": 41,
@@ -183,8 +183,8 @@ LOCATION_HEURISTICS = {
                 },
                 "village": {
                   "coordinates": {
-                    "latitude": "62.43333",
-                    "longitude": "26.45"
+                    "latitude": None,
+                    "longitude": None
                   },
                   "locationName": "Hankavesi"
                 },
@@ -225,8 +225,8 @@ EXPECTED_RESULTS = [
             "locationName": "Urjala",
             "village": {
               "coordinates": {
-                "longitude": "25.64154",
-                "latitude": "62.56873"
+                "longitude": None,
+                "latitude": None
               },
               "locationName": "Honkola"
             }

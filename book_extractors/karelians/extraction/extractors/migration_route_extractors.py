@@ -97,9 +97,9 @@ class FinnishLocationsExtractor(BaseExtractor):
             entry_name = validate_location_name(entry_name, geocoordinates)
             village_name = validate_village_name(village_name)
 
+            # FIXME: Village coordinates are not trivial to deduce because of multiple same named
+            # villages and locations in map name data sets.
             village_coordinates = {"latitude": None, "longitude": None}
-            if village_name is not None:
-                village_coordinates = get_coordinates_by_name(village_name)
 
             village_information = {
                 KEYS["otherlocation"]: village_name or None,
