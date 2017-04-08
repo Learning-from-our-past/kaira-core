@@ -3,6 +3,8 @@ from pymongo import MongoClient, ASCENDING
 from bson import ObjectId
 import pytz
 
+loc_count = 0
+mul_count = 0
 
 class DatabaseHandler:
     db_name = 'geonames'  # name of the db where collections are located
