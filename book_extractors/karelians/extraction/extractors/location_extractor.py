@@ -48,7 +48,7 @@ class BirthdayLocationExtractor(BaseExtractor):
 
         self.DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
         self.REQUIRES_MATCH_POSITION = True
-        self.SUBSTRING_WIDTH = 28
+        self.SUBSTRING_WIDTH = 32
 
     def extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
@@ -67,7 +67,8 @@ class BirthdayLocationExtractor(BaseExtractor):
             results = self._sub_extraction_pipeline.process({'text': text})
             self._check_if_location_is_valid(text, results['location']['results']['locationMatch'])
             location = results['location']['results']['locationMatch'].group("location")
-            location = re.sub(r"([a-zä-ö])(\s|-)([a-zä-ö])", "\1\2", location)
+            location = location.replace('-', '')
+            location = location.replace('\s', '')
 
             cursor_location = self.get_last_cursor_location(results) + start_position - 4
         except LocationException:
