@@ -7,7 +7,6 @@ class ExtractionPipeline:
         self._extractor_configurations = extractor_configurations
         self._extractors = self._build_extraction_pipeline()
 
-    # FIXME: Refactor extractors so that Pipeline is not built for each and every person. Should speed up and save lots of memory
     def _build_extraction_pipeline(self):
         extractors = []
 
@@ -19,7 +18,8 @@ class ExtractionPipeline:
 
     def process(self, entry):
         extraction_results = {}
-        # Replace all weird invisible white space characters with regular space
+        # FIXME: This is not really responsibility of this class. Move to some kind of preprocessor instead.
+        # Replace invisible whitespace and control characters
         entry['text'] = re.sub(r"\s", r" ", entry['text'])
 
         for ext in self._extractors:

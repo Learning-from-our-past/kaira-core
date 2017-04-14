@@ -49,70 +49,38 @@ LOCATION_HEURISTICS = {
           {
             "movedOut": 40,
             "village": {
-              "locationName": None,
-              "coordinates": {
-                "longitude": None,
-                "latitude": None
-              }
+              "locationName": None
             },
             "movedIn": 39,
             "region": "other",
-            "locationName": "Kankaanpää",
-            "coordinates": {
-              "longitude": "21.99682",
-              "latitude": "62.97651"
-            }
+            "locationName": "Kankaanpää"
           },
           {
             "movedOut": 40,
             "village": {
-              "locationName": None,
-              "coordinates": {
-                "longitude": None,
-                "latitude": None
-              }
+              "locationName": None
             },
             "movedIn": None,
             "region": "other",
-            "locationName": "Hirvensalo",
-            "coordinates": {
-              "longitude": "27.89087",
-              "latitude": "61.56453"
-            }
+            "locationName": "Hirvensalo"
           },
           {
             "movedOut": 40,
             "village": {
-              "locationName": None,
-              "coordinates": {
-                "longitude": None,
-                "latitude": None
-              }
+              "locationName": None
             },
             "movedIn": None,
             "region": "other",
-            "locationName": "Perniö",
-            "coordinates": {
-              "longitude": "23.15",
-              "latitude": "60.25"
-            }
+            "locationName": "Perniö"
           },
           {
             "movedOut": None,
             "village": {
-              "locationName": "Hankavesi",
-              "coordinates": {
-                "longitude": None,
-                "latitude": None
-              }
+              "locationName": "Hankavesi"
             },
             "movedIn": 41,
             "region": "other",
-            "locationName": "Ähtäri",
-            "coordinates": {
-              "longitude": "24.21264",
-              "latitude": "62.59465"
-            }
+            "locationName": "Ähtäri"
           }
         ]
     },
@@ -126,15 +94,7 @@ LOCATION_HEURISTICS = {
                 "region": "other",
                 "locationName": "Kankaanpää",
                 "movedIn": 39,
-                "coordinates": {
-                  "latitude": "62.97651",
-                  "longitude": "21.99682"
-                },
                 "village": {
-                  "coordinates": {
-                    "latitude": None,
-                    "longitude": None
-                  },
                   "locationName": "Lauhalankoulu"
                 },
                 "movedOut": 40
@@ -143,15 +103,7 @@ LOCATION_HEURISTICS = {
                 "region": "other",
                 "locationName": "Hirvensalo",
                 "movedIn": None,
-                "coordinates": {
-                  "latitude": "61.56453",
-                  "longitude": "27.89087"
-                },
                 "village": {
-                  "coordinates": {
-                    "latitude": None,
-                    "longitude": None
-                  },
                   "locationName": None
                 },
                 "movedOut": 40
@@ -160,15 +112,7 @@ LOCATION_HEURISTICS = {
                 "region": "other",
                 "locationName": "Perniö",
                 "movedIn": None,
-                "coordinates": {
-                  "latitude": "60.25",
-                  "longitude": "23.15"
-                },
                 "village": {
-                  "coordinates": {
-                    "latitude": None,
-                    "longitude": None
-                  },
                   "locationName": None
                 },
                 "movedOut": 40
@@ -177,15 +121,7 @@ LOCATION_HEURISTICS = {
                 "region": "other",
                 "locationName": "Ähtäri",
                 "movedIn": 41,
-                "coordinates": {
-                  "latitude": "62.59465",
-                  "longitude": "24.21264"
-                },
                 "village": {
-                  "coordinates": {
-                    "latitude": None,
-                    "longitude": None
-                  },
                   "locationName": "Hankavesi"
                 },
                 "movedOut": None
@@ -200,66 +136,34 @@ EXPECTED_RESULTS = [
     {
         "finnish_locations": [{
             "movedIn": 39,
-            "coordinates": {
-              "longitude": "23.53333",
-              "latitude": "61.08333"
-            },
             "region": "other",
             "movedOut": 40,
             "locationName": "Urjala",
             "village": {
-              "coordinates": {
-                "longitude": None,
-                "latitude": None
-              },
               "locationName": None
             }
           }, {
             "movedIn": 40,
-            "coordinates": {
-              "longitude": "23.53333",
-              "latitude": "61.08333"
-            },
             "region": "other",
             "movedOut": 42,
             "locationName": "Urjala",
             "village": {
-              "coordinates": {
-                "longitude": None,
-                "latitude": None
-              },
               "locationName": "Honkola"
             }
           }, {
             "movedIn": None,
-            "coordinates": {
-              "longitude": "22.69642",
-              "latitude": "60.34306"
-            },
             "region": "other",
             "movedOut": 44,
             "locationName": "Sauvo",
             "village": {
-              "coordinates": {
-                "longitude": None,
-                "latitude": None
-              },
               "locationName": "Timperlä"
             }
           }, {
             "movedIn": 44,
-            "coordinates": {
-              "longitude": "22.51667",
-              "latitude": "60.41667"
-            },
             "region": "other",
             "movedOut": None,
             "locationName": "Piikkiö",
             "village": {
-              "coordinates": {
-                "longitude": None,
-                "latitude": None
-              },
               "locationName": "Viuhkalo"
             }
           }
