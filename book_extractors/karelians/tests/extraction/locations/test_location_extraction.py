@@ -1,5 +1,3 @@
-import json
-
 import pytest
 from book_extractors.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS, EXPECTED_RESULTS, LOCATION_HEURISTICS
 from book_extractors.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor
@@ -73,9 +71,10 @@ class TestFinnishLocationExtraction:
     def finnish_extractor(self):
         return FinnishLocationsExtractor(None, None)
 
-    def should_extract_locations(self, finnish_extractor):
+    def should_extract_locations(self, finnish_extractor, th):
         results = finnish_extractor.extract({'text': LOCATION_TEXTS[0]}, {})['finnishLocations']['results']
 
+        th.omit_property(results, 'coordinates')
         assert len(results) == 4
 
         assert results[0] == EXPECTED_RESULTS[0]['finnish_locations'][0]
@@ -87,15 +86,17 @@ class TestFinnishLocationExtraction:
         results = finnish_extractor.extract({'text': ''}, {})['finnishLocations']['results']
         assert len(results) == 0
 
-    def should_leave_out_too_long_place_names(self, finnish_extractor):
+    def should_leave_out_too_long_place_names(self, finnish_extractor, th):
         results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']}, {})['finnishLocations']['results']
 
+        th.omit_property(results, 'coordinates')
         assert len(results) == 4
         assert results == LOCATION_HEURISTICS['long_place_name']['expected']
 
-    def should_leave_out_too_short_place_names(self, finnish_extractor):
+    def should_leave_out_too_short_place_names(self, finnish_extractor, th):
         results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']}, {})['finnishLocations']['results']
 
+        th.omit_property(results, 'coordinates')
         assert len(results) == 4
         assert results == LOCATION_HEURISTICS['short_place_name']['expected']
 
@@ -131,8 +132,6 @@ class TestKarelianLocationExtraction:
 
         assert results[0]['locationName'] == 'Kuolemajärvi'
         assert results[0]['region'] == 'karelia'
-        assert results[0]['coordinates']['longitude'] == '28.98863'
-        assert results[0]['coordinates']['latitude'] == '60.33621'
         assert results[0]['movedIn'] is None
         assert results[0]['movedOut'] == 39
 
@@ -142,12 +141,8 @@ class TestKarelianLocationExtraction:
 
         assert results[1]['locationName'] == 'Kuolemajärvi'
         assert results[1]['region'] == 'karelia'
-        assert results[1]['coordinates']['latitude'] == '60.33621'
-        assert results[1]['coordinates']['longitude'] == '28.98863'
 
         assert results[0]['village']['locationName'] == 'Laasola'
-        assert results[0]['village']['coordinates']['latitude'] == '60.38876'
-        assert results[0]['village']['coordinates']['longitude'] == '28.93825'
 
         assert results[1]['movedIn'] == 42
         assert results[1]['movedOut'] == 44
@@ -182,8 +177,6 @@ class TestKarelianLocationExtraction:
 
         assert results[2]['locationName'] == 'Viipuri'
         assert results[2]['region'] == 'karelia'
-        assert results[2]['coordinates']['longitude'] == '28.73333'
-        assert results[2]['coordinates']['latitude'] == '60.7'
         assert results[2]['movedIn'] == 32
         assert results[2]['movedOut'] is None
 
