@@ -8,7 +8,7 @@ class Gender():
     @staticmethod
     def load_names():
         if len(Gender.male_names) == 0:
-            f = open("./names/men.names", "r", encoding="utf8")
+            f = open("./support_datasheets/men.names", "r", encoding="utf8")
             for row in f:
                 row = row.strip("\n")
                 row = row.lower()
@@ -16,7 +16,7 @@ class Gender():
             Gender.male_names = set(Gender.male_names)
 
         if len(Gender.female_names) == 0:
-            f = open("./names/women.names", "r", encoding="utf8")
+            f = open("./support_datasheets/women.names", "r", encoding="utf8")
             for row in f:
                 row = row.strip("\n")
                 row = row.lower()
