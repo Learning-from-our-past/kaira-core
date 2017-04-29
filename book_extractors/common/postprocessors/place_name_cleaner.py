@@ -27,9 +27,10 @@ for key, item in fixed_place_names.items():
 
 
 def try_to_normalize_place_name(location_entry):
-    search_key = stemmer.stem(location_entry[KEYS['locationName']])
-    if search_key in place_name_index:
-        location_entry[KEYS['locationName']] = place_name_index[search_key]['fixed_name']
-        location_entry[KEYS['region']] = place_name_index[search_key]['region']
+    if location_entry[KEYS['locationName']]:
+        search_key = stemmer.stem(location_entry[KEYS['locationName']])
+        if search_key in place_name_index:
+            location_entry[KEYS['locationName']] = place_name_index[search_key]['fixed_name']
+            location_entry[KEYS['region']] = place_name_index[search_key]['region']
 
     return location_entry
