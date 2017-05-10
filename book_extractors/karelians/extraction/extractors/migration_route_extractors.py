@@ -4,7 +4,7 @@ from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers import migration_parser
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from names import location_name_white_list
+from support_datasheets import location_name_white_list
 from shared import regexUtils, textUtils
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 

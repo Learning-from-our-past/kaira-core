@@ -34,6 +34,7 @@ KEYS = {
     "birthYear": "birthYear",
     "birthLocation": "birthLocation",
 
+    "locationName": "locationName",
     "personMetadata": "personMetadata",
 
     "address": "address",

@@ -1,6 +1,8 @@
 import pytest
+import re
+
 from book_extractors.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS, EXPECTED_RESULTS, LOCATION_HEURISTICS
-from book_extractors.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor
+from book_extractors.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor, MigrationRouteExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers.migration_parser import parse_locations
 
 
@@ -147,7 +149,6 @@ class TestKarelianLocationExtraction:
         assert results[1]['movedIn'] == 42
         assert results[1]['movedOut'] == 44
 
-
     def should_extract_locations_with_missing_village_names(self, karelian_extractor):
         results = karelian_extractor.extract({'text': LOCATION_TEXTS[2]}, {})['karelianLocations']['results']['karelianLocations']
 
@@ -215,3 +216,19 @@ class TestKarelianLocationExtraction:
 
         assert len(results) == 1
         assert results[0]['locationName'] == 'Kristiinankaupungin mlk'
+
+
+class TestMigrationRouteExtractor:
+    @pytest.yield_fixture(autouse=True)
+    def migration_extractor(self):
+        return MigrationRouteExtractor(None, None)
+
+
+    @pytest.mark.skip
+    def should_extract_location_list_with_missing_years_properly(self, migration_extractor, th):
+        # TODO: Here both karelian and finnish location extraction breaks weirdly. Only Ypäjä is recognized as finnish location and
+        # others will be classified as karelian locations. Something strange is going on.
+        text = re.sub(r"\s", r" ", LOCATION_TEXTS[5])
+
+        results = migration_extractor.extract({'text': text}, {})
+        th.omit_property(results, 'coordinates')

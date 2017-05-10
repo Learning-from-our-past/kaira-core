@@ -8,31 +8,28 @@ EXPECTED = [
     {
         'birthYear': 1945,
         'gender': 'Female',
-        'location': 'Ahlaisissa',
-        'name': 'Irja Hellevi',
-        'coordinates': {
-            'latitude': None,
-            'longitude': None
-        }
+        'location': {
+            'locationName': 'Ahlainen',
+            'region': 'other'
+        },
+        'name': 'Irja Hellevi'
     },
     {
         'birthYear': 1947,
         'gender': 'Female',
-        'location': 'Ahlaisissa',
-        'name': 'Kirsti Anna-Liisa',
-        'coordinates': {
-            'latitude': None,
-            'longitude': None
-        }
+        'location': {
+            'locationName': 'Ahlainen',
+            'region': 'other'
+        },
+        'name': 'Kirsti Anna-Liisa'
     },
     {
         'birthYear': 1953,
         'gender': 'Male',
-        'location': 'Ahlaisissa',
-        'name': 'Kalervo Viljam',
-        'coordinates': {
-            'latitude': None,
-            'longitude': None
-        }
+        'location': {
+            'locationName': 'Ahlainen',
+            'region': 'other'
+        },
+        'name': 'Kalervo Viljam'
     }
 ]
