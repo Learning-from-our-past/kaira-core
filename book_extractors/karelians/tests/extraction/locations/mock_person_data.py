@@ -15,7 +15,9 @@ LOCATION_TEXTS = [
     "Muut asuinp.: Vihti 39—41, Kajaani, Helsinki, Paimio. Perniö, Paimio. Huuhkat asuvat",
 
     "Asuinp. Karjalassa: Vuoksenranta, Oravankytö 23—39,    41—44."
-    "Muut asuinp.: Lottana -44, Kurikka 39—41, Ähtäri, Niemisvesi 44—. Viitaset asuvat"
+    "Muut asuinp.: Lottana -44, Kurikka 39—41, Ähtäri, Niemisvesi 44—. Viitaset asuvat",
+
+    "autonkuljettaja, synt. 1. 12. -33 Valkjärvellä. Puol. Testi Testinen o.s. Testaaja, rouva, synt. 24. 6. -32 Kempeleellä. Lapset: Lapsi -54 Längelmäki, Lapsekas -57 Längelmäki, Lapsellinen -61 Längelmäki. Asuinp. Karjalassa: Valkjärvi, Marjaniemi -39,42—44. Muut asuinp.. Ypäjä 39—42, Kuhmoinen, Längelmäki, Hiukkaa, Längelmäki. Länkipohja. Aikaisemmin Karjalaisilla oli maatila, mutta vanhaemännän kuoltua se myytiin ja lapset muuttivat muualle. Herra Karjalainen on ollut vuodesta -59 Längelmäen Osuuskaupan palveluksessa. Ensi Karjalaisen isä. Antti, synt. -97 Valkjärvellä, kuoli Kangasalalla v. -66. Äiti. Hilda o.s. Paavilainen, synt. 1900, kuöli -53 Längelmäellä."
 ]
 
 LOCATION_HEURISTICS = {
@@ -165,6 +167,58 @@ EXPECTED_RESULTS = [
             "locationName": "Piikkiö",
             "village": {
               "locationName": "Viuhkalo"
+            }
+          }
+        ]
+    },
+    {
+        "finnish_locations": [{
+            "movedIn": 39,
+            "region": "other",
+            "movedOut": 42,
+            "locationName": "Ypäjä",
+            "village": {
+              "locationName": None
+            }
+          }, {
+            "movedIn": None,
+            "region": "other",
+            "movedOut": None,
+            "locationName": "Kuhmoinen",
+            "village": {
+              "locationName": None
+            }
+          }, {
+            "movedIn": None,
+            "region": "other",
+            "movedOut": None,
+            "locationName": "Längelmäki",
+            "village": {
+              "locationName": None
+            }
+          }, {
+            "movedIn": None,
+            "region": "other",
+            "movedOut": None,
+            "locationName": "Hiukkaa",
+            "village": {
+              "locationName": None
+            }
+          }, {
+            "movedIn": None,
+            "region": "other",
+            "movedOut": None,
+            "locationName": "Längelmäki",
+            "village": {
+              "locationName": None
+            }
+          }, {
+            "movedIn": None,
+            "region": "other",
+            "movedOut": None,
+            "locationName": "Länkipohja",
+            "village": {
+              "locationName": None
             }
           }
         ]
