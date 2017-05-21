@@ -11,6 +11,7 @@ KEYS = {
     "karelianlocation": "locationName",
     "returnedkarelia": "returnedToKarelia",
     "kareliancoordinate": "coordinates",
+    "coordinates": "coordinates",
     "karelianlocationsCount": "karelianLocationCount",
     "otherlocations": "otherLocations",
     "otherlocationsCount": "otherLocationCount",
