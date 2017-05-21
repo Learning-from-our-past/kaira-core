@@ -127,7 +127,7 @@ class ChildExtractor(BaseExtractor):
                 KEYS['region']: None,
             }
 
-            child[KEYS["childLocationName"]] = place_name_cleaner.try_to_normalize_place_name(location_entry)
+            child[KEYS["childLocationName"]] = place_name_cleaner.try_to_normalize_place_name(location_entry, self.metadata_collector)
 
             coordinates = self._find_birth_coord(child[KEYS["childLocationName"]][KEYS['locationName']])
             location_entry[KEYS["childCoordinates"]] = {

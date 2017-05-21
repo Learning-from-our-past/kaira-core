@@ -59,14 +59,13 @@ class BirthdayLocationExtractor(BaseExtractor):
 
         return self._add_to_extraction_results(location_entry, extraction_results, result[1])
 
-    @staticmethod
-    def _augment_location_data(location_name):
+    def _augment_location_data(self, location_name):
         location_entry = {
             KEYS['locationName']: location_name,
             KEYS['region']: None,
         }
 
-        return place_name_cleaner.try_to_normalize_place_name(location_entry)
+        return place_name_cleaner.try_to_normalize_place_name(location_entry, self.metadata_collector)
 
     def _prepare_text_for_extraction(self, text, start_position):
         return textUtils.take_sub_str_based_on_pos(text, start_position - 4, self.SUBSTRING_WIDTH)   # Dirty -4 offset

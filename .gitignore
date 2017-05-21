@@ -4,7 +4,6 @@ build/
 kaira_venv/
 .idea/
 *.pyc
-*.csv
 *.bat
 *.html
 *.htm
