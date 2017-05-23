@@ -110,3 +110,18 @@ def normalize_place_name_with_known_list_of_places(location_entry, metadata_coll
             if metadata_collector is not None:
                 metadata_collector.add_error_record('locationNameNotFoundFromLists', 2)
             return location_entry
+
+
+def clean_place_name(location_entry):
+    """
+    Utility function to clean up the locationName and stemmedName if one is available from useless
+    characters.
+    :param location_entry: 
+    :return: 
+    """
+    location_entry[KEYS['locationName']] = location_entry[KEYS['locationName']].strip('-')
+
+    if KEYS['stemmedName'] in location_entry:
+        location_entry[KEYS['stemmedName']] = location_entry[KEYS['stemmedName']].strip('-')
+
+    return location_entry

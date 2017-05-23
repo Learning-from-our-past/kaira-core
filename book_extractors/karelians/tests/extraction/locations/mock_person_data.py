@@ -41,6 +41,13 @@ LOCATION_HEURISTICS = {
                     "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
     },
 
+    'name_with_extra_hyphens': {
+            'text': "Asuinp. Karjalassa; -Viipuri 23—39. Muut asuinp.: Kankaanpää 39— 40, "
+                    "Hirvensalo -40, Perniö -40, -Ähtäri, Hankavesi 41—44, Kristiinankaupungin mlk 45-. Aholat asuvat itse rakentamassaan omakotitalossa. "
+                    "Herra Ahola on sotamies. Hän on saanut kunniamerkit Ts mm, Js mm, SVR m 1 ja SVR m 2. Kalastus ja puutarhanhoito "
+                    "miellyttävät häntä. Hän on ollut asevarikkotehtävissä v.30—68.",
+    },
+
 
     'short_place_name': {
         'text': "Asuinp. Karjalassa; Viipuri 23—39, ktr. Muut asuinp.: Kankaanpää, ja 39— 40, "
