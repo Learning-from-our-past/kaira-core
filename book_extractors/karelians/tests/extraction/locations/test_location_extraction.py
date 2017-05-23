@@ -120,6 +120,12 @@ class TestFinnishLocationExtraction:
         assert len(results) == 5
         assert results[4]['locationName'] == 'Kristiinankaupungin mlk'
 
+    def should_remove_hyphens_from_beginning_of_the_place_name(self, finnish_extractor):
+        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['name_with_extra_hyphens']['text']}, {})['finnishLocations']['results']
+
+        assert len(results) == 5
+        assert results[3]['locationName'] == 'Ähtäri'   # Hyphen from beginning removed
+
 
 class TestKarelianLocationExtraction:
 
@@ -216,6 +222,12 @@ class TestKarelianLocationExtraction:
 
         assert len(results) == 1
         assert results[0]['locationName'] == 'Kristiinankaupungin mlk'
+
+    def should_remove_hyphens_from_beginning_of_the_place_name(self, karelian_extractor):
+        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['name_with_extra_hyphens']['text']}, {})['karelianLocations']['results']['karelianLocations']
+
+        assert len(results) == 1
+        assert results[0]['locationName'] == 'Viipuri'   # Hyphen from beginning removed
 
 
 class TestMigrationRouteExtractor:

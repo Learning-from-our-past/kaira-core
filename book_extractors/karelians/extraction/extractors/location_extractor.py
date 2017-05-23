@@ -65,6 +65,7 @@ class BirthdayLocationExtractor(BaseExtractor):
             KEYS['region']: None,
         }
 
+        location_entry = place_name_cleaner.clean_place_name(location_entry)
         return place_name_cleaner.try_to_normalize_place_name(location_entry, self.metadata_collector)
 
     def _prepare_text_for_extraction(self, text, start_position):

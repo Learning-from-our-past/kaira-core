@@ -1,5 +1,5 @@
 import re
-
+from book_extractors.common.postprocessors import place_name_cleaner
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers import migration_parser
@@ -137,9 +137,17 @@ class FinnishLocationsExtractor(BaseExtractor):
                     else:
                         moved_out = None
 
-                    location_records.append(get_location_entry())
+                    location_records.append(
+                        place_name_cleaner.clean_place_name(
+                            get_location_entry()
+                        )
+                    )
             else:
-                location_records.append(get_location_entry())
+                location_records.append(
+                    place_name_cleaner.clean_place_name(
+                        get_location_entry()
+                    )
+                )
 
             return location_records
 
@@ -147,7 +155,7 @@ class FinnishLocationsExtractor(BaseExtractor):
             found_locations = regexUtils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             cursor_location = found_locations.end()
             locations = found_locations.group("asuinpaikat")
-            locations = self._clean_locations(locations)
+            locations = self._clean_locations_string(locations)
 
             # Parse location string with BNF parser
             parsed_locations = migration_parser.parse_locations(locations)
@@ -163,7 +171,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         return location_entries, cursor_location
 
     @staticmethod
-    def _clean_locations(locations):
+    def _clean_locations_string(locations):
         locations = locations.strip(",")
         locations = locations.strip(".")
         locations = locations.strip()
@@ -272,9 +280,17 @@ class KarelianLocationsExtractor(BaseExtractor):
                     except TypeError:
                         pass
 
-                    location_records.append(get_location_entry())
+                    location_records.append(
+                        place_name_cleaner.clean_place_name(
+                            get_location_entry()
+                        )
+                    )
             else:
-                location_records.append(get_location_entry())
+                location_records.append(
+                    place_name_cleaner.clean_place_name(
+                        get_location_entry()
+                    )
+                )
 
             return location_records
 
