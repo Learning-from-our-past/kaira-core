@@ -12,7 +12,8 @@ from book_extractors.farmers.extraction.extractors.quantity_extractor import Qua
 from book_extractors.common.extraction_keys import KEYS
 from shared.gender_extract import Gender
 
-class SmallFarmersExtractor:
+
+class SmallFarmersBooksExtractor:
 
     def __init__(self, update_callback):
         Gender.load_names()

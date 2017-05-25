@@ -3,9 +3,9 @@ import os
 import subprocess
 import argparse
 from lxml import etree
-from book_extractors.karelians.main import KarelianExtractor, get_karelian_data_entry
-from book_extractors.farmers.main import SmallFarmersExtractor, get_small_farmers_data_entry
-from book_extractors.greatfarmers.main import GreatFarmersExtractor, get_great_farmers_data_entry
+from book_extractors.karelians.main import KarelianBooksExtractor, get_karelian_data_entry
+from book_extractors.farmers.main import SmallFarmersBooksExtractor, get_small_farmers_data_entry
+from book_extractors.greatfarmers.main import GreatFarmersBooksExtractor, get_great_farmers_data_entry
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')
 parser.add_argument('-i', nargs='?', type=argparse.FileType('r', encoding='utf8'), help='Input file to extract data from. Should be XML.', default=sys.stdin)
@@ -66,7 +66,7 @@ def main():
     if book_series == 'Siirtokarjalaisten tie':
         print('Book series:', book_series)
         #mongodb = start_mongodb() # FIXME: Invent a sensible way to check if mongo start is required or not
-        extractor = KarelianExtractor(callback)
+        extractor = KarelianBooksExtractor(callback)
         extractor.process(xml_to_extractor_format(xml_document))
         extractor.save_results(args['o'], file_format='json')
         print('Process finished successfully.')
@@ -74,7 +74,7 @@ def main():
     elif book_series == 'Suomen pienviljelijat':
         print('Book series:', book_series)
         #mongodb = start_mongodb()
-        extractor = SmallFarmersExtractor(callback)
+        extractor = SmallFarmersBooksExtractor(callback)
         extractor.process(xml_to_extractor_format(xml_document))
         extractor.save_results(args['o'], file_format='json')
         print('Process finished successfully.')
@@ -82,7 +82,7 @@ def main():
     elif book_series == 'Suuret maatilat':
         print('Book series:', book_series)
         #mongodb = start_mongodb()
-        extractor = GreatFarmersExtractor(callback)
+        extractor = GreatFarmersBooksExtractor(callback)
         extractor.process(xml_to_extractor_format(xml_document))
         extractor.save_results(args['o'], file_format='json')
         print('Process finished successfully.')

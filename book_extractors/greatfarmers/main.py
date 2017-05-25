@@ -13,7 +13,7 @@ from shared.gender_extract import Gender
 from book_extractors.common.extraction_keys import KEYS
 
 
-class GreatFarmersExtractor:
+class GreatFarmersBooksExtractor:
 
     def __init__(self, update_callback):
         Gender.load_names()
