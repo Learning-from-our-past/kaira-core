@@ -28,13 +28,12 @@ class ExtractionPipeline:
         return extraction_results
 
 
-def configure_extractor(extractor_class, extractor_options=None, depends_on_match_position_of_extractor=None, set_dependency_match_position_to_zero=False):
+def configure_extractor(extractor_class, extractor_options=None, depends_on_match_position_of_extractor=None):
     """
     Utility function to build configure dict object for extraction pipeline.
     :param extractor_class:
-    :param kwargs_for_extractor: Possible kwargs arguments which can be passed to extractor. Some extractors might need arbitrary extra parametes in their __init__
+    :param extractor_options: Possible kwargs arguments which can be passed to extractor. Some extractors might need arbitrary extra parametes in their __init__
     :param depends_on_match_position_of_extractor: Extractor class this extractor is dependent on their match position.
-    :param set_dependency_match_position_to_zero:
     :return:
     """
 
