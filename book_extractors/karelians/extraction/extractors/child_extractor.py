@@ -28,7 +28,7 @@ class ChildExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"\d\d\s(?P<location>[a-zä-ö\s-]+$)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         results = self._find_children(entry['text'])
 
         children = self._augment_location_data_of_children(results[0])

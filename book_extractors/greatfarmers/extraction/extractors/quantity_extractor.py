@@ -18,7 +18,7 @@ class QuantityExtractor(BaseExtractor):
         self.NUMBER_MAP = {"yksi": 1, "yhtä": 1, "kahta": 2, "kaksi": 2, "kolme": 3, "neljä": 4, "viisi": 5, "kuusi": 6,
                            "seitsemän": 7, "kahdeksan": 8, "yhdeksän": 9, "kymmenen": 10}
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         results = self._find_patterns(entry['text'])
         return self._add_to_extraction_results(results, extraction_results, start_position)

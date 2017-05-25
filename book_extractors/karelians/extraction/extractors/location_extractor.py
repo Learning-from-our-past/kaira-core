@@ -16,7 +16,7 @@ class LocationExtractor(BaseExtractor):
 
     extraction_key = 'location'
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         """
         Note: Returns match-object for caller instead of string.
         :param entry:
@@ -50,7 +50,7 @@ class BirthdayLocationExtractor(BaseExtractor):
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 32
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 

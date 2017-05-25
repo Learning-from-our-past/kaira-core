@@ -5,7 +5,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 class ImageExtractor(BaseExtractor):
     extraction_key = 'personMetadata'
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         image_path = None
         page = None
         try:

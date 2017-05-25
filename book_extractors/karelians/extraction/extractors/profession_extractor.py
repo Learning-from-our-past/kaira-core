@@ -15,7 +15,7 @@ class ProfessionExtractor(BaseExtractor):
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         profession_results = self._find_profession(entry['text'], start_position)
 

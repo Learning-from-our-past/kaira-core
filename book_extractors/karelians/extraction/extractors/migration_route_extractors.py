@@ -64,7 +64,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)"  # r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         location_listing_results = self._find_locations(entry['text'])
         return self._add_to_extraction_results(location_listing_results[0], extraction_results, location_listing_results[1])
 
@@ -195,7 +195,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))"  # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         location_listing_results = self._find_locations(entry['text'])
 
         return self._add_to_extraction_results({
@@ -336,7 +336,7 @@ class MigrationRouteExtractor(BaseExtractor):
             configure_extractor(FinnishLocationsExtractor),
         ])
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         results = self._sub_extraction_pipeline.process(entry)
 
         return self._add_to_extraction_results({

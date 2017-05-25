@@ -13,9 +13,41 @@ class BaseExtractor:
         self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
         self.metadata_collector = MetadataCollector()
 
-    @abstractmethod
     def extract(self, entry, extraction_results):
+        extraction_results = self._preprocess(entry, extraction_results)
+        extraction_results = self._extract(entry, extraction_results)
+        extraction_results = self._postprocess(entry, extraction_results)
+        return extraction_results
+
+    def _preprocess(self, entry, extraction_results):
+        """
+        Optional implementable method for child classes. Run before _extract method. 
+        Lets to manipulate input data for extraction logic.
+        :param entry: 
+        :param extraction_results: 
+        :return: 
+        """
+        return extraction_results
+
+    @abstractmethod
+    def _extract(self, entry, extraction_results):
+        """
+        Required method for child classes. Should contain main data extraction logic.
+        :param entry: 
+        :param extraction_results: 
+        :return: 
+        """
         pass
+
+    def _postprocess(self, entry, extraction_results):
+        """
+        Optional implementable method for child classes. Run after _extract method.
+        Lets to manipulate results of the extractor.
+        :param entry: 
+        :param extraction_results: 
+        :return: 
+        """
+        return extraction_results
 
     def get_starting_position(self, extraction_results):
         if self.key_of_cursor_location_dependent is not None:

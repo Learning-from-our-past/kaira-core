@@ -13,7 +13,7 @@ class OmakotitaloExtractor(BaseExtractor):
         self.OMAKOTITALO_PATTERN = r"(?P<omakotitalo>omakotitalo)"
         self.OMAKOTITALO_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         own_house = self._find_omakotitalo(entry['text'])
         return self._add_to_extraction_results(own_house, extraction_results)
 

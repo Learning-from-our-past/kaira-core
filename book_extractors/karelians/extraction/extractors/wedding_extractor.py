@@ -17,7 +17,7 @@ class WeddingExtractor(BaseExtractor):
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 

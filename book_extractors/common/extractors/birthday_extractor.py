@@ -30,7 +30,7 @@ class CommonBirthdayExtractor(BaseExtractor):
             configure_extractor(DateExtractor, extractor_options={'PATTERN': self.PATTERN, 'OPTIONS': self.OPTIONS})
         ])
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
         result = self._find_date(prepared_text, start_position)

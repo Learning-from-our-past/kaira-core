@@ -15,7 +15,7 @@ class CommonChildExtractor(BaseExtractor):
     def __init__(self, key_of_cursor_location_dependent, options):
         super(CommonChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         many_marriages = self._check_many_marriages(entry['text'])
 

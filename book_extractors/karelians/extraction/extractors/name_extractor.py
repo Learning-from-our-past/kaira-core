@@ -11,7 +11,7 @@ class NameExtractor(BaseExtractor):
     """
     extraction_key = 'name'
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         result = {
             KEYS["surname"]: '',
             KEYS['firstnames']: ''

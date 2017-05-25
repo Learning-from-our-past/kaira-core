@@ -7,7 +7,7 @@ class MetadataExtractor(BaseExtractor):
     extraction_key = KEYS['personMetadata']
     geocoder = GeoCoder()
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         page = None
         name = None
         location = {"locationName": None, "latitude": None, "longitude": None}
