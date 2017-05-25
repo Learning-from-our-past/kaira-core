@@ -138,12 +138,14 @@ class FinnishLocationsExtractor(BaseExtractor):
                         moved_out = None
 
                     location_records.append(
+                        # FIXME: Refactor this to the _postprocess method?
                         place_name_cleaner.clean_place_name(
                             get_location_entry()
                         )
                     )
             else:
                 location_records.append(
+                    # FIXME: Refactor this to the _postprocess method?
                     place_name_cleaner.clean_place_name(
                         get_location_entry()
                     )
@@ -281,12 +283,14 @@ class KarelianLocationsExtractor(BaseExtractor):
                         pass
 
                     location_records.append(
+                        # FIXME: Refactor this to the _postprocess method?
                         place_name_cleaner.clean_place_name(
                             get_location_entry()
                         )
                     )
             else:
                 location_records.append(
+                    # FIXME: Refactor this to the _postprocess method?
                     place_name_cleaner.clean_place_name(
                         get_location_entry()
                     )

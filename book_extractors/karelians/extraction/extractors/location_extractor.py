@@ -54,10 +54,18 @@ class BirthdayLocationExtractor(BaseExtractor):
         start_position = self.get_starting_position(extraction_results)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
-        result = self._find_location(prepared_text, start_position)
-        location_entry = self._augment_location_data(result[0])
+        location_result = self._find_location(prepared_text, start_position)
+        return self._add_to_extraction_results(location_result[0], extraction_results, location_result[1])
 
-        return self._add_to_extraction_results(location_entry, extraction_results, result[1])
+    def _postprocess(self, entry, extraction_results):
+        """
+        After extraction, run a postprocess cleaning and name fixing for the location.
+        :param entry: 
+        :param extraction_results: 
+        :return: 
+        """
+        extraction_results[self.extraction_key]['results'] = self._augment_location_data(extraction_results[self.extraction_key]['results'])
+        return extraction_results
 
     def _augment_location_data(self, location_name):
         location_entry = {

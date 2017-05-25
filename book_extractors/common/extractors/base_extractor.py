@@ -17,6 +17,11 @@ class BaseExtractor:
         extraction_results = self._preprocess(entry, extraction_results)
         extraction_results = self._extract(entry, extraction_results)
         extraction_results = self._postprocess(entry, extraction_results)
+
+        # Add finally the metadata after post process has been run since it might add metadata
+        extraction_results[self.extraction_key]['metadata'] = self.metadata_collector.get_metadata()
+        self.metadata_collector.clear()
+
         return extraction_results
 
     def _preprocess(self, entry, extraction_results):
@@ -25,7 +30,7 @@ class BaseExtractor:
         Lets to manipulate input data for extraction logic.
         :param entry: 
         :param extraction_results: 
-        :return: 
+        :return extraction_results:
         """
         return extraction_results
 
@@ -35,7 +40,7 @@ class BaseExtractor:
         Required method for child classes. Should contain main data extraction logic.
         :param entry: 
         :param extraction_results: 
-        :return: 
+        :return extraction_results: 
         """
         pass
 
@@ -45,7 +50,7 @@ class BaseExtractor:
         Lets to manipulate results of the extractor.
         :param entry: 
         :param extraction_results: 
-        :return: 
+        :return extraction_results:
         """
         return extraction_results
 
@@ -63,8 +68,6 @@ class BaseExtractor:
         self.metadata_collector.set_metadata_property('cursorLocation', cursor_location)
         extraction_results[self.extraction_key] = {
             'results': data,
-            'metadata': self.metadata_collector.get_metadata()
+            'metadata': None    # This will be filled in extract() method after postprocess task
         }
-
-        self.metadata_collector.clear()
         return extraction_results
