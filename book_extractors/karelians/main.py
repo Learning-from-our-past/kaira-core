@@ -15,7 +15,7 @@ from book_extractors.karelians.extraction.extractors.child_extractor import Chil
 from shared.gender_extract import Gender
 
 
-class KarelianExtractor:
+class KarelianBooksExtractor:
 
     def __init__(self, update_callback):
         Gender.load_names()
