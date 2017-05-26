@@ -18,7 +18,7 @@ class FarmExtractor(BaseExtractor):
         self.MEADOW_AREA_PATTERN = r"(?:luonnonlaidunta{s<=1}\s?(?P<area1>\d\d?\d?,?\d?\d?))|(?:(?P<area1>\d\d?\d?,?\d?\d?)\s?ha\s?luonnonlaidunta{s<=1})"
         self.AREA_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_areas(entry['text'])
         return self._add_to_extraction_results(result, extraction_results, start_position)

@@ -22,7 +22,7 @@ class HostessExtractor(BaseExtractor):
             configure_extractor(BirthdayExtractor)
         ])
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         results = self._find_hostess(entry['text'], start_position)
         return self._add_to_extraction_results(results[0], extraction_results, results[1])

@@ -23,7 +23,7 @@ class CommonOwnerExtractor(BaseExtractor):
             configure_extractor(options['BIRTHDAY_EXTRACTOR'])
         ])
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_owner(entry['text'], start_position)
         return self._add_to_extraction_results(result[0], extraction_results, result[1])

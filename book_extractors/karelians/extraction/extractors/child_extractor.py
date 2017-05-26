@@ -28,14 +28,40 @@ class ChildExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"\d\d\s(?P<location>[a-zä-ö\s-]+$)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
 
-    def extract(self, entry, extraction_results):
-        results = self._find_children(entry['text'])
-
-        children = self._augment_location_data_of_children(results[0])
+    def _extract(self, entry, extraction_results):
+        children_results = self._find_children(entry['text'])
 
         return self._add_to_extraction_results({
-            KEYS["manymarriages"]: results[1], KEYS["children"]: children
-        }, extraction_results, results[2])
+            KEYS["manymarriages"]: children_results[1], KEYS["children"]: children_results[0]
+        }, extraction_results, children_results[2])
+
+    def _postprocess(self, entry, extraction_results):
+        """
+        Add location information to each child in this postprocess method.
+        :param entry: 
+        :param extraction_results: 
+        :return extraction_results: 
+        """
+        extraction_results[self.extraction_key]['results'][KEYS["children"]] = self._augment_location_data_of_children(extraction_results[self.extraction_key]['results'][KEYS["children"]])
+        return extraction_results
+
+    def _augment_location_data_of_children(self, children):
+        for child in children:
+            location_entry = {
+                KEYS['locationName']: child[KEYS["childLocationName"]],
+                KEYS['region']: None,
+            }
+
+            location_entry = place_name_cleaner.clean_place_name(location_entry)
+            child[KEYS["childLocationName"]] = place_name_cleaner.try_to_normalize_place_name(location_entry, self.metadata_collector)
+
+            coordinates = self._find_birth_coord(child[KEYS["childLocationName"]][KEYS['locationName']])
+            location_entry[KEYS["childCoordinates"]] = {
+                KEYS["latitude"]: coordinates["latitude"],
+                KEYS["longitude"]: coordinates["longitude"]
+            }
+
+        return children
 
     def _find_children(self, text):
         children = []
@@ -119,24 +145,6 @@ class ChildExtractor(BaseExtractor):
                 KEYS["birthYear"]: textUtils.int_or_none(year),
                 KEYS["childLocationName"]: location,
                 }
-
-    def _augment_location_data_of_children(self, children):
-        for child in children:
-            location_entry = {
-                KEYS['locationName']: child[KEYS["childLocationName"]],
-                KEYS['region']: None,
-            }
-
-            location_entry = place_name_cleaner.clean_place_name(location_entry)
-            child[KEYS["childLocationName"]] = place_name_cleaner.try_to_normalize_place_name(location_entry, self.metadata_collector)
-
-            coordinates = self._find_birth_coord(child[KEYS["childLocationName"]][KEYS['locationName']])
-            location_entry[KEYS["childCoordinates"]] = {
-                    KEYS["latitude"]: coordinates["latitude"],
-                    KEYS["longitude"]: coordinates["longitude"]
-            }
-
-        return children
 
     def _find_birth_coord(self, location_name):
         try:

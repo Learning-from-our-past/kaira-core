@@ -16,7 +16,7 @@ class DateExtractor(BaseExtractor):
         self.MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik": 4,
                                           "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         prepared_text = self._prepare_text_for_extraction(entry['text'])
 

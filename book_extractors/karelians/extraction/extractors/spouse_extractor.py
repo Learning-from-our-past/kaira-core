@@ -49,7 +49,7 @@ class SpouseExtractor(BaseExtractor):
             KEYS["hasSpouse"]: False
         }
 
-    def extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
         result = self._find_spouse(entry['text'], start_position)
         return self._add_to_extraction_results(result[0], extraction_results, cursor_location=result[1])
