@@ -1,5 +1,4 @@
 from book_extractors.karelians.extraction.postprocessors.returned_to_karelia import check_if_person_returned_karelia_in_between_wars
-import pytest
 from random import shuffle
 
 
@@ -70,19 +69,43 @@ class TestReturnedToKareliaCheck:
         returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
         assert returned_to_karelia is None
 
-    @pytest.mark.skip()
+    def should_return_correct_values_with_different_migration_histories(self):
+        data = [
+            {'movedIn': 38, 'movedOut': None, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 39, 'movedOut': None, 'locationName': "Viinijärvi", 'region': 'other'},
+            {'movedIn': 40, 'movedOut': 41, 'locationName': "Riistavesi", 'region': 'other'},
+            {'movedIn': None, 'movedOut': 44, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 44, 'movedOut': None, 'locationName': "Alajärvi", 'region': 'other'}
+        ]
+
+        shuffle(data)  # Make sure the order of records does not matter
+        returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
+        assert returned_to_karelia is True
+
     def should_return_true_if_returned_to_karelia_can_be_deduced_when_movedIn_is_missing_from_other_migration_records(self):
-        """
-           TODO: How about the case where:
-           {'locationName': 'Kuolemajärvi', 'region': 'karelia', 'movedIn': None, 'movedOut': 44},
-           and person has previous migration history in somewhere else? If movedIn year is not recorded but movedOut is, and
-           it hits to sensible range? Conditions would be something like:
+        data = [
+            {'locationName': 'Hiitola', 'region': 'karelia', 'movedIn': None, 'movedOut': 39},
+            {'locationName': 'Parkano', 'region': 'other', 'movedIn': 39, 'movedOut': None},
+            {'locationName': 'Hiitola', 'region': 'karelia', 'movedIn': None, 'movedOut': 44},
+            {'locationName': 'Vaasa', 'region': 'other', 'movedIn': None, 'movedOut': 44},
+            {'locationName': 'Ahlainen', 'region': 'other', 'movedIn': 48, 'movedOut': None},
+        ]
 
-           1) Lived in karelia before
-           2) Then moved out of 'other' place in range in 40-44 and karelian location is the next in line with movedOut after previous movedOut
-           3) Next location is 'other'
+        shuffle(data)  # Make sure the order of records does not matter
+        returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
+        assert returned_to_karelia is True
 
-        """
+        data = [
+            {'movedIn': None, 'movedOut': 44, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': None, 'movedOut': 39, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 39, 'movedOut': 40, 'locationName': "Viinijärvi", 'region': 'other'},
+            {'movedIn': 40, 'movedOut': 41, 'locationName': "Riistavesi", 'region': 'other'},
+            {'movedIn': 44, 'movedOut': None, 'locationName': "Alajärvi", 'region': 'other'}
+        ]
+
+        shuffle(data)  # Make sure the order of records does not matter
+        returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
+        assert returned_to_karelia is True
 
         data = [
             {'locationName': 'Kuolemajärvi', 'region': 'karelia', 'movedIn': None, 'movedOut': 39},
@@ -92,7 +115,63 @@ class TestReturnedToKareliaCheck:
         ]
 
         shuffle(data)  # Make sure the order of records does not matter
-
         returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
         assert returned_to_karelia is True
 
+        data = [
+            {'movedIn': None, 'movedOut': 39, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 39, 'movedOut': None, 'locationName': "Viinijärvi", 'region': 'other'},
+            {'movedIn': 40, 'movedOut': 41, 'locationName': "Riistavesi", 'region': 'other'},
+            {'movedIn': None, 'movedOut': 44, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 44, 'movedOut': None, 'locationName': "Alajärvi", 'region': 'other'}
+        ]
+
+        shuffle(data)  # Make sure the order of records does not matter
+        returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
+        assert returned_to_karelia is True
+
+        data = [
+            {'movedIn': 38, 'movedOut': None, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 39, 'movedOut': None, 'locationName': "Viinijärvi", 'region': 'other'},
+            {'movedIn': 40, 'movedOut': 41, 'locationName': "Riistavesi", 'region': 'other'},
+            {'movedIn': None, 'movedOut': 44, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 44, 'movedOut': None, 'locationName': "Alajärvi", 'region': 'other'}
+        ]
+
+        shuffle(data)  # Make sure the order of records does not matter
+        returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
+        assert returned_to_karelia is True
+
+        data = [
+            {'movedIn': None, 'movedOut': 39, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': None, 'movedOut': 40, 'locationName': "Viinijärvi", 'region': 'other'},
+            {'movedIn': None, 'movedOut': 41, 'locationName': "Riistavesi", 'region': 'other'},
+            {'movedIn': None, 'movedOut': 44, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': None, 'movedOut': 46, 'locationName': "Alajärvi", 'region': 'other'}
+        ]
+
+        shuffle(data)  # Make sure the order of records does not matter
+        returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
+        assert returned_to_karelia is True
+
+        data = [
+            {'movedIn': 38, 'movedOut': None, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 39, 'movedOut': None, 'locationName': "Viinijärvi", 'region': 'other'},
+            {'movedIn': 40, 'movedOut': None, 'locationName': "Riistavesi", 'region': 'other'},
+            {'movedIn': 42, 'movedOut': None, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 44, 'movedOut': None, 'locationName': "Alajärvi", 'region': 'other'}
+        ]
+
+        shuffle(data)  # Make sure the order of records does not matter
+        returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
+        assert returned_to_karelia is True
+
+        data = [
+            {'movedIn': 38, 'movedOut': None, 'locationName': "Impilahti", 'region': 'karelia'},
+            {'movedIn': 39, 'movedOut': None, 'locationName': "Viinijärvi", 'region': 'other'},
+            {'movedIn': 40, 'movedOut': 41, 'locationName': "Riistavesi", 'region': 'other'},
+            {'movedIn': 44, 'movedOut': None, 'locationName': "Alajärvi", 'region': 'other'}
+        ]
+
+        returned_to_karelia = check_if_person_returned_karelia_in_between_wars(data)
+        assert returned_to_karelia is False

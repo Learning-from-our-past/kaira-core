@@ -1,5 +1,4 @@
 
-
 def check_if_person_returned_karelia_in_between_wars(location_list, metadata_collector=None):
     """
     Reads through the migration history and tries to resolve if the person returned to karelia in between
@@ -19,7 +18,7 @@ def check_if_person_returned_karelia_in_between_wars(location_list, metadata_col
     lived_in_karelia_before_wars = False
     moved_to_karelia_in_between_wars = False
     year_data_not_available_for_karelian_place = False
-    winter_war_end_year = 40
+    winter_war_end_year = 41
     continuation_war_end_year = 44
 
     for living_record in location_list:
@@ -31,7 +30,13 @@ def check_if_person_returned_karelia_in_between_wars(location_list, metadata_col
             if living_record['movedOut'] is not None and living_record['movedOut'] < winter_war_end_year:
                 lived_in_karelia_before_wars = True
 
+            if living_record['movedIn'] is not None and living_record['movedIn'] < winter_war_end_year:
+                lived_in_karelia_before_wars = True
+
             if living_record['movedIn'] is not None and winter_war_end_year <= living_record['movedIn'] <= continuation_war_end_year:
+                moved_to_karelia_in_between_wars = True
+
+            if living_record['movedOut'] is not None and winter_war_end_year <= living_record['movedOut'] <= continuation_war_end_year:
                 moved_to_karelia_in_between_wars = True
 
     if not moved_to_karelia_in_between_wars and year_data_not_available_for_karelian_place:
