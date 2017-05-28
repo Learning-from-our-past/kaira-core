@@ -7,6 +7,7 @@ from book_extractors.extraction_pipeline import ExtractionPipeline, configure_ex
 from support_datasheets import location_name_white_list
 from shared import regexUtils, textUtils
 from shared.geo.geocoding import GeoCoder, LocationNotFound
+from book_extractors.karelians.extraction.postprocessors.returned_to_karelia import check_if_person_returned_karelia_in_between_wars
 
 MAX_PLACE_NAME_LENGTH = 15
 MIN_PLACE_NAME_LENGTH = 4
@@ -202,8 +203,7 @@ class KarelianLocationsExtractor(BaseExtractor):
 
         return self._add_to_extraction_results({
             KEYS["karelianlocations"]: location_listing_results[0],
-            KEYS["returnedkarelia"]: location_listing_results[1]
-        }, extraction_results, location_listing_results[2])
+        }, extraction_results, location_listing_results[1])
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
@@ -211,7 +211,6 @@ class KarelianLocationsExtractor(BaseExtractor):
 
         cursor_location = 0
         location_entries = []
-        returned_to_karelia = False
 
         def _get_location_entries(location):
             # If there is municipality information, use it as an main entry name
@@ -275,13 +274,6 @@ class KarelianLocationsExtractor(BaseExtractor):
                     else:
                         moved_out = None
 
-                    try:
-                        if 41 <= moved_in <= 43:
-                            nonlocal returned_to_karelia
-                            returned_to_karelia = True
-                    except TypeError:
-                        pass
-
                     location_records.append(
                         # FIXME: Refactor this to the _postprocess method?
                         place_name_cleaner.clean_place_name(
@@ -315,7 +307,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         except regexUtils.RegexNoneMatchException as e:
             self.metadata_collector.add_error_record('karelianLocationNotFound', 5)
 
-        return location_entries, returned_to_karelia, cursor_location
+        return location_entries, cursor_location
 
     @staticmethod
     def _clean_locations(locations):
@@ -344,9 +336,12 @@ class MigrationRouteExtractor(BaseExtractor):
         results = self._sub_extraction_pipeline.process(entry)
 
         return self._add_to_extraction_results({
-            KEYS["locations"]: results['karelianLocations']['results'][KEYS['karelianlocations']] + results['finnishLocations']['results'],
-            KEYS["returnedkarelia"]: results['karelianLocations']['results'][KEYS["returnedkarelia"]]
+            KEYS["locations"]: results['karelianLocations']['results'][KEYS['karelianlocations']] + results['finnishLocations']['results']
         }, extraction_results, results['finnishLocations']['metadata']['cursorLocation'])
+
+    def _postprocess(self, entry, extraction_results):
+        extraction_results['migrationHistory']['results'][KEYS["returnedkarelia"]] = check_if_person_returned_karelia_in_between_wars(extraction_results['migrationHistory']['results']['locations'], self.metadata_collector)
+        return extraction_results
 
 
 class LocationThresholdException(Exception):

@@ -235,6 +235,12 @@ class TestMigrationRouteExtractor:
     def migration_extractor(self):
         return MigrationRouteExtractor(None, None)
 
+    def should_run_post_process_to_mark_if_person_returned_to_karelia(self, migration_extractor, th):
+        text = re.sub(r"\s", r" ", LOCATION_TEXTS[0])
+
+        results = migration_extractor.extract({'text': text}, {})
+        th.omit_property(results, 'coordinates')
+        assert results['migrationHistory']['results']['returnedToKarelia'] is True
 
     @pytest.mark.skip
     def should_extract_location_list_with_missing_years_properly(self, migration_extractor, th):

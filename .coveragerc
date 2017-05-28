@@ -1,0 +1,8 @@
+[run]
+omit = */kaira_venv/*,
+    */analysis_toolkit/*,
+    */deploy_scripts/*,
+    */experimental_scripts/*,
+    */material/*,
+    */tests/*,
+    conftest.py
