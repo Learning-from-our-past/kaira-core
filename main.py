@@ -74,32 +74,16 @@ def extract(args):
     xml_document = etree.parse(args['i'], parser=xml_parser).getroot()
     book_series = xml_document.attrib["bookseries"]
 
-    if book_series == KARELIAN_BOOK_ID:
-        print('Book series:', book_series)
-        # mongodb = start_mongodb() # FIXME: Invent a sensible way to check if mongo start is required or not
-        extractor = KarelianBooksExtractor(callback)
-        extractor.process(xml_to_extractor_format(xml_document))
-        extractor.save_results(args['o'], file_format='json')
-        print('Process finished successfully.')
-
-    elif book_series == SMALL_FARMERS_BOOK_ID:
-        print('Book series:', book_series)
-        # mongodb = start_mongodb()
-        extractor = SmallFarmersBooksExtractor(callback)
-        extractor.process(xml_to_extractor_format(xml_document))
-        extractor.save_results(args['o'], file_format='json')
-        print('Process finished successfully.')
-
-    elif book_series == GREAT_FARMERS_BOOK_ID:
-        print('Book series:', book_series)
-        # mongodb = start_mongodb()
-        extractor = GreatFarmersBooksExtractor(callback)
-        extractor.process(xml_to_extractor_format(xml_document))
-        extractor.save_results(args['o'], file_format='json')
-        print('Process finished successfully.')
-    else:
-        print('Error: File does not contain supported book series data', file=sys.stderr)
+    if book_series not in supported_bookseries:
+        print('Error: Provided book series is not supported.')
         sys.exit(1)
+
+    print('Book series:', book_series)
+    # mongodb = start_mongodb() # FIXME: Invent a sensible way to check if mongo start is required or not
+    extractor = supported_bookseries[book_series]['extractor'](callback)
+    extractor.process(xml_to_extractor_format(xml_document))
+    extractor.save_results(args['o'], file_format='json')
+    print('Process finished successfully.')
 
     if mongodb is not None:
         mongodb.kill()
