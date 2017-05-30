@@ -2,9 +2,8 @@ from lxml.html import *
 from lxml import etree
 from lxml import html
 import re
-import os
 from interface.chunktextinterface import ChunkTextInterface
-
+from book_extractors.farmers.main import BOOK_SERIES_ID
 
 def read_html_file(path):
     return parse(path)
@@ -12,8 +11,9 @@ def read_html_file(path):
 
 class PersonPreprocessor(ChunkTextInterface):
 
-    def chunk_text(self, text, destination_path):
+    def chunk_text(self, text, destination_path, book_number):
         self.save_path = destination_path
+        self.book_number = book_number
         text = re.sub(r"(\<sup\>)|\<\/sup\>", "", text) #remove sup tags
         parsed = html.document_fromstring( text)
         persons = self.process(parsed)
@@ -21,7 +21,8 @@ class PersonPreprocessor(ChunkTextInterface):
 
     def process(self, tree):
         self.persons_document = etree.Element("DATA")
-        self.persons_document.attrib["bookseries"] = "Suomen pienviljelijat"
+        self.persons_document.attrib["bookseries"] = BOOK_SERIES_ID
+        self.persons_document.attrib["book_number"] = str(self.book_number)
         self.map_name_to_person = {}
         self.current_person = None
         self.page_number = 1
@@ -86,15 +87,11 @@ class PersonPreprocessor(ChunkTextInterface):
         if person is not None and len(person.text) > 4:
             self.persons_document.append(person)
 
-def start():
-    os.chdir("material")
-    f = open("Siirtokarjalaisten tie I fragment_kuvat.html", "r", encoding="utf8")
-    text = f.read()
-    p = PersonPreprocessor()
-    persons = p.chunk_text(text)
-    f = open("results.xml", "wb")
-    f.write(persons.encode("utf8"))
-    f.close()
 
-if __name__ == "__main__":
-    start()
+def convert_html_file_to_xml(input_file, output_file, book_number):
+    text = input_file.read()
+    p = PersonPreprocessor()
+    persons = p.chunk_text(text, output_file.name, book_number)
+    output_file.write(persons)
+    output_file.close()
+    print('File converted to xml and saved!')

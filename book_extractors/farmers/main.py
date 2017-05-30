@@ -12,6 +12,7 @@ from book_extractors.farmers.extraction.extractors.quantity_extractor import Qua
 from book_extractors.common.extraction_keys import KEYS
 from shared.gender_extract import Gender
 
+BOOK_SERIES_ID = 'pienviljelijat'    # Used to identify this book series in xml files
 
 class SmallFarmersBooksExtractor:
 

@@ -14,6 +14,7 @@ from book_extractors.karelians.extraction.extractors.spouse_extractor import Spo
 from book_extractors.karelians.extraction.extractors.child_extractor import ChildExtractor
 from shared.gender_extract import Gender
 
+BOOK_SERIES_ID = 'siirtokarjalaiset'    # Used to identify this book series in xml files
 
 class KarelianBooksExtractor:
 

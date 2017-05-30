@@ -12,6 +12,7 @@ from book_extractors.greatfarmers.extraction.extractors.spouse_extractor import 
 from shared.gender_extract import Gender
 from book_extractors.common.extraction_keys import KEYS
 
+BOOK_SERIES_ID = 'suuretmaatilat'    # Used to identify this book series in xml files
 
 class GreatFarmersBooksExtractor:
 
