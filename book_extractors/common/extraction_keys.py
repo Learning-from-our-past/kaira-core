@@ -1,5 +1,6 @@
 KEYS = {
-    # Karelians keys
+    "kairaId": "kairaId",
+    # Karelians key
     "surname": "surname",
     "firstnames": "firstNames",
     "origfamily": "originalFamily",

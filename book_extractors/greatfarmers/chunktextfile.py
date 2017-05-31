@@ -2,10 +2,8 @@ from lxml.html import *
 from lxml import etree
 from lxml import html
 import re
-import cProfile
-import os, nturl2path
-import shutil
 from interface.chunktextinterface import ChunkTextInterface
+from book_extractors.greatfarmers.main import BOOK_SERIES_ID
 
 def read_html_file(path):
     return parse(path)
@@ -13,8 +11,9 @@ def read_html_file(path):
 
 class PersonPreprocessor(ChunkTextInterface):
 
-    def chunk_text(self, text, destination_path):
+    def chunk_text(self, text, destination_path, book_number):
         self.save_path = destination_path
+        self.book_number = book_number
         text = re.sub(r"(\<sup\>)|\<\/sup\>", "", text) #remove sup tags
         parsed = html.document_fromstring( text)
         persons = self.process(parsed)
@@ -22,7 +21,8 @@ class PersonPreprocessor(ChunkTextInterface):
 
     def process(self, tree):
         self.persons_document = etree.Element("DATA")
-        self.persons_document.attrib["bookseries"] = "Suuret maatilat"
+        self.persons_document.attrib["bookseries"] = BOOK_SERIES_ID
+        self.persons_document.attrib["book_number"] = str(self.book_number)
         self.map_name_to_person = {}
         self.current_person = None
         self.page_number = 1
@@ -92,3 +92,12 @@ class PersonPreprocessor(ChunkTextInterface):
     def _remove_swedes(self, person):
         if re.search(r"gärd|ligger|ägare|andra|ägt|Totalarealen", person.text, re.UNICODE|re.IGNORECASE):
             return True
+
+
+def convert_html_file_to_xml(input_file, output_file, book_number):
+    text = input_file.read()
+    p = PersonPreprocessor()
+    persons = p.chunk_text(text, output_file.name, book_number)
+    output_file.write(persons)
+    output_file.close()
+    print('File converted to xml and saved!')

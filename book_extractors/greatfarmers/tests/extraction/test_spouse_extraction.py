@@ -8,9 +8,11 @@ class TestSpouseExtraction:
     def spouse_extractor(self):
         return SpouseExtractor(None, None)
 
-    def should_extract_spouse_details_correctly(self, spouse_extractor):
+    def should_extract_spouse_details_correctly(self, spouse_extractor, th):
         spouse_text = "om vsta 1951 Testi Mies Testilä s 25. 9.—12, vmo Anna-Liisa o.s. Testilä s 19. 4. -21. Lapset: Lapsi Lapsekas -38, Lapsikas"
         result = spouse_extractor.extract({'text': spouse_text}, {})['spouse']['results']
+
+        th.omit_property(result, 'kairaId')
 
         assert result == {
             'originalFamily': 'Testilä',
