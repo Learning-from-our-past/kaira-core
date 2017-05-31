@@ -5,8 +5,6 @@ kaira_venv/
 .idea/
 *.pyc
 *.bat
-*.html
-*.htm
 *.jpg
 *.zip
 *.tar.gz

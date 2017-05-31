@@ -92,15 +92,15 @@ def extract(args):
 def chunk(args):
     if args['b'] is None or args['n'] is None:
         print('Error: Both book series argument and book number in series should be provided when starting conversion process. Example: -b siirtokarjalaiset -n 1')
-        sys.exit(1)
+        raise CommandLineParameterException()
 
     if args['b'] not in supported_bookseries:
         print('Error: Provided book series is not supported. Try one from', ', '.join(list(supported_bookseries.keys())))
-        sys.exit(1)
+        raise CommandLineParameterException()
 
     if args['o'] is None:
         print('Error: Both input file and the output file should be provided.')
-        sys.exit(1)
+        raise CommandLineParameterException()
 
     print('Converting...')
     supported_bookseries[args['b']]['converter'](args['c'], args['o'], args['n'])
@@ -110,10 +110,16 @@ def main():
     args = vars(parser.parse_args())
 
     if args['c'] is not None:
-        chunk(args)
+        try:
+            chunk(args)
+        except CommandLineParameterException:
+            sys.exit(1)
     else:
         extract(args)
 
+
+class CommandLineParameterException(Exception):
+    pass
 
 if __name__ == '__main__':
     main()
