@@ -12,9 +12,12 @@ from book_extractors.karelians.extraction.extractors.location_extractor import B
 from book_extractors.karelians.extraction.extractors.migration_route_extractors import MigrationRouteExtractor
 from book_extractors.karelians.extraction.extractors.spouse_extractor import SpouseExtractor
 from book_extractors.karelians.extraction.extractors.child_extractor import ChildExtractor
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
 from shared.gender_extract import Gender
+import book_extractors.extraction_constants as extraction_constants
 
 BOOK_SERIES_ID = 'siirtokarjalaiset'    # Used to identify this book series in xml files
+
 
 class KarelianBooksExtractor:
 
@@ -35,7 +38,8 @@ class KarelianBooksExtractor:
             configure_extractor(MigrationRouteExtractor),
             configure_extractor(OmakotitaloExtractor),
             configure_extractor(SpouseExtractor),
-            configure_extractor(ChildExtractor)
+            configure_extractor(ChildExtractor),
+            configure_extractor(KairaIdExtractor, extractor_options={'bookseries': BOOK_SERIES_ID, 'book_number': extraction_constants.BOOK_NUMBER})
         ]
 
         return ExtractionPipeline(pipeline_components)

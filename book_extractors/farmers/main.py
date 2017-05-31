@@ -9,8 +9,10 @@ from book_extractors.farmers.extraction.extractors.child_extractor import ChildE
 from book_extractors.farmers.extraction.extractors.farm_extractor import FarmExtractor
 from book_extractors.farmers.extraction.extractors.bool_extractor import BoolExtractor
 from book_extractors.farmers.extraction.extractors.quantity_extractor import QuantityExtractor
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
 from book_extractors.common.extraction_keys import KEYS
 from shared.gender_extract import Gender
+import book_extractors.extraction_constants as extraction_constants
 
 BOOK_SERIES_ID = 'pienviljelijat'    # Used to identify this book series in xml files
 
@@ -77,7 +79,8 @@ class SmallFarmersBooksExtractor:
             configure_extractor(FarmExtractor),
             configure_extractor(ChildExtractor),
             configure_extractor(BoolExtractor, extractor_options={'patterns': boolean_flag_patterns}),
-            configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns})
+            configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns}),
+            configure_extractor(KairaIdExtractor, extractor_options={'bookseries': BOOK_SERIES_ID, 'book_number': extraction_constants.BOOK_NUMBER})
         ]
 
         return ExtractionPipeline(pipeline_components)

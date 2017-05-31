@@ -10,7 +10,9 @@ from book_extractors.karelians.extraction.extractors.location_extractor import B
 from book_extractors.karelians.extraction.extractors.original_family_extractor import OrigFamilyExtractor
 from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
 from book_extractors.karelians.extraction.extractors.wedding_extractor import WeddingExtractor
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
 from shared import regexUtils
+import book_extractors.extraction_constants as extraction_constants
 
 
 class SpouseExtractor(BaseExtractor):
@@ -25,7 +27,8 @@ class SpouseExtractor(BaseExtractor):
             configure_extractor(BirthdayExtractor),
             configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
             configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
-            configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor)
+            configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
+            configure_extractor(KairaIdExtractor, extractor_options={'bookseries': extraction_constants.BOOK_SERIES, 'book_number': extraction_constants.BOOK_NUMBER})
         ])
 
         self.PATTERN = r"Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"
@@ -46,6 +49,7 @@ class SpouseExtractor(BaseExtractor):
             KEYS["profession"]: None,
             KEYS["weddingYear"]: None,
             KEYS["spouseName"]: None,
+            KEYS['kairaId']: None,
             KEYS["hasSpouse"]: False
         }
 
@@ -90,7 +94,8 @@ class SpouseExtractor(BaseExtractor):
                 KEYS["spouseProfession"]: spouse_details['profession'],
                 KEYS["weddingYear"]: spouse_details['wedding'],
                 KEYS["spouseName"]: spouse_name,
-                KEYS["hasSpouse"]: True
+                KEYS["hasSpouse"]: True,
+                KEYS['kairaId']: spouse_details['kairaId']
             }
 
         except regexUtils.RegexNoneMatchException:

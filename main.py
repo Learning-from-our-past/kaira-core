@@ -9,6 +9,7 @@ from book_extractors.farmers.main import SmallFarmersBooksExtractor, get_small_f
 import book_extractors.farmers.chunktextfile as small_farmers_converter
 from book_extractors.greatfarmers.main import GreatFarmersBooksExtractor, get_great_farmers_data_entry, BOOK_SERIES_ID as GREAT_FARMERS_BOOK_ID
 import book_extractors.greatfarmers.chunktextfile as great_farmers_converter
+import book_extractors.extraction_constants as extraction_constants
 
 supported_bookseries = {
     KARELIAN_BOOK_ID: {'extractor': KarelianBooksExtractor, 'converter': karelian_converter.convert_html_file_to_xml},
@@ -73,6 +74,8 @@ def extract(args):
     xml_parser = etree.XMLParser(encoding="utf8")
     xml_document = etree.parse(args['i'], parser=xml_parser).getroot()
     book_series = xml_document.attrib["bookseries"]
+    extraction_constants.BOOK_NUMBER = xml_document.attrib["book_number"]
+    extraction_constants.BOOK_SERIES = book_series
 
     if book_series not in supported_bookseries:
         print('Error: Provided book series is not supported.')

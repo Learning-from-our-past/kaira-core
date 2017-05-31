@@ -9,8 +9,10 @@ from book_extractors.greatfarmers.extraction.extractors.farm_extractor import Fa
 from book_extractors.greatfarmers.extraction.extractors.bool_extractor import BoolExtractor
 from book_extractors.greatfarmers.extraction.extractors.quantity_extractor import QuantityExtractor
 from book_extractors.greatfarmers.extraction.extractors.spouse_extractor import SpouseExtractor
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
 from shared.gender_extract import Gender
 from book_extractors.common.extraction_keys import KEYS
+import book_extractors.extraction_constants as extraction_constants
 
 BOOK_SERIES_ID = 'suuretmaatilat'    # Used to identify this book series in xml files
 
@@ -78,7 +80,8 @@ class GreatFarmersBooksExtractor:
             configure_extractor(FarmExtractor),
             configure_extractor(ChildExtractor),
             configure_extractor(BoolExtractor, extractor_options={'patterns': boolean_flag_patterns}),
-            configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns})
+            configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns}),
+            configure_extractor(KairaIdExtractor, extractor_options={'bookseries': BOOK_SERIES_ID, 'book_number': extraction_constants.BOOK_NUMBER})
         ]
 
         return ExtractionPipeline(pipeline_components)
