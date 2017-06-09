@@ -59,6 +59,8 @@ class TestPlaceNameNormalizationWithManualLists:
             ('Helsinlg', 'Helsinki', 'other'),
             ('Parikkala', 'Parikkala', 'other'),
             ('Harlu', 'Harlu', 'karelia'),
+            ('Lammi', 'Lammi', 'other'),
+            ('Ylistaro', 'Ylistaro', 'other')
         ]
 
         for data in places:
