@@ -41,6 +41,29 @@ class TestPlaceNameNormalizationWithManualLists:
         assert result[KEYS['locationName']] == 'Testimaa'
         assert result[KEYS['region']] is None
 
+    def should_augment_region_to_entries(self):
+        # Sample of most common place names which lacked region data before updating place names json
+
+        def check_place(data):
+            entry = {
+                KEYS['locationName']: data[0],
+                KEYS['region']: None
+            }
+            result = place_name_cleaner.try_to_normalize_place_name(entry)
+            assert result[KEYS['locationName']] == data[1]
+            assert result[KEYS['region']] == data[2]
+
+        places = [
+            ('Antreassa', 'Antrea', 'karelia'),
+            ('Kivennapa', 'Kivennapa', 'karelia'),
+            ('Helsinlg', 'Helsinki', 'other'),
+            ('Parikkala', 'Parikkala', 'other'),
+            ('Harlu', 'Harlu', 'karelia'),
+        ]
+
+        for data in places:
+            check_place(data)
+
 
 class TestPlaceNameNormalizationWithPlaceList:
 
