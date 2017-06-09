@@ -50,7 +50,9 @@ def try_to_normalize_place_name(location_entry, metadata_collector=None):
         search_key = stemmer.stem(location_entry[KEYS['locationName']])
         if search_key in manual_place_name_index:
             location_entry[KEYS['locationName']] = manual_place_name_index[search_key]['fixed_name']
-            location_entry[KEYS['region']] = manual_place_name_index[search_key]['region']
+
+            if manual_place_name_index[search_key]['region'] is not None:
+                location_entry[KEYS['region']] = manual_place_name_index[search_key]['region']
         else:
             location_entry = normalize_place_name_with_known_list_of_places(location_entry, metadata_collector)
 

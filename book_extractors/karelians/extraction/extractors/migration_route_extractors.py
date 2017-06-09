@@ -67,7 +67,18 @@ class FinnishLocationsExtractor(BaseExtractor):
 
     def _extract(self, entry, extraction_results):
         location_listing_results = self._find_locations(entry['text'])
-        return self._add_to_extraction_results(location_listing_results[0], extraction_results, location_listing_results[1])
+
+        return self._add_to_extraction_results({
+            KEYS["otherlocations"]: location_listing_results[0]},
+            extraction_results, location_listing_results[1])
+
+    def _postprocess(self, entry, extraction_results):
+        places = extraction_results[self.extraction_key]['results'][KEYS["otherlocations"]]
+
+        for i in range(0, len(places)):
+            places[i] = place_name_cleaner.try_to_normalize_place_name(places[i])
+
+        return extraction_results
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
@@ -205,6 +216,14 @@ class KarelianLocationsExtractor(BaseExtractor):
             KEYS["karelianlocations"]: location_listing_results[0],
         }, extraction_results, location_listing_results[1])
 
+    def _postprocess(self, entry, extraction_results):
+        places = extraction_results[self.extraction_key]['results'][KEYS["karelianlocations"]]
+
+        for i in range(0, len(places)):
+            places[i] = place_name_cleaner.try_to_normalize_place_name(places[i])
+
+        return extraction_results
+
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
         text = re.sub(r"\s", r" ", text)
@@ -336,7 +355,7 @@ class MigrationRouteExtractor(BaseExtractor):
         results = self._sub_extraction_pipeline.process(entry)
 
         return self._add_to_extraction_results({
-            KEYS["locations"]: results['karelianLocations']['results'][KEYS['karelianlocations']] + results['finnishLocations']['results']
+            KEYS["locations"]: results['karelianLocations']['results'][KEYS['karelianlocations']] + results['finnishLocations']['results'][KEYS['otherlocations']]
         }, extraction_results, results['finnishLocations']['metadata']['cursorLocation'])
 
     def _postprocess(self, entry, extraction_results):
