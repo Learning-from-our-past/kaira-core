@@ -20,6 +20,49 @@ LOCATION_TEXTS = [
     "autonkuljettaja, synt. 1. 12. -33 Valkjärvellä. Puol. Testi Testinen o.s. Testaaja, rouva, synt. 24. 6. -32 Kempeleellä. Lapset: Lapsi -54 Längelmäki, Lapsekas -57 Längelmäki, Lapsellinen -61 Längelmäki. Asuinp. Karjalassa: Valkjärvi, Marjaniemi -39,42—44. Muut asuinp.. Ypäjä 39—42, Kuhmoinen, Längelmäki, Hiukkaa, Längelmäki. Länkipohja. Aikaisemmin Karjalaisilla oli maatila, mutta vanhaemännän kuoltua se myytiin ja lapset muuttivat muualle. Herra Karjalainen on ollut vuodesta -59 Längelmäen Osuuskaupan palveluksessa. Ensi Karjalaisen isä. Antti, synt. -97 Valkjärvellä, kuoli Kangasalalla v. -66. Äiti. Hilda o.s. Paavilainen, synt. 1900, kuöli -53 Längelmäellä."
 ]
 
+LOCATION_TEXTS_WITH_INCORRECT_REGION = [
+    {'text': "Poika -53 Helsinki. Asuinp. Karjalassa: Uusi kirkko. Lempiälä 12—28, Helsinki 28—. Muut asuinp.: Helsinki mlk. Testiset asuvat",
+     'expected': [
+        {
+            "movedOut": 28,
+            "village": {
+              "locationName": "Lempiälä"
+            },
+            "movedIn": 12,
+            "region": "karelia",
+            "locationName": "Uusikirkko"
+        }, {
+            "movedOut": None,
+            "village": {
+              "locationName": None
+            },
+            "movedIn": 28,
+            "region": "other",
+            "locationName": "Helsinki"
+        }]
+     },
+    {'text': "Poika -53 Helsinki. Asuinp. Karjalassa: Uusi kirkko. Lempiälä 12—28. Muut asuinp.: Kanneljärvi 28—. Testiset asuvat",
+     'expected': [
+        {
+            "movedOut": 28,
+            "village": {
+              "locationName": "Lempiälä"
+            },
+            "movedIn": 12,
+            "region": "karelia",
+            "locationName": "Uusikirkko"
+        }, {
+            "movedOut": None,
+            "village": {
+              "locationName": None
+            },
+            "movedIn": 28,
+            "region": "karelia",
+            "locationName": "Kanneljärvi"
+        }]
+     }
+]
+
 LOCATION_HEURISTICS = {
     'long_name_with_mlk': {
             'text': "Asuinp. Karjalassa; Kristiinankaupungin mlk 23—39. Muut asuinp.: Kankaanpää 39— 40, "
