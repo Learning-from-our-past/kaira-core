@@ -20,6 +20,150 @@ LOCATION_TEXTS = [
     "autonkuljettaja, synt. 1. 12. -33 Valkjärvellä. Puol. Testi Testinen o.s. Testaaja, rouva, synt. 24. 6. -32 Kempeleellä. Lapset: Lapsi -54 Längelmäki, Lapsekas -57 Längelmäki, Lapsellinen -61 Längelmäki. Asuinp. Karjalassa: Valkjärvi, Marjaniemi -39,42—44. Muut asuinp.. Ypäjä 39—42, Kuhmoinen, Längelmäki, Hiukkaa, Längelmäki. Länkipohja. Aikaisemmin Karjalaisilla oli maatila, mutta vanhaemännän kuoltua se myytiin ja lapset muuttivat muualle. Herra Karjalainen on ollut vuodesta -59 Längelmäen Osuuskaupan palveluksessa. Ensi Karjalaisen isä. Antti, synt. -97 Valkjärvellä, kuoli Kangasalalla v. -66. Äiti. Hilda o.s. Paavilainen, synt. 1900, kuöli -53 Längelmäellä."
 ]
 
+# Texts where rouva words was included as place name
+LOCATION_TEXTS_WITH_ROUVA_WORD = [
+    {'text': "Avioit. -32. Asuinp. Karjalassa: Vahviala. Viipuri 24—39. Muut asuinp.. Orivesi39-40. Lahti 40—. Rouva muutti v. -27 Sortavalasta Viipuriin, josta edelleen Orivedelle v. -39.",
+     'expected': [
+        {
+            "movedOut": 39,
+            "movedIn": 24,
+            "region": "karelia",
+            "locationName": "Vahviala"
+        }, {
+            "movedOut": 40,
+            "movedIn": 39,
+            "region": "other",
+            "locationName": "Orivesi"
+        }, {
+            "movedOut": None,
+            "movedIn": 40,
+            "region": "other",
+            "locationName": "Lahti"
+        }
+     ]},
+
+    # Here Rouva is extracted as last one. Otherwise ok.
+    {'text': "ottolapsi. Asuinp. Karjalassa: Räisäiä, Tuulaskoski -39. 41—44. Muut asuinp.: Ilmajoki 39—, Kauhajoki 44-. Kokemäki 48—, Pirkkala 59—, Simo 52—, Pori 61—, Rouva Testaaja toimi lottana vv. 41—44. Hän kuuluu invalidiyhdistykseen",
+     'expected': [
+         {
+             "locationName": "Räisäiä",
+             "movedIn": None,
+             "movedOut": 39,
+             "region": "karelia"
+         }, {
+             "locationName": "Räisäiä",
+             "movedIn": 41,
+             "movedOut": 44,
+             "region": "karelia"
+         }, {
+             "locationName": "Ilmajoki",
+             "movedIn": 39,
+             "movedOut": None,
+             "region": "other"
+         }, {
+             "locationName": "Kauhajoki",
+             "movedIn": 44,
+             "movedOut": None,
+             "region": "other"
+         }, {
+             "locationName": "Kokemäki",
+             "movedIn": 48,
+             "movedOut": None,
+             "region": "other"
+         }, {
+             "locationName": "Pirkkala",
+             "movedIn": 59,
+             "movedOut": None,
+             "region": "other"
+         }, {
+             "locationName": "Simo",
+             "movedIn": 52,
+             "movedOut": None,
+             "region": "other"
+         }, {
+             "locationName": "Pori",
+             "movedIn": 61,
+             "movedOut": None,
+             "region": "other"
+         }
+     ]},
+    # Here extraction doesn't stop correctly to last entry but instead includes Rouva and all other stuff after it.
+    {'text': "Asuinp. Karjalassa: Käkisalmi -39. Muut asuinp.: Vaasa 44—46, Turku 46—. Rouva Testaaja lähti Viipurista v. -39 Kurikka -39 Turku -41 Viipuri 41—44 Turku 44—, Testaajat rakennuttivat vv. 53—55 omakotitalon.",
+     'expected': [
+        {
+            "locationName": "Käkisalmi",
+            "movedIn": None,
+            "movedOut": 39,
+            "region": "karelia"
+        }, {
+            "locationName": "Vaasa",
+            "movedIn": 44,
+            "movedOut": 46,
+            "region": "other"
+        }, {
+            "locationName": "Turku",
+            "movedIn": 46,
+            "movedOut": None,
+            "region": "other"
+        }
+     ]},
+    # Here extraction doesn't stop correctly and instead includes persons name Saima interpreted as Saimaa and then later word Rouva.
+    {'text': "Asuinp. Karjalassa: Uusikirkko 1900-23, Heinjoki 25-39. 43-44. Muut asuinp.: Helsinki 23—24, Kouvola 24—25, Perniö 39—40, Miehikkälä 40—43. Koski Tl. 44— 45, Miehikkälä 45—47, Virolahti 47—. Saima Testaaja asuu yhdessä poikansa kanssa. Rouva Testaaja on käynyt kätilöopiston Helsingissä v.23—24 ja toiminut sen jälkeen ammatissaan.",
+        'expected': [{
+             "locationName": "Uusikirkko",
+             "movedIn": 1900,
+             "movedOut": 23,
+             "region": "karelia"
+         }, {
+             "locationName": "Heinjoki",
+             "movedIn": 25,
+             "movedOut": 39,
+             "region": "karelia"
+         }, {
+             "locationName": "Heinjoki",
+             "movedIn": 43,
+             "movedOut": 44,
+             "region": "karelia"
+         }, {
+             "locationName": "Helsinki",
+             "movedIn": 23,
+             "movedOut": 24,
+             "region": "other"
+         }, {
+             "locationName": "Kouvola",
+             "movedIn": 24,
+             "movedOut": 25,
+             "region": "other"
+         }, {
+             "locationName": "Perniö",
+             "movedIn": 39,
+             "movedOut": 40,
+             "region": "other"
+         }, {
+             "locationName": "Miehikkälä",
+             "movedIn": 40,
+             "movedOut": 43,
+             "region": "other"
+         }, {
+             "locationName": "Koski",
+             "movedIn": 44,
+             "movedOut": 45,
+             "region": "other"
+         }, {
+             "locationName": "Miehikkälä",
+             "movedIn": 45,
+             "movedOut": 47,
+             "region": "other"
+         }, {
+             "locationName": "Virolahti",
+             "movedIn": 47,
+             "movedOut": None,
+             "region": "other"
+         }
+        ]
+    }
+]
+
 LOCATION_TEXTS_WITH_INCORRECT_REGION = [
     {'text': "Poika -53 Helsinki. Asuinp. Karjalassa: Uusi kirkko. Lempiälä 12—28, Helsinki 28—. Muut asuinp.: Helsinki mlk. Testiset asuvat",
      'expected': [

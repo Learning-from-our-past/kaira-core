@@ -11,7 +11,8 @@ from book_extractors.karelians.extraction.postprocessors.returned_to_karelia imp
 
 MAX_PLACE_NAME_LENGTH = 15
 MIN_PLACE_NAME_LENGTH = 4
-
+# Known words which often after in migration results which should clip the string which is parsed to list of places
+KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS = ['rouva', 'saima(?!a)', 'muutasuinp']
 
 def validate_location_name(entry_name, geocoordinates):
     if len(entry_name) > MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] is None and geocoordinates['longitude'] is None:
@@ -62,7 +63,7 @@ class FinnishLocationsExtractor(BaseExtractor):
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(FinnishLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
-        self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)"  # r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*?)(?=[A-Za-zÄ-Öä-ö\s\.]{30,50})" # #r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-])*(?=—\D\D\D)"
+        self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
     def _extract(self, entry, extraction_results):
@@ -191,6 +192,14 @@ class FinnishLocationsExtractor(BaseExtractor):
         locations = locations.strip()
         locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
         locations = locations.lstrip()
+
+        # if string contains word some of known incorrect words, split string from that position
+        lowercase = locations.lower()
+        for word in KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS:
+            position = re.search(word, lowercase)
+
+            if position is not None:
+                locations = locations[0:position.start()]
 
         return locations
 
@@ -336,6 +345,14 @@ class KarelianLocationsExtractor(BaseExtractor):
 
         # Strip away spaces and hyphens from center of words
         locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
+
+        # if string contains word some of known incorrect words, split string from that position
+        lowercase = locations.lower()
+        for word in KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS:
+            position = re.search(word, lowercase)
+
+            if position is not None:
+                locations = locations[0:position.start()]
 
         return locations.lstrip()
 

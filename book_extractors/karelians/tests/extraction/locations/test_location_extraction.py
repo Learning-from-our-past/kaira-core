@@ -2,7 +2,7 @@ import pytest
 import re
 from book_extractors.common.extraction_keys import KEYS
 
-from book_extractors.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS, EXPECTED_RESULTS, LOCATION_HEURISTICS, LOCATION_TEXTS_WITH_INCORRECT_REGION
+from book_extractors.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS, EXPECTED_RESULTS, LOCATION_HEURISTICS, LOCATION_TEXTS_WITH_ROUVA_WORD, LOCATION_TEXTS_WITH_INCORRECT_REGION
 from book_extractors.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor, MigrationRouteExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers.migration_parser import parse_locations
 
@@ -272,4 +272,21 @@ class TestMigrationRouteExtractor:
         assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected'])
         assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected']
 
-    
+    class TestExcludingIncorrectWords:
+
+        def extract_and_assert(self, person_data, migration_extractor, th):
+            text = re.sub(r"\s", r" ", person_data['text'])
+            results = migration_extractor.extract({'text': text}, {})
+            th.omit_property(results, 'coordinates')
+            th.omit_property(results, 'village')
+            result_locations = results['migrationHistory']['results']['locations']
+
+            assert len(result_locations) == len(person_data['expected'])
+            assert result_locations == person_data['expected']
+
+        def should_not_contain_incorrect_word_rouva_as_location(self, migration_extractor, th):
+            # Regression test to remove word Rouva from results
+            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[0], migration_extractor, th)
+            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[1], migration_extractor, th)
+            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[2], migration_extractor, th)
+            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[3], migration_extractor, th)
