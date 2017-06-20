@@ -10,6 +10,7 @@ from book_extractors.greatfarmers.extraction.extractors.bool_extractor import Bo
 from book_extractors.greatfarmers.extraction.extractors.quantity_extractor import QuantityExtractor
 from book_extractors.greatfarmers.extraction.extractors.spouse_extractor import SpouseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
+from book_extractors.common.extractors.previous_marriages_flag_extractor import PreviousMarriagesFlagExtractor
 from shared.gender_extract import Gender
 from book_extractors.common.extraction_keys import KEYS
 import book_extractors.extraction_constants as extraction_constants
@@ -79,6 +80,7 @@ class GreatFarmersBooksExtractor:
             configure_extractor(SpouseExtractor),
             configure_extractor(FarmExtractor),
             configure_extractor(ChildExtractor),
+            configure_extractor(PreviousMarriagesFlagExtractor),
             configure_extractor(BoolExtractor, extractor_options={'patterns': boolean_flag_patterns}),
             configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns}),
             configure_extractor(KairaIdExtractor, extractor_options={'bookseries': BOOK_SERIES_ID, 'book_number': extraction_constants.BOOK_NUMBER})

@@ -20,7 +20,6 @@ class ChildExtractor(BaseExtractor):
         super(ChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika)(;|:)(?P<children>.*?)Asuinp{s<=1}"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
 
         self.SPLIT_PATTERN1 = r"(?P<child>[A-ZÄ-Öa-zä-ö\d\s-]{3,})"
         self.NAME_PATTERN = r"^(?P<name>[a-zä-ö\s-]+)"
@@ -31,9 +30,7 @@ class ChildExtractor(BaseExtractor):
     def _extract(self, entry, extraction_results):
         children_results = self._find_children(entry['text'])
 
-        return self._add_to_extraction_results({
-            KEYS["manymarriages"]: children_results[1], KEYS["children"]: children_results[0]
-        }, extraction_results, children_results[2])
+        return self._add_to_extraction_results({KEYS["children"]: children_results[0]}, extraction_results, children_results[1])
 
     def _postprocess(self, entry, extraction_results):
         """
@@ -66,23 +63,17 @@ class ChildExtractor(BaseExtractor):
     def _find_children(self, text):
         children = []
         cursor_location = 0
-        many_marriages = False
         try:
             found_children = regexUtils.safe_search(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
             cursor_location = found_children.end()
             children_str = found_children.group("children")
-            many_marriages = self._check_many_marriages(children_str)
             children_str = self._clean_children(children_str)
             children = self._split_children(children_str)
 
         except regexUtils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('childrenNotFound', 5)
 
-        return children, many_marriages, cursor_location
-
-    def _check_many_marriages(self, text):
-        marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
-        return marriage is not None
+        return children, cursor_location
 
     @staticmethod
     def _clean_children(children_str):

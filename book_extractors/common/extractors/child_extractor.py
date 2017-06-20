@@ -17,10 +17,9 @@ class CommonChildExtractor(BaseExtractor):
 
     def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
-        many_marriages = self._check_many_marriages(entry['text'])
 
         children_results = self._find_children(entry['text'], start_position)
-        return self._add_to_extraction_results({KEYS["manymarriages"]: many_marriages, KEYS["children"]: children_results[0]}, extraction_results, children_results[1])
+        return self._add_to_extraction_results({KEYS["children"]: children_results[0]}, extraction_results, children_results[1])
 
     def _find_children(self, text, start_position):
         cursor_location = start_position
@@ -38,10 +37,6 @@ class CommonChildExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('childrenNotFound', 5)
 
         return children_entries, cursor_location
-
-    def _check_many_marriages(self, text):
-        marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, self.CHILD_OPTIONS)
-        return marriage is not None
 
     @staticmethod
     def _clean_children(children_str):
