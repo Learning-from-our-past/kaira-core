@@ -13,6 +13,7 @@ from book_extractors.karelians.extraction.extractors.migration_route_extractors 
 from book_extractors.karelians.extraction.extractors.spouse_extractor import SpouseExtractor
 from book_extractors.karelians.extraction.extractors.child_extractor import ChildExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
+from book_extractors.common.extractors.previous_marriages_flag_extractor import PreviousMarriagesFlagExtractor
 from shared.gender_extract import Gender
 import book_extractors.extraction_constants as extraction_constants
 
@@ -35,6 +36,7 @@ class KarelianBooksExtractor:
             configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
             configure_extractor(BirthdayExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
             configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
+            configure_extractor(PreviousMarriagesFlagExtractor),
             configure_extractor(MigrationRouteExtractor),
             configure_extractor(OmakotitaloExtractor),
             configure_extractor(SpouseExtractor),
