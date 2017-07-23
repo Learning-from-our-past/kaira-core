@@ -12,7 +12,8 @@ EXPECTED = [
             'locationName': 'Ahlainen',
             'region': 'other'
         },
-        'name': 'Irja Hellevi'
+        'name': 'Irja Hellevi',
+        'kairaId': 'testbook_1_1C'
     },
     {
         'birthYear': 1947,
@@ -21,7 +22,8 @@ EXPECTED = [
             'locationName': 'Ahlainen',
             'region': 'other'
         },
-        'name': 'Kirsti Anna-Liisa'
+        'name': 'Kirsti Anna-Liisa',
+        'kairaId': 'testbook_1_2C'
     },
     {
         'birthYear': 1953,
@@ -30,6 +32,7 @@ EXPECTED = [
             'locationName': 'Ahlainen',
             'region': 'other'
         },
-        'name': 'Kalervo Viljam'
+        'name': 'Kalervo Viljam',
+        'kairaId': 'testbook_1_3C'
     }
 ]

@@ -83,7 +83,7 @@ class GreatFarmersBooksExtractor:
             configure_extractor(PreviousMarriagesFlagExtractor),
             configure_extractor(BoolExtractor, extractor_options={'patterns': boolean_flag_patterns}),
             configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns}),
-            configure_extractor(KairaIdExtractor, extractor_options={'bookseries': BOOK_SERIES_ID, 'book_number': extraction_constants.BOOK_NUMBER})
+            configure_extractor(KairaIdExtractor)
         ]
 
         return ExtractionPipeline(pipeline_components)

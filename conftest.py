@@ -1,5 +1,8 @@
 import pytest
 
+from book_extractors import extraction_constants
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
+
 
 def pytest_collection_modifyitems(session, config, items):
     """
@@ -35,3 +38,13 @@ class Th:
 @pytest.fixture
 def th():
     return Th
+
+@pytest.fixture(scope="session", autouse=True)
+def constants():
+    extraction_constants.BOOK_NUMBER = '1'
+    extraction_constants.BOOK_SERIES = 'testbook'
+
+@pytest.fixture(scope="function", autouse=True)
+def reset_kaira_id():
+    p = KairaIdProvider()
+    p.reset()

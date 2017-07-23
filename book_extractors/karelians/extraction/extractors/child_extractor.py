@@ -2,6 +2,7 @@ import re
 
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from book_extractors.extraction_exceptions import StopExtractionException
 from shared import regexUtils, textUtils
 from shared.gender_extract import Gender
@@ -18,6 +19,7 @@ class ChildExtractor(BaseExtractor):
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(ChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self._kaira_id_provider = KairaIdProvider()
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika)(;|:)(?P<children>.*?)Asuinp{s<=1}"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
@@ -135,6 +137,7 @@ class ChildExtractor(BaseExtractor):
                 KEYS["gender"]: gender,
                 KEYS["birthYear"]: textUtils.int_or_none(year),
                 KEYS["childLocationName"]: location,
+                KEYS["kairaId"]: self._kaira_id_provider.get_new_id('C')
                 }
 
     def _find_birth_coord(self, location_name):

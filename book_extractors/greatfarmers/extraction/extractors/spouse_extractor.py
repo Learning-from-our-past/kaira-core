@@ -7,8 +7,7 @@ from book_extractors.extraction_pipeline import ExtractionPipeline, configure_ex
 from book_extractors.greatfarmers.extraction.extractors.birthday_extractor import BirthdayExtractor
 from book_extractors.greatfarmers.extraction.extractors.original_family_extractor import OrigFamilyExtractor
 from shared import regexUtils
-from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
-import book_extractors.extraction_constants as extraction_constants
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 
 
 class SpouseExtractor(BaseExtractor):
@@ -25,8 +24,9 @@ class SpouseExtractor(BaseExtractor):
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(OrigFamilyExtractor),
             configure_extractor(BirthdayExtractor),
-            configure_extractor(KairaIdExtractor, extractor_options={'bookseries': extraction_constants.BOOK_SERIES, 'book_number': extraction_constants.BOOK_NUMBER})
         ])
+
+        self.kaira_id_provider = KairaIdProvider()
 
     def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
@@ -62,7 +62,7 @@ class SpouseExtractor(BaseExtractor):
                 },
                 KEYS["origfamily"]: spouse_details[KEYS['origfamily']]['results'],
                 KEYS["spouseName"]: spouse_name,
-                KEYS["kairaId"]: spouse_details[KEYS['kairaId']]
+                KEYS["kairaId"]: self.kaira_id_provider.get_new_id('S')
             }
 
         except regexUtils.RegexNoneMatchException:
