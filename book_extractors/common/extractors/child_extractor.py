@@ -2,6 +2,7 @@ import re
 
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from shared import regexUtils
 from shared.gender_extract import Gender, GenderException
 from shared.geo.geocoding import GeoCoder
@@ -14,6 +15,7 @@ class CommonChildExtractor(BaseExtractor):
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(CommonChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self._kaira_id_provider = KairaIdProvider()
 
     def _extract(self, entry, extraction_results):
         start_position = self.get_starting_position(extraction_results)
@@ -101,6 +103,6 @@ class CommonChildExtractor(BaseExtractor):
             except regexUtils.RegexNoneMatchException:
                 year = None
 
-            return {"name": name, "gender": gender, "birthYear": year}
+            return {"name": name, "gender": gender, "birthYear": year, "kairaId": self._kaira_id_provider.get_new_id('C')}
         except regexUtils.RegexNoneMatchException:
             pass

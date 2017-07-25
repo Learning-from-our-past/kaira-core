@@ -10,9 +10,8 @@ from book_extractors.karelians.extraction.extractors.location_extractor import B
 from book_extractors.karelians.extraction.extractors.original_family_extractor import OrigFamilyExtractor
 from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
 from book_extractors.karelians.extraction.extractors.wedding_extractor import WeddingExtractor
-from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
+from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from shared import regexUtils
-import book_extractors.extraction_constants as extraction_constants
 
 
 class SpouseExtractor(BaseExtractor):
@@ -28,8 +27,9 @@ class SpouseExtractor(BaseExtractor):
             configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
             configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
             configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
-            configure_extractor(KairaIdExtractor, extractor_options={'bookseries': extraction_constants.BOOK_SERIES, 'book_number': extraction_constants.BOOK_NUMBER})
         ])
+
+        self.kaira_id_provider = KairaIdProvider()
 
         self.PATTERN = r"Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
@@ -95,7 +95,7 @@ class SpouseExtractor(BaseExtractor):
                 KEYS["weddingYear"]: spouse_details['wedding'],
                 KEYS["spouseName"]: spouse_name,
                 KEYS["hasSpouse"]: True,
-                KEYS['kairaId']: spouse_details['kairaId']
+                KEYS['kairaId']: self.kaira_id_provider.get_new_id('S')
             }
 
         except regexUtils.RegexNoneMatchException:

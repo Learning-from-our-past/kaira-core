@@ -29,12 +29,12 @@ class TestCommandLineSmoke:
             assert len(result_data) == 3
 
             # Check that each person has unique id
-            assert result_data[0]['kairaId']['results'] == 'siirtokarjalaiset_1_2'
-            assert result_data[0]['spouse']['results']['kairaId']['results'] == 'siirtokarjalaiset_1_1'
-            assert result_data[1]['kairaId']['results'] == 'siirtokarjalaiset_1_4'
-            assert result_data[1]['spouse']['results']['kairaId']['results'] == 'siirtokarjalaiset_1_3'
-            assert result_data[2]['kairaId']['results'] == 'siirtokarjalaiset_1_6'
-            assert result_data[2]['spouse']['results']['kairaId']['results'] == 'siirtokarjalaiset_1_5'
+            assert result_data[0]['kairaId']['results'] == 'siirtokarjalaiset_1_3P'
+            assert result_data[0]['spouse']['results']['kairaId'] == 'siirtokarjalaiset_1_1S'
+            assert result_data[1]['kairaId']['results'] == 'siirtokarjalaiset_1_5P'
+            assert result_data[1]['spouse']['results']['kairaId'] == 'siirtokarjalaiset_1_4S'
+            assert result_data[2]['kairaId']['results'] == 'siirtokarjalaiset_1_10P'
+            assert result_data[2]['spouse']['results']['kairaId'] == 'siirtokarjalaiset_1_6S'
 
         def should_return_correct_birthlocation_without_control_characters(self):
             # FIXME: Move this test to some kind of preprocessor class when relevant implementation code is moved from
@@ -61,9 +61,9 @@ class TestCommandLineSmoke:
             assert len(result_data) == 3
 
             # Check that each entry has unique id
-            assert result_data[0]['kairaId']['results'] == 'pienviljelijat_1_1'
-            assert result_data[1]['kairaId']['results'] == 'pienviljelijat_1_2'
-            assert result_data[2]['kairaId']['results'] == 'pienviljelijat_1_3'
+            assert result_data[0]['kairaId']['results'] == 'pienviljelijat_1_2P'
+            assert result_data[1]['kairaId']['results'] == 'pienviljelijat_1_3P'
+            assert result_data[2]['kairaId']['results'] == 'pienviljelijat_1_9P'
 
         def should_process_great_farmers_xml_and_save_to_json(self):
             file_path = 'temp/json_export_tests/results.json'
@@ -77,12 +77,12 @@ class TestCommandLineSmoke:
             assert len(result_data) == 3
 
             # Check that each person has unique id
-            assert result_data[0]['kairaId']['results'] == 'suuretmaatilat_1_2'
-            assert result_data[0]['spouse']['results']['kairaId']['results'] == 'suuretmaatilat_1_1'
-            assert result_data[1]['kairaId']['results'] == 'suuretmaatilat_1_4'
-            assert result_data[1]['spouse']['results']['kairaId']['results'] == 'suuretmaatilat_1_3'
-            assert result_data[2]['kairaId']['results'] == 'suuretmaatilat_1_6'
-            assert result_data[2]['spouse']['results']['kairaId']['results'] == 'suuretmaatilat_1_5'
+            assert result_data[0]['kairaId']['results'] == 'suuretmaatilat_1_2P'
+            assert result_data[0]['spouse']['results']['kairaId'] == 'suuretmaatilat_1_1S'
+            assert result_data[1]['kairaId']['results'] == 'suuretmaatilat_1_4P'
+            assert result_data[1]['spouse']['results']['kairaId'] == 'suuretmaatilat_1_3S'
+            assert result_data[2]['kairaId']['results'] == 'suuretmaatilat_1_7P'
+            assert result_data[2]['spouse']['results']['kairaId'] == 'suuretmaatilat_1_5S'
 
         def should_error_if_unsupported_xml_is_read(self):
             file_path = 'temp/json_export_tests/results.json'
