@@ -98,7 +98,7 @@ class GreatFarmersBooksExtractor:
 
             for entry in self._results['entries']:
                 try:
-                    writer.writeEntry(entry["extractionResults"])
+                    writer.writeEntry(entry["extractionResults"][0])
                 except KeyError as e:
                     raise e
 

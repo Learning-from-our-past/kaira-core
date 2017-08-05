@@ -14,10 +14,10 @@ class BoolExtractor(BaseExtractor):
         self.patterns_to_find = options['patterns']
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         results = self._find_patterns(entry['text'])
-        return self._add_to_extraction_results(results, extraction_results, start_position)
+        return self._add_to_extraction_results(results, extraction_results, extraction_metadata, start_position)
 
     def _find_patterns(self, text):
         results = {}

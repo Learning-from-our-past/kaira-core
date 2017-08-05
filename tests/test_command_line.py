@@ -77,12 +77,12 @@ class TestCommandLineSmoke:
             assert len(result_data) == 3
 
             # Check that each person has unique id
-            assert result_data[0]['kairaId']['results'] == 'suuretmaatilat_1_2P'
-            assert result_data[0]['spouse']['results']['kairaId'] == 'suuretmaatilat_1_1S'
-            assert result_data[1]['kairaId']['results'] == 'suuretmaatilat_1_4P'
-            assert result_data[1]['spouse']['results']['kairaId'] == 'suuretmaatilat_1_3S'
-            assert result_data[2]['kairaId']['results'] == 'suuretmaatilat_1_7P'
-            assert result_data[2]['spouse']['results']['kairaId'] == 'suuretmaatilat_1_5S'
+            assert result_data[0]['kairaId'] == 'suuretmaatilat_1_2P'
+            assert result_data[0]['spouse']['kairaId'] == 'suuretmaatilat_1_1S'
+            assert result_data[1]['kairaId'] == 'suuretmaatilat_1_4P'
+            assert result_data[1]['spouse']['kairaId'] == 'suuretmaatilat_1_3S'
+            assert result_data[2]['kairaId'] == 'suuretmaatilat_1_7P'
+            assert result_data[2]['spouse']['kairaId'] == 'suuretmaatilat_1_5S'
 
         def should_error_if_unsupported_xml_is_read(self):
             file_path = 'temp/json_export_tests/results.json'

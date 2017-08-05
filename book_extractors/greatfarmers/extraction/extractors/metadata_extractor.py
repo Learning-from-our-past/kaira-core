@@ -7,7 +7,7 @@ class MetadataExtractor(BaseExtractor):
     extraction_key = KEYS['personMetadata']
     geocoder = GeoCoder()
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         page = None
         name = None
         short = False
@@ -47,4 +47,4 @@ class MetadataExtractor(BaseExtractor):
                                                 KEYS["approximatePage"]: page,
                                                 KEYS["farmLocation"]: location,
                                                 KEYS["shortentry"]: short,
-                                                KEYS["originalText"]: original_text}, extraction_results, 0)
+                                                KEYS["originalText"]: original_text}, extraction_results, extraction_metadata, 0)
