@@ -29,12 +29,12 @@ class TestCommandLineSmoke:
             assert len(result_data) == 3
 
             # Check that each person has unique id
-            assert result_data[0]['kairaId']['results'] == 'siirtokarjalaiset_1_3P'
-            assert result_data[0]['spouse']['results']['kairaId'] == 'siirtokarjalaiset_1_1S'
-            assert result_data[1]['kairaId']['results'] == 'siirtokarjalaiset_1_5P'
-            assert result_data[1]['spouse']['results']['kairaId'] == 'siirtokarjalaiset_1_4S'
-            assert result_data[2]['kairaId']['results'] == 'siirtokarjalaiset_1_10P'
-            assert result_data[2]['spouse']['results']['kairaId'] == 'siirtokarjalaiset_1_6S'
+            assert result_data[0]['kairaId'] == 'siirtokarjalaiset_1_3P'
+            assert result_data[0]['spouse']['kairaId'] == 'siirtokarjalaiset_1_1S'
+            assert result_data[1]['kairaId'] == 'siirtokarjalaiset_1_5P'
+            assert result_data[1]['spouse']['kairaId'] == 'siirtokarjalaiset_1_4S'
+            assert result_data[2]['kairaId'] == 'siirtokarjalaiset_1_10P'
+            assert result_data[2]['spouse']['kairaId'] == 'siirtokarjalaiset_1_6S'
 
         def should_return_correct_birthlocation_without_control_characters(self):
             # FIXME: Move this test to some kind of preprocessor class when relevant implementation code is moved from
@@ -47,7 +47,7 @@ class TestCommandLineSmoke:
             with open(file_path, encoding='utf8') as data_file:
                 result_data = json.load(data_file, encoding='utf8')
 
-            assert result_data[0]['birthLocation']['results']['locationName'] == 'Kuolemajärvi'
+            assert result_data[0]['birthLocation']['locationName'] == 'Kuolemajärvi'
 
         def should_process_small_farmers_xml_and_save_to_json(self):
             file_path = 'temp/json_export_tests/results.json'

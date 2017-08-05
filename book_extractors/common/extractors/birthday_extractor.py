@@ -30,12 +30,12 @@ class CommonBirthdayExtractor(BaseExtractor):
             configure_extractor(DateExtractor, extractor_options={'PATTERN': self.PATTERN, 'OPTIONS': self.OPTIONS})
         ])
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
         result = self._find_date(prepared_text, start_position)
 
-        return self._add_to_extraction_results(result[0], extraction_results, result[1])
+        return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
         t = textUtils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
@@ -53,9 +53,9 @@ class CommonBirthdayExtractor(BaseExtractor):
         cursor_location = start_position
 
         try:
-            result = self._sub_extraction_pipeline.process({'text': text})
-            found_date = result['date']['results']
-            cursor_location = self.get_last_cursor_location(result) + start_position - 4
+            result, metadata = self._sub_extraction_pipeline.process({'text': text})
+            found_date = result['date']
+            cursor_location = self.get_last_cursor_location(result, metadata) + start_position - 4
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?
             found_date = {"day": None, "month": None, "year": None, "cursorLocation": 0}

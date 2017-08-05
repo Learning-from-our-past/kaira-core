@@ -15,11 +15,11 @@ class ProfessionExtractor(BaseExtractor):
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         profession_results = self._find_profession(entry['text'], start_position)
 
-        return self._add_to_extraction_results(profession_results[0], extraction_results, profession_results[1])
+        return self._add_to_extraction_results(profession_results[0], extraction_results, extraction_metadata, profession_results[1])
 
     def _find_profession(self, text, start_position):
         text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)

@@ -55,7 +55,7 @@ class KarelianBooksExtractor:
 
             for entry in self._results['entries']:
                 try:
-                    writer.writeEntry(entry["extractionResults"])
+                    writer.writeEntry(entry["extractionResults"][0])    # Leave metadata objects out
                 except KeyError as e:
                     raise e
 

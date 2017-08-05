@@ -2,7 +2,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 import book_extractors.extraction_constants as extraction_constants
 
 
-class KairaIdProvider():
+class KairaIdProvider:
     _id_num = 1
 
     _allowed_person_types = {
@@ -31,8 +31,8 @@ class KairaIdExtractor(BaseExtractor):
         super(KairaIdExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self._provider = KairaIdProvider()
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         # Form of the id: <bookseries>_<bookNumber>_<id_num>
         full_id = self._provider.get_new_id()
 
-        return self._add_to_extraction_results(full_id, extraction_results)
+        return self._add_to_extraction_results(full_id, extraction_results, extraction_metadata)

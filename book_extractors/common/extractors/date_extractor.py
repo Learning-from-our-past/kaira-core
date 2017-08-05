@@ -16,8 +16,8 @@ class DateExtractor(BaseExtractor):
         self.MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik": 4,
                                           "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         prepared_text = self._prepare_text_for_extraction(entry['text'])
 
         try:
@@ -26,7 +26,7 @@ class DateExtractor(BaseExtractor):
             # non-space pattern match didn't produce results, try with including spaces
             result = self._find_date(entry['text'], start_position)
 
-        return self._add_to_extraction_results(result[0], extraction_results, result[1])
+        return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
 
     @staticmethod
     def _prepare_text_for_extraction(text):

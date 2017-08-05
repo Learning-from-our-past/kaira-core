@@ -10,7 +10,8 @@ class TestChildrenExtraction:
         return ChildExtractor(None, None)
 
     def should_extract_children_correctly_when_string_ends_to_syntyneet_word_and_fill_birth_location_accordingly(self, child_extractor, th):
-        children = child_extractor.extract({'text': CHILDREN_TEXTS[0]}, {})['children']['results']['children']
+        result, metadata = child_extractor.extract({'text': CHILDREN_TEXTS[0]}, {}, {})
+        children = result['children']
 
         th.omit_property(children, 'coordinates')
         assert len(children) == 3

@@ -74,58 +74,66 @@ class TestFinnishLocationExtraction:
     def finnish_extractor(self):
         return FinnishLocationsExtractor(None, None)
 
+
     def should_extract_locations(self, finnish_extractor, th):
-        results = finnish_extractor.extract({'text': LOCATION_TEXTS[0]}, {})['finnishLocations']['results'][KEYS["otherlocations"]]
+        results, metadata = finnish_extractor.extract({'text': LOCATION_TEXTS[0]}, {}, {})
+        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        th.omit_property(locations, 'coordinates')
+        assert len(locations) == 4
 
-        th.omit_property(results, 'coordinates')
-        assert len(results) == 4
-
-        assert results[0] == EXPECTED_RESULTS[0]['finnish_locations'][0]
-        assert results[1] == EXPECTED_RESULTS[0]['finnish_locations'][1]
-        assert results[2] == EXPECTED_RESULTS[0]['finnish_locations'][2]
-        assert results[3] == EXPECTED_RESULTS[0]['finnish_locations'][3]
+        assert locations[0] == EXPECTED_RESULTS[0]['finnish_locations'][0]
+        assert locations[1] == EXPECTED_RESULTS[0]['finnish_locations'][1]
+        assert locations[2] == EXPECTED_RESULTS[0]['finnish_locations'][2]
+        assert locations[3] == EXPECTED_RESULTS[0]['finnish_locations'][3]
 
     def should_return_empty_if_no_finnish_locations_listed(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': ''}, {})['finnishLocations']['results'][KEYS["otherlocations"]]
-        assert len(results) == 0
+        results, metadata = finnish_extractor.extract({'text': ''}, {}, {})
+        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        assert len(locations) == 0
 
     def should_leave_out_too_long_place_names(self, finnish_extractor, th):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']}, {})['finnishLocations']['results'][KEYS["otherlocations"]]
+        results, metadata = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']}, {}, {})
+        locations = results['finnishLocations'][KEYS["otherlocations"]]
 
-        th.omit_property(results, 'coordinates')
-        assert len(results) == 4
-        assert results == LOCATION_HEURISTICS['long_place_name']['expected']
+        th.omit_property(locations, 'coordinates')
+        assert len(locations) == 4
+        assert locations == LOCATION_HEURISTICS['long_place_name']['expected']
 
     def should_leave_out_too_short_place_names(self, finnish_extractor, th):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']}, {})['finnishLocations']['results'][KEYS["otherlocations"]]
+        results, metadata = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']}, {}, {})
+        locations = results['finnishLocations'][KEYS["otherlocations"]]
 
-        th.omit_property(results, 'coordinates')
-        assert len(results) == 4
-        assert results == LOCATION_HEURISTICS['short_place_name']['expected']
+        th.omit_property(locations, 'coordinates')
+        assert len(locations) == 4
+        assert locations == LOCATION_HEURISTICS['short_place_name']['expected']
 
     def should_extract_short_place_names_if_they_are_in_white_list(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_name']['text']}, {})['finnishLocations']['results'][KEYS["otherlocations"]]
+        results, metadata = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_name']['text']}, {}, {})
+        locations = results['finnishLocations'][KEYS["otherlocations"]]
 
-        assert len(results) == 5
-        assert results[4]['locationName'] == 'Utö'
+        assert len(locations) == 5
+        assert locations[4]['locationName'] == 'Utö'
 
     def should_use_alias_for_short_place_name_if_one_is_available(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_alias_name']['text']}, {})['finnishLocations']['results'][KEYS["otherlocations"]]
+        results, metadata = finnish_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_alias_name']['text']}, {}, {})
+        locations = results['finnishLocations'][KEYS["otherlocations"]]
 
-        assert len(results) == 5
-        assert results[4]['locationName'] == 'Ii'
+        assert len(locations) == 5
+        assert locations[4]['locationName'] == 'Ii'
 
     def should_accept_any_name_if_mlk_pattern_in_the_end(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']}, {})['finnishLocations']['results'][KEYS["otherlocations"]]
+        results, metadata = finnish_extractor.extract({'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']}, {}, {})
+        locations = results['finnishLocations'][KEYS["otherlocations"]]
 
-        assert len(results) == 5
-        assert results[4]['locationName'] == 'Kristiinankaupungin mlk'
+        assert len(locations) == 5
+        assert locations[4]['locationName'] == 'Kristiinankaupungin mlk'
 
     def should_remove_hyphens_from_beginning_of_the_place_name(self, finnish_extractor):
-        results = finnish_extractor.extract({'text': LOCATION_HEURISTICS['name_with_extra_hyphens']['text']}, {})['finnishLocations']['results'][KEYS["otherlocations"]]
+        results, metadata = finnish_extractor.extract({'text': LOCATION_HEURISTICS['name_with_extra_hyphens']['text']}, {}, {})
+        locations = results['finnishLocations'][KEYS["otherlocations"]]
 
-        assert len(results) == 5
-        assert results[3]['locationName'] == 'Ähtäri'   # Hyphen from beginning removed
+        assert len(locations) == 5
+        assert locations[3]['locationName'] == 'Ähtäri'   # Hyphen from beginning removed
 
 
 class TestKarelianLocationExtraction:
@@ -134,101 +142,113 @@ class TestKarelianLocationExtraction:
     def karelian_extractor(self):
         return KarelianLocationsExtractor(None, None)
 
+
     def should_extract_locations_with_village_names(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_TEXTS[0]}, {})['karelianLocations']['results']['karelianLocations']
+        results, metadata = karelian_extractor.extract({'text': LOCATION_TEXTS[0]}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
 
-        assert len(results) == 2
+        assert len(locations) == 2
 
-        assert results[0]['locationName'] == 'Kuolemajärvi'
-        assert results[0]['region'] == 'karelia'
-        assert results[0]['movedIn'] is None
-        assert results[0]['movedOut'] == 39
+        assert locations[0]['locationName'] == 'Kuolemajärvi'
+        assert locations[0]['region'] == 'karelia'
+        assert locations[0]['movedIn'] is None
+        assert locations[0]['movedOut'] == 39
 
-        assert results[0]['village']['locationName'] == 'Laasola'
-        assert results[0]['village']['coordinates']['latitude'] == '60.38876'
-        assert results[0]['village']['coordinates']['longitude'] == '28.93825'
+        assert locations[0]['village']['locationName'] == 'Laasola'
+        assert locations[0]['village']['coordinates']['latitude'] == '60.38876'
+        assert locations[0]['village']['coordinates']['longitude'] == '28.93825'
 
-        assert results[1]['locationName'] == 'Kuolemajärvi'
-        assert results[1]['region'] == 'karelia'
+        assert locations[1]['locationName'] == 'Kuolemajärvi'
+        assert locations[1]['region'] == 'karelia'
 
-        assert results[0]['village']['locationName'] == 'Laasola'
+        assert locations[0]['village']['locationName'] == 'Laasola'
 
-        assert results[1]['movedIn'] == 42
-        assert results[1]['movedOut'] == 44
+        assert locations[1]['movedIn'] == 42
+        assert locations[1]['movedOut'] == 44
+
 
     def should_extract_locations_with_missing_village_names(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_TEXTS[2]}, {})['karelianLocations']['results']['karelianLocations']
+        results, metadata = karelian_extractor.extract({'text': LOCATION_TEXTS[2]}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
 
-        assert len(results) == 3
+        assert len(locations) == 3
 
-        assert results[0]['locationName'] == 'Viipurin mlk'
-        assert results[0]['region'] == 'karelia'
-        assert results[0]['coordinates']['longitude'] is None
-        assert results[0]['coordinates']['latitude'] is None
-        assert results[0]['movedIn'] is None
-        assert results[0]['movedOut'] == 27
+        assert locations[0]['locationName'] == 'Viipurin mlk'
+        assert locations[0]['region'] == 'karelia'
+        assert locations[0]['coordinates']['longitude'] is None
+        assert locations[0]['coordinates']['latitude'] is None
+        assert locations[0]['movedIn'] is None
+        assert locations[0]['movedOut'] == 27
 
-        assert results[0]['village']['locationName'] is None
-        assert results[0]['village']['coordinates']['latitude'] is None
-        assert results[0]['village']['coordinates']['longitude'] is None
+        assert locations[0]['village']['locationName'] is None
+        assert locations[0]['village']['coordinates']['latitude'] is None
+        assert locations[0]['village']['coordinates']['longitude'] is None
 
-        assert results[1]['locationName'] == 'Pohjois Karjala'
-        assert results[1]['region'] == 'karelia'
-        assert results[1]['coordinates']['longitude'] is None
-        assert results[1]['coordinates']['latitude'] is None
-        assert results[1]['movedIn'] == 31
-        assert results[1]['movedOut'] == 32
+        assert locations[1]['locationName'] == 'Pohjois Karjala'
+        assert locations[1]['region'] == 'karelia'
+        assert locations[1]['coordinates']['longitude'] is None
+        assert locations[1]['coordinates']['latitude'] is None
+        assert locations[1]['movedIn'] == 31
+        assert locations[1]['movedOut'] == 32
 
-        assert results[1]['village']['locationName'] is None
-        assert results[1]['village']['coordinates']['latitude'] is None
-        assert results[1]['village']['coordinates']['longitude'] is None
+        assert locations[1]['village']['locationName'] is None
+        assert locations[1]['village']['coordinates']['latitude'] is None
+        assert locations[1]['village']['coordinates']['longitude'] is None
 
-        assert results[2]['locationName'] == 'Viipuri'
-        assert results[2]['region'] == 'karelia'
-        assert results[2]['movedIn'] == 32
-        assert results[2]['movedOut'] is None
+        assert locations[2]['locationName'] == 'Viipuri'
+        assert locations[2]['region'] == 'karelia'
+        assert locations[2]['movedIn'] == 32
+        assert locations[2]['movedOut'] is None
 
-        assert results[2]['village']['locationName'] is None
-        assert results[2]['village']['coordinates']['latitude'] is None
-        assert results[2]['village']['coordinates']['longitude'] is None
+        assert locations[2]['village']['locationName'] is None
+        assert locations[2]['village']['coordinates']['latitude'] is None
+        assert locations[2]['village']['coordinates']['longitude'] is None
 
     def should_return_empty_if_no_karelian_locations_listed(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': ''}, {})['karelianLocations']['results']['karelianLocations']
-        assert len(results) == 0
+        results, metadata = karelian_extractor.extract({'text': ''}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
+
+        assert len(locations) == 0
 
     def should_leave_out_too_long_place_names(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']}, {})['karelianLocations']['results']['karelianLocations']
+        results, metadata = karelian_extractor.extract({'text': LOCATION_HEURISTICS['long_place_name']['text']}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
 
-        assert len(results) == 1
+        assert len(locations) == 1
 
     def should_leave_out_too_short_place_names(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']}, {})['karelianLocations']['results']['karelianLocations']
+        results, metadata = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_place_name']['text']}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
 
-        assert len(results) == 1
+        assert len(locations) == 1
 
     def should_extract_short_place_names_if_they_are_in_white_list(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_name']['text']}, {})['karelianLocations']['results']['karelianLocations']
+        results, metadata = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_name']['text']}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
 
-        assert len(results) == 1
-        assert results[0]['locationName'] == 'Eno'
+        assert len(locations) == 1
+        assert locations[0]['locationName'] == 'Eno'
 
     def should_use_alias_for_short_place_name_if_one_is_available(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_alias_name']['text']}, {})['karelianLocations']['results']['karelianLocations']
+        results, metadata = karelian_extractor.extract({'text': LOCATION_HEURISTICS['short_white_listed_alias_name']['text']}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
 
-        assert len(results) == 1
-        assert results[0]['locationName'] == 'Ii'
+        assert len(locations) == 1
+        assert locations[0]['locationName'] == 'Ii'
 
     def should_accept_any_name_if_mlk_pattern_in_the_end(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']}, {})['karelianLocations']['results']['karelianLocations']
+        results, metadata = karelian_extractor.extract({'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
 
-        assert len(results) == 1
-        assert results[0]['locationName'] == 'Kristiinankaupungin mlk'
+        assert len(locations) == 1
+        assert locations[0]['locationName'] == 'Kristiinankaupungin mlk'
 
     def should_remove_hyphens_from_beginning_of_the_place_name(self, karelian_extractor):
-        results = karelian_extractor.extract({'text': LOCATION_HEURISTICS['name_with_extra_hyphens']['text']}, {})['karelianLocations']['results']['karelianLocations']
+        results, metadata = karelian_extractor.extract({'text': LOCATION_HEURISTICS['name_with_extra_hyphens']['text']}, {}, {})
+        locations = results['karelianLocations']['karelianLocations']
 
-        assert len(results) == 1
-        assert results[0]['locationName'] == 'Viipuri'   # Hyphen from beginning removed
+        assert len(locations) == 1
+        assert locations[0]['locationName'] == 'Viipuri'   # Hyphen from beginning removed
 
 
 class TestMigrationRouteExtractor:
@@ -236,12 +256,13 @@ class TestMigrationRouteExtractor:
     def migration_extractor(self):
         return MigrationRouteExtractor(None, None)
 
+
     def should_run_post_process_to_mark_if_person_returned_to_karelia(self, migration_extractor, th):
         text = re.sub(r"\s", r" ", LOCATION_TEXTS[0])
 
-        results = migration_extractor.extract({'text': text}, {})
+        results, metadata = migration_extractor.extract({'text': text}, {}, {})
         th.omit_property(results, 'coordinates')
-        assert results['migrationHistory']['results']['returnedToKarelia'] is True
+        assert results['migrationHistory']['returnedToKarelia'] is True
 
     @pytest.mark.skip
     def should_extract_location_list_with_missing_years_properly(self, migration_extractor, th):
@@ -249,15 +270,15 @@ class TestMigrationRouteExtractor:
         # others will be classified as karelian locations. Something strange is going on.
         text = re.sub(r"\s", r" ", LOCATION_TEXTS[5])
 
-        results = migration_extractor.extract({'text': text}, {})
+        results, metadata = migration_extractor.extract({'text': text}, {}, {})
         th.omit_property(results, 'coordinates')
 
     def should_fix_helsinkis_region_from_karelia_to_other(self, migration_extractor, th):
         text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[0]['text'])
 
-        results = migration_extractor.extract({'text': text}, {})
+        results, metadata = migration_extractor.extract({'text': text}, {}, {})
         th.omit_property(results, 'coordinates')
-        result_locations = results['migrationHistory']['results']['locations']
+        result_locations = results['migrationHistory']['locations']
 
         assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[0]['expected'])
         assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[0]['expected']
@@ -265,9 +286,9 @@ class TestMigrationRouteExtractor:
     def should_fix_kanneljärvi_region_from_other_to_karelia(self, migration_extractor, th):
         text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['text'])
 
-        results = migration_extractor.extract({'text': text}, {})
+        results, metadata = migration_extractor.extract({'text': text}, {}, {})
         th.omit_property(results, 'coordinates')
-        result_locations = results['migrationHistory']['results']['locations']
+        result_locations = results['migrationHistory']['locations']
 
         assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected'])
         assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected']
@@ -276,10 +297,10 @@ class TestMigrationRouteExtractor:
 
         def extract_and_assert(self, person_data, migration_extractor, th):
             text = re.sub(r"\s", r" ", person_data['text'])
-            results = migration_extractor.extract({'text': text}, {})
+            results, metadata = migration_extractor.extract({'text': text}, {}, {})
             th.omit_property(results, 'coordinates')
             th.omit_property(results, 'village')
-            result_locations = results['migrationHistory']['results']['locations']
+            result_locations = results['migrationHistory']['locations']
 
             assert len(result_locations) == len(person_data['expected'])
             assert result_locations == person_data['expected']
