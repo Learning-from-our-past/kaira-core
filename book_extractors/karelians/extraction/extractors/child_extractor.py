@@ -29,20 +29,20 @@ class ChildExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"\d\d\s(?P<location>[a-zä-ö\s-]+$)"
         self.SPLIT_OPTIONS1 = (re.UNICODE | re.IGNORECASE)
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         children_results = self._find_children(entry['text'])
 
-        return self._add_to_extraction_results({KEYS["children"]: children_results[0]}, extraction_results, children_results[1])
+        return self._add_to_extraction_results(children_results[0], extraction_results, extraction_metadata, children_results[1])
 
-    def _postprocess(self, entry, extraction_results):
+    def _postprocess(self, entry, extraction_results, extraction_metadata):
         """
         Add location information to each child in this postprocess method.
         :param entry: 
         :param extraction_results: 
         :return extraction_results: 
         """
-        extraction_results[self.extraction_key]['results'][KEYS["children"]] = self._augment_location_data_of_children(extraction_results[self.extraction_key]['results'][KEYS["children"]])
-        return extraction_results
+        self._get_output_path(extraction_results)[self.extraction_key] = self._augment_location_data_of_children(self._get_output_path(extraction_results)[self.extraction_key])
+        return extraction_results, extraction_metadata
 
     def _augment_location_data_of_children(self, children):
         for child in children:

@@ -16,7 +16,7 @@ class LocationExtractor(BaseExtractor):
 
     extraction_key = 'location'
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         """
         Note: Returns match-object for caller instead of string.
         :param entry:
@@ -26,7 +26,7 @@ class LocationExtractor(BaseExtractor):
         result = self._find_location(entry['text'])
         return self._add_to_extraction_results({
             "locationMatch": result[0]
-        }, extraction_results, result[1])
+        }, extraction_results, extraction_metadata, result[1])
 
     def _find_location(self, text):
         try:
@@ -50,22 +50,22 @@ class BirthdayLocationExtractor(BaseExtractor):
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 32
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
         location_result = self._find_location(prepared_text, start_position)
-        return self._add_to_extraction_results(location_result[0], extraction_results, location_result[1])
+        return self._add_to_extraction_results(location_result[0], extraction_results, extraction_metadata, location_result[1])
 
-    def _postprocess(self, entry, extraction_results):
+    def _postprocess(self, entry, extraction_results, extraction_metadata):
         """
         After extraction, run a postprocess cleaning and name fixing for the location.
         :param entry: 
         :param extraction_results: 
         :return: 
         """
-        extraction_results[self.extraction_key]['results'] = self._augment_location_data(extraction_results[self.extraction_key]['results'])
-        return extraction_results
+        self._get_output_path(extraction_results)[self.extraction_key] = self._augment_location_data(self._get_output_path(extraction_results)[self.extraction_key])
+        return extraction_results, extraction_metadata
 
     def _augment_location_data(self, location_name):
         location_entry = {
@@ -83,13 +83,13 @@ class BirthdayLocationExtractor(BaseExtractor):
         cursor_location = start_position
 
         try:
-            results = self._sub_extraction_pipeline.process({'text': text})
-            self._check_if_location_is_valid(text, results['location']['results']['locationMatch'])
-            location = results['location']['results']['locationMatch'].group("location")
+            results, metadata = self._sub_extraction_pipeline.process({'text': text})
+            self._check_if_location_is_valid(text, results['location']['locationMatch'])
+            location = results['location']['locationMatch'].group("location")
             location = location.replace('-', '')
             location = location.replace('\s', '')
 
-            cursor_location = self.get_last_cursor_location(results) + start_position - 4
+            cursor_location = self.get_last_cursor_location(results, metadata) + start_position - 4
         except LocationException:
             self.metadata_collector.add_error_record('birthLocationNotFound', 2)
             location = ''

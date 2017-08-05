@@ -11,7 +11,7 @@ class NameExtractor(BaseExtractor):
     """
     extraction_key = 'name'
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         result = {
             KEYS["surname"]: '',
             KEYS['firstnames']: ''
@@ -28,7 +28,7 @@ class NameExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('genderNotFound', 8)
             result[KEYS['gender']] = ""
 
-        return self._add_to_extraction_results(result, extraction_results)
+        return self._add_to_extraction_results(result, extraction_results, extraction_metadata)
 
     def _split_names(self, name):
         name = re.sub(r"(?:<|>|&|')", r"", name)

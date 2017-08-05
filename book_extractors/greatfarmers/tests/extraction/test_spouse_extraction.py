@@ -10,32 +10,34 @@ class TestSpouseExtraction:
 
     def should_extract_spouse_details_correctly(self, spouse_extractor, th):
         spouse_text = "om vsta 1951 Testi Mies Testilä s 25. 9.—12, vmo Anna-Liisa o.s. Testilä s 19. 4. -21. Lapset: Lapsi Lapsekas -38, Lapsikas"
-        result = spouse_extractor.extract({'text': spouse_text}, {})['spouse']['results']
+        result, metadata = spouse_extractor.extract({'text': spouse_text}, {}, {})
+        spouse_details = result['spouse']
 
-        th.omit_property(result, 'kairaId')
+        th.omit_property(spouse_details, 'kairaId')
 
-        assert result == {
+        assert spouse_details == {
             'originalFamily': 'Testilä',
-            'spouseName': 'Anna-Liisa',
+            'firstNames': 'Anna-Liisa',
             'birthData': {
-                'results': {
-                    'birthDay': 19,
-                    'birthMonth': 4,
-                    'birthYear': 1921,
-                },
-                'metadata': {
-                    'cursorLocation': 16,
-                    'errors': {}
-                }
+                'birthDay': 19,
+                'birthMonth': 4,
+                'birthYear': 1921
+            }
+        }
 
+        assert metadata == {
+            'spouse': {
+                'cursorLocation': 83,
+                'errors': {}
             }
         }
 
     def should_return_none_if_spouse_not_available(self, spouse_extractor):
         spouse_text = "om. Testi Testisen perikunta. Viljelijä Mies Testinen. Tila sijaitsee Antooran kylässä. Kokonaispinta-ala on 80,67 ha."
-        result = spouse_extractor.extract({'text': spouse_text}, {})['spouse']['results']
+        result, metadata = spouse_extractor.extract({'text': spouse_text}, {}, {})
+        spouse_details = result['spouse']
 
-        assert result is None
+        assert spouse_details is None
 
 
 

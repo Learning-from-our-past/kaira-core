@@ -22,10 +22,10 @@ class HostessExtractor(BaseExtractor):
             configure_extractor(BirthdayExtractor)
         ])
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         results = self._find_hostess(entry['text'], start_position)
-        return self._add_to_extraction_results(results[0], extraction_results, results[1])
+        return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
 
     def _find_hostess(self, text, start_position):
         text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
@@ -49,9 +49,9 @@ class HostessExtractor(BaseExtractor):
             return None, 0
 
     def _find_hostess_birthday(self, text):
-        results = self._sub_extraction_pipeline.process({'text': text})
-        final_cursor_location = self.get_last_cursor_location(results)
-        return results['birthday']['results'], final_cursor_location
+        results, metadata = self._sub_extraction_pipeline.process({'text': text})
+        final_cursor_location = self.get_last_cursor_location(results, metadata)
+        return results['birthday'], final_cursor_location
 
     def _find_hostess_name(self, text):
         hostess_name_match = regexUtils.safe_search(self.HOSTESS_NAME_PATTERN, text, self.HOSTESS_OPTIONS)

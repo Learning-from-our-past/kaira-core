@@ -28,10 +28,10 @@ class SpouseExtractor(BaseExtractor):
 
         self.kaira_id_provider = KairaIdProvider()
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         results = self._find_spouse(entry['text'], start_position)
-        return self._add_to_extraction_results(results[0], extraction_results, cursor_location=results[1])
+        return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, cursor_location=results[1])
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
@@ -53,14 +53,14 @@ class SpouseExtractor(BaseExtractor):
             name = regexUtils.safe_search(self.NAMEPATTERN, text, self.OPTIONS)
             spouse_name = name.group("name").strip()
             spouse_name = re.sub(r"\so$","", spouse_name)
-            spouse_details = self._find_spouse_details(text[name.end() - 2:])
+            spouse_details, metadata = self._find_spouse_details(text[name.end() - 2:])
 
             # Map data to spouse object
             return {
                 KEYS["spouseBirthData"]: {
                     **spouse_details['birthday']
                 },
-                KEYS["origfamily"]: spouse_details[KEYS['origfamily']]['results'],
+                KEYS["origfamily"]: spouse_details[KEYS['origfamily']],
                 KEYS["spouseName"]: spouse_name,
                 KEYS["kairaId"]: self.kaira_id_provider.get_new_id('S')
             }

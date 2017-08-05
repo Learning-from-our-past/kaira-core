@@ -10,9 +10,9 @@ class PreviousMarriagesFlagExtractor(BaseExtractor):
         super(PreviousMarriagesFlagExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         many_marriages = self._check_many_marriages(entry['text'])
-        return self._add_to_extraction_results(many_marriages, extraction_results)
+        return self._add_to_extraction_results(many_marriages, extraction_results, extraction_metadata)
 
     def _check_many_marriages(self, text):
         marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, (re.UNICODE | re.IGNORECASE))

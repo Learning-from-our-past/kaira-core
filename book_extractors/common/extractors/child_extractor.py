@@ -17,11 +17,11 @@ class CommonChildExtractor(BaseExtractor):
         super(CommonChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self._kaira_id_provider = KairaIdProvider()
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
 
         children_results = self._find_children(entry['text'], start_position)
-        return self._add_to_extraction_results({KEYS["children"]: children_results[0]}, extraction_results, children_results[1])
+        return self._add_to_extraction_results(children_results[0], extraction_results, extraction_metadata, children_results[1])
 
     def _find_children(self, text, start_position):
         cursor_location = start_position

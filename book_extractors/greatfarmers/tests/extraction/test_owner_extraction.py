@@ -12,9 +12,10 @@ class TestOwnerExtraction:
 
     def should_extract_owner_correctly_from_short_entry(self, owner_extractor):
         owner_text = "om Uuno Säämäki. Tila sijaitsee Testilän kylässä. Kokonaispinta-ala on 186,17 ha."
-        result = owner_extractor.extract({'text': owner_text}, {})['ownerDetails']['results']
+        result, metadata = owner_extractor.extract({'text': owner_text}, {}, {})
+        data = result['ownerDetails']
 
-        assert result['firstNames'] == 'Uuno'
-        assert result['surname'] == 'Säämäki'
-        assert result['ownerFrom'] is None
-        assert result['gender'] == 'Male'
+        assert data['firstNames'] == 'Uuno'
+        assert data['surname'] == 'Säämäki'
+        assert data['ownerFrom'] is None
+        assert data['gender'] == 'Male'

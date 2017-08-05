@@ -1,11 +1,12 @@
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
-
+# FIXME: Rename this class to describe its purpose...
+# FIXME: Do not save the data as group.
 class ImageExtractor(BaseExtractor):
     extraction_key = 'personMetadata'
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         image_path = None
         page = None
         try:
@@ -22,4 +23,4 @@ class ImageExtractor(BaseExtractor):
             KEYS["imagepath"]: image_path,
             KEYS["approximatePage"]: page,
             KEYS["originalText"]: entry['text']
-        }, extraction_results)
+        }, extraction_results, extraction_metadata)

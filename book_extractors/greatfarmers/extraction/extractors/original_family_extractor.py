@@ -19,10 +19,10 @@ class OrigFamilyExtractor(BaseExtractor):
         self.FAMILY_PATTERN = r"(?:(?:o|0)\.?\s?s\.?,?\s)(?P<family>[a-zä-ö-]*)"
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         results = self._find_family(entry['text'], start_position)
-        return self._add_to_extraction_results(results[0], extraction_results, results[1])
+        return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
 
     def _find_family(self, text, start_position):
         cursor_location = start_position

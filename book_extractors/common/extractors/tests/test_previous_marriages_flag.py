@@ -13,15 +13,15 @@ class TestPreviousMarriagesFlag:
                          'synt. 23. 12. -06 Kurkijoella. Lapset: Lapsi -25, Lapsikaks -28. Molemmat ovat syntyneet '
                          'Kurkijoella ja ovat miehen ensimmäisestä avioliitosta.'}
         extraction_results = {}
-        results = extractor.extract(entry, extraction_results)
-        assert results['previousMarriagesFlag']['results'] is True
+        results, metadata = extractor.extract(entry, extraction_results, {})
+        assert results['previousMarriagesFlag'] is True
 
         entry = {'text': '0. s. Testaaja, ent. Testeri. synt 22. 2. 20 Viipurissa. Puol. Mies Miehekäs, maanviljelijä, '
                          'synt.1.    2. -16 Alavudella. Avioit. -47. Lapset: Tyttö 38 Viipuri. Tyttö -40'
                          ' Jyväskylä. Lapset rouvan aikaisemmasta avioliitosta. Asuinp Karjalassa: Viipuri.'}
         extraction_results = {}
-        results = extractor.extract(entry, extraction_results)
-        assert results['previousMarriagesFlag']['results'] is True
+        results, metadata = extractor.extract(entry, extraction_results, {})
+        assert results['previousMarriagesFlag'] is True
 
     def should_return_false_if_text_does_not_mention_previous_marriages(self, extractor):
         entry = {'text': 'työmies, synt. 19. 6. -01 Pyhäjärvellä. Puol. Vaimo o.s. Testaaja. rouva, synt. 21 4 -06 '
@@ -29,5 +29,5 @@ class TestPreviousMarriagesFlag:
                          'Syntyneet Pyhäjärvellä, Poika -41 Alavus. Asuinp, Karjalassa.'}
 
         extraction_results = {}
-        results = extractor.extract(entry, extraction_results)
-        assert results['previousMarriagesFlag']['results'] is False
+        results, metadata = extractor.extract(entry, extraction_results, {})
+        assert results['previousMarriagesFlag'] is False

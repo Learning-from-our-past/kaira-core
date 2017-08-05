@@ -66,20 +66,20 @@ class FinnishLocationsExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         location_listing_results = self._find_locations(entry['text'])
 
         return self._add_to_extraction_results({
             KEYS["otherlocations"]: location_listing_results[0]},
-            extraction_results, location_listing_results[1])
+            extraction_results, extraction_metadata, location_listing_results[1])
 
-    def _postprocess(self, entry, extraction_results):
-        places = extraction_results[self.extraction_key]['results'][KEYS["otherlocations"]]
+    def _postprocess(self, entry, extraction_results, extraction_metadata):
+        places = extraction_results[self.extraction_key][KEYS["otherlocations"]]
 
         for i in range(0, len(places)):
             places[i] = place_name_cleaner.try_to_normalize_place_name(places[i])
 
-        return extraction_results
+        return extraction_results, extraction_metadata
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
@@ -218,20 +218,20 @@ class KarelianLocationsExtractor(BaseExtractor):
         self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))"  # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         location_listing_results = self._find_locations(entry['text'])
 
         return self._add_to_extraction_results({
             KEYS["karelianlocations"]: location_listing_results[0],
-        }, extraction_results, location_listing_results[1])
+        }, extraction_results, extraction_metadata, location_listing_results[1])
 
-    def _postprocess(self, entry, extraction_results):
-        places = extraction_results[self.extraction_key]['results'][KEYS["karelianlocations"]]
+    def _postprocess(self, entry, extraction_results, extraction_metadata):
+        places = extraction_results[self.extraction_key][KEYS["karelianlocations"]]
 
         for i in range(0, len(places)):
             places[i] = place_name_cleaner.try_to_normalize_place_name(places[i])
 
-        return extraction_results
+        return extraction_results, extraction_metadata
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
@@ -368,16 +368,19 @@ class MigrationRouteExtractor(BaseExtractor):
             configure_extractor(FinnishLocationsExtractor),
         ])
 
-    def _extract(self, entry, extraction_results):
+    def _extract(self, entry, extraction_results, extraction_metadata):
         results = self._sub_extraction_pipeline.process(entry)
 
         return self._add_to_extraction_results({
-            KEYS["locations"]: results['karelianLocations']['results'][KEYS['karelianlocations']] + results['finnishLocations']['results'][KEYS['otherlocations']]
-        }, extraction_results, results['finnishLocations']['metadata']['cursorLocation'])
+            KEYS["locations"]: results[0]['karelianLocations'][KEYS['karelianlocations']] + results[0]['finnishLocations'][KEYS['otherlocations']]
+        },
+            extraction_results,
+            extraction_metadata,
+            cursor_location=results[1]['finnishLocations']['cursorLocation'])
 
-    def _postprocess(self, entry, extraction_results):
-        extraction_results['migrationHistory']['results'][KEYS["returnedkarelia"]] = check_if_person_returned_karelia_in_between_wars(extraction_results['migrationHistory']['results']['locations'], self.metadata_collector)
-        return extraction_results
+    def _postprocess(self, entry, extraction_results, extraction_metadata):
+        self._get_output_path(extraction_results)['migrationHistory'][KEYS["returnedkarelia"]] = check_if_person_returned_karelia_in_between_wars(self._get_output_path(extraction_results)['migrationHistory']['locations'], self.metadata_collector)
+        return extraction_results, extraction_metadata
 
 
 class LocationThresholdException(Exception):

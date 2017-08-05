@@ -53,10 +53,10 @@ class SpouseExtractor(BaseExtractor):
             KEYS["hasSpouse"]: False
         }
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         result = self._find_spouse(entry['text'], start_position)
-        return self._add_to_extraction_results(result[0], extraction_results, cursor_location=result[1])
+        return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, cursor_location=result[1])
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
@@ -81,12 +81,12 @@ class SpouseExtractor(BaseExtractor):
             spouse_name_match = regexUtils.safe_search(self.NAMEPATTERN, text, self.OPTIONS)
             spouse_name = spouse_name_match.group("name").strip()
             spouse_name = re.sub(r"\so$", "", spouse_name)
-            spouse_details = self._find_spouse_details(text[spouse_name_match.end() - 2:])
+            spouse_details, metadata = self._find_spouse_details(text[spouse_name_match.end() - 2:])
 
             # Map data to spouse object
             return {
-                KEYS["spouseBirthData"]: {
-                    **spouse_details['birthday'],
+                KEYS['birthData']: {
+                    **spouse_details[KEYS['birthData']],
                     KEYS['birthLocation']: spouse_details['birthLocation']
                 },
                 KEYS['spouseDeathYear']: spouse_details['death'],

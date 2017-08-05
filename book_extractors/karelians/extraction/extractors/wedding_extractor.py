@@ -17,12 +17,12 @@ class WeddingExtractor(BaseExtractor):
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
         results = self._find_date(prepared_text, start_position)
-        return self._add_to_extraction_results(results[0], extraction_results, results[1])
+        return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
         t = textUtils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
