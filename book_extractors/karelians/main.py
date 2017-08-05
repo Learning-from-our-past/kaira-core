@@ -29,18 +29,18 @@ class KarelianBooksExtractor:
 
     def _define_extraction_pipeline(self):
         pipeline_components = [
-            configure_extractor(NameExtractor),
+            configure_extractor(NameExtractor, path='primaryPerson'),
             configure_extractor(ImageExtractor),
-            configure_extractor(OrigFamilyExtractor),
-            configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
-            configure_extractor(BirthdayExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
-            configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
-            configure_extractor(PreviousMarriagesFlagExtractor),
-            configure_extractor(MigrationRouteExtractor),
-            configure_extractor(OmakotitaloExtractor),
+            configure_extractor(OrigFamilyExtractor, path='primaryPerson'),
+            configure_extractor(ProfessionExtractor, path='primaryPerson', depends_on_match_position_of_extractor=OrigFamilyExtractor),
+            configure_extractor(BirthdayExtractor, path='primaryPerson', depends_on_match_position_of_extractor=OrigFamilyExtractor),
+            configure_extractor(BirthdayLocationExtractor, path='primaryPerson', depends_on_match_position_of_extractor=BirthdayExtractor),
+            configure_extractor(PreviousMarriagesFlagExtractor, path='primaryPerson'),
+            configure_extractor(MigrationRouteExtractor, path='primaryPerson'),
+            configure_extractor(OmakotitaloExtractor, path='primaryPerson'),
             configure_extractor(SpouseExtractor),
             configure_extractor(ChildExtractor),
-            configure_extractor(KairaIdExtractor)
+            configure_extractor(KairaIdExtractor, path='primaryPerson')
         ]
 
         return ExtractionPipeline(pipeline_components)

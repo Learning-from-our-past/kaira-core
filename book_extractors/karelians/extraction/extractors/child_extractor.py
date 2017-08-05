@@ -41,7 +41,7 @@ class ChildExtractor(BaseExtractor):
         :param extraction_results: 
         :return extraction_results: 
         """
-        extraction_results[self.extraction_key] = self._augment_location_data_of_children(extraction_results[self.extraction_key])
+        self._get_output_path(extraction_results)[self.extraction_key] = self._augment_location_data_of_children(self._get_output_path(extraction_results)[self.extraction_key])
         return extraction_results, extraction_metadata
 
     def _augment_location_data_of_children(self, children):

@@ -379,7 +379,7 @@ class MigrationRouteExtractor(BaseExtractor):
             cursor_location=results[1]['finnishLocations']['cursorLocation'])
 
     def _postprocess(self, entry, extraction_results, extraction_metadata):
-        extraction_results['migrationHistory'][KEYS["returnedkarelia"]] = check_if_person_returned_karelia_in_between_wars(extraction_results['migrationHistory']['locations'], self.metadata_collector)
+        self._get_output_path(extraction_results)['migrationHistory'][KEYS["returnedkarelia"]] = check_if_person_returned_karelia_in_between_wars(self._get_output_path(extraction_results)['migrationHistory']['locations'], self.metadata_collector)
         return extraction_results, extraction_metadata
 
 
