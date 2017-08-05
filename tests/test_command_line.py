@@ -61,9 +61,9 @@ class TestCommandLineSmoke:
             assert len(result_data) == 3
 
             # Check that each entry has unique id
-            assert result_data[0]['kairaId']['results'] == 'pienviljelijat_1_2P'
-            assert result_data[1]['kairaId']['results'] == 'pienviljelijat_1_3P'
-            assert result_data[2]['kairaId']['results'] == 'pienviljelijat_1_9P'
+            assert result_data[0]['kairaId'] == 'pienviljelijat_1_2P'
+            assert result_data[1]['kairaId'] == 'pienviljelijat_1_3P'
+            assert result_data[2]['kairaId'] == 'pienviljelijat_1_9P'
 
         def should_process_great_farmers_xml_and_save_to_json(self):
             file_path = 'temp/json_export_tests/results.json'

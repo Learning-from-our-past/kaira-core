@@ -22,7 +22,8 @@ class TestChildrenExtraction:
         pass
 
     def should_extract_children_correctly(self, child_extractor):
-        children = child_extractor.extract({'text': CHILDREN_TEXTS[0]}, {})['children']['results']['children']
+        results, metadata = child_extractor.extract({'text': CHILDREN_TEXTS[0]}, {}, {})
+        children = results['children']
 
         assert len(children) == 3
         assert children[0] == EXPECTED_CHILDREN[0]

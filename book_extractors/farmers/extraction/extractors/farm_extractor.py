@@ -18,10 +18,10 @@ class FarmExtractor(BaseExtractor):
         self.MEADOW_AREA_PATTERN = r"(?:niittyä{s<=1}\s?(?P<area1>\d\d?\d?,?\d\d))|(?:(?P<area1>\d\d?\d?,\d\d)\s?ha\s?niittyä{s<=1})"
         self.AREA_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         result = self._find_areas(entry['text'])
-        return self._add_to_extraction_results(result, extraction_results, start_position)
+        return self._add_to_extraction_results(result, extraction_results, extraction_metadata, start_position)
 
     def _find_areas(self, text):
         whole_area = self._get_area(text, self.ALL_AREA_PATTERN)

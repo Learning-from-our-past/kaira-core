@@ -23,24 +23,24 @@ class CommonOwnerExtractor(BaseExtractor):
             configure_extractor(options['BIRTHDAY_EXTRACTOR'])
         ])
 
-    def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        start_position = self.get_starting_position(extraction_results, extraction_metadata)
         result = self._find_owner(entry['text'], start_position)
-        return self._add_to_extraction_results(result[0], extraction_results, result[1])
+        return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
 
     def _find_owner(self, text, start_position):
         text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
         owner_year_result = self._find_owner_year(text, start_position)
         owner_name_details_result = self._find_owner_name_details(text, start_position)
-        owner_birthday_result = self._find_owner_birthday(text)
+        owner_birthday_result, metadata = self._find_owner_birthday(text)
 
-        cursor_location = max(owner_year_result[1], owner_name_details_result[1], self.get_last_cursor_location(owner_birthday_result))
+        cursor_location = max(owner_year_result[1], owner_name_details_result[1], self.get_last_cursor_location(owner_birthday_result, metadata))
         result = {
             KEYS["ownerFrom"]: owner_year_result[0],
             KEYS["firstnames"]: owner_name_details_result[0][0],
             KEYS["surname"]: owner_name_details_result[0][1],
             KEYS["gender"]: owner_name_details_result[0][2],
-            KEYS["ownerBirthData"]: owner_birthday_result['birthday']['results']
+            KEYS["ownerBirthData"]: owner_birthday_result['birthday']
         }
 
         return result, cursor_location
@@ -70,8 +70,7 @@ class CommonOwnerExtractor(BaseExtractor):
         return owner_name_data, cursor_location
 
     def _find_owner_birthday(self, text):
-        results = self._sub_extraction_pipeline.process({'text': text})
-        return results
+        return self._sub_extraction_pipeline.process({'text': text})
 
     @staticmethod
     def _find_owner_gender(names):
