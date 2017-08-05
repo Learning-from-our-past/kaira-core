@@ -7,3 +7,5 @@ extract-all:
 test-set:
 	python main.py -i material/testset_I.xml -o material/testset_I.json
 
+test:
+	python -m pytest
