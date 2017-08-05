@@ -30,7 +30,8 @@ KEYS = {
     "movedIn": "movedIn",
     "locations": "locations",
     "village": "village",
-    "originalText": "originalText",
+    "originalText": "sourceText",
+    "birthData": "birthData",
     "birthDay":  "birthDay",
     "birthMonth": "birthMonth",
     "birthYear": "birthYear",
@@ -61,7 +62,7 @@ KEYS = {
     "weddingYear": "weddingYear",
 
     "spouse": "spouse",
-    "spouseName": "spouseName",
+    "spouseName": "firstNames",
     "spouseProfession": "profession",
     "spouseBirthData": "birthData",
     "spouseDeathData": "deathData",

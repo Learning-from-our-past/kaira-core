@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.birthday_extractor import CommonBirthdayExtractor
 
 
 class BirthdayExtractor(CommonBirthdayExtractor):
-    extraction_key = 'birthday'
+    extraction_key = KEYS['birthData']
 
     def __init__(self, key_of_cursor_location_dependent, options):
         if options is None:

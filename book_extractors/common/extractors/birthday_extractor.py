@@ -12,7 +12,7 @@ from shared import textUtils
 
 
 class CommonBirthdayExtractor(BaseExtractor):
-    extraction_key = 'birthday'
+    extraction_key = KEYS['birthData']
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(CommonBirthdayExtractor, self).__init__(key_of_cursor_location_dependent, options)

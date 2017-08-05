@@ -17,7 +17,7 @@ class TestSpouseExtraction:
 
         assert spouse_details == {
             'originalFamily': 'Testilä',
-            'spouseName': 'Anna-Liisa',
+            'firstNames': 'Anna-Liisa',
             'birthData': {
                 'birthDay': 19,
                 'birthMonth': 4,
