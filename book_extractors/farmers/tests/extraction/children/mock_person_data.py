@@ -14,18 +14,18 @@ EXPECTED_CHILDREN = [
         "birthYear": 1937,
         "gender": "Female",
         "name": "Maija Sanelma",
-        "kairaId": 'testbook_1_1C'
+        "kairaId": 'testbook_1_1C_1'
     },
     {
         "birthYear": 1939,
         "gender": "Male",
         "name": "Raimo Juhani",
-        "kairaId": 'testbook_1_2C'
+        "kairaId": 'testbook_1_1C_2'
     },
     {
         "birthYear": 1942,
         "gender": "Male",
         "name": "Pentti Kaarlo Kalevi",
-        "kairaId": 'testbook_1_3C'
+        "kairaId": 'testbook_1_1C_3'
     }
 ]
