@@ -3,7 +3,9 @@ import book_extractors.extraction_constants as extraction_constants
 
 
 class KairaIdProvider:
-    _id_num = 1
+    _main_id_num = 1
+    _children_id_num = 1
+    _spouse_id_num = 1
 
     _allowed_person_types = {
         'P': 'primary',
@@ -12,14 +14,31 @@ class KairaIdProvider:
     }
 
     def reset(self):
-        KairaIdProvider._id_num = 1
+        KairaIdProvider._main_id_num = 1
+        KairaIdProvider._children_id_num = 1
+        KairaIdProvider._spouse_id_num = 1
 
     def get_new_id(self, person_type='P'):
         if person_type not in KairaIdProvider._allowed_person_types:
             raise Exception('Not a proper person type for kairaId assigned.')
 
-        full_id = '{}_{}_{}{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER, KairaIdProvider._id_num, person_type)
-        KairaIdProvider._id_num += 1
+        if person_type == 'P':
+            KairaIdProvider._children_id_num = 1
+            KairaIdProvider._spouse_id_num = 1
+
+            full_id = '{}_{}_{}{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER,
+                                          KairaIdProvider._main_id_num, person_type)
+            KairaIdProvider._main_id_num += 1
+
+        if person_type == 'S':
+            full_id = '{}_{}_{}{}_{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER,
+                                          KairaIdProvider._main_id_num, person_type, KairaIdProvider._spouse_id_num)
+            KairaIdProvider._spouse_id_num += 1
+
+        if person_type == 'C':
+            full_id = '{}_{}_{}{}_{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER,
+                                          KairaIdProvider._main_id_num, person_type, KairaIdProvider._children_id_num)
+            KairaIdProvider._children_id_num += 1
 
         return full_id
 

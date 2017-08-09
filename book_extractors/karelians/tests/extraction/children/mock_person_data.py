@@ -13,7 +13,7 @@ EXPECTED = [
             'region': 'other'
         },
         'name': 'Irja Hellevi',
-        'kairaId': 'testbook_1_1C'
+        'kairaId': 'testbook_1_1C_1'
     },
     {
         'birthYear': 1947,
@@ -23,7 +23,7 @@ EXPECTED = [
             'region': 'other'
         },
         'name': 'Kirsti Anna-Liisa',
-        'kairaId': 'testbook_1_2C'
+        'kairaId': 'testbook_1_1C_2'
     },
     {
         'birthYear': 1953,
@@ -33,6 +33,6 @@ EXPECTED = [
             'region': 'other'
         },
         'name': 'Kalervo Viljam',
-        'kairaId': 'testbook_1_3C'
+        'kairaId': 'testbook_1_1C_3'
     }
 ]
