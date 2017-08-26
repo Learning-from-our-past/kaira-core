@@ -1,0 +1,15 @@
+dist: trusty
+language: python
+python: "3.5.1"
+services:
+  - mongodb
+install:
+- pip install -r requirements.txt
+before_script:
+# Download and set up location database
+- wget https://github.com/Learning-from-our-past/Kaira/releases/download/v1.0/mongodump.zip
+- unzip mongodump.zip
+- mongorestore dump
+script: python -m pytest
+notifications:
+  email: false
