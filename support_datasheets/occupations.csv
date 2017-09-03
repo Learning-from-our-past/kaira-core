@@ -1,0 +1,1669 @@
+professionName,professionEnglishName,agricultureOrForestryRelated,manualLabor,education,SESgroup1989,occupationCategory,socialClassRank
+maanviljelijä,farmer (owns farm),1,1,0,1,3,5
+rouva,housewife (upper class???),0,0,0,8,,
+emäntä,Farm housewife,1,1,0,1,3,5
+eläkeläinen,pensioner,,0,,7,,
+kirvesmies,carpenter (on a construction site),0,1,0,4,6,4
+työmies,workman,0,1,0,5,6,6
+ompelija,dressmaker,0,1,0,5,6,4
+työnjohtaja,foreman,0,0,0,4,0,2
+liikkeenharjoittaja,Businessman,0,0,1,2,2,2
+autonkuljettaja,chauffeur,0,0,0,5,5,6
+autoilija,motorist,0,0,0,5,5,5
+siivooja,cleaner,0,1,0,5,8,6
+kauppias,merchant shop owner,0,0,1,2,2,2
+kansakoulunopettaja,elementary school teacher,0,0,1,3,0,2
+liikeapulainen,buisness assistant,0,0,0,4,2,4
+tehdastyöläinen,factory worker,0,1,0,5,6,5
+maalari,painter,0,1,0,5,6,6
+leskirouva,widow (female),,,,,,
+apulainen,helper,0,1,0,5,8,7
+rakennusmestari,builder,0,0,1,4,0,2
+varastonhoitaja,stock keeper,0,0,0,4,5,3
+varastomies,warehouse worker,0,1,0,5,7,5
+keittäjä,cook,0,1,0,5,8,5
+puuseppä,carpenter (furniture or small crafts),0,1,0,5,6,3
+talonmies,caretaker,0,0,0,5,8,5
+konttoristi,clerk,0,0,0,4,1,3
+sähköasentaja,electrician,0,1,0,5,6,3
+muurari,bricklayer,0,1,0,5,6,4
+myymälänhoitaja,store manager,0,0,,3,2,3
+pienviljelijä,small farm holder,1,1,0,1,3,5
+opettaja,teacher,0,0,1,3,0,2
+rautatieläinen,railwayman,0,,0,4,5,5
+veturinkuljettaja,engine driver,0,,0,5,5,5
+sekatyömies,odd-job man,0,1,0,5,6,7
+vahtimestari,caretaker,0,0,0,5,8,5
+neiti,miss,,,,,,
+koneenhoitaja,engineer,0,0,1,2,6,2
+putkiasentaja,pipe fitter,0,1,0,5,6,4
+teknikko,technician,0,0,1,4,6,2
+hitsaaja,welder,0,1,0,5,6,3
+pakkaaja,packer,0,1,,5,6,7
+asentaja,mechanic,0,1,0,5,6,4
+toimistoapulainen,office boy,0,0,0,4,1,6
+rakennustyömies,construction worker,0,1,0,5,6,4
+rakennustyöläinen,construction worker,0,1,0,5,6,4
+sairaanhoitaja,nurse,0,0,1,4,0,3
+työläinen,worker,,1,0,5,6,6
+autonasentaja,car mechanic,0,1,0,5,6,5
+toimitusjohtaja,managing director,0,0,1,3,1,2
+maanvilj,farmer,1,1,0,1,3,6
+lämmittäjä,steam furnace worker,0,1,0,5,6,4
+kutoja,weaver,0,1,0,5,6,3
+levyseppä,metalsmith,0,1,0,5,6,3
+tarjoilija,Waiter,0,0,0,5,8,4
+kirjanpitäjä,accountant,0,0,,2,1,2
+kassanhoitaja,cashier,0,0,0,4,2,5
+viilaaja,filer,0,0,0,4,6,3
+ahtaaja,stevedore,0,1,0,5,1,4
+laitosmies,factory worker machinist,0,1,0,5,6,4
+seppä,blacksmith,0,1,0,5,6,5
+asemamies,"railroad station worker (Appears to have done many different tasks at railway station. At larger stations, there were many of them, and their boss was the 'head of the station')",0,1,0,4,5,6
+keittiöapulainen,Kitchen helper,0,1,0,5,8,7
+metsätyömies,woodcutter,0,1,0,5,3,6
+talonomistaja,householder,0,,0,,,7
+taloudenhoitaja,housekeeper,0,1,0,5,8,7
+insinööri,engineer,0,0,1,3,0,1
+puutarhuri,gardener,0,1,0,5,3,7
+tehtaantyöläinen,factory worker,0,1,0,5,6,5
+kalastaja,fisherman,0,1,,5,3,6
+mielisairaanhoitaja,mental nurse,0,0,1,4,0,3
+johtaja,manager,0,0,1,3,1,3
+apuhoitaja,caregiver,0,0,0,5,0,5
+kotiapulainen,domestic help,0,0,0,5,8,7
+pankkivirkailija,bank clerk,0,0,0,4,1,3
+vaatturi,tailor,0,0,0,5,6,4
+sorvaaja,metal lathe worker,0,1,0,5,6,4
+sotilasmestari evp,sergeant major retired,0,0,,,8,3
+myyjätär,saleswoman,0,0,0,4,2,4
+junamies,train man,0,0,0,5,5,4
+liikemies,businessman,0,0,1,2,2,1
+myyjä,salesperson,0,0,0,4,2,4
+edustaja,representative,0,0,,,2,4
+kampaaja,hairdresser,0,0,0,5,8,5
+toimistovirkailija,clerk,0,0,0,4,1,5
+osastonhoitaja,Head nurse,0,0,1,3,0,2
+puhelinvälittäjä,telephone broker,0,0,0,4,1,3
+koneasentaja,machine fitter,0,1,0,5,6,5
+konemestari,engineer,0,0,1,3,0,2
+lehtori,lecturer,0,0,1,3,0,1
+metsätyönjohtaja,forestry foreman,1,1,,5,3,4
+leipuri,baker,0,0,0,5,6,6
+karjakko,milkmaid,0,,0,5,3,7
+ratatyömies,railway worker,0,0,0,4,6,6
+lastenhoitaja,nanny,0,0,0,5,0,6
+postivirkailija,post office clerk,0,0,0,4,1,5
+ylikonstaapeli,sergeant,0,0,0,,8,3
+poliisikonstaapeli,police officer,0,0,0,4,8,4
+konduktööri,conductor,0,0,0,4,5,3
+merkonomi,sales and administration worker,0,0,1,4,1,2
+metsäteknikko,forestry technician,1,1,1,5,3,3
+korjausmies,repair man,0,0,0,5,6,5
+vartija,guard,0,0,0,4,8,6
+vääpeli evp,Warrant Officer retired,0,0,1,3,8,3
+farmaseutti,pharmacist,0,0,1,2,0,2
+urakoitsija,contractor,0,0,,2,6,2
+vaihdemies,switchman (rails),0,0,0,5,5,5
+konepuuseppä,joiner machine,0,1,0,5,6,4
+kirjaltaja,print shop book binding,0,0,,4,6,3
+terveyssisar,district nurse,0,0,1,4,0,3
+tilallinen,farm owner,1,1,0,1,3,4
+puhelinasentaja,telephone installer,0,0,0,5,6,5
+ylivääpeli evp,master sergeant retired,0,0,,,8,4
+nosturinkuljettaja,crane operator,0,1,0,5,5,4
+kanslisti,clerk,0,0,0,4,1,5
+peltiseppä,tinsmith,0,1,0,5,6,4
+kätilö,midwife,0,0,0,5,0,6
+huoltomies,serviceman,0,0,0,5,8,
+sementtimies,cement man,0,1,0,5,6,6
+tarkastaja,inspector,0,0,,4,6,4
+hioja,The grinder,0,1,0,5,6,5
+lajittelija,sorter,0,1,0,5,6,7
+karjanhoitaja,cowboy (takes care of cows on farms),1,1,0,5,3,5
+sähköteknikko,electrician,0,1,0,5,6,4
+ylikonduktööri,Senior conductor,0,0,,3,5,3
+panostaja,bettor (certified in explosives),0,0,,5,6,4
+esimies,director,0,0,1,3,1,2
+ylivääpeli,master sergeant,0,0,,,8,3
+vanhempi konstaapeli,senior Constable,0,0,1,3,8,2
+sotilasmestari,sergeant major,0,0,,,8,3
+varastoapulainen,warehouse assistant,0,1,0,5,6,7
+trukinkuljettaja,the truck driver,0,0,0,5,5,5
+ekonomi,bachelors degree economist,0,0,1,6,2,2
+ratavartija,guard rail,0,0,0,4,5,6
+kapteeni evp,captain ret,0,0,1,3,8,2
+agrologi,Agronomist,1,0,1,2,3,2
+verhoilija,upholsterer,0,0,0,5,6,5
+leikkaaja,editor,0,0,1,3,6,2
+postinkantaja,postman,0,0,,4,8,5
+myyntimies,salesman,0,0,,4,2,4
+hieroja,massager,0,0,0,5,8,4
+jalkinetyöntekijä,footwear employee,0,0,0,5,6,5
+rakennusmies,construction worker,0,1,0,5,6,5
+parturi,barber,0,0,0,5,8,5
+kirjuri,bookeeper,0,0,,5,1,4
+emännöitsijä,housekeeper,0,0,0,5,8,7
+osastopäällikkö,Head of department,0,0,1,3,1,3
+kivityömies,stone workman,0,1,0,5,6,4
+käsityönopettaja,crafts teacher,0,0,1,3,0,3
+käsityöläinen,craftsman,0,0,0,5,6,3
+merimies,sailor,0,0,0,5,5,4
+metallityömies,metal worker,0,1,0,5,6,4
+myyntipäällikkö,Sales Manager,0,0,,3,2,3
+konttoripäällikkö,secretary,0,0,0,4,1,5
+koneteknikko,machine technician,0,0,0,5,6,4
+konstaapeli,officer,0,0,,3,8,3
+vakuutustarkastaja,insurance inspector,0,0,,4,0,3
+kodinhoitaja,homemaker,0,0,0,,8,
+talousapulainen,houseworker,0,0,0,,8,6
+yövartija,night watchman,0,0,0,4,8,7
+vanhaemäntä,Grandmother on a farm,1,1,0,1,3,4
+veturinlämmittäjä,fireman,0,0,0,5,5,5
+betoniraudoittaja,concrete reenforcement worker,0,1,0,5,6,6
+talollinen,landowner (farmer),1,1,0,1,3,4
+kelloseppä,watchmaker,0,0,0,5,6,3
+mylläri,miller (grind grain into flour),1,1,0,5,6,4
+konekirjoittaja,typist,0,0,0,5,1,5
+ylipostimies,postman,0,0,0,4,8,6
+rautatievirkailija,railway clerk,0,0,0,4,5,5
+suutari,cobbler,0,0,0,5,6,4
+silittäjä,irons textiles,0,0,0,5,6,6
+vääpeli,sergeant major,0,0,,,8,4
+ylikonemestari,chief engineer,0,0,1,3,0,3
+paperityöläinen,paper worker,0,0,0,5,6,4
+sahatyömies,sawmill laborer,0,1,0,5,6,6
+asemapäällikkö,stationmaster,0,0,,3,1,3
+elintarviketyöläinen,food worker,0,0,0,5,6,6
+valaja,founder,0,1,0,5,6,4
+eristäjä,isolator,0,,0,,6,
+etumies,foreman,0,0,0,4,,3
+raudoittaja,steel bender,0,1,0,5,6,4
+kansalaiskoulunopettaja,Civil school teacher,0,0,1,3,0,2
+lastaaja,loader,0,1,0,5,6,6
+modisti,milliner (makes female hats and other accesories),0,0,0,5,6,5
+maalarimestari,master painter,0,0,1,5,6,4
+päiväapulainen,day helper,0,0,0,5,8,6
+agronomi,agronomist,1,0,1,3,3,2
+metsänhoitaja,forester,1,0,0,5,3,3
+apulaiskanslisti,office assistant,0,0,0,4,1,7
+varatuomari,vice judge,0,0,1,3,0,1
+ravintolatyöntekijä,restaurant worker,0,0,0,5,8,6
+kotitalousteknikko,household technician,0,0,0,5,6,4
+puhelinmestari,telephone repairmen,0,0,0,5,8,4
+rehtori,principal,0,0,1,3,0,1
+leipoja,baker,0,0,0,5,6,4
+merikapteeni,sea ​​captain,0,0,,3,5,1
+kotiavustaja,home assistant,0,0,,5,8,6
+kotirouva,housewife,0,0,0,,,
+leipomotyöntekijä,bakery employee,0,0,0,5,6,6
+vaununtarkastaja,wagon inspector,0,0,1,4,5,4
+yliluutnantti evp,Lieutenant,0,0,1,,8,3
+kaivosmies,miner,0,1,0,5,4,6
+laitosapulainen,Department assistant,0,0,0,4,6,4
+meijeriapulainen,dairy helper,1,1,0,5,6,4
+muusikko,musician,0,0,,,0,2
+toimistonhoitaja,Office manager,0,0,1,3,1,2
+kylmäkkö,Pastry chef,0,0,0,5,8,4
+tehtaantyöntekijä,factory worker,0,1,0,5,6,6
+traktorinkuljettaja,tractor driver,0,0,0,5,5,6
+kirjansitoja,bookbinder,0,0,0,5,6,4
+kultaseppä,goldsmith,0,1,0,5,6,4
+paperityöntekijä,paper worker,0,0,0,5,6,5
+betonityömies,concrete laborer,0,1,0,5,6,6
+poraaja,driller,0,1,0,5,6,5
+prässääjä,metal worker,0,1,0,5,6,6
+ylikersantti evp,Staff Sergeant retired,0,0,,,8,3
+pankinjohtaja,bank manager,0,0,1,3,1,2
+majuri evp,Major ret,0,0,1,,8,3
+laivuri,shipmaster,0,0,,,5,2
+kuormausmestari,loader of railawy cars,0,1,0,5,5,7
+laborantti,Laboratory,0,0,,3,0,2
+valokuvaaja,photographer,0,0,,4,0,3
+maatyömies,odd jobs in the countryside,,0,0,5,3,7
+nuohooja,chimney sweep,0,1,0,5,8,7
+puutarhatyöntekijä,garden worker,0,1,0,5,3,7
+koneompelija,machine seamstress,0,0,0,5,6,6
+puhelinvirkailija,telephone clerk,0,0,0,4,1,6
+dipl.ins,Engineer with MSc,0,0,1,3,0,2
+liikennöitsijä,operator,0,0,0,5,5,6
+talousopettaja,economic teacher,0,0,1,3,0,2
+toimittaja,supplier,0,0,0,4,0,4
+vanginvartija,jailer,0,0,0,4,8,5
+betonimies,Concrete layer,0,1,0,5,4,6
+mittamies,measurer,0,0,0,5,6,6
+postimies,the postman,0,0,0,4,8,4
+leipomotyöläinen,bakery worker,0,0,0,5,6,4
+torikauppias,market vendor,0,0,0,4,2,4
+osastoapulainen,assistant in hospital,0,0,0,4,1,5
+konemies,machinist,0,1,0,5,6,5
+metallimies,metal worker,0,1,0,5,6,5
+piirtäjä,draftsman,0,0,,5,0,4
+kehrääjä,spinner,0,0,0,5,6,5
+lähettäjä,dispatcher,0,0,,4,6,5
+lehdenjakaja,paperboy,0,0,0,4,8,5
+luutnantti evp,Lieutenant ret,0,0,1,,8,4
+asettaja,installer,0,0,0,5,6,5
+hammaslääkäri,dentist,0,0,1,3,0,1
+mekaanikko,mechanic,0,0,0,5,6,5
+aputyömies,installs something,0,0,0,5,6,6
+hevosmies,Trains racehorses,1,0,,8,8,3
+portinvartija,gatekeeper,0,0,0,4,8,6
+piiritarkastaja,district auditor,0,0,1,3,1,2
+isännöitsijä,building superintendent,0,0,0,4,2,4
+putkimies,plumber,0,1,0,5,6,4
+diakonissa,deaconess,0,0,,3,0,3
+konttoriapulainen,office assistant,0,0,0,4,1,5
+sahuri,Cuts wood at sawmill,0,1,0,5,6,6
+tehdastyöntekijä,factory worker,0,1,0,5,6,6
+vakuutusvirkailija,insurance clerk,0,0,,4,1,4
+postimiesten esimies,mail men supervisor,0,0,,3,1,3
+rahastaja,conductor,0,0,,4,5,3
+sahatyöläinen,sawmill worker,0,1,0,5,6,5
+sekatyöläinen,Joint worker,0,1,0,5,6,5
+sementtityömies,cement laborer,0,1,0,5,6,6
+postinhoitaja,postmaster,0,0,,3,1,2
+kirjaaja,registrar (handles records),0,0,,4,1,3
+postittaja,mailer,0,0,,4,6,4
+puutarhatyöläinen,garden worker,0,1,0,5,3,7
+faktori,press house worker,0,0,0,5,6,4
+rakennusurakoitsija,builder and contractor,0,0,1,3,6,2
+jyrsijä,lathe operator,0,1,0,5,6,5
+varastopäällikkö,warehouse Manager,0,0,0,4,5,3
+kartoittaja,surveyer (map maker),0,0,1,4,0,2
+baariapulainen,barman,0,0,0,5,8,5
+kaivinkoneenkuljettaja,excavator driver,0,0,0,5,5,5
+metallisorvaaja,Metal worker,0,1,0,5,6,6
+työnvalvoja,supervisor,0,0,1,4,1,2
+dipl.insinööri,supervisor,0,0,1,3,1,2
+rovasti,dean (vicar who has served for a long time and is highly respected by peers),0,0,1,3,1,1
+pursimies,boatswain,0,0,0,5,5,3
+sihteeri,secretary,0,0,0,4,1,5
+kirkkoherra,vicar,0,0,1,3,0,2
+liikkeenhoitaja,manager,0,0,,3,2,2
+konttorinhoitaja,postmaster,0,0,0,3,1,4
+fil.maisteri,MSc in non technical field,0,0,1,3,0,3
+paperityömies,paper workman,0,0,0,5,6,6
+sahaaja,Saws in sawmill,0,1,0,5,5,6
+satamatyömies,port laborer,0,1,0,5,5,6
+tehtaan työntekijä,factory worker,0,1,0,5,6,6
+apulaisjohtaja,deputy Director,0,0,1,3,1,1
+majuri,major,0,0,1,3,8,2
+luotsi,maritime pilot,0,0,1,3,5,2
+rautatiekirjuri,rail clerk,0,0,0,4,0,4
+tukkumyyjä,distributor,0,0,0,4,2,4
+autonapumies,car helper,0,0,0,5,5,6
+leipomoapulainen,bakery assistant,0,0,0,5,6,7
+rullaaja,rullaaja ??,,,,,6,
+muovipuristaja,molds plastic by punch method,0,1,0,5,6,
+myymäläapulainen,shop assistant,0,0,0,4,2,6
+viestittäjä,communicator,0,0,,4,0,4
+kanttori,church musician,0,0,0,,0,3
+keskuksenhoitaja,switchboard operator,0,0,0,4,1,5
+viilari,filer,0,0,0,4,6,6
+järjestelymestari,train traffic organizer,0,0,0,,,3
+varastomestari,Military supplier,0,0,0,3,5,3
+kotitalousneuvoja,household advice,0,0,0,,0,3
+sulattaja,melter,0,1,0,5,6,6
+toiminnanjohtaja,Executive Director,0,0,1,3,1,1
+verovalmistelija,tax assessment clerk,0,0,,,1,2
+filosofian maisteri,Master of Arts,0,0,1,,0,2
+ravintolan emäntä,Head of a kitchen in a restaurant,0,0,0,5,8,4
+ruokalan emäntä,Head of kitchen in cafeteria,0,0,0,5,8,4
+sairaala apulainen,hospital assistant,0,0,0,4,0,6
+toimistopäällikkö,office manager,0,0,,3,1,3
+ylityönjohtaja,higher tier foreman/personal manager,0,0,0,,1,2
+piiriesimies,Regional manager,0,0,0,3,1,2
+taidemaalari,painter,0,0,0,,0,4
+leski,widow,0,0,,,,
+tarkastuskarjakko,"Educated to keep track of diet, condition, milk production etc. in animal husbandry",1,0,1,3,3,3
+ratatyöntekijä,Railway worker (track laying and repairs),0,0,0,5,5,6
+rautatievirkamies,railway official,0,0,0,,5,3
+kotitalousopettaja,Home Economics teacher,0,0,1,3,0,2
+prokuristi,signing clerk,0,0,0,,2,4
+kapteeni,captain,0,0,1,,5,2
+kartanpiirtäjä,cartographer,0,0,1,,0,1
+tilanhoitaja,steward,0,0,0,4,3,2
+tullivartija,guard duty,0,0,0,4,8,5
+konekutoja,Textile industry factory worker,0,1,0,5,6,6
+palomies,fireman,0,0,0,4,8,4
+taiteilija,artist,0,0,,,0,3
+kylvettäjä,bather,0,0,0,5,8,5
+laboratorioapulainen,laboratory assistant,0,0,,4,0,4
+parsija,darner,0,0,0,5,6,5
+pesijä,cleaner,0,0,0,5,6,7
+sukeltaja,diver,0,0,0,,,4
+alikonemestari,machine operator but entry level,0,1,0,5,6,7
+automyyjä,car dealer,0,0,0,4,2,4
+hovimestari,butler,0,0,0,5,8,6
+kirjakauppias,bookseller,0,0,,4,2,3
+konsulentti,consultant,0,0,1,3,0,3
+libristi,bookstore assistant,0,0,0,4,2,4
+vartiomies,sentry,0,0,0,4,8,4
+autopeltiseppä,Auto tinsmith,0,1,0,5,6,5
+kivenhakkaaja,stonemason,0,1,0,5,6,4
+pesulatyöntekijä,laundry worker,0,0,0,5,8,7
+saumaaja,sealer,0,1,,5,6,6
+asemamestari,station master,0,0,,,5,4
+baarinhoitaja,bar attendant,0,0,0,,8,6
+sotilasteknikko,military engineer,0,0,1,3,8,2
+everstiluutnantti,lieutenant colonel,0,0,1,,8,2
+kamreeri,treasurer,0,0,1,3,1,2
+moottoriasentaja,engine fitter,0,1,0,,6,5
+rikosetsivä,detective,0,0,,3,8,3
+kerroshoitaja,floor manager,0,0,0,4,8,3
+ratatyöläinen,rail worker,0,1,0,5,5,6
+vaihetyöntekijä,production line worker,0,1,0,5,6,6
+apumies,odd-job man,0,1,0,5,6,7
+autonpesijä,washing cars,0,1,0,5,8,7
+kauppaedustaja,trade representative,0,0,,3,2,1
+kirjeenkantaja,letter carrier,0,0,0,4,8,5
+pesulanhoitaja,laundry attendant,0,0,0,4,8,7
+postiasemanhoitaja,postal station attendant,0,0,0,4,1,6
+sosiaalisihteeri,social services secretary,0,0,1,3,1,2
+työnopettaja,the work of a teacher,0,0,1,3,6,2
+kalakauppias,fishmonger,0,0,0,4,2,4
+kondiittori,confectioner (pastry chef),0,0,,5,6,4
+musiikinopettaja,music teacher,0,0,1,3,0,3
+palopäällikkö,Fire Chief,0,0,0,3,8,3
+sosionomi,of Social Services,0,0,,4,0,
+terveystarkastaja,sanitary inspector,0,0,0,4,0,3
+ylikersantti,staff sergeant,0,0,,,8,4
+lastentarhanopettaja,a kindergarten teacher,0,0,1,3,0,3
+poliisi,police,0,0,0,4,8,3
+varastotyöntekijä,warehouse worker,0,1,0,5,5,5
+kauppapuutarhuri,gardener,0,1,0,5,3,7
+kauppateknikko,trade Technician,0,0,0,4,2,3
+kiinteistövälittäjä,real estate agent,0,0,0,4,2,3
+latoja,typesetter,0,0,0,4,6,5
+liikennetarkastaja,traffic inspector,0,0,1,4,1,4
+palokorpraali,Corporal fire,0,0,0,,8,3
+porari,driller,0,1,0,5,6,5
+raitiovaununkuljettaja,a tram driver,0,0,0,5,5,6
+rakennustyöntekijä,construction worker,0,1,0,5,6,6
+rappari,plasterer,0,1,0,5,6,5
+särmääjä,a press brake,0,1,0,5,6,5
+tuntikirjuri,tuntikirjuri ??,,,,,1,
+turkisompelija,fur seamstress,0,0,0,5,6,5
+työkaluviilaaja,tool maker,0,1,0,5,6,4
+työntarkastaja,labor inspector,0,0,,3,0,3
+ylipursimies,ylipursimies (something with the navy?),0,0,,3,8,2
+arkkitehti,architect,0,0,1,3,0,1
+tehtailija,manufacturer,0,,0,3,1,2
+sahateknikko,sawmill technician,0,,0,4,6,3
+toimistosihteeri,office secretary,0,,0,4,1,5
+verovirkailija,tax clerk,0,0,0,4,1,3
+automaalari,car painter,0,0,0,5,6,5
+kotisisar,Domestic help (professional came from a program to educate young rural women. Education lasted 2 years!),0,0,1,5,0,3
+sorvari,lathe operator,0,1,0,5,6,6
+kirjailija,author,0,0,1,2,0,2
+piiriedustaja,district representative,0,0,1,3,2,1
+puutarhaviljelijä,horticulturist,,0,1,3,3,2
+satamatyöläinen,longshoreman,0,1,0,5,5,5
+tullipäällysmies,Customs officer (highest ranking in region?),0,0,1,3,8,1
+vaatetustyöläinen,clothing worker,0,,0,5,1,6
+ylimestari,"very ambiguous, in charge of something",,,,,0,4
+ylitullivartija,Customs officer (higher ranking),,,,,1,2
+apteekkari,pharmacist,0,0,1,4,0,2
+kirjeenvaihtaja,"correspondent (works for newspaper or other media, can be foreign correspondent)",0,0,1,4,0,2
+kuljetuspäällikkö,transport Manager,0,0,,3,5,3
+ostopäällikkö,purchasing Manager,0,0,,3,2,3
+sihtimies,strainer in pulp mill,0,1,0,5,6,7
+tehtaanedustaja,factory representative,0,0,,3,2,3
+turkkuri,Furrier (works in fur industry),0,0,0,4,4,4
+yksityisyrittäjä,businesswoman,0,0,,2,2,2
+ylivartija,watchman (security) upper (not entry) level hence the 'yli',0,0,,,8,3
+koneenkäyttäjä,machinist,0,1,,5,6,5
+lihanleikkaaja,meat cutter,0,1,,5,6,6
+meijerikkö,dairymaid,1,0,0,5,6,7
+räätäli,tailor,0,0,0,5,6,4
+tiehöylänkuljettaja,grader operator,0,1,0,5,5,5
+kirjatyöntekijä,book binder/printer,0,0,,3,6,4
+konekokooja,machine assembler,0,1,0,5,6,6
+lasityöntekijä,glass worker,0,0,0,5,6,4
+merkkaaja,"ambiguous, might be working at a lighthouse?",0,0,0,5,6,4
+nahkatyöntekijä,leather worker,,1,0,5,6,5
+ravintolanhoitaja,restaurant manager,0,0,,4,6,3
+urkuri,organist,0,0,,4,0,3
+vanhempi poliisikonstaapeli,senior police officer,0,0,,4,8,3
+kotiteollisuusopettaja,artisanal teacher,0,0,1,3,0,3
+koulunjohtaja,schoolmaster,0,0,1,,0,2
+autokoulunopettaja,driving instructor,,0,,,0,3
+isäntä,host,,0,,,8,5
+pastori,pastor,0,0,1,3,0,2
+Pientilallinen,crofter,1,1,0,1,3,6
+piiripäällikkö,district Manager,0,0,,3,1,2
+suunnittelija,designer,0,0,,4,0,2
+työteknikko,technician,0,0,,4,6,2
+voimistelunopettaja,gymnastics teacher,0,0,,3,0,3
+ylihoitaja,head nurse,0,0,1,3,0,3
+elintarviketyöntekijä,food worker,0,0,0,5,6,7
+hitsari,welder,0,1,0,5,6,5
+hoitoapulainen,care assistant,0,0,0,5,0,7
+näyttelijä,actor,0,0,0,,0,4
+puistotyöntekijä,park employee,0,0,0,4,3,4
+tietyömies,road worker,0,1,0,5,6,6
+everstiluutnantti evp,Lieutenant Colonel ret,0,0,1,3,8,2
+ruokalanhoitaja,canteen attendant,0,0,0,5,8,7
+seurakuntasisar,woman working for church,0,0,,4,0,3
+tehdastyömies,factory laborer,0,1,0,5,6,6
+teknillinen apulainen,Technical assistant,0,0,,4,6,4
+myymälätarkastaja,shop inspector,0,0,,3,2,3
+ohjaaja,supervisor,0,0,,4,0,3
+perämies,helmsman on boat,0,0,0,5,5,5
+sahanasettaja,saw fitter (works in saw mill),0,1,0,5,4,6
+työnsuunnittelija,work planner,,0,0,,0,2
+sähkömies,electrician,0,0,0,5,6,4
+turbiininhoitaja,turbine nurse,0,0,1,4,6,3
+ammattikoulunopettaja,vocational school teacher,0,0,1,3,0,3
+jalkinetyöläinen,shoe worker,0,0,0,5,6,6
+kukkakauppias,florist,0,0,0,5,2,5
+kuormaaja,loader,0,1,0,5,5,7
+lasintarkastaja,glass inspector,0,0,,4,6,3
+maatyöläinen,farm hand,1,1,0,5,3,7
+makkaratyöntekijä,sausage employee,0,,0,5,6,7
+nen,of,,,,,,
+piirityönjohtaja,the circuit overseer,0,0,,4,1,3
+tarkkailukarjakko,tarkkailukarjakko,,,,,3,
+vaunumestari,in charge of rail cars at railway station,0,0,,3,5,2
+herastuomari,Juror,0,0,,,1,4
+komisario,inspector,0,0,,4,8,3
+nimismies,rural police chief,0,0,,3,8,2
+professori,professor,0,0,1,3,0,1
+kaivertaja,engraver,0,0,,4,6,3
+kirjastonhoitaja,librarian,0,0,1,3,0,3
+puhelinmyyjä,telephone salesperson,0,0,,4,2,5
+ruiskumaalari,spray painter,0,0,,5,6,7
+sosiaalikasvattaja,Social educator,0,0,1,3,0,3
+valssaaja,metal worker (forms metal),,,0,5,6,6
+arkistonhoitaja,archivist,0,0,,3,0,3
+ekspeditööri,"expeditor, works at post office",0,0,0,4,1,5
+höylääjä,"wood planing, carving",,,0,,7,3
+käsityöntekijä,manual worker,0,1,0,5,6,7
+liikk.harj,"abbreviation of liikkeenharjoittaja (can be merged with occupation below), entrepreneur",0,0,,2,1,2
+maanviljelijän tytär,the daughter of a farmer,1,,,,3,
+maanviljelkirvesmies,carpenter for farms,1,1,0,5,3,6
+pääkirjanpitäjä,Chief Accountant,0,0,1,3,1,2
+pelastusarmeijan upseeri,Salvation Army officer,,0,,,0,4
+sahanhoitaja,maintenance for saw at sawmill,0,0,0,5,4,5
+toimitussihteeri,subeditor ??,0,0,,,0,2
+tullaaja,customs worker (calculates money owed when importing goods),0,0,1,3,1,2
+vaatetustyöntekijä,clothing worker,0,0,,5,6,7
+varastotyöläinen,warehouse worker,0,1,,5,5,7
+fil.kand,BSc!,,0,1,2,0,3
+fil.maist,M.Sc,,0,1,,0,2
+kansakoulun opettaja,elementary school teacher,0,0,1,3,0,3
+ostoasiamies,purchasing agent,0,0,1,3,2,3
+autoasentaja,auto mechanic,0,1,0,5,6,5
+hienomekaanikko,"Makes, services and repairs mechanical and electronic equipment for measuring things",0,1,0,5,6,5
+kappaompelija,window shade seamstress,0,0,0,5,6,7
+maanvijelijä,farmer,1,1,0,1,3,4
+talouspäällikkö,Finance Manager,0,,1,,1,2
+ylösottaja,"Record keeper: worked in harbours as people (mostly women) who recorded amounts of wood in shipments, Done by memory, required good concentration.",0,0,,3,6,3
+autosähköasentaja,auto electrician,0,,,,6,4
+laitosemäntä,Department hostess,0,0,,,8,5
+ostomies,Purchaser,0,0,,3,2,3
+palvelija,servant,,,0,,8,7
+aputyöläinen,Helper,,,0,,6,7
+eläkel,pensioner (short for eläkeläinen),,,,7,,4
+johtajaopettaja,Head teacher,0,0,1,,0,2
+junailija,conductor on train,0,0,0,4,5,5
+kertaaja,multipliers,0,,,,6,
+kioskinhoitaja,the kiosk attendant,0,0,0,,2,7
+konehoitaja,machine attendant,0,,0,,6,6
+konepäällikkö,chief engineer,0,0,1,,6,2
+konepajatyöläinen,shop worker,0,0,0,,6,5
+lääketieteen lisensiaatti,Licentiate of medicine,0,0,1,,0,2
+leskiemäntä,female widower,0,,0,,,
+mittarinlukija,the meter reader,0,0,0,,6,4
+optikko,optician,0,0,1,,0,2
+paistaja,The baker,0,0,0,,6,5
+palokersantti,fire Sergeant,0,0,0,,8,4
+porttivahti,gate watchman,0,0,0,4,8,7
+postiaseman hoitaja,postal station attendant,0,0,0,,1,5
+postiautonkuljettaja,mail chauffeur,0,0,0,,5,5
+ruokalanpitäjä,canteen operator,0,0,0,,8,4
+teollisuusvartija,industrial security guard,0,0,0,,8,5
+teollisuusvirkailija,industrial clerk,0,0,0,,1,5
+tikkaaja,"appears to be like seamstress, in textile industry",0,1,0,5,6,6
+uuttaaja,Extractor (uses chemical process to extract something from something else),0,1,,5,4,5
+yliasentaja,"installer (in charge of others, hence 'yli'",0,0,,3,6,3
+eläinlääkäri,veterinarian,,0,1,,0,1
+konttorinjohtaja,Branch Director,0,0,,,1,2
+proviisori,pharmacist,0,0,1,,0,2
+ravintoloitsija,restaurateur,0,0,,,2,3
+kansak.opettaja,elementary school teacher,0,0,1,3,0,3
+kokooja,collector,0,0,,,6,3
+konetarkastaja,machinery inspector,0,0,,,6,3
+kunnansihteeri,municipal secretary,0,0,1,,1,3
+leipurimestari,master baker,0,0,0,,6,3
+maanviljelysteknikko,agricultural technician,1,0,1,,3,3
+osastosihteeri,department Secretary,0,0,1,,1,2
+painaja,works for printing press,0,,,4,6,4
+panimotyöntekijä,brewery worker,0,,0,,6,6
+rajavääpeli,border Warrant Officer,0,0,,,8,3
+suntio,Maintenance man for church,0,1,0,,0,7
+talollisen tytär,freeholders daughter,,,0,,3,
+tilanomistaja,owner of farmland,1,,0,,3,3
+ajuri,driver,0,0,0,,5,6
+kuljetusmies,transport man,0,0,0,,5,6
+kulkukauppias,travelling salesman,0,0,,4,2,3
+laskuttaja,Invoicer,0,0,,3,2,3
+metallityöläinen,metal worker,0,1,0,,6,5
+puhelunvälittäjä,telephonist,0,0,0,,1,5
+teollisuusompelija,industrial seamstress,0,1,0,,6,5
+teurastaja,butcher,0,1,0,,6,5
+toimitsija,official,,0,,,0,3
+aputyöntekijä,helper for work,,,,,6,7
+dipl.kauppias,certified salesman,0,0,,4,2,3
+hankintamies,procurer,0,0,,3,2,2
+hinnoittelija,labellers,,0,0,,2,6
+karjantarkkailija,Like shepherd but for cattle?,1,0,0,5,3,7
+katsastaja,examiner,1,0,1,,6,3
+kattilaseppä,Made boilers for steam engines,0,1,0,5,6,4
+konepesijä,machine washer,0,1,0,,6,7
+konttorikonemekaanikko,office machine mechanic,,,0,,6,5
+lääket.lis,Higher degree in medicine (more than a master's less than a doctorate,0,0,1,3,0,2
+lasinleikkaaja,glass cutter,,,0,,6,5
+laturi,charger,,,,,4,
+lautatarhatyömies,lumberyard worker,,1,0,,6,6
+maanmittausinsinööri,surveyor,,0,1,,0,4
+mainospiirtäjä,commercial artist,,0,,,0,3
+mittausteknikko,measurement technician,,0,1,,6,3
+osuuskassanjohtaja,share of cash Director,0,0,,,2,2
+rasvaaja,greaser,0,1,0,,6,
+ravintolan kassa,restaurant cashier,0,0,0,,2,6
+sementtityöläinen,cement worker,0,1,0,,6,6
+topografi,topographer,0,0,,,6,3
+työmestari,work manager,0,0,,3,6,3
+uunimies,oven man,,,,,6,6
+vastaanottoapulainen,receptionist,0,0,0,,8,5
+voitelija,oiler,0,,,,6,6
+vuoromestari,shift Foreman,0,0,,,6,4
+jaostopäällikkö,Head of Division,0,0,,,1,3
+karjatalousteknikko,livestock technician,1,0,,,3,3
+sosiaalipäällikkö,Social Manager,0,0,,,1,3
+ylitarkastaja,inspector general,,0,,,1,3
+asutustilallinen,asutustilallinen ?? (settler on a farm?),1,1,0,,3,5
+kioskikauppias,kiosk merchant,0,0,0,,2,6
+lääkäri,doctor,0,0,1,2,0,1
+lääketyöntekijä,Medicines employee,0,0,1,4,0,3
+luontaishoitaja,natural healer (naturopath),0,0,,2,8,4
+maisteri,Master of Arts,0,0,1,,0,3
+palomestari,fire chief,0,0,0,3,8,3
+paperikoneenhoitaja,paper machine attendant,0,1,0,5,6,6
+pienvilj,pienvilj,,,,,3,
+taksiautoilija,taxi driver,0,0,0,5,5,6
+autonkulj,chauffeur,0,0,0,5,5,6
+einestyöntekijä,ready prepared food preparer,0,0,0,5,6,6
+haudankaivaja,gravedigger,0,1,0,5,8,7
+merkantti,Certificate in Business Administration,0,0,1,3,2,3
+neuloja,needles,,,,,6,
+rva,Mrs,,,,,,
+tehtaantyömies,factory laborer,0,1,0,5,6,6
+tiemestari,road inspectors,0,0,0,3,0,4
+aluetarkastaja,regional inspector,0,0,,3,0,3
+annostelija,dispenser,0,0,,,6,
+asiamies,agent,0,0,,,0,3
+askarteluohjaaja,crafting instructor,0,0,1,,0,5
+baarimyyjä,bar seller,0,0,,,8,4
+erikoishammasteknikko,special dental technician,0,0,1,,0,3
+eversti evp,Colonel ret,0,0,1,,8,1
+käämijä,coiler,,,,,6,
+kansalaiskoulun opettaja,Civil school teacher,0,0,1,,0,2
+karjanostaja,cattle buyer,1,0,,,2,2
+karstaaja,"textile industry, prepares different fabrics so they can be combined (e.g., cotton and nylon)",0,0,0,5,4,5
+kerhoneuvoja,club advice,0,0,,,0,4
+kersantti evp,Sergeant retired,0,0,0,,8,4
+koneapulainen,machine helper,0,,0,5,6,7
+konelatoja,machine loader,,,,5,6,7
+kortistonhoitaja,card manager?,0,0,,3,1,3
+kumityöläinen,rubber worker,0,1,0,5,6,7
+kunnalliskodin johtajatar,senior's home manager (female),0,0,0,3,1,3
+liikkeenomistaja,business owner (entrepreneur),0,0,,2,2,1
+maalaiskirjeenkantaja,"Mailman, but only regular mail. Not allowed to take valuable mail",0,0,0,4,8,6
+maataloustyöläinen,agricultural worker,1,1,0,5,3,7
+mainospäällikkö,advertising Manager,0,0,1,3,2,2
+makeistyöntekijä,confectionery employee,0,0,0,5,6,5
+metallipuristaja,Metal presser,0,1,0,5,6,6
+metsätyöläinen,forest worker,1,1,0,5,3,5
+mittariasentaja,meter installer,0,1,0,5,6,4
+päätoimittaja,editor in chief,0,0,1,2,0,1
+raidemies,railway man,0,,0,4,5,5
+remonttimies,decorator,0,0,0,4,6,4
+ruokalanemäntä,canteen hostess,0,0,0,5,8,6
+saarnaaja,Preacher,0,0,,2,0,3
+sähkömestari,electric officer,0,0,,3,6,3
+sotilaskotisisar,soldier's sister,,,,,8,
+tallimies,stableboy,1,1,0,5,3,6
+tehtaan edustaja,factory representative,0,0,,3,2,3
+tiilenpolttaja,brick maker,0,1,0,5,6,6
+ulosottomies,the bailiff,0,0,,4,1,4
+vanhaisäntä,old host,,,,,3,
+vesilaitoksen hoitaja,the water utility manager,0,0,,3,1,3
+ylietsivä,police seargent,0,0,,4,8,3
+ylipursimies evp,retired chief petty officer,0,0,,4,8,3
+yövahti,night watch,0,0,0,4,8,6
+varanotaari,Vice Notari,0,0,1,4,1,3
+apulaisesimies,assistant manager,0,0,,3,0,3
+asetinlaitemies,railway switch operator,0,0,0,5,6,5
+filosofian kandidaatti,Bachelor of Arts,0,0,1,,0,3
+hammasteknikko,dental technician,0,0,1,4,0,3
+hoitaja,nurse,0,0,1,4,0,3
+kanttoriurkuri,cantor organist,0,0,,,0,3
+konepiirtäjä,machine drawer ??,,,,5,6,6
+kunnalliskodin johtaja,Director of the municipal home,0,0,,3,1,2
+liikkeenharj,entrepreneur,0,0,,2,2,2
+maansiirtourakoitsija,earthmoving Contractor,,0,1,,5,4
+mallipuuseppä,Design carpenter,0,0,,,6,3
+paalaaja,catches ??,,,,,3,
+postivirkamies,postal official,0,0,,4,1,4
+pumppumies,pump man,0,,0,,6,5
+savenvalaja,potter,0,,0,5,0,4
+sikalanhoitaja,the pig farm manager,1,0,,4,3,3
+yliluutnantti,First Lieutenant,0,0,1,4,8,3
+hammashoitaja,dental hygienist,0,0,1,4,0,4
+huoltopäällikkö,quartermaster,0,0,0,4,,
+kivimies,stone man,0,,0,5,6,6
+lasityöläinen,glass worker,0,1,0,5,6,5
+meijerityöntekijä,dairy worker,1,1,0,5,6,6
+metallityöntekijä,metal worker,0,1,0,5,6,6
+nahkuri,tanner,,1,0,5,6,6
+satulaseppä,saddler,1,1,0,5,6,7
+tekstiilityöntekijä,textile worker,0,1,0,5,6,6
+työntekijä,worker,,1,0,5,6,7
+apulaisnimismies,assistan police chief ??,0,0,,4,8,3
+apulaisvahtimestari,apulaisvahtimestari ??,,,,,8,
+huoltoasemanhoitaja,gas station attendant,0,0,0,5,2,7
+kapellimestari,conductor,0,0,0,5,0,3
+kiillottaja,polisher,0,1,0,5,6,5
+konekaavaaja,konekaavaaja ??,,,,,6,
+konepajatyömies,engineering laborer ??,0,,1,,6,5
+laboratoriomestari,laboratory Technician,0,0,1,4,0,4
+laivapuuseppä,ship carpenter,0,1,0,5,6,4
+lennätinvirkailija,telegrapher,0,0,1,5,1,4
+lentomekaanikko,flight engineer,0,0,1,4,6,3
+liiketyöntekijä,business worker ??,0,0,1,4,2,3
+lyijyseppä,lead blacksmith,,1,0,4,6,4
+maanviljalijä,maanviljalijä ??,1,,,,3,
+maanviljelkalastaja,maanviljelkalastaja ??,1,,,,3,
+maatalouskerhoneuvoja,agricultural club advice ??,1,,,,3,
+metallijyrsijä,metallijyrsijä ??,,,,,6,
+metsäpiirimies,Forestry circuit man,1,0,,,3,4
+myyntitarkastaja,sales inspector,0,0,1,4,2,3
+osuuskassan johtaja,Share of Fund director ?,,0,,3,2,2
+paikkaaja,patch up ??,,,,,6,
+panimotyöläinen,brewery worker,0,,0,5,6,6
+polttaja,smoker ??,,,,5,6,
+postiekspeditööri,postiekspeditööri ??,,,,,1,
+puristaja,a presser,0,,0,5,6,
+purkaja,wrecker ??,0,,0,,6,
+putkieristäjä,putkieristäjä ??,,,,,6,
+puuseppämestari,master carpenter,0,1,,5,6,4
+puutarhatyöl,puutarhatyöl ??,,,,,3,
+rahastonhoitaja,treasurer,0,0,1,3,2,3
+ravintolanemäntä,restaurant hostess,0,0,0,5,8,6
+ravintolatyöläinen,restaurant worker,0,0,0,5,8,7
+somistaja,decorators,0,0,0,5,2,3
+taaplaaja,taaplaaja ??,,,,,6,
+tehdassiivooja,factory cleaner,0,1,0,5,6,6
+telakkatyömies,dock laborer,0,1,0,5,6,6
+vaatturimestari,vaatturimestari ??,,,,,6,
+valimotyöläinen,foundry worker,0,1,0,5,6,6
+valimotyömies,foundry laborer,0,1,0,5,6,6
+varaosapäällikkö,spare parts Manager,0,0,,3,6,4
+verosihteeri,Secretary of tax,0,0,1,3,1,3
+veturinasentaja,locomotive fitter,0,1,0,5,6,5
+viinikassa,wine cash,0,0,,,2,
+ylivahtimestari,the head janitor,0,1,0,4,8,4
+ylilääkäri,senior physician,0,0,1,2,0,1
+rakennustyönjohtaja,construction manager,0,0,,3,0,2
+aarporaaja,aarporaaja ??,,,,,6,
+hortonomi,horticulturist,1,0,1,4,3,2
+karkaisija,karkaisija ??,,,,,6,
+lasinpuhaltaja,glassblower,0,1,0,,6,4
+matkatoimistovirkailija,travel agent,0,0,,4,2,3
+radiotyöntekijä,radio employee,0,0,0,4,0,4
+veneenrakentaja,boat builder,0,1,0,5,6,4
+viimeistelijä,finisher,0,1,0,,6,4
+dipl.kosmetologi,make up ???,,0,,,0,
+käyttömies,use of man ??,,,,,6,
+kirjapainotyöläinen,pressman,0,,0,,6,5
+kokki,cook,0,0,0,5,8,5
+koneistaja,machinist,0,1,0,5,6,6
+liikunnanohjaaja,physical education,0,0,,,0,4
+metallihioja,metallihioja ??,,,,,6,
+prosessimies,processer,0,,0,5,6,4
+sahatyöntekijä,sawmill worker,0,1,0,5,6,5
+siistijä,Cleaner,0,1,0,5,8,6
+ammattiautoilija,professional driver,0,0,0,5,5,5
+apulaispäällikkö,Deputy Head,0,0,,3,1,2
+dir.cant,dir.cant ??,,,,,,
+esittelijä,demonstrator ??,,,,,2,
+hakunhoitaja,hakunhoitaja ??,,,,,6,
+harjansitoja,harjansitoja ??,,,,,6,
+hum.kand,hum.kand ??,,,,,0,
+johtajatar,headmistress,0,0,,,1,
+kaavaaja,kaavaaja ??,,,,,,
+kahvilanhoitaja,cafe attendant,0,0,,5,8,7
+kaivostyönjohtaja,mining foreman,0,0,,4,0,3
+keittolanhoitaja,keittolanhoitaja ??,,,,,8,
+kerrossiivooja,floor cleaner,0,1,0,5,8,6
+kiinteistönomistaja,property owner,,0,,2,,2
+kirjakaupanhoitaja,bookstore manager,0,0,,4,2,3
+kuivaamonhoitaja,kuivaamonhoitaja ??,,,,,6,
+kunnanjohtaja,the mayor,0,0,,3,1,1
+kuvanveistäjä,sculptor,0,0,,,0,3
+lääkepakkaaja,lääkepakkaaja ??,,,,,6,
+laattamies,tile man,0,1,0,5,6,5
+lakkityöntekijä,hat worker,0,1,0,5,6,5
+lasittaja,glazier ??,,,,,6,
+lastenkodin johtaja,director of children's home,0,0,,3,1,2
+laulajatar,songstress,0,0,,,0,3
+lautatarhatyöläinen,lumberyard worker,,1,0,5,6,6
+maanmittausteknikko,land survey technician,1,0,1,4,6,3
+maanviljelautoilija,maanviljelautoilija ??,,,,,3,
+maanviljelyä,farming,1,1,0,,3,6
+maatalousneuvoja,land surveyor,1,0,1,4,3,3
+mainoshoitaja,advertising manager,0,0,1,3,2,2
+mallimestari,model champion ??,,,,,6,
+mattomies,carpet man,0,1,0,5,6,5
+meijerityöläinen,dairy worker,1,1,0,5,6,6
+myymälän esimies,store supervisor,0,0,,4,2,3
+näyttämömestari,stage manager,0,0,,4,0,3
+niputtaja,stacker,,1,0,5,6,6
+päivystäjä,duty officer,0,0,,4,,3
+paperinleikkaaja,paper cutter,0,1,0,5,6,6
+parturimestari,master barber,0,0,,5,8,5
+puistotyöläinen,park worker,,,0,5,3,5
+punnitsija,"weighers,",0,1,0,5,6,6
+putkenlaskija,pipelayers,0,1,0,5,6,6
+putkiurakoitsija,The plumbing contractor,0,,0,5,6,5
+puutyömies,puutyömies ??,,,,,6,
+radiomekaanikko,radio mechanic,0,,,,6,5
+radiosähköttäjä,radio operator,0,0,,,0,4
+radiotyöläinen,radio worker,0,0,0,,6,4
+rajavääpeli evp,limit sergeant major retired,0,0,1,3,8,3
+ravintola apulainen,Restaurant assistant,0,0,0,5,8,5
+sahanasentaja,saw fitter,0,1,0,5,6,5
+sähköyliasentaja,sähköyliasentaja ??,,,,,6,
+sairaalan emäntä,the hospital mistress ??,,,,,8,
+talonemäntä,lady of the house ??,,,,,,
+täyttäjä,filler,0,,0,5,6,5
+tehtaantyöl,tehtaantyöl ??,,,,,6,
+teroittaja,grinder,,1,0,5,6,5
+tislaaja,distiller,0,1,0,5,6,5
+työkalusorvaaja,työkalusorvaaja ??,,,,,6,
+työnopastaja,Work guidance counselors,0,0,1,4,,4
+valokuvauslaborantti,valokuvauslaborantti ??,,,,,0,
+valunpuhdistaja,valunpuhdistaja ??,,,,,6,
+vanerisorvaaja,vanerisorvaaja ??,,,,,6,
+vanhainkodin johtaja,Director of nursing home,0,0,1,1,1,3
+vanhempi vartija,senior guard,0,0,0,4,8,5
+varikkomies,pit man,0,1,0,5,5,6
+värjääjä,dyer,0,1,0,5,6,6
+venemestari,boat master ??,0,1,,,6,3
+veturinpuhdistaja,veturinpuhdistaja ??,,,,,6,
+vkonstaapeli,vkonstaapeli ??,,,,,8,
+lääninrovasti,the county provost,0,0,1,3,0,3
+diakoni,deacon,0,0,,3,0,3
+kansak.op,kansak.op ??,,,,,0,
+sahanomistaja,sawmill owner,,0,,2,2,2
+talousjohtaja,Chief Financial Officer,0,0,1,2,1,1
+vanhempi lehtori,senior lecturer,0,0,1,3,0,1
+verojohtaja,tax Director,0,0,1,3,1,1
+autoteknikko,automotive technician,0,,0,5,6,4
+dieselasentaja,diesel fitter,0,1,,5,6,5
+erityisopettaja,special needs ??,,,,,0,
+etsivä,detective,0,0,1,4,8,3
+hevosvalmentaja,horse coach (trainer??),1,0,,,3,5
+kielenkääntäjä,translator,0,0,1,4,0,3
+kumityöntekijä,rubber worker,0,1,0,5,6,6
+Liikkeenjohtaja,manager,0,0,,3,2,3
+maatalousteknikko,agricultural technician,1,0,1,4,3,3
+metsänhoidonneuvoja,forestry advice,1,0,,3,3,3
+metsänhoitoneuvoja,forestry advice,1,0,,3,3,3
+metsätalousneuvoja,forestry advice,1,0,,3,3,3
+myyntijohtaja,Sales Director,0,0,,3,2,3
+ostaja,buyer,0,0,,3,2,2
+puutarhaopettaja,garden teacher,0,0,1,4,3,3
+rajavartija,border guard,0,0,0,5,8,5
+rakennusinsinööri,civil engineer,0,0,1,4,0,4
+röntgenhoitaja,radiographer,0,0,1,,0,4
+stuertti,steward,0,0,0,,5,4
+tarjoilijatar,barmaid,0,0,0,,8,6
+työkaluviilari,työkaluviilari ??,,,,,6,
+valimotyöntekijä,foundry worker,0,1,0,,6,6
+veistonopettaja,veistonopettaja ??,,,,,0,
+virkailija,official ??,,0,,,1,4
+ylirajajääkäri,ylirajajääkäri ??,,,,,0,
+muovityöntekijä,plastic employee,0,,0,,6,6
+nuohoojamestari,master chimney sweep,0,1,0,5,8,5
+opiskelija,student,0,0,1,6,,
+pintakäsittelijä,surface treatment,0,,0,,6,
+tehdastyöl,tehdastyöl ??,,,,,6,
+vaunusiivooja,chambermaid trolley ??,,,,,8,6
+alistaja,an oppressor ??,0,,,,6,
+ammattikoulun opettaja,vocational school teacher,0,0,1,3,0,3
+apulaisasemapäällikkö,apulaisasemapäällikkö ??,,,,,1,
+apulaisverosihteeri,apulaisverosihteeri ??,,,,,1,
+asemanhoitaja,station attendant,0,0,0,4,1,7
+aseseppä,gunsmith,0,0,0,5,6,5
+asuntolanhoitaja,dorm attendant,0,0,0,4,1,5
+autohuoltomies,automotive service technician,0,0,0,5,6,5
+autokoulun johtaja,driving school director,0,0,,3,1,3
+baariemäntä,a bar hostess,0,0,0,5,8,6
+diplomikauppias,Master of the merchant ??,0,0,,3,2,2
+einestyöläinen,einestyöläinen ??,,,,,6,
+evankelista,evangelist,0,0,,,0,4
+haastemies,bailiff,0,0,0,4,0,4
+hankintapäällikkö,Chief of admissions,0,0,1,3,2,2
+harjatyöntekijä,brush employee,0,0,0,5,6,6
+hollanterimies,hollanterimies ??,,,,,6,
+hotelliapulainen,hotel assistant,0,0,0,5,8,6
+huolitsija,Freight forwarder,0,0,0,5,5,5
+huoltotarkastaja,maintenance inspector,0,0,,4,6,4
+jäätelötyöntekijä,ice cream employee,0,0,0,5,2,5
+järjestösihteeri,Organizational ??,,,,4,1,4
+käärijä,wrapper ??,0,,0,5,6,6
+kalastmaanviljelijä,kalastmaanviljelijä ??,,,,,3,
+kanttiininhoitaja,kanttiininhoitaja ??,,,,,8,
+karja n hoitaja,ranch's manager,1,0,,3,3,3
+kellarimies,cellar man,0,,0,,6,6
+kentänhoitaja,field manager,0,0,,3,6,3
+kenttämestari,field champion ??,,0,,3,3,
+koekäyttäjä,Sample user ??,,,,,6,
+konerakennusteknikko,mechanical engineering technician,0,0,1,3,6,3
+kuorma autoilija,truck driver,0,0,0,5,5,5
+kustannuslaskija,cost accountant,0,0,1,2,1,2
+lähetti,messenger,0,0,0,4,8,4
+lastenkodin johtajatar,orphanage headmistress,0,0,1,4,1,3
+lautatarhatyöntekijä,lumberyard worker,,1,0,5,6,6
+liikeenharjoittaja,liikeenharjoittaja ??,,,,,2,
+louhintaurakoitsija,mining contractor ??,0,,0,3,6,4
+maalarin apulainen,painter helper,0,1,0,5,6,6
+maalausurakoitsija,painting contractor,0,1,0,3,6,5
+maanviljelijän vaimo,the farmer's wife,1,1,0,1,3,4
+makeistyöläinen,confectionery worker,0,1,0,5,6,6
+makkaramestari,sausage maker ??,0,1,0,5,6,6
+metallihöylääjä,metallihöylääjä ??,,,,,6,
+metallityönopettaja,metal work teacher,0,0,1,3,6,3
+mittarimekaanikko,meter mechanic,0,0,0,4,6,5
+mosaiikkimies,mosaic man,0,,0,,6,4
+muovitarkastaja,plastic inspector,0,0,1,4,6,4
+muovityöläinen,plastic worker,0,1,0,5,6,5
+myllynomistaja,mill owner,0,0,,2,2,1
+naulaaja,naulaaja ??,,,,,6,
+näytteenottaja,sampler ??,0,,,,6,
+ohentaja,thinner ??,0,,,,6,
+paikallisjohtaja,local leader,0,0,,2,1,2
+pesula apulainen,laundry helper,0,1,0,5,8,7
+pesulatyöläinen,laundry worker,0,1,0,5,8,7
+piirimies,circuit man,0,0,,4,1,5
+pitokokki,hold cook,0,1,0,5,8,5
+polttoainetyöntekijä,fuel employee,0,1,0,5,6,4
+puistotyömies,park workman,,1,0,5,3,4
+puristimenhoitaja,press nurse,0,0,1,4,6,3
+pursimies evp,boatswain ret,0,1,,,8,4
+puutavaraliikemies,timber businessman,1,0,,2,2,2
+rak.mestari,rak.mestari ??,,,,,6,
+rakennuspuuseppä,building carpenter,0,1,0,4,6,4
+rappaaja,plasterer,0,1,0,5,6,5
+rasvari,central lubrication,0,1,0,5,6,5
+ratamies,railway man,0,0,0,5,5,4
+reviisori,Reviisori ??,,,,,1,
+Riihimäki,Riihimäki ??,,,,,,
+santaaja,santaaja ??,,,,,6,
+selluloosankeittäjä,cellulose cooker,0,1,0,5,6,4
+sementtityöntekijä,cement worker,0,1,0,5,6,6
+siltavartija,bridge guard,0,0,0,4,8,6
+sitoja,binder,0,0,0,4,6,5
+sosiaalitarkkailija,Social observer ??,0,,,,0,
+sotainvalidi,disabled soldier,0,,,8,,
+sotilaskodinhoitaja,military homemaker ??,,,,,8,
+sulattomies,sulattomies ??,,,,,6,
+suutarimestari,shoemaker,0,1,0,5,6,5
+sylinterimies,cylinder man,0,1,0,5,6,5
+talonmvahtimestari,talonmvahtimestari ??,,,,,8,
+tasaaja,compensator,0,0,,,6,4
+teknillinen johtaja,Technical Director,0,0,1,3,0,2
+tiskaaja,dishwasher,0,1,0,5,8,6
+tukkimies,log man,1,1,0,5,3,6
+tukkityömies,log laborer,1,1,0,5,3,7
+tuntiopettaja,time teacher,0,0,1,3,0,3
+turkistyöntekijä,fur employee,0,0,,,3,5
+tutkimusapulainen,research assistant,0,0,1,3,0,4
+työnohjaaja,supervisor,0,0,,4,0,2
+urakkahinnoittelija,urakkahinnoittelija ??,,,,,1,
+uuninhoitaja,oven nurse ??,,,,,6,3
+vaakaaja,vaakaaja ??,,,,,6,
+vaakamestari,horizontal master ??,,,,,6,
+välinehuoltoapulainen,equipment maintenance assistant,0,0,0,5,6,4
+valkaisija,bleach ??,,,,,6,
+varastokirjanpitäjä,inventory accountant,0,0,1,3,1,3
+varastotyömies,warehouse laborer,0,1,0,5,5,6
+vaununvoitelija,vaununvoitelija ??,,,,,5,
+venyttäjä,venyttäjä ??,,,,,6,
+verotarkastaja,tax inspector,0,0,1,3,1,3
+virastotyöntekijä,Office worker,0,0,,5,1,4
+kihlakunnantuomari,district judge,0,0,1,3,0,1
+talousneuvos,economic Counselor,0,0,1,3,2,2
+aluejohtaja,Regional Director,0,0,1,3,1,1
+asianajaja,lawyer,0,0,1,3,0,1
+eversti,colonel,0,0,1,3,8,1
+geologi,geologist,0,0,1,2,0,1
+kappalainen,chaplain,0,0,1,2,0,2
+käyttöpäällikkö,Operations Manager,0,0,1,3,0,2
+osastonjohtaja,manager,0,0,,3,1,2
+piirieläinlääkäri,district veterinarian,0,0,1,3,0,1
+rannikkolaivuri,for coast ??,0,,,,5,
+työpäällikkö,Foreman,0,0,0,4,0,3
+huoltoasentaja,service engineer,0,0,1,4,6,3
+kenttäpäällikkö,field Manager,0,0,,3,6,3
+kiinteistönhoitaja,property manager,0,0,,3,3,3
+kirjanpainaja,printer,0,0,,3,6,3
+konekorjaaja,machine repairman,0,1,0,5,6,5
+lentokonemekaanikko,aircraft mechanic,0,1,,5,6,4
+mallisuunnittelija,model designer,0,0,,,6,4
+myyntiedustaja,salesman,0,0,0,4,2,3
+rajajääkäri,border Jaeger ??,0,,,,8,
+sähkötyömies,electrical worker,0,1,0,5,6,5
+sähkötyönjohtaja,electrical foreman,0,0,,4,6,4
+sähköurakoitsija,electrical Contractor,0,0,1,3,6,4
+sosiaalihoitaja,Social nurse,0,0,1,3,0,3
+tullivirkailija,customs officer,0,0,1,3,8,3
+tuotantomies,production of man,,,,,6,
+tuotantopäällikkö,Production Manager,0,0,,3,1,3
+turkisleikkaaja,fur cutter ??,0,,,,6,
+uuttaja,novel and ??,,,,,6,
+varastoesimies,warehouse supervisor,0,0,0,4,5,3
+värimestari,color master ??,,,,,6,
+veturiasentaja,locomotive fitter,0,1,0,5,5,4
+vuokraaja,lessee ??,,,,,,
+kaivinkoneen kuljettaja,excavator driver,0,0,0,,5,5
+kersantti,sergeant,0,0,0,,8,4
+liikeapul,sales assista,0,,,4,2,5
+metsänvartija,forest ranger,1,0,,5,3,4
+myyntisihteeri,sales Secretary,0,0,0,4,2,4
+rautatietyöläinen,railway worker,0,0,0,5,5,4
+tehtaan työläinen,factory worker,0,1,0,5,6,5
+tiehöylän kuljettaja,grader driver,0,0,0,,5,5
+työntutkija,the work of researcher,0,0,1,2,0,3
+ulosottoapulainen,exekutionsbiträdet ??,,,,,,
+vanerityöläinen,plywood worker,0,1,0,5,6,3
+aluesihteeri,Regional secretary,0,0,,3,1,3
+apteekkiapulainen,pharmacy assistant,0,0,,4,0,4
+apul,apul ??,,,,,8,
+aputyönjohtaja,aputyönjohtaja ??,,,,,0,
+asessori,assessor,0,0,1,4,0,3
+aseteknikko,aseteknikko ??,,,,,6,
+autokoulun omistaja,driving school owner,0,0,,2,2,2
+auton apumies,car helper,0,,,5,5,7
+auton kuljettaja,car driver,0,,,5,5,6
+diplomi kauppias,Master of the merchant ??,,,,,2,2
+elokuvakoneenhoitaja,film machine operator,,,,,8,4
+ennakontarkastaja,advance inspector,,,,4,,3
+fil.maistlehtori,fil.maistlehtori ??,,,,,0,
+hakkurinhoitaja,chipper nurse,,,,4,3,
+happomies,acid man ??,,,,,6,
+harjantekijä,crest factor,,,,,6,
+hissinkuljettaja,lift driver,,,,5,5,
+huoltoaseman esimies,the service station manager,,,,4,2,
+huoltoaseman omistaja,petrol station owner,,,,2,2,
+huoltosihteeri,Secretary service,,,,5,1,
+jalkinemestari,footwear champion,,,,5,6,
+jalokivihioja,jalokivihioja ??,,,,,6,
+jaostonhoitaja,Chamber manager,,,,3,,
+johtomestari,management master,,,,3,,
+juustonhoitaja,cheese nurse,,,,4,6,
+kaivinkoneurakoitsija,excavator Contractor,,,,4,5,
+kalustonhoitaja,equipment manager,,,,4,6,
+kankaankutoja,weavers,,,,5,6,
+kärrääjä,kärrääjä ??,,,,,6,
+kasaaja,stacker,,,,5,6,
+käsikonekutoja,käsikonekutoja ??,,,,,6,
+käsineompelija,käsineompelija ??,,,,,6,
+käsinkaavaaja,käsinkaavaaja ??,,,,,6,
+käsityönohjaaja,crafts instructor,,,,3,0,
+kasööri,kasööri ??,,,,,2,
+kattilanhoitaja,boiler attendant,,,,5,6,
+kehystäjä,framer,,,,,6,
+keittolan emäntä,keittolan hostess,,,,,8,
+keskusvarastonhoitaja,the central attendant,,,,,6,
+kihlakunnan tuomari,district judge,,,,3,0,
+kioskiapulainen,kiosk assistant,,,,,2,
+kioskimyyjä,kiosk seller,,,,,2,
+kirvesmmaanviljelijä,kirvesmmaanviljelijä,,,,,3,
+komentaja,commander,,,,3,8,
+kondiittorimestari,pastry chef,,,,,6,
+koneenkokooja,koneenkokooja,,,,,6,
+koneporaaja,koneporaaja,,,,,6,
+konttorin esimies,office supervisor,,,,3,1,
+korityöntekijä,basket employee,,,,4,6,
+korjaamon päällikkö,Head of the workshop,,,,3,6,
+kotelotyöntekijä,case worker,,,,4,6,
+kuivaaja,dryer,,,,,6,
+kullanhioja,kullanhioja,,,,,6,
+kumikorjaaja,rubber correctors,,,,5,6,
+kunnantyöntekijä,municipal employee,,,,4,8,
+kuorija,peeler,,,,5,6,
+kutomotyöläinen,kutomotyöläinen,,,,,6,
+lääkintävoimistelija,physiotherapist,,,,4,0,
+lakankeittäjä,stopped the cook,,,,,6,
+lasinhioja,glass grinder,,,,5,6,
+lastausesimies,loading supervisor,,,,4,6,
+lastenkodinjohtaja,director of children's home,,,,3,1,
+lausuntataiteilija,lausuntataiteilija,,,,,0,
+lehtiasiamies,Journal agent,,,1,3,2,
+liikennepäällikkö,traffic Manager,,,0,3,0,
+liikennetyöntekijä,transport worker,,,0,5,5,
+liiketyöläinen,business worker,,,,4,2,
+loimaaja,loimaaja,,,,,6,
+lossinhoitaja,ferry attendant,,,0,5,5,
+maanv,maanv,,,,,3,
+maanviljelkauppias,maanviljelkauppias,,,,,3,
+maanviljelmuurari,maanviljelmuurari,,,,,3,
+maataloustyöntekijä,agricultural worker,1,,,5,3,
+maidonkatsastaja,maidonkatsastaja,,,,,6,
+manviljelijä,manviljelijä,,,,,3,
+matkapuhuja,mobile speaker,,,,,,
+matkasihteeri,Secretary of travel,,,,3,1,
+mittariteknikko,meter technician,,,,,6,
+Multia,Multia,,,,,,
+muovailija,modeller,,,,,6,
+myllytyöläinen,mill worker,,,0,5,6,
+myymäläntarkastaja,shop inspector,,,,4,2,
+myyntineuvoja,selling advice,,,,3,2,
+myyntityöneuvoja,selling advice,,,,3,2,
+nahkatyöläinen,leather worker,,,,5,6,
+näyttelijätär,actress,,,,,0,
+niklaaja,niklaaja,,,,,6,
+nitoja,stapler,,,,,6,
+nitraaja,nitrators,,,,,6,
+notaari,notary,,,1,4,0,
+"o,Kurouva","No, Kurouva",,,,,,
+"o,Rrouva","No, Rrouva",,,,,,
+ohjaamomies,cab man,,,,5,6,
+ohjaamopäivystäjä,cab dispatcher,,,,5,6,
+oikolukija,proofreader,,,1,4,0,
+oikovetäjä,oikovetäjä,,,,,6,
+osastonhoit,osastonhoit,,,,,0,
+pedikyristi,pedicurist,,,,5,8,
+pianisti,pianist,,,,2,0,
+piiriasiamies,district attorney,,,,3,0,
+piirijohtaja,district Director,,,,3,1,
+pormestari,mayor,,,,2,1,
+postiapulainen,post office assistant,,,,5,8,
+prässäri,prässäri,,,,,6,
+puhtaaksikirjoittaja,copyist,,,,,1,
+pukuompelija,clothes manufacturing,,,,,6,
+putkityömies,tube worker,,,,5,6,
+puutarhanviljelijä,garden farmer,,,,,3,
+puutavaramyyjä,the timber seller,,,,,2,
+puutyönopettaja,puutyönopettaja,,,,,0,
+pyöräkuormaajankuljettaja,wheel loader driver,,,,5,5,
+pyykkäri,laundress,,,,,8,
+raitiovaunun rahastaja,tram to the conductor,,,,,5,
+rajaylivääpeli evp,rajaylivääpeli ret,,,,,8,
+rautatiet,railway,,,,5,5,
+ravintolaemäntä,restaurant hostess,,,,5,8,
+ravintolanpitäjä,restaurant manager,,,,4,2,
+ruiskumestari,Burgher,,,,,6,
+säätäjä,regulator,,,,,6,
+sähkötyöntekijä,electrical worker,,,,5,6,
+satamavartija,harbor guard,,,,5,8,
+saunanhoitaja,bath attendant,,,,5,8,
+saunottaja,sauna attendant,,,,5,8,
+sirkkelisahuri,sirkkelisahuri,,,,,6,
+sokerityöläinen,sugar worker,,,,,6,
+sosiaalihuoltaja,Social guardian,,,,,0,
+sot.mevp,sot.mevp,,,,,8,
+sotilaskodin johtajatar,military home manageress,,,,,1,
+sotilasvirkailija,military officer,,,,,1,
+sotilasvirkamies,military official,,,,,1,
+sotilasvirkamies evp,retired military officer,,,,,1,
+taaplari,taaplari,,,,,,
+taidegraafikko,printmaker,,,,3,0,
+talonhoitaja,house attendant,,,,5,8,
+talousmestari,economic champion,,,,3,2,
+tapuloitsija,tapuloitsija,,,,,6,
+tehd.työl,tehd.työl,,,,,6,
+teht.työl,teht.työl,,,,,6,
+tehtaanvartija,factory guard,,,,5,8,
+tekniopettaja,tekniopettaja,,,,,0,
+telakkatyöläinen,a shipyard worker,,,,5,6,
+tiilimestari,brick champion,,,,5,2,
+toimistoesimies,Office supervisor,,,,4,1,
+toimistusjohtaja,toimistusjohtaja,,,,,1,
+toimituspäällikkö,Managing Editor,,,1,3,1,
+työkalujyrsijä,työkalujyrsijä,,,,,6,
+työkalukorjaaja,tool repairman,,,,5,6,
+työnjärjestelijä,työnjärjestelijä,,,,,6,
+työnjohtoja,the work of wires,,,,,0,
+työnvälittäjä,The dispatcher,,,,,0,
+uittotyömies,floating laborer,,,,,3,
+vaihdetyöntekijä,shift worker,,,,,5,
+valtiot.maisteri,valtiot.maisteri,,,,,0,
+vanh.konst,vanh.konst,,,,,8,
+vanh.konstaapeli,vanh.konstaapeli,,,,,8,
+vanhainkodin johtajatar,nursing home manageress,,,,,1,
+varamies,deputy,,,,,,
+vartiopäällikkö,Security chief,,,,,,
+vastaanottaja,recipient,,,,,6,
+vaununsiivooja,chambermaid trolley,,,,,8,
+vaunupuuseppä,trolley carpenter,,,,,6,
+veistonohjaaja,veistonohjaaja,,,,,0,
+venerakentaja,boat builder,,,,,6,
+vesiasemanhoitaja,water station attendants,,,,,1,
+viimeistelyä,the finalization,,,,,,
+virastoapulainen,Office assistant,,,,5,1,
+vulkanoija,vulcaniser,,,,,,
+vuorottaja,relief,,,,,,
+apulaisprofessori,reader,,,,,0,
+tehtaanjohtaja,factory Manager,,,,3,1,
+tuomari,judge,,,1,2,0,
+huvilanomistaja,the villa owner,,,,,,
+kauppalaivuri,kauppalaivuri,,,,,5,
+koulutuspäällikkö,Training,,,,,1,
+lasimestari,glass-worker,,,,,6,
+provisori,Provisor,,,,,0,
+sosiaalijohtaja,Social Director,,,,,1,
+suunnittelupäällikkö,Planning Manager,,,,,0,
+yliopettaja,Principal Lecturer,,,,,0,
+yliperämies,first officer,,,,,5,
+autonmyyjä,car salesman,,,,,2,
+baarimestari,bartender,,,,,8,
+erikoissairaanhoitaja,specially trained nurse,,,,,0,
+ilmoituspäällikkö,ad Manager,,,,,1,
+kalastusmestari,fishing champion,,,,,3,
+kampaajamestari,hairdresser champion,,,,,8,
+kassa,cash,,,,,2,
+kaupanhoitaja,marketing manager,,,,,2,
+kaupungin työntekijä,city ​​employee,,,,,,
+kemigrafi,kemigrafi,,,,,,
+kiinteistönvälittäjä,real estate agent,,,,,2,
+kirjastovirkailija,library assistant,,,,,0,
+korjaamon esimies,workshop manager,,,,,6,
+lääkintävahtimestari,orderly,,,,,0,
+lastenohjaaja,director of children,,,,,0,
+liikenteenharjoittaja,carrier,,,,,2,
+luutnantti,lieutenant,,,,,8,
+"maanvilj,","maanvilj,",,,,,3,
+maataloustyönjohtaja,agricultural foreman,,,,,3,
+majakanvartija,lighthouse keeper,,,,,8,
+majakkamestari,lighthouse champion,,,,,8,
+meijeristi,dairyman,1,,,,6,
+merivartija,coastguard,,,,,8,
+mies,man,,,,,,
+moottorimies,motor man,,,,,5,
+pääluottamusmies,Chief Shop Steward,,,,,,
+pakkamestari,packager champion,,,,,,
+paperiteknikko,paper technician,,,,,6,
+piirisihteeri,district secretary,,,,,1,
+postinkuljettaja,mail driver,,,,,8,
+psykologi,psychologist,,,1,,0,
+puhelinkeskuksen hoitaja,telephone switchboard operator,,,,,1,
+puutarhateknikko,in horticulture,,,,,3,
+radioasentaja,radio technician,,,,,6,
+rajakersantti,Sergeant limit,,,,,8,
+sahan asettaja,saw setter,,,,,6,
+seminologi,Artificial Insemination,,,,,3,
+sosiaalityöntekijä,social worker,,,1,,0,
+värjäri,dyer,,,0,,6,
+askartelunohjaaja,craft instructor,,,,,0,
+huonekalumyyjä,furniture seller,,,0,,2,
+kaivostyöläinen,miner,,,0,,4,
+kirjapainotyöntekijä,printing plant worker,,,0,,6,
+koneurakoitsija,Contractor machinery,,,0,,6,
+matruusi,seaman,,,0,,5,
+palovartija,fire guard,,,0,,8,
+sairaalatyöntekijä,hospital worker,,,0,,0,
+taksinkuljettaja,taxi driver,,,0,,5,
+tilallisen tytär,daughter of spatial,,,,,3,
+toimistotyöntekijä,office worker,,,,,1,
+ahtausurakoitsija,stevedoring contractor,,,,,5,
+aliupseeri,non-commissioned officer,,,,,8,
+aluemyyntipäällikkö,Area Sales Manager,,,,,2,
+alueteknikko,area Technician,,,,,,
+aluetoimittaja,regional reporter,,,,,,
+amanuenssi,assistant,,,,,0,
+ammattientarkastaja,professions inspector,,,,,,
+anniskelija,anniskelija,,,,,,
+apuemäntä,apuemäntä,,,,,8,
+apuiainen,apuiainen,,,,,8,
+apukeittäjä,apukeittäjä,,,,,8,
+äpulainen,helper,,,0,,8,
+apulaisemäntä,apulaisemäntä,,,,,8,
+apulaiskirjaaja,Deputy,,,,,1,
+apulaisosastopäällikkö,Deputy Director General,,,,,1,
+apulaisrehtori,Assistant Principal,,,,,1,
+apulaistyömestari,apulaistyömestari,,,,,,
+apulaistyönjohtaja,apulaistyönjohtaja,,,,,1,
+apulämmittäjä,apulämmittäjä,,,,,6,
+aputyöl,aputyöl,,,,,6,
+asemamestari yp,Station master yp,,,,,5,
+asemestari,armourer,,,,,5,
+aseteknikko evp,aseteknikko ret,,,,,6,
+asfalttimies,asphalt man,,,,,6,
+asfalttityömies,asphalt worker,,,,,6,
+asfalttityöntekijä,asphalt worker,,,,,6,
+autoaseman hoitaja,station attendant,,,,,5,
+autonasentmaanviljelijä,autonasentmaanviljelijä,,,,,3,
+autonkulettaja,autonkulettaja,,,,,5,
+autonkuliettaja,autonkuliettaja,,,,,5,
+baarin emäntä,bar hostess,,,,,8,
+betonimylläri,concrete miller,,,,,6,
+dinsinööri,dinsinööri,,,,,0,
+eläkeasiainneuvoja,pension advice Affairs,,,,,0,
+elintarviketyöl,elintarviketyöl,,,,,6,
+elokuvakoneen hoitaja,film machine operator,,,,,8,
+erikoismestari evp,Special master ret,,,,,8,
+esikehrääjä,esikehrääjä,,,,,6,
+esmies,esmies,,,,,,
+etutyöntekijä,etutyöntekijä,,,,,,
+expeditööri,1,,,,,1,
+fikseeraja,fikseeraja,,,,,,
+fil.lis,Ph.L.,,,,,0,
+fil.toht,fil.toht,,,,,0,
+fil.tri,Ph.D.,,,1,,0,
+fiLmaisteri,fiLmaisteri,,,,,0,
+filosofian lisensiaatti,Licentiate of Philosophy,,,,,0,
+graafikko,graphic Designer,,,,,0,
+haalaaja,"slinger,",,,,,6,
+haalausmies,haalausmies,,,,,6,
+haastattelija,interviewer,,,,,,
+haihduttaja,Evaporator,,,,,6,
+hakkumies,hakkumies,,,,,6,
+Hamrouva,Hamrouva,,,,,,
+hattutyöntekijä,hat worker,,,,,6,
+hautausmaanhoitaja,cemetery attendant,,,,,8,
+Helsinki,Helsinki,,,,,,
+henkilökunnan päällikkö,chief of staff,,,,,1,
+hinaajan päällikkö,Head of the tugboat,,,,,5,
+hissiasentaja,elevator installer,,,,,6,
+hopeankiillottaja,hopeankiillottaja,,,,,6,
+hopeaseppä,silversmith,,,,,6,
+huolintatyönjohtaja,freight forwarding supervisor,,,,,1,
+huoltolatyöntekijä,huoltolatyöntekijä,,,,,8,
+huoltomekaanikko,maintenance mechanic,,,,,6,
+huoltosisar,maintenance sister,,,,,0,
+huoltotyöntekijä,maintenance worker,,,,,6,
+huonekalujen kiilloittaja,furniture kiilloittaja,,,,,6,
+huonekalukiillottaja,huonekalukiillottaja,,,,,6,
+ialkinemestari,ialkinemestari,,,,,6,
+ikkunanpesijä,window cleaner,,,,,8,
+il.maisteri,il.maisteri,,,,,0,
+inventoija,inventoija,,,,,8,
+itsen.yrittäjä,itsen.yrittäjä,,,,,2,
+itsenäinen yrittäjä,Independent Contractor,,,,,2,
+ja metsätieteiden kand,Science and Forestry Bachelor of Science,,,1,,3,
+ja metsätyömies,and forestry laborer,,,,,3,
+ja myyntipäällikkö,and Sales Manager,,,,,2,
+jalkinekorjaaja,shoe repairman,,,,,6,
+jaostosihteeri,Chamber Secretary,,,,,1,
+jousiseppä,spring blacksmith,,,,,6,
+jousittaja,jousittaja,,,,,6,
+kaavapiirtäjä,formula artist,,,,,6,
+Kaemäntä,Kaemäntä,,,,,,
+kahvilan omistaja,the café owner,,,,2,2,
+kaivinkoneenkäyttäjä,excavator operator,,,0,,5,
+kaivontekijä,well by,,,,,6,
+kaivostyömies,mining laborer,,,0,,4,
+kalanterinhoitaja,kalanterinhoitaja,,,,,,
+kalastajan vaimo,a fisherman's wife,,,0,,3,
+kanavanhoitaja,channel manager,,,,,5,
+kankaiden tarkastaja,fabrics inspector,,,,,6,
+kansakouluntarkastaja,elementary school inspector,,,,,1,
+kansalaisopiston rehtori,Rector of the community college,,,1,,1,
+kansliapäällikkö,undersecretary,,,,,1,
+kansliasihteeri,The Office of the Secretary,,,,,1,
+Karoleski,Karoleski,,,,,,
+karta n piirtäjä,depart from the drawer,,,,,0,
+kartografi,cartographer,,,,,0,
+käsihioja,käsihioja,,,,,6,
+käsinlatoja,käsinlatoja,,,,,6,
+katkaisija,circuit breaker,,,,,6,
+katsastusteknikko,motor vehicle roadworthiness,,,,,6,
+kattolevyntekijä,roof plate element,,,,,6,
+kaupallinen johtaja,commercial Director,,,,,2,
+kauppmaanviljelijä,kauppmaanviljelijä,,,,,3,
+kehäsahaaja,kehäsahaaja,,,,,6,
+kelaaja,rewinder,,,,,6,
+kelloseppämestari,"master watchmaker,",,,,,6,
+kenraalimajuri,major general,,,,,8,
+kenttämies,field man,,,,,3,
+kerhoemäntä,club hostess,,,,,8,
+kerhonhoitaja,club manager,,,,,8,
+kihartaja,kihartaja,,,,,6,
+kiinteistötyöntekijä,real estate employee,,,,,8,
+kipsilevytyömies,drywall laborer,,,,,6,
+kirjakaupan hoitaja,bookstore manager,,,,,2,
+kirjatyöläinen,Paper worker,,,,,6,
+kirvesmis,kirvesmis,,,,,6,
+kiviporaaja,kiviporaaja,,,,,6,
+kivityöläinen,stone worker,,,,,6,
+kivityöm,kivityöm,,,,,6,
+koestaja,koestaja,,,,,6,
+kojeoptikko,kojeoptikko,,,,,6,
+kojiteollisuusopettaja,kojiteollisuusopettaja,,,,,0,
+komisaario,komisaario,,,,,8,
+kompressorinhoitaja,compressor manager,,,,,6,
+koneenhoitajan apulainen,machine operator helper,,,,,6,
+konekaivertaja,konekaivertaja,,,,,6,
+konenainen,machine woman,,,,,,
+koneprässääjä,koneprässääjä,,,,,6,
+konesilittäjä,konesilittäjä,,,,,6,
+konsuli,consul,,,,,1,
+konttorisiivooja,office cleaner,,,,,8,
+kopisti,is knocked,,,,,,
+korintekijä,korintekijä,,,,,,
+koristelija,decorator,,,,,6,
+korjaaja,repairman,,,,,6,
+korjaamon johtaja,workshop leader,,,,,6,
+korsettiompelija,korsettiompelija,,,,,6,
+koti avustaja,home help,,,,,8,
+kotiompelija,home seamstress,,,,,6,
+kotitaloustyöntekijä,household worker,,,,,8,
+koulunsiivooja,school cleaning lady,,,,,8,
+kudonnanneuvoja,kudonnanneuvoja,,,,,6,
+kuivauskoneenhoitaja,drying machine operator,,,,,6,
+kuljettaja,driver,,,,,5,
+kuljetustyöntekijä,transport worker,,,,,5,
+kultaseppämestari,master goldsmith,,,,,6,
+Kunnalliskodin emäntä,municipal home hostess,,,,,8,
+kunnallissihteeri,municipal secretary,,,,,1,
+kunnankirjuri,kunnankirjuri,,,,,1,
+kunnanlääkäri,medical officer,,,,,0,
+kunnossapitotyömies,maintenance laborer,,,0,,6,
+kunnossapitotyöntekijä,maintenance worker,,,0,,6,
+kursooja,kursooja,,,,,,
+kutomotyöntekijä,kutomotyöntekijä,,,,,6,
+kuvaamataidon lehtori,arts lecturer,,,1,,,
+kynttilänvalaja,candle makers,,,,,6,
+kytkijä,linker,,,,,6,
+lääja kir.tohtori,A wide kir.tohtori,,,,,0,
+lääketieteenlisensiaatti,Licentiate of medicine,,,1,,0,
+lääkJis,lääkJis,,,,,0,
+läänin rakennusmestari,the county builder,,,,,1,
+laatikkotyöntekijä,box employee,,,,,6,
+laatikontekijä,the box by,,,,,6,
+laattatyöntekijä,tile worker,,,0,,6,
+lähettämön esimies,the dispatch supervisor,,,,,6,
+lähettämönhoitaja,lähettämönhoitaja,,,,,6,
+lainopin kandidaatti,his Master of Laws,,,,,0,
+laitostyöntekijä,Institute an employee,,,,,6,
+laivakirvesmies,ship Carpenter,,,0,,6,
+laivanpäällikkö,the ship's master,,,,,5,
+lakaisija,sweeper,,,0,,8,
+lakkaaja,lakkaaja,,,,,6,
+langantarkastaja,yarn inspector,,,,,6,
+lasikonemies,glass machine man,,,0,,6,
+laskujen tarkastaja,invoices inspector,,,,,1,
+lastentarhan johtajatar,kindergarten headmistress,,,1,,1,
+laulunopettaja,singing teacher,,,,,0,
+lautatarhanhoitaja,timber yard manager,,,0,,6,
+lavamies,lava man,,,,,6,
+lehtfil.maist,lehtfil.maist,,,,,0,
+lehtfil.maisteri,lehtfil.maisteri,,,,,0,
+leikkaamoapulainen,leikkaamoapulainen,,,,,6,
+leikkikoulunopettaja,playschool teacher,,,1,,0,
+leimaaja,leimaaja,,,,,6,
+leivänlaskija,bread counter,,,,,6,
+lennonjohtaja,air traffic controller,,,1,,5,
+lentoemäntä,stewardess,,,0,,5,
+lentomestari,flight master,,,,,5,
+liikennejohtaja,traffic Director,,,,,1,
+liikevaihtoverotarkastaja,turnover tax inspector,,,,,1,
+liikkeenharjoitaja,liikkeenharjoitaja,,,,,2,
+liikuntateknikko,sports Technician,,,,,0,
+liimamies,glue man,,,0,,6,
+liimankeittäjä,adhesive cook,,,0,,6,
+linja autonkuljettaja,bus driver,,,0,,5,
+linjakirjuri,linjakirjuri,,,,,,
+linjatarkastaja,line inspector,,,,,,
+listoittaja,listoittaja,,,,,6,
+lnkeroirouva,lnkeroirouva,,,,,,
+lovyseppä,lovyseppä,,,,,6,
+"maanv., kansanedustaja","maanv., MP",,,,,3,
+maanviljelagrologi,maanviljelagrologi,,,,,3,
+maanviljelliikemies,maanviljelliikemies,,,,,3,
+maanviljelmuusikko,maanviljelmuusikko,,,,,3,
+maanviljelmyyntiedustaja,maanviljelmyyntiedustaja,,,,,2,
+maanviljelpuuseppä,maanviljelpuuseppä,,,,,3,
+maanviljelpuutarhuri,maanviljelpuutarhuri,,,,,3,
+maanvitj,maanvitj,,,,,3,
+maanvllj,maanvllj,,,,,3,
+maanvtytär,maanvtytär,,,,,,
+maidontarkastaja,milk inspector,,,,,6,
+mainosmies,adman,,,,,2,
+mainostaiteilija,advertising artist,,,,,0,
+maitolanhoitaja,maitolanhoitaja,,,,,6,
+majakkavartija,lighthouse guard,,,,,8,
+"majuri evp., opettaja","Major ret., teacher",,,1,,8,
+mallastaja,brewer,,,,,6,
+mallintekijä,model maker,,,,,6,
+mäntyöljyn keittäjä,tall oil cook,,,,,6,
+markkinointineuvoja,marketing advice,,,,,2,
+matematiikan lehtori,mathematics lecturer,,,1,,0,
+matematiikan opettaja,mathematics teacher,,,1,,0,
+mattoasentaja,carpet installer,,,,,6,
+meanviljelijä,meanviljelijä,,,,,3,
+metallileikkaaja,metal cutting machine,,,,,6,
+metalliporaaja,metalliporaaja,,,,,6,
+metallisulattaja,metallisulattaja,,,,,6,
+metsäharj,metsäharj,,,,,3,
+metsämies,hunter,,,,,3,
+metsäpäällikkö,Head of forestry,,,,,3,
+metsäpiiriesimies,forest district manager,,,,,3,
+mikroskopisti,Microscopy,,,,,0,
+miksarinhoitaja,miksarinhoitaja,,,,,6,
+moottorinkuljettaja,engine driver,,,,,5,
+myllyasentaja,mill installer,,,,,6,
+myllyn omistaja,mill owner,,,,,2,
+myllynhoitaja,mill manager,,,,,6,
+myymäläautonhoitaja,car shop attendant,,,,,2,
+myymälänhoit,myymälänhoit,,,,,2,
+myynninjohtaja,sales director,,,,,2,
+n työntekijä,employee,,,,,,
+nahkaplastikko,nahkaplastikko,,,,,6,
+noppaaja,noppaaja,,,,,6,
+nostomies,lifting man,,,,,8,
+nosturin kuljettaja,crane operator,,,,,5,
+nosturinkäyttäjä,crane operator,,,,,5,
+nuorisosihteeri,nuorisosihteeri,,,,,0,
+"o,Korouva","No, Korouva",,,,,,
+"o,Koskelairouva","No, Koskelairouva",,,,,,
+"o,Martikairouva","No, Martikairouva",,,,,,
+"o,Matiemäntä","No, Matiemäntä",,,,,,
+"o,Purouva","No, Purouva",,,,,,
+"o,Reirouva","No, Reirouva",,,,,,
+"o,Saemäntä","No, Saemäntä",,,,,,
+"o,Savolairouva","No, Savolairouva",,,,,,
+"o,Viinarouva","No, Liquor Mrs.",,,,,,
+offsetapulainen,offset assistant,,,,,6,
+ohjaamonhoitaja,cabin attendant,,,,,6,
+oikaisija,straightener,,,,,6,
+oikeustieteen kandidaatti,LL.M.,,,,,0,
+oikoja,Orthodontist,,,1,,,
+oläkeläinen,oläkeläinen,,,,,,
+ompeluopettaja,sewing teacher,,,,,0,
+oopperalaulajatar,opera singer,,,,,0,
+opastinasentaja,opastinasentaja,,,,,6,
+opastintyöntekijä,opastintyöntekijä,,,,,6,
+operatööri,operatööri,,,,,6,
+oppikoulunopettaja,secondary school teacher,,,,,0,
+osapäiväapulainen,osapäiväapulainen,,,,,8,
+ostopäälliagrologi,ostopäälliagrologi,,,,,3,
+pääsihteeri,secretary-general,,,,,1,
+paketoija,paketoija,,,,,6,
+palkkakonttorin esimies,the pay office supervisor,,,,,1,
+palokalustonhoitaja,fire equipment manager,,,,,8,
+palomestari evp,retired fire chief,,,,,8,
+paperikoneen hoitaja,paper machine attendant,,,,,6,
+paperileikkaaja,paper cutter,,,,,6,
+paperin lajittelija,paper sorter,,,,,6,
+paperinlajittelija,the paper sorter,,,,,6,
+paperityontekijä,paperityontekijä,,,,,6,
+pianonsoiton opettaja,The Piano teacher,,,,,0,
+piirroittaja,piirroittaja,,,,,6,
+pinomies,a stack of a man,,,,,6,
+pintakäsittelyä,surface treatment,,,0,,6,
+poliisikonstaapeli evp,Retired police officer,,,0,,8,
+poliisimestari,chief of police,,,,,8,
+poliisitarkastaja,Police Inspector,,,0,,8,
+Pori,Pori,,,,,,
+postiauton kuljettaja,mail car driver,,,0,,5,
+postitoimiston hoitaja,post office manager,,,0,,1,
+postitoimistonhoitaja,post office manager,,,0,,1,
+puh.asentaja,puh.asentaja,,,,,6,
+puhelinapulainen,phone assistant,,,0,,6,
+puhelinaseman hoitaja,telephone station attendant,,,0,,1,
+puhelinkeskuksenhoitaja,telephone switchboard operator,,,0,,1,
+puhelinmekaanikko,telephone mechanic,,,0,,6,
+puutarhanhoitaja,the garden manager,,,0,,3,
+puutavarahankkija,timber buyer,,,,,2,
+puutavaran mittaaja,timber measurer,,,0,,6,
+puutavaran vastaanottaja,the recipient timber,,,,,6,
+puutyöläinen,puutyöläinen,,,,,6,
+puuutarhuri,puuutarhuri,,,,,3,
+puvustonhoitaja,wardrobe master,,,0,,8,
+pysäkinhoitaja,stops attendant,,,0,,5,
+rak.työl,rak.työl,,,,,6,
+rakennusmaalari,building painter,,,0,,6,
+rakennustarkastaja,building inspector,,,0,,6,
+rakennusteknikko,construction technician,,,0,,6,
+rakennustyö m ies,m yoke construction,,,,,6,
+rakennustyöni,construction job,,,0,,6,
+rakennustyöni ies,building my yoke,,,,,6,
+rautamyyjä,ferrous seller,,,,,2,
+rautaosaston hoitaja,iron head nurse,,,,,,
+rautatietyömies,railway laborer,,,,,5,
+ravintolakassa,restaurant cashier,,,,,2,
+ravintolan hoitaja,restaurant manager,,,,,8,
+rnaanvilj,farmer,1,,,,3,
+rottinkityöntekijä,rottinkityöntekijä,,,,,6,
+rouvä,housewife,,,,,,
+rouvo,housewife,,,,,,
+rpaanviljelijä,rpaanviljelijä,,,,,3,
+ruokala apulainen,canteen helper,,,,,8,
+ruokalan kassa,canteen cash,,,,,2,
+ruokalatyöntekijä,emplyee,,,,,8,
+sääteknikko,sääteknikko,,,,,6,
+sahan isännöitsijä,sawmill superintendent,,,,,1,
+sahantyöntekijä,sawmill worker,,,,,6,
+sähkö asentaja,electrical fitter,,,,,6,
+sähköhitsaaja,sähköhitsaaja,,,,,6,
+sähköpäivystäjä,electricity duty officer,,,,,6,
+sähkötarkastaja,electrical inspector,,,,,0,
+säilyketyöläinen,canned worker,,,,,6,
+sairaalaapulainen,hospital assistant,,,0,,0,
+sairaalaemäntä,hospital hostess,,,,,,
+sairaanhoitajaopettaja,nurse teacher,,,1,,0,
+sanomalehdentoimittaja,a newspaper reporter,,,,,0,
+satamamies,port of man,,,,,5,
+satamatyönjohtaja,harbor foreman,,,,,5,
+satamavalvoja,port administrator,,,,,5,
+savustaja,smokers,,,,,6,
+sementinpolttaja,cement burner,,,0,,6,
+sementtimles,sementtimles,,,,,6,
+seurakuntatyöntekijä,church employee,,,0,,0,
+siivoja,cleaning lady,,,0,,8,
+silinterimies,silinterimies,,,,,,
+sillanhoitaja,bridge attendant,,,0,,8,
+sinkitsijä,sinkitsijä,,,,,6,
+sirkkelisahaaja,sirkkelisahaaja,,,,,6,
+sisustaja,decorator,,,,,0,
+smirklaaja,smirklaaja,,,,,,
+sotilaskodin johtaja,military leader home,,,,,1,
+sotilasmestari ovp,sergeant major OVP,,,,,8,
+sotilasteknikko evp,military engineer ret,,,1,,8,
+sukeltajan merkinantaja,diver signalman,,,0,,8,
+suksiseppä,ski smith,,,0,,6,
+sulkumestari,the master shut-off,,,,,5,
+syväporari,syväporari,,,,,6,
+tallimestari,equerry,,,,,3,
+taloustyöläinen,economic worker,,,1,,2,
+Tampere,Tampere,,,,,,
+tasoitemies,tasoitemies,,,,,6,
+tavaranmerkitsijä,tavaranmerkitsijä,,,,,6,
+tavarantarkastaja,goods inspector,,,,,1,
+tehdastvöntekijä,tehdastvöntekijä,,,,,6,
+teht.työmies,teht.työmies,,,,,6,
+tehtaantyöläinon,tehtaantyöläinon,,,,,6,
+tekstiilityöläinen,textile worker,,,0,,6,
+telakkamies,shipyard man,,,0,,5,
+terottaja,terottaja,,,,,6,
+tiedotussihteeri,information Secretary,,,,,0,
+tiemies,tiemies,,,,,6,
+tiivistäjä,compacting,,,,,6,
+tilitoimiston omistaja,accounting firm owner,,,1,2,1,
+toim.joht,toim.joht,,,,,1,
+toim.johtaja,toim.johtaja,,,,,1,
+toimisto apulainen,office boy,,,,,1,
+toimistoapul,toimistoapul,,,,,1,
+toimiston esimies,Office manager,,,,,1,
+torimyyjä,stallholder,,,,,2,
+traktori n kuljettaja,The tractor driver,,,,,5,
+ttyöläinen,ttyöläinen,,,,,6,
+tukkityöläinen,log worker,,,,,3,
+tulkki,interpreter,,,,,0,
+tullinhoitaja,the duty nurse,,,1,,1,
+turkiskonettaja,turkiskonettaja,,,,,6,
+turkistarhaaja,Fur Farmer,,,,,3,
+työkaluhioja,työkaluhioja,,,,,6,
+työkaluvarastonhoitaja,tool warehouse manager,,,0,,6,
+työkasööri,työkasööri,,,,,2,
+työl,employment,,,,,6,
+työnjakaja,the work dispatcher,,,,,0,
+työnjärjestäjä,labor organizer,,,1,,0,
+työnjohtmaanviljelijä,työnjohtmaanviljelijä,,,,,3,
+työsuunnittelija,a planner,,,1,,1,
+työsuunnittelua,Work planning,,,,,1,
+uittomies,floating man,,,,,3,
+ulkomaankirjeenvaihtaja,a foreign correspondent,,,1,,0,
+upseerikerhon emäntä,the officer club hostess,,,,,8,
+urakkahinnoittaja,urakkahinnoittaja,,,,,1,
+urheilukentänhoitaja,groundsman,,,,,8,
+uskonnonopettaja,religious teacher,,,1,,0,
+uunintekijä,oven factor,,,,,6,
+vaakitsija,vaakitsija,,,,,6,
+vaatttyönjohtaja,vaatttyönjohtaja,,,,,1,
+vahtimies,watchman,,,,,6,
+vaihdetyömies,shift worker,,,,,5,
+vaihekokooja,vaihekokooja,,,,,6,
+vaihteenkorjaaja,gear repairman,,,,,6,
+välinehuoltaja,tool guardian,,,,,6,
+välittäjä,appellant,,,,,,
+valokuvaamoapulainen,valokuvaamoapulainen,,,,,0,
+valssimies,waltz man,,,,,6,
+vaneriteknikko,plywood technician,,,,,6,
+vanhempi myyjä,senior seller,,,,,2,
+vankilalähetti,prison sent,,,,,8,
+vankilanjohtaja,warden,,,,,1,
+vänrikki evp,Second Lieutenant ret,,,,,8,
+varastokirjuri,varastokirjuri,,,,,1,
+varaston esimies,warehouse supervisor,,,,,6,
+varatuomasianajaja,Vice pig brought on by driver,,,,,0,
+varavankilanjohtaja,Deputy Prison Director,,,,,0,
+värimies,color man,,,,,6,
+varjostinompelija,varjostinompelija,,,,,6,
+vartiotarkastaja,guard inspector,,,,,0,
+veneenveistäjä,boatbuilder,,,,,6,
+veneveistäjä,boat builders,,,,,6,
+verhoiluompelija,upholstery seamstress,,,,,6,
+verkontekijä,network element,,,,,6,
+verstasmies,workshop man,,,,,6,
+vesilaitoksenhoitaja,the water utility manager,,,,,1,
+vihannesviljelijä,vegetable farmer,,,,,3,
+viiiaaja,viiiaaja,,,,,6,
+viilunleikkaaja,viilunleikkaaja,,,,,6,
+vinssimies,vinssimies,,,,,6,
+virittäjä,tuner,,,0,,,
+voimalaitostyöntekijä,power plant worker,,,0,,6,
+voimistelun lehtori,gymnastics lecturer,,,1,,0,
+vpoliisikonstaapeli,vpoliisikonstaapeli,,,,,8,
+ylikersantti maanviljelijä,Staff Sergeant farmer,,,0,,3,
+ylirajajääkäri evp,ylirajajääkäri ret,,,,,8,
+ylivaäpeli,master sergeant,,,,,8,
+yo.merkonomi,yo.merkonomi,,,,,0,
+filosofian tohtori,doctor of Philosophy,,,1,,0,
