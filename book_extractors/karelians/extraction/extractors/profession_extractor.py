@@ -2,7 +2,7 @@ import re
 
 import shared.regexUtils as regexUtils
 import shared.textUtils as textUtils
-from book_extractors.common.extraction_keys import KEYS
+import csv
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 
@@ -15,11 +15,47 @@ class ProfessionExtractor(BaseExtractor):
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
+        def cast_int(value):
+            try:
+                return int(value)
+            except ValueError:
+                return None
+
+        with open('support_datasheets/occupations.csv', 'r', encoding='utf-8') as occupations_list:
+            occupations = list(csv.DictReader(occupations_list))
+            self._occupation_extra_data = {}
+
+            for occupation in occupations:
+                self._occupation_extra_data[occupation['professionName']] = {
+                    'englishName': occupation['professionEnglishName'],
+                    'agricultureOrForestryRelated': bool(occupation['agricultureOrForestryRelated']),
+                    'manualLabor': bool(occupation['manualLabor']),
+                    'education': bool(occupation['education']),
+                    'SESgroup1989': cast_int(occupation['SESgroup1989']),
+                    'occupationCategory': cast_int(occupation['occupationCategory']),
+                    'socialClassRank': cast_int(occupation['socialClassRank'])
+                }
+
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
-        profession_results = self._find_profession(entry['text'], start_position)
+        profession_results = self._get_profession(entry['text'], start_position)
 
         return self._add_to_extraction_results(profession_results[0], extraction_results, extraction_metadata, profession_results[1])
+
+    def _get_profession(self, text, start_position):
+        profession_name, cursor_location = self._find_profession(text, start_position)
+        return self._add_profession_extra_information(profession_name), cursor_location
+
+    def _add_profession_extra_information(self, profession_name):
+        profession_output = {
+            'professionName': profession_name,
+            'extraInfo': None
+        }
+
+        if profession_name in self._occupation_extra_data:
+            profession_output['extraInfo'] = self._occupation_extra_data[profession_name]
+
+        return profession_output
 
     def _find_profession(self, text, start_position):
         text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
@@ -27,7 +63,7 @@ class ProfessionExtractor(BaseExtractor):
         profession = None
 
         try:
-            #limit the search range if there is spouse keyword:
+            # limit the search range if there is spouse keyword:
             try:
                 found_spouse_word = regexUtils.safe_search(r"Puol", text, self.PROFESSION_OPTIONS)
                 text = textUtils.take_sub_str_based_on_range(text, 0, found_spouse_word.start())
