@@ -41,6 +41,8 @@ KEYS = {
     "stemmedName": "stemmedName",
     "personMetadata": "personMetadata",
 
+    "animalHusbandry": "animalHusbandry",
+
     "address": "address",
     "deathDay": "deathDay",
     "deathMonth": "deathMonth",
