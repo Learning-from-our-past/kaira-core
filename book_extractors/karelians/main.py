@@ -12,6 +12,7 @@ from book_extractors.karelians.extraction.extractors.location_extractor import B
 from book_extractors.karelians.extraction.extractors.migration_route_extractors import MigrationRouteExtractor
 from book_extractors.karelians.extraction.extractors.spouse_extractor import SpouseExtractor
 from book_extractors.karelians.extraction.extractors.child_extractor import ChildExtractor
+from book_extractors.karelians.extraction.extractors.farm_extractor import FarmDetailsExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
 from book_extractors.common.extractors.previous_marriages_flag_extractor import PreviousMarriagesFlagExtractor
 from shared.gender_extract import Gender
@@ -40,6 +41,7 @@ class KarelianBooksExtractor:
             configure_extractor(OmakotitaloExtractor, path='primaryPerson'),
             configure_extractor(SpouseExtractor),
             configure_extractor(ChildExtractor),
+            configure_extractor(FarmDetailsExtractor),
             configure_extractor(KairaIdExtractor, path='primaryPerson')
         ]
 

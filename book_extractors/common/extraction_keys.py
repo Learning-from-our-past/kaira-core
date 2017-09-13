@@ -41,6 +41,13 @@ KEYS = {
     "stemmedName": "stemmedName",
     "personMetadata": "personMetadata",
 
+    "animalHusbandry": "animalHusbandry",
+    "dairyFarm": "dairyFarm",
+    "farmObtainedThroughGovermentPrograms": "farmObtainedThroughGovermentPrograms",
+    "asutustila": "asutustila",
+    "maanhankintalaki": "maanhankintalaki",
+    "coldFarm": "coldFarm",
+
     "address": "address",
     "deathDay": "deathDay",
     "deathMonth": "deathMonth",
