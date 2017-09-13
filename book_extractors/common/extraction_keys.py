@@ -42,6 +42,7 @@ KEYS = {
     "personMetadata": "personMetadata",
 
     "animalHusbandry": "animalHusbandry",
+    "dairyFarm": "dairyFarm",
 
     "address": "address",
     "deathDay": "deathDay",
