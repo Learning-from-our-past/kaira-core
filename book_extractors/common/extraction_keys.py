@@ -43,6 +43,9 @@ KEYS = {
 
     "animalHusbandry": "animalHusbandry",
     "dairyFarm": "dairyFarm",
+    "farmObtainedThroughGovermentPrograms": "farmObtainedThroughGovermentPrograms",
+    "asutustila": "asutustila",
+    "maanhankintalaki": "maanhankintalaki",
 
     "address": "address",
     "deathDay": "deathDay",

@@ -39,3 +39,20 @@ class TestFarmExtraction:
             ('Tilalla on siirrytty lypsykarjasta teuraskarjaan. Karjanhoitoa harjoitetaan.', False),
         ], 'dairyFarm', farm_extractor)
 
+    def should_mark_farm_as_asutustila_if_it_is_mentioned_in_the_text(self, farm_extractor):
+        self.verify_flags([
+            ('Testikkäillä on asutustila, jonka he saivat valtiolta.', True),
+            ('Testikkäiden tila on pika-asutustila.', True),
+            ('Testikkäiden tila on pika asutustila.', True),
+            ('Testikkäillä on maatila jolla harjoitetaan karjanhoitoa.', False),
+            ('Testikkäiden tila on pisaka-asutudgstila, jolla harjoitetaan karjanhoitoa.', False),
+        ], 'asutustila', farm_extractor)
+
+    def should_mark_maanhankintalaki_if_it_is_mentioned_in_the_text(self, farm_extractor):
+        self.verify_flags([
+            ('Testikkäiden tila perustettiin maanhankintalain nojalla.', True),
+            ('Testikkäiden tila perustettiin maanhangintalain nojalla. He harjoittavat karjanhoitoa.', True),
+            ('Testikkäillä on maanhankintatila.', True),
+            ('Testikkäillä on hieno maatila jossa harjoitetaan karjanhoitoa.', False),
+            ('Testikkäillä on maanhaankrintatila. He harjoittavat karjanhoitoa.', False)
+        ], 'maanhankintalaki', farm_extractor)

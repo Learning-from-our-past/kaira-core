@@ -18,7 +18,9 @@ class FarmDetailsExtractor(BaseExtractor):
 
         boolean_flag_patterns = {
             KEYS['animalHusbandry']: r'karjataloutta|karjanhoitoa?\b|karjatalous\b',
-            KEYS['dairyFarm']: r'lypsy-|lypsy\b|lypsykarja(?!sta)'
+            KEYS['dairyFarm']: r'lypsy-|lypsy\b|lypsykarja(?!sta)',
+            KEYS['asutustila']: r'(?:asutustila){s<=1,i<=1}|(?:pika-asutustila){s<=1,i<=1}',
+            KEYS['maanhankintalaki']: r'(?:maanhankinta){s<=1,i<=1}'
         }
 
         self._sub_extraction_pipeline = ExtractionPipeline([
