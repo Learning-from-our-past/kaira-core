@@ -46,6 +46,7 @@ KEYS = {
     "farmObtainedThroughGovermentPrograms": "farmObtainedThroughGovermentPrograms",
     "asutustila": "asutustila",
     "maanhankintalaki": "maanhankintalaki",
+    "coldFarm": "coldFarm",
 
     "address": "address",
     "deathDay": "deathDay",

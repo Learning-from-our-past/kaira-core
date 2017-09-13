@@ -56,3 +56,11 @@ class TestFarmExtraction:
             ('Testikkäillä on hieno maatila jossa harjoitetaan karjanhoitoa.', False),
             ('Testikkäillä on maanhaankrintatila. He harjoittavat karjanhoitoa.', False)
         ], 'maanhankintalaki', farm_extractor)
+
+    def should_mark_farm_as_cold_farm_if_it_is_mentioned_in_the_text(self, farm_extractor):
+        self.verify_flags([
+            ('Testikkäillä on kylmätila, jonka he saivat valtiolta.', True),
+            ('Testikkäiden tila on kylmätilana saatu, jonka he myöhemmin raivasivat isommaksi.', True),
+            ('Testikkäiden tila kymätila, ja he harjoittavat karjanhoitoa', False),  # No support for typos
+            ('Testikkäillä on maatila jolla harjoitetaan karjanhoitoa.', False),
+        ], 'coldFarm', farm_extractor)
