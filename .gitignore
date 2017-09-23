@@ -1,7 +1,7 @@
 dist/
 mongodb/
 build/
-kaira_venv/
+*venv*
 .idea/
 *.pyc
 *.bat
