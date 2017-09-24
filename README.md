@@ -2,6 +2,10 @@
 
 Main module containing logic for data extraction and command line interface.
 
+## Dependencies
+* Mongodb 3.4.9
+* Python 3
+
 ## Setup
 ```
 make create-venv
