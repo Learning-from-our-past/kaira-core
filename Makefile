@@ -3,6 +3,11 @@ create-venv:
 
 setup:
 	pip install -r requirements.txt;
+	wget https://github.com/Learning-from-our-past/kaira-core/releases/download/mongodump2/geonames_dump.zip
+	unzip geonames_dump.zip
+	mongorestore dump
+	rm -rf dump/
+	rm -rf geonames_dump.zip
 
 extract-all:
 	python main.py -i material/siirtokarjalaiset_I.xml -o material/siirtokarjalaiset_I.json
