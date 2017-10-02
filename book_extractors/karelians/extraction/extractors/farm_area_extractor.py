@@ -7,7 +7,7 @@ class FarmAreaExtractor(BaseExtractor):
     Extract the area of the farm in the data entry.
     """
 
-    extraction_key = 'farmArea'
+    extraction_key = 'farmTotalArea'
 
     def __init__(self, key_of_cursor_location_dependent, options):
         super(FarmAreaExtractor, self).__init__(key_of_cursor_location_dependent, options)
