@@ -66,6 +66,7 @@ class TestFarmExtraction:
             ('Testikkäillä on maatila jolla harjoitetaan karjanhoitoa.', False),
         ], 'coldFarm', farm_extractor)
 
+
 class TestFarmAreaExtraction:
     @pytest.yield_fixture(autouse=True)
     def farm_area_extractor(self):
@@ -78,7 +79,25 @@ class TestFarmAreaExtraction:
         results, metadata = farm_area_extractor.extract({'text': 'Nimettömät asuvat tilalla, jonka pinta-ala on 21,61 ha ja viljelyksiä on 7,79 ha.'}, {}, {})
         assert results['farmArea'] == 21.61
 
-    def should_extract_none_if_area_is_not_farm_area(self, farm_area_extractor):
+    def should_extract_hectares_correctly_as_float_if_hectare_unit_contains_typo(self, farm_area_extractor):
+        results, metadata = farm_area_extractor.extract({'text': 'Perhe asuu tilalla, jonka pinta-ala on 28,5 haja viljelyksiä on 15 ha Heidän poikansa Taavi hoitaa tilaa.'}, {}, {})
+        assert results['farmArea'] == 28.5
+
+    def should_extract_hectares_correctly_as_float_if_area_is_in_ares(self, farm_area_extractor):
+        results, metadata = farm_area_extractor.extract({'text': 'Pa-lonkylä 44- Satunnaisella ihmisellä on oma talo. jonka tontin pinta ala on 10 aaria.'}, {}, {})
+        assert results['farmArea'] == 10/100
+
+    def should_extract_none_if_contains_whitespace_in_number(self, farm_area_extractor):
+        results, metadata = farm_area_extractor.extract({'text': 'Meikäläisillä on asutustila, jonka pinta-ala on 1 9 ha ja siitä on viljeltyä 4 ha.'}, {}, {})
+        assert results['farmArea'] is None
+
+    def should_extract_none_if_data_does_not_contain_total_area(self, farm_area_extractor):
         results, metadata = farm_area_extractor.extract({'text': 'Jonkun perhe asuu maatilallaan. Pinta-alasta on viljeltyä 2,7 ha ja metsää 0,3 ha.'}, {}, {})
         assert results['farmArea'] is None
 
+    def should_extract_none_if_area_is_in_square_meters(self, farm_area_extractor):
+        results, metadata = farm_area_extractor.extract({'text': 'Nyymeillä on myös Helsingissä Tikkurilassa kaksikerroksinen asuintalo, jonka pinta-ala on 270 m'}, {}, {})
+        assert results['farmArea'] is None
+
+        results, metadata = farm_area_extractor.extract({'text': 'Testiperheellä on kesäasunto Ristiinkäytävän järven rannalla. Tontin pinta-ala on n. 2300 m'}, {}, {})
+        assert results['farmArea'] is None
