@@ -1,5 +1,6 @@
 import pytest
 from book_extractors.karelians.extraction.extractors.farm_extractor import FarmDetailsExtractor
+from book_extractors.karelians.extraction.extractors.farm_area_extractor import FarmAreaExtractor
 
 
 class TestFarmExtraction:
@@ -64,3 +65,20 @@ class TestFarmExtraction:
             ('Testikkäiden tila kymätila, ja he harjoittavat karjanhoitoa', False),  # No support for typos
             ('Testikkäillä on maatila jolla harjoitetaan karjanhoitoa.', False),
         ], 'coldFarm', farm_extractor)
+
+class TestFarmAreaExtraction:
+    @pytest.yield_fixture(autouse=True)
+    def farm_area_extractor(self):
+        return FarmAreaExtractor(None, None)
+
+    def should_extract_hectares_correctly_as_float(self, farm_area_extractor):
+        results, metadata = farm_area_extractor.extract({'text': 'Anonyymit asuvat maatilallaan, jonka pinta-ala on 35.20 ha ja siitä on viljeltyä 3.37 ha.'}, {}, {})
+        assert results['farmArea'] == 35.2
+
+        results, metadata = farm_area_extractor.extract({'text': 'Nimettömät asuvat tilalla, jonka pinta-ala on 21,61 ha ja viljelyksiä on 7,79 ha.'}, {}, {})
+        assert results['farmArea'] == 21.61
+
+    def should_extract_none_if_area_is_not_farm_area(self, farm_area_extractor):
+        results, metadata = farm_area_extractor.extract({'text': 'Jonkun perhe asuu maatilallaan. Pinta-alasta on viljeltyä 2,7 ha ja metsää 0,3 ha.'}, {}, {})
+        assert results['farmArea'] is None
+
