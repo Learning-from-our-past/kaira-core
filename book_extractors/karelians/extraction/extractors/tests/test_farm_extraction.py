@@ -66,6 +66,10 @@ class TestFarmExtraction:
             ('Testikkäillä on maatila jolla harjoitetaan karjanhoitoa.', False),
         ], 'coldFarm', farm_extractor)
 
+    def should_extract_farm_area(self, farm_extractor):
+        results, metadata = farm_extractor.extract({'text': 'Anonyymit asuvat maatilallaan, jonka pinta-ala on 35.20 ha ja siitä on viljeltyä 3.37 ha.'}, {}, {})
+        assert results['farmDetails']['farmArea'] == 35.2
+
 
 class TestFarmAreaExtraction:
     @pytest.yield_fixture(autouse=True)
