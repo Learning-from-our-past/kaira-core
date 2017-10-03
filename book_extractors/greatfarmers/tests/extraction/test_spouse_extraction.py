@@ -16,7 +16,7 @@ class TestSpouseExtraction:
         th.omit_property(spouse_details, 'kairaId')
 
         assert spouse_details == {
-            'originalFamily': 'Testilä',
+            'formerSurname': 'Testilä',
             'firstNames': 'Anna-Liisa',
             'birthData': {
                 'birthDay': 19,

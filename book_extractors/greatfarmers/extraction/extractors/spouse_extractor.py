@@ -5,7 +5,7 @@ from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from book_extractors.greatfarmers.extraction.extractors.birthday_extractor import BirthdayExtractor
-from book_extractors.greatfarmers.extraction.extractors.original_family_extractor import OrigFamilyExtractor
+from book_extractors.greatfarmers.extraction.extractors.original_family_extractor import FormerSurnameExtractor
 from shared import regexUtils
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 
@@ -22,7 +22,7 @@ class SpouseExtractor(BaseExtractor):
         self.SUBSTRING_WIDTH = 100
 
         self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(OrigFamilyExtractor),
+            configure_extractor(FormerSurnameExtractor),
             configure_extractor(BirthdayExtractor),
         ])
 
@@ -60,7 +60,7 @@ class SpouseExtractor(BaseExtractor):
                 KEYS["spouseBirthData"]: {
                     **spouse_details['birthday']
                 },
-                KEYS["origfamily"]: spouse_details[KEYS['origfamily']],
+                KEYS["formerSurname"]: spouse_details[KEYS['formerSurname']],
                 KEYS["spouseName"]: spouse_name,
                 KEYS["kairaId"]: self.kaira_id_provider.get_new_id('S')
             }
