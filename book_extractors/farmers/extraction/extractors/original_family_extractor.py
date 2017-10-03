@@ -6,14 +6,14 @@ from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 
-class OrigFamilyExtractor(BaseExtractor):
-    extraction_key = KEYS['origfamily']
+class FormerSurnameExtractor(BaseExtractor):
+    extraction_key = KEYS['formerSurname']
     """
     Tries to find the possible o.s. (omaa sukua) part from entry.
     """
 
     def __init__(self, key_of_cursor_location_dependent, options):
-        super(OrigFamilyExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        super(FormerSurnameExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.REQUIRES_MATCH_POSITION = True
         self.SEARCH_SPACE = 40
         self.FAMILY_PATTERN = r"(((?:o|0)\.? ?s\.?,? )(?P<family>([a-zä-ö-]*)(, ent\.?,? \w*)?)(?:,|\.))|(?P<family>ent\.?,? \w*)"
