@@ -7,7 +7,7 @@ from book_extractors.extraction_pipeline import ExtractionPipeline, configure_ex
 from book_extractors.karelians.extraction.extractors.birthday_extractor import BirthdayExtractor
 from book_extractors.karelians.extraction.extractors.death_extractor import DeathExtractor
 from book_extractors.karelians.extraction.extractors.location_extractor import BirthdayLocationExtractor
-from book_extractors.karelians.extraction.extractors.original_family_extractor import OrigFamilyExtractor
+from book_extractors.karelians.extraction.extractors.original_family_extractor import FormerSurnameExtractor
 from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
 from book_extractors.karelians.extraction.extractors.wedding_extractor import WeddingExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
@@ -21,8 +21,8 @@ class SpouseExtractor(BaseExtractor):
         super(SpouseExtractor, self).__init__(key_of_cursor_location_dependent, options)
 
         self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(OrigFamilyExtractor),
-            configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=OrigFamilyExtractor),
+            configure_extractor(FormerSurnameExtractor),
+            configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=FormerSurnameExtractor),
             configure_extractor(BirthdayExtractor),
             configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
             configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
@@ -45,7 +45,7 @@ class SpouseExtractor(BaseExtractor):
                 KEYS["birthLocation"]: None
             },
             KEYS["deathYear"]: None,
-            KEYS["origfamily"]: None,
+            KEYS["formerSurname"]: None,
             KEYS["profession"]: None,
             KEYS["weddingYear"]: None,
             KEYS["spouseName"]: None,
@@ -90,7 +90,7 @@ class SpouseExtractor(BaseExtractor):
                     KEYS['birthLocation']: spouse_details['birthLocation']
                 },
                 KEYS['spouseDeathYear']: spouse_details['death'],
-                KEYS["origfamily"]: spouse_details['originalFamily'],
+                KEYS["formerSurname"]: spouse_details['formerSurname'],
                 KEYS["spouseProfession"]: spouse_details['profession'],
                 KEYS["weddingYear"]: spouse_details['wedding'],
                 KEYS["spouseName"]: spouse_name,
