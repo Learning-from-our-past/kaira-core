@@ -3,7 +3,7 @@ KEYS = {
     # Karelians key
     "surname": "surname",
     "firstnames": "firstNames",
-    "origfamily": "originalFamily",
+    "formerSurname": "formerSurname",
     "profession": "profession",
     "imagepath": "imagePath",
     "approximatePage": "approximatePageNumber",

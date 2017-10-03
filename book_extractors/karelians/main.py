@@ -3,7 +3,7 @@ from book_extractors.karelians.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.karelians.resultjsonbuilder import ResultJsonBuilder
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
-from book_extractors.karelians.extraction.extractors.original_family_extractor import OrigFamilyExtractor
+from book_extractors.karelians.extraction.extractors.original_family_extractor import FormerSurnameExtractor
 from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
 from book_extractors.karelians.extraction.extractors.image_extractor import ImageExtractor
 from book_extractors.karelians.extraction.extractors.omakotitalo_extractor import OmakotitaloExtractor
@@ -32,9 +32,9 @@ class KarelianBooksExtractor:
         pipeline_components = [
             configure_extractor(NameExtractor, path='primaryPerson'),
             configure_extractor(ImageExtractor),
-            configure_extractor(OrigFamilyExtractor, path='primaryPerson'),
-            configure_extractor(ProfessionExtractor, path='primaryPerson', depends_on_match_position_of_extractor=OrigFamilyExtractor),
-            configure_extractor(BirthdayExtractor, path='primaryPerson', depends_on_match_position_of_extractor=OrigFamilyExtractor),
+            configure_extractor(FormerSurnameExtractor, path='primaryPerson'),
+            configure_extractor(ProfessionExtractor, path='primaryPerson', depends_on_match_position_of_extractor=FormerSurnameExtractor),
+            configure_extractor(BirthdayExtractor, path='primaryPerson', depends_on_match_position_of_extractor=FormerSurnameExtractor),
             configure_extractor(BirthdayLocationExtractor, path='primaryPerson', depends_on_match_position_of_extractor=BirthdayExtractor),
             configure_extractor(PreviousMarriagesFlagExtractor, path='primaryPerson'),
             configure_extractor(MigrationRouteExtractor, path='primaryPerson'),
