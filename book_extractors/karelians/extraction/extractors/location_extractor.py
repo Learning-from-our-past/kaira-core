@@ -6,6 +6,7 @@ from book_extractors.extraction_exceptions import *
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared import regexUtils, textUtils
 from book_extractors.common.postprocessors import place_name_cleaner
+from shared.textUtils import remove_hyphens_from_text
 
 
 class LocationExtractor(BaseExtractor):
@@ -86,7 +87,7 @@ class BirthdayLocationExtractor(BaseExtractor):
             results, metadata = self._sub_extraction_pipeline.process({'text': text})
             self._check_if_location_is_valid(text, results['location']['locationMatch'])
             location = results['location']['locationMatch'].group("location")
-            location = location.replace('-', '')
+            location = remove_hyphens_from_text(location)
             location = location.replace('\s', '')
 
             cursor_location = self.get_last_cursor_location(results, metadata) + start_position - 4
