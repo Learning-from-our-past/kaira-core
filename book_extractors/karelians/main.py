@@ -15,6 +15,7 @@ from book_extractors.karelians.extraction.extractors.child_extractor import Chil
 from book_extractors.karelians.extraction.extractors.farm_extractor import FarmDetailsExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
 from book_extractors.common.extractors.previous_marriages_flag_extractor import PreviousMarriagesFlagExtractor
+from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
 from shared.gender_extract import Gender
 
 BOOK_SERIES_ID = 'siirtokarjalaiset'    # Used to identify this book series in xml files
@@ -37,6 +38,7 @@ class KarelianBooksExtractor:
             configure_extractor(BirthdayExtractor, path='primaryPerson', depends_on_match_position_of_extractor=FormerSurnameExtractor),
             configure_extractor(BirthdayLocationExtractor, path='primaryPerson', depends_on_match_position_of_extractor=BirthdayExtractor),
             configure_extractor(PreviousMarriagesFlagExtractor, path='primaryPerson'),
+            configure_extractor(InjuredInWarFlagExtractor, path='primaryPerson'),
             configure_extractor(MigrationRouteExtractor, path='primaryPerson'),
             configure_extractor(OmakotitaloExtractor, path='primaryPerson'),
             configure_extractor(SpouseExtractor),
