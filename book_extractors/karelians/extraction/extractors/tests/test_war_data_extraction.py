@@ -1,18 +1,42 @@
 import pytest
+from book_extractors.karelians.extraction.extractors.war_data_extractor import WarDataExtractor
 from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
 
-class TestInjuredInWarFlag:
 
+class TestWarDataExtraction:
+    @pytest.yield_fixture(autouse=True)
+    def extractor(self):
+        return WarDataExtractor(None, None)
+
+    def _verify_flags(self, expected_flags_and_texts, extractor, subflag, gender):
+        extractor_prerequisite_results = {'primaryPerson': {'name': {'gender': gender}}}
+        flag = 'warData'
+
+        for e in expected_flags_and_texts:
+            results, metadata = extractor.extract({'text': e[0]}, extractor_prerequisite_results, {})
+            assert results[flag][subflag] is e[1]
+
+    def should_extract_injured_in_war_flag_correctly_as_true_if_male(self, extractor):
+        self._verify_flags([
+            ('Nyymi on sotamies, ja hän palveli JP 1;ssä. Hän haavoittui v. -44 ja on 30 %;n sotainvalidi.', True)
+        ], extractor, 'injuredInWarFlag', 'Male')
+
+    def should_extract_injured_in_war_flag_correctly_as_none_if_female(self, extractor):
+        self._verify_flags([
+            ('Hän on sotamies ja palvellut jatkosodassa JR 6:ssa. Hän on 60 %:n sotainvalidi.', None)
+        ], extractor, 'injuredInWarFlag', 'Female')
+
+
+class TestInjuredInWarFlag:
     @pytest.yield_fixture(autouse=True)
     def extractor(self):
         return InjuredInWarFlagExtractor(None, None)
 
-    def _verify_flags(self, expected_flags_and_texts, extractor, gender = 'Male'):
-        extraction_results = {'primaryPerson': {'name': {'gender': gender}}}
+    def _verify_flags(self, expected_flags_and_texts, extractor):
         flag = 'injuredInWarFlag'
 
         for e in expected_flags_and_texts:
-            results, metadata = extractor.extract({'text': e[0]}, extraction_results, {})
+            results, metadata = extractor.extract({'text': e[0]}, {}, {})
             assert results[flag] is e[1]
 
     def should_return_true_if_text_contains_mentions_of_being_injured(self, extractor):
@@ -60,8 +84,3 @@ class TestInjuredInWarFlag:
             ('Satunnainen heppuu asuu yhdessä äitinsä, Satunnaisen Äidin kanssa sotainvalidien talossa.', False),
             ('Hän kuuluu Karjalaseuraan, Rakennustyöväen liittoon ja Sotainvalidien Veljesliittoon.', False)
         ], extractor)
-
-    def should_return_none_if_primaryperson_gender_is_female(self, extractor):
-        self._verify_flags([
-            ('Hän on sotamies ja palvellut jatkosodassa JR 6:ssa. Hän on 60 %:n sotainvalidi.', None)
-        ], extractor, gender='Female')
