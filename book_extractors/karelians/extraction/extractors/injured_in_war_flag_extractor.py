@@ -12,9 +12,6 @@ class InjuredInWarFlagExtractor(BaseExtractor):
         self.REGEX_INJURED_IN_WAR = regex.compile(self.INJURED_IN_WAR_PATTERN, self.OPTIONS)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        if extraction_results['primaryPerson']['name']['gender'] == 'Female':
-            return self._add_to_extraction_results(None, extraction_results, extraction_metadata)
-
         injured_in_war = self._check_injured_in_war(entry['text'])
 
         return self._add_to_extraction_results(injured_in_war, extraction_results, extraction_metadata)
