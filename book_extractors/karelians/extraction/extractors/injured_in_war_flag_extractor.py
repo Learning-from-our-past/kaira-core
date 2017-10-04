@@ -1,4 +1,5 @@
 from book_extractors.common.extractors.base_extractor import BaseExtractor
+from shared.textUtils import remove_hyphens_from_text
 import regex
 
 
@@ -17,6 +18,6 @@ class InjuredInWarFlagExtractor(BaseExtractor):
         return self._add_to_extraction_results(injured_in_war, extraction_results, extraction_metadata)
 
     def _check_injured_in_war(self, text):
-        text = text.replace('-', '')
+        text = remove_hyphens_from_text(text)
         injured = regex.search(self.REGEX_INJURED_IN_WAR, text)
         return injured is not None
