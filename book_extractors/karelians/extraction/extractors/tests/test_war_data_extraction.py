@@ -17,15 +17,25 @@ class TestWarDataExtraction:
             results, metadata = extractor.extract({'text': e[0]}, extractor_prerequisite_results, {})
             assert results[flag][subflag] is e[1]
 
-    def should_extract_injured_in_war_flag_correctly_as_true_if_male(self, extractor):
+    def should_extract_injured_in_war_flag_correctly_as_true_if_primary_person_is_male(self, extractor):
         self._verify_flags([
             ('Nyymi on sotamies, ja hän palveli JP 1;ssä. Hän haavoittui v. -44 ja on 30 %;n sotainvalidi.', True)
         ], extractor, 'injuredInWarFlag', 'Male')
 
-    def should_extract_injured_in_war_flag_correctly_as_none_if_female(self, extractor):
+    def should_extract_injured_in_war_flag_correctly_as_none_if_primary_person_is_female(self, extractor):
         self._verify_flags([
             ('Hän on sotamies ja palvellut jatkosodassa JR 6:ssa. Hän on 60 %:n sotainvalidi.', None)
         ], extractor, 'injuredInWarFlag', 'Female')
+
+    def should_extract_served_during_war_flag_correctly_as_true_if_primary_person_is_male(self, extractor):
+        self._verify_flags([
+            ('Herra Testilä oli molemmissa sodissa mukana palvellen tykkimiehenä.', True)
+        ], extractor, 'servedDuringWarFlag', 'Male')
+
+    def should_extract_served_during_war_flag_correctly_as_none_if_primary_person_is_female(self, extractor):
+        self._verify_flags([
+            ('Rouva Testilä oli molemmissa sodissa mukana palvellen ironmanina.', None)
+        ], extractor, 'servedDuringWarFlag', 'Female')
 
 
 class TestInjuredInWarFlag:
