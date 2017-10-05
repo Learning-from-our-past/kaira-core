@@ -2,6 +2,7 @@ import pytest
 from book_extractors.karelians.extraction.extractors.war_data_extractor import WarDataExtractor
 from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
 from book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor import ServedDuringWarFlagExtractor
+from book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor import LottaActivityFlagExtractor
 
 
 class TestWarDataExtraction:
@@ -145,4 +146,42 @@ class TestServedDuringWarFlagExtraction:
     def should_return_false_if_text_contains_mention_of_having_served_with_luksessa_suffix(self, extractor):
         self._verify_flags([
             ('Rautateiden Partaveitsi on ollut vuodesta -48 lähtien valtion rautateiden palveluksessa.', False)
+        ], extractor)
+
+
+class TestLottaActivityFlagExtraction:
+    @pytest.yield_fixture(autouse=True)
+    def extractor(self):
+        return LottaActivityFlagExtractor(None, None)
+
+    def _verify_flags(self, expected_flags_and_texts, extractor):
+        flag = 'lottaActivityFlag'
+
+        for e in expected_flags_and_texts:
+            results, metadata = extractor.extract({'text': e[0]}, {}, {})
+            assert results[flag] is e[1]
+
+    def should_return_true_if_text_contains_mention_of_lotta_activity(self, extractor):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], extractor)
+
+    def should_return_true_if_text_contains_mention_of_lotta_activity_with_typo(self, extractor):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana lot7atoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], extractor)
+
+    def should_return_true_if_text_contains_mention_of_lotta_activity_with_hyphen(self, extractor):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana lot-tatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], extractor)
+
+    def should_return_true_if_text_contains_mention_of_lotta_activity_with_typo_and_hyphen(self, extractor):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana l0t-tatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], extractor)
+
+    def should_return_false_if_text_does_not_contain_mention_of_lotta_activity(self, extractor):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana tanssilattioiden partaveitsi eikä piitannut sotatoiminnasta.', False)
         ], extractor)
