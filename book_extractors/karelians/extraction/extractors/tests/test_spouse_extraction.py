@@ -46,7 +46,8 @@ class TestSpouseExtraction:
             },
             'warData': {
                 'injuredInWarFlag': None,
-                'servedDuringWarFlag': None
+                'servedDuringWarFlag': None,
+                'lottaActivityFlag': False
             }
         }
 
@@ -78,6 +79,7 @@ class TestSpouseExtraction:
             'profession': None,
             'warData': {
                 'injuredInWarFlag': None,
-                'servedDuringWarFlag': None
+                'servedDuringWarFlag': None,
+                'lottaActivityFlag': None
             }
         }
