@@ -13,7 +13,7 @@ class TestWarDataExtraction:
 
     def _verify_flags(self, expected_flags_and_texts, extractor, subflag, gender):
         flag = 'warData'
-        parent_data = {'extraction_results': {'primaryPerson': {'name': {'gender': 'Male'}}},
+        parent_data = {'extraction_results': {'primaryPerson': {'name': {'gender': gender}}},
                        'parent_data': None}
 
         for e in expected_flags_and_texts:
@@ -30,6 +30,11 @@ class TestWarDataExtraction:
         self._verify_flags([
             ('Herra Testilä oli molemmissa sodissa mukana palvellen tykkimiehenä.', True)
         ], extractor, 'servedDuringWarFlag', 'Male')
+
+    def should_extract_lotta_activity_flag_correctly_as_true_if_primary_person_is_female(self, extractor):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], extractor, 'lottaActivityFlag', 'Female')
 
 
 class TestInjuredInWarFlag:

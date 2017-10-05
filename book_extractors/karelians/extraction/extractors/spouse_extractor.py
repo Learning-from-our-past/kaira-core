@@ -13,6 +13,7 @@ from book_extractors.karelians.extraction.extractors.wedding_extractor import We
 from book_extractors.karelians.extraction.extractors.war_data_extractor import WarDataExtractor
 from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
 from book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor import ServedDuringWarFlagExtractor
+from book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor import LottaActivityFlagExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from shared import regexUtils
 
@@ -60,7 +61,8 @@ class SpouseExtractor(BaseExtractor):
             KEYS["hasSpouse"]: False,
             WarDataExtractor.extraction_key: {
                 InjuredInWarFlagExtractor.extraction_key: None,
-                ServedDuringWarFlagExtractor.extraction_key: None
+                ServedDuringWarFlagExtractor.extraction_key: None,
+                LottaActivityFlagExtractor.extraction_key: None
             }
         }
 
