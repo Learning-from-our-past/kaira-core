@@ -1,6 +1,7 @@
 import pytest
 from book_extractors.karelians.extraction.extractors.war_data_extractor import WarDataExtractor
 from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
+from book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor import ServedDuringWarFlagExtractor
 
 
 class TestWarDataExtraction:
@@ -83,4 +84,55 @@ class TestInjuredInWarFlag:
         self._verify_flags([
             ('Satunnainen heppuu asuu yhdessä äitinsä, Satunnaisen Äidin kanssa sotainvalidien talossa.', False),
             ('Hän kuuluu Karjalaseuraan, Rakennustyöväen liittoon ja Sotainvalidien Veljesliittoon.', False)
+        ], extractor)
+
+
+class TestServedDuringWarFlagExtraction:
+    @pytest.yield_fixture(autouse=True)
+    def extractor(self):
+        return ServedDuringWarFlagExtractor(None, None)
+
+    def _verify_flags(self, expected_flags_and_texts, extractor):
+        flag = 'servedDuringWarFlag'
+
+        for e in expected_flags_and_texts:
+            results, metadata = extractor.extract({'text': e[0]}, {}, {})
+            assert results[flag] is e[1]
+
+    def should_return_true_if_text_contains_mention_of_having_served_with_lut_suffix(self, extractor):
+        self._verify_flags([
+            ('Herra Alikersantti on sotilasarvoltaan alikersantti ja palvellut jatkosodassa ETp/VAK:ssa '
+             'sekä ErP 21:ssa.', True)
+        ], extractor)
+
+    def should_return_true_if_text_contains_mention_of_having_served_with_li_suffix(self, extractor):
+        self._verify_flags([
+            ('Muut asuinp.: Kuhmoinen, Orimattila, Perniö 44—, Paimio. Sota Mies palveli sotamiehen'
+             'ä jatkosodassa JR 20:ssa, Vapaa-aikansa hän viettää lueskellen.', True)
+        ], extractor)
+
+    def should_return_true_if_text_contains_mention_of_having_served_with_len_suffix(self, extractor):
+        self._verify_flags([
+            ('Herra Testilä oli molemmissa sodissa mukana palvellen tykkimiehenä.', True)
+        ], extractor)
+
+    def should_return_true_if_text_contains_mention_of_having_served_with_substitutions_and_or_hyphen(self, extractor):
+        self._verify_flags([
+            ('Herra Alikersantti on sotilasarvoltaan alikersantti ja pa1-vellut jatkosodassa ETp/VAK:ssa '
+             'sekä ErP 21:ssa.', True)
+        ], extractor)
+
+    def should_return_false_if_text_contains_no_mention_of_having_served(self, extractor):
+        self._verify_flags([
+            ('Nimettömät asuvat rakentamassaan omakotitalossa. Nyrkkeilijä Nimetön on ammattiosaston jäsen '
+             'ja kuuluu nuorisojaostoon. Hän harrastaa yleisurheilua, nyrkkeilyä ja hiihtoa. Nimetön on voi'
+             'ttanut seiväshypyssä piirin mestaruuksia. Hän lukee ammattikirjallisuutta. Rouva Nimetön on o'
+             'piskellut työväenopistossa. Rouva harrastaa puutarhanhoitoa, käsitöitä ja kirjallisuutta. Hän'
+             'on ottanut osaa kirkollisiin toimiin. Herran äiti, Äiti Nimetön o.s. Epänimetön, asuu Kaarlel'
+             'assa omakotitalossa.', False)
+        ], extractor)
+
+    def should_return_false_if_text_contains_mention_of_having_served_with_luksessa_suffix(self, extractor):
+        self._verify_flags([
+            ('Rautateiden Partaveitsi on ollut vuodesta -48 lähtien valtion rautateiden palveluksessa.', False)
         ], extractor)
