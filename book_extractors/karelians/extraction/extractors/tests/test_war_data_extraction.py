@@ -18,6 +18,19 @@ class TestWarDataExtraction:
             results, metadata = extractor.extract({'text': e[0]}, extractor_prerequisite_results, {})
             assert results[flag][subflag] is e[1]
 
+    def _verify_lotta_flag(self, expected_flags_and_texts, extractor, gender):
+        extractor_prerequisite_results = {'primaryPerson': {'name': {'gender': gender}}, 'spouse': {}}
+        flag = 'warData'
+        subflag = 'lottaActivityFlag'
+
+        for e in expected_flags_and_texts:
+            results, metadata = extractor.extract({'text': e[0]}, extractor_prerequisite_results, {})
+            if gender == 'Male':
+                assert results[flag][subflag] is None
+                assert results['spouse'][subflag] is e[1]
+            else:
+                assert results[flag][subflag] is e[1]
+
     def should_extract_injured_in_war_flag_correctly_as_true_if_primary_person_is_male(self, extractor):
         self._verify_flags([
             ('Nyymi on sotamies, ja hän palveli JP 1;ssä. Hän haavoittui v. -44 ja on 30 %;n sotainvalidi.', True)
@@ -37,6 +50,16 @@ class TestWarDataExtraction:
         self._verify_flags([
             ('Rouva Testilä oli molemmissa sodissa mukana palvellen ironmanina.', None)
         ], extractor, 'servedDuringWarFlag', 'Female')
+
+    def should_extract_lotta_activity_flag_correctly_as_true_if_female(self, extractor):
+        self._verify_lotta_flag([
+            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], extractor, "Female")
+
+    def should_extract_lotta_activity_flag_correctly_as_true_for_spouse_if_male_and_none_for_person(self, extractor):
+        self._verify_lotta_flag([
+            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], extractor, "Male")
 
 
 class TestInjuredInWarFlag:
