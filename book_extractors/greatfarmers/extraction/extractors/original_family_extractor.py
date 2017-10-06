@@ -1,7 +1,7 @@
 import re
 
 import shared.regexUtils as regexUtils
-import shared.textUtils as textUtils
+import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
@@ -27,7 +27,7 @@ class FormerSurnameExtractor(BaseExtractor):
     def _find_family(self, text, start_position):
         cursor_location = start_position
         own_family = None
-        text = textUtils.take_sub_str_based_on_pos(text, start_position, self.SEARCH_SPACE)
+        text = text_utils.take_sub_str_based_on_pos(text, start_position, self.SEARCH_SPACE)
         try:
             found_family_match = regexUtils.safe_search(self.FAMILY_PATTERN, text, self.FAMILY_OPTIONS)
             cursor_location = start_position + found_family_match.end()

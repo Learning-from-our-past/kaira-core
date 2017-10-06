@@ -1,6 +1,6 @@
 import pytest
-from shared.textUtils import remove_hyphens_from_text
-from shared.textUtils import remove_spaces_from_text
+from shared.text_utils import remove_hyphens_from_text
+from shared.text_utils import remove_spaces_from_text
 
 
 class TestTextUtils:
