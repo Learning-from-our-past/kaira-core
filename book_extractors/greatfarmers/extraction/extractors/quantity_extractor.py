@@ -4,7 +4,7 @@ import re
 import shared.regexUtils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared import textUtils
+from shared import text_utils
 
 class QuantityExtractor(BaseExtractor):
     extraction_key = KEYS["quantities"]
@@ -44,7 +44,7 @@ class QuantityExtractor(BaseExtractor):
         if match.group("range") is not None:
             return self._take_average(match.group("range"))
         if match.group("number") is not None:
-            return textUtils.int_or_none(match.group("number"))
+            return text_utils.int_or_none(match.group("number"))
         if match.group("word") is not None:
             try:
                 return self.NUMBER_MAP[match.group("word").lower()]

@@ -2,7 +2,7 @@
 import re
 
 import shared.regexUtils as regexUtils
-import shared.textUtils as textUtils
+import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
@@ -28,7 +28,7 @@ class HostessExtractor(BaseExtractor):
         return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
 
     def _find_hostess(self, text, start_position):
-        text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
+        text = text_utils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
 
         try:
             name = self._find_hostess_name(text)

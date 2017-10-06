@@ -1,5 +1,5 @@
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared.textUtils import remove_hyphens_from_text
+from shared.text_utils import remove_hyphens_from_text
 import regex
 
 
