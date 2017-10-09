@@ -16,7 +16,7 @@ class ExtractionPipeline:
 
         return extractors
 
-    def process(self, entry):
+    def process(self, entry, parent_pipeline_data=None):
         extraction_output = {}
         extraction_metadata = {}
 
@@ -25,7 +25,10 @@ class ExtractionPipeline:
         entry['text'] = re.sub(r"\s", r" ", entry['text'])
 
         for ext in self._extractors:
-            extraction_output, extraction_metadata = ext.extract(entry, extraction_output, extraction_metadata)
+            extraction_output, extraction_metadata = ext.extract(entry,
+                                                                 extraction_output,
+                                                                 extraction_metadata,
+                                                                 parent_pipeline_data=parent_pipeline_data)
 
         return extraction_output, extraction_metadata
 
