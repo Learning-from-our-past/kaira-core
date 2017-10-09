@@ -120,4 +120,5 @@ class NoPreAndPostProcessesExtractor(BaseExtractor):
 
         final_location = self.get_starting_position(extraction_results, extraction_metadata) + 5
 
-        return self._add_to_extraction_results('some result', extraction_results, extraction_metadata, cursor_location=final_location)
+        return self._add_to_extraction_results('some result', extraction_results,
+                                               extraction_metadata, cursor_location=final_location)
