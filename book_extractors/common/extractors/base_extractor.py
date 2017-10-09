@@ -11,6 +11,7 @@ class BaseExtractor:
         self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
         self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes
         self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
+        self._parent_pipeline_data = {}
 
         if options is not None and 'output_path' in options:
             self.output_path = options['output_path']
@@ -19,7 +20,9 @@ class BaseExtractor:
 
         self.metadata_collector = MetadataCollector()
 
-    def extract(self, entry, extraction_results, extraction_metadata):
+    def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data={}):
+        self._parent_pipeline_data = parent_pipeline_data
+        
         extraction_results, extraction_metadata = self._preprocess(entry, extraction_results, extraction_metadata)
         extraction_results, extraction_metadata = self._extract(entry, extraction_results, extraction_metadata)
         extraction_results, extraction_metadata = self._postprocess(entry, extraction_results, extraction_metadata)
