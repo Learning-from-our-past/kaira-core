@@ -87,7 +87,8 @@ class MockExtractor(BaseExtractor):
 
         final_location = self.get_starting_position(extraction_results, extraction_metadata) + 5
 
-        return self._add_to_extraction_results('some result', extraction_results, extraction_metadata, cursor_location=final_location)
+        return self._add_to_extraction_results('some result', extraction_results,
+                                               extraction_metadata, cursor_location=final_location)
 
     def _postprocess(self, entry, extraction_results, extraction_metadata):
         self.execution_order.append('postprocess')
@@ -108,4 +109,5 @@ class NoPreAndPostProcessesExtractor(BaseExtractor):
 
         final_location = self.get_starting_position(extraction_results, extraction_metadata) + 5
 
-        return self._add_to_extraction_results('some result', extraction_results, extraction_metadata, cursor_location=final_location)
+        return self._add_to_extraction_results('some result', extraction_results,
+                                               extraction_metadata, cursor_location=final_location)
