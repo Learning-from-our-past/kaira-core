@@ -11,7 +11,11 @@ class ExtractionPipeline:
         extractors = []
 
         for config in self._extractor_configurations:
-            extractor = config['extractor_class'](key_of_cursor_location_dependent=config['depends_on_match_position_of_extractor'], options=config['extractor_options'])
+            extractor = config['extractor_class'](
+                key_of_cursor_location_dependent=config['depends_on_match_position_of_extractor'],
+                options=config['extractor_options'],
+                dependencies_contexts=config['dependencies_contexts']
+            )
             extractors.append(extractor)
 
         return extractors
@@ -33,12 +37,17 @@ class ExtractionPipeline:
         return extraction_output, extraction_metadata
 
 
-def configure_extractor(extractor_class, extractor_options=None, path=None, depends_on_match_position_of_extractor=None):
+def configure_extractor(extractor_class, dependencies_contexts=None, extractor_options=None, path=None, depends_on_match_position_of_extractor=None):
     """
     Utility function to build configure dict object for extraction pipeline.
     :param extractor_class:
-    :param extractor_options: Possible kwargs arguments which can be passed to extractor. Some extractors might need arbitrary extra parametes in their __init__
-    :param path: Path of the extractor's results in the dict and json output. Can be used to define parent groups for the output of the extractor.
+    :param dependencies_contexts: Used to find the location (pipelinewise) where the extractor or extractors that we
+                                  depend on reside. The extractor needs this information to get the extraction results
+                                  its operation depends on.
+    :param extractor_options: Possible kwargs arguments which can be passed to extractor. Some extractors might need
+                              arbitrary extra parametes in their __init__
+    :param path: Path of the extractor's results in the dict and json output. Can be used to define parent groups for
+                 the output of the extractor.
     :param depends_on_match_position_of_extractor: Extractor class this extractor is dependent on their match position.
     :return:
     """
@@ -56,6 +65,7 @@ def configure_extractor(extractor_class, extractor_options=None, path=None, depe
         'extractor_class': extractor_class,
         'depends_on_match_position_of_extractor': depends_on,
         'extractor_options': extractor_options,
+        'dependencies_contexts': dependencies_contexts
     }
 
     return config

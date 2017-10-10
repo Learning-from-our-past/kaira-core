@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from book_extractors.common.metadata_helper import MetadataCollector
+from book_extractors.configuration_exceptions import DependencyConfigurationException
 
 
 class BaseExtractor:
@@ -12,6 +13,8 @@ class BaseExtractor:
         self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes
         self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
         self._parent_pipeline_data = {}
+        self._dependencies_graph = []
+        self._required_dependencies = []
 
         if options is not None and 'output_path' in options:
             self.output_path = options['output_path']
@@ -19,6 +22,53 @@ class BaseExtractor:
             self.output_path = None
 
         self.metadata_collector = MetadataCollector()
+
+    def _build_dependencies_graph(self, dependencies_contexts):
+        if dependencies_contexts:
+            if len(dependencies_contexts) < len(self._required_dependencies):
+                while len(dependencies_contexts) < len(self._required_dependencies):
+                    dependencies_contexts.append(None)
+
+                missing_contexts = []
+                for ext, context in zip(self._required_dependencies, dependencies_contexts):
+                    if context is None:
+                        missing_contexts.append(ext.__name__)
+
+                raise DependencyConfigurationException(missing_contexts)
+
+            new_dependencies = [(extractor, context) for extractor, context in zip(self._required_dependencies, dependencies_contexts)]
+            self._dependencies_graph += new_dependencies
+
+    def _set_dependencies(self, dependencies, dependencies_contexts):
+        """
+        When calling this function, contexts for every dependency need to be defined,
+        including those that this extractor possibly inherits from its superclasses.
+        The dependency and context lists must match each other positionally.
+
+        Example: dependencies = [NameExtractor, SpouseExtractor]
+                 contexts     = ['parent.parent', 'main']
+
+        This tells the dependency system to look for MockExtractor's results in the
+        parent pipeline of the parent pipeline, and for FoodExtractor's results in the
+        main pipeline.
+
+        When this function is called from a constructor that is called through super
+        in a subclass, no contexts are passed. The superclass (and its superclasses)
+        merely inserts its dependencies and is done. When this function is called
+        through configure_extractor as it calls the extractor's constructor, the
+        dependency graph is built as the contexts are passed into the constructor
+        (and through that, here) through the extractor configuration.
+
+        :param dependencies: A list of extractors (classes) whose results this extractor depends on.
+        :param dependencies_contexts: A list of contexts for this extractor's dependencies. Contexts tell the dependency
+        system where to find the dependencies. Valid keywords: 'current', 'main', 'parent', 'parent.parent.', ...
+        :return:
+        """
+        for dependency in reversed(dependencies):
+            self._required_dependencies.insert(0, dependency)
+
+        if dependencies_contexts is not None:
+            self._build_dependencies_graph(dependencies_contexts)
 
     def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data={}):
         self._parent_pipeline_data = parent_pipeline_data
