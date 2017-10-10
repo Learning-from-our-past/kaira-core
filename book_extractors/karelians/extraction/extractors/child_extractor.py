@@ -4,7 +4,7 @@ from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from book_extractors.extraction_exceptions import StopExtractionException
-from shared import regexUtils, textUtils
+from shared import regexUtils, text_utils
 from shared.gender_extract import Gender
 from shared.gender_extract import GenderException
 from shared.geo.geocoding import GeoCoder, LocationNotFound
@@ -135,7 +135,7 @@ class ChildExtractor(BaseExtractor):
 
         return {KEYS["childName"]: name,
                 KEYS["gender"]: gender,
-                KEYS["birthYear"]: textUtils.int_or_none(year),
+                KEYS["birthYear"]: text_utils.int_or_none(year),
                 KEYS["childLocationName"]: location,
                 KEYS["kairaId"]: self._kaira_id_provider.get_new_id('C')
                 }

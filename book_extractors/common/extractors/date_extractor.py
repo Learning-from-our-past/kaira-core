@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import shared.textUtils as textUtils
+import shared.text_utils as text_utils
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
 from shared import regexUtils
-from shared import textUtils
+from shared import text_utils
 
 
 class DateExtractor(BaseExtractor):
@@ -30,7 +30,7 @@ class DateExtractor(BaseExtractor):
 
     @staticmethod
     def _prepare_text_for_extraction(text):
-        return textUtils.remove_spaces_from_text(text)
+        return text_utils.remove_spaces_from_text(text)
 
     def _find_date(self, text, start_position):
         try:
@@ -50,8 +50,8 @@ class DateExtractor(BaseExtractor):
     @staticmethod
     def _get_month_and_day_from_match(date_match):
         return {
-            'day': textUtils.int_or_none(date_match.group("day")),
-            'month': textUtils.int_or_none(date_match.group("month"))
+            'day': text_utils.int_or_none(date_match.group("day")),
+            'month': text_utils.int_or_none(date_match.group("month"))
         }
 
     def _if_written_month_names_extract_them(self, date_match):
@@ -89,7 +89,7 @@ class DateExtractor(BaseExtractor):
         elif int(year) < 1800:
             year = "18" + year
 
-        return textUtils.int_or_none(year)
+        return text_utils.int_or_none(year)
 
     @staticmethod
     def _check_is_year_sensible(year):

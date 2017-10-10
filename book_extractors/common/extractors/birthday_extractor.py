@@ -8,7 +8,7 @@ from book_extractors.common.extractors.date_extractor import DateExtractor
 from book_extractors.extraction_exceptions import *
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared import regexUtils
-from shared import textUtils
+from shared import text_utils
 
 
 class CommonBirthdayExtractor(BaseExtractor):
@@ -38,10 +38,10 @@ class CommonBirthdayExtractor(BaseExtractor):
         return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
-        t = textUtils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
+        t = text_utils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
 
         if self._remove_spaces_from_text:
-            t = textUtils.remove_spaces_from_text(t)
+            t = text_utils.remove_spaces_from_text(t)
 
         spouse_found = regexUtils.find_first_position_with_regex_search("puol", t, re.IGNORECASE | re.UNICODE)
         if spouse_found != -1:
@@ -62,8 +62,8 @@ class CommonBirthdayExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('birthDateNotFound', 2)
 
         # Map date to birthDate
-        birth_date = {KEYS["birthDay"]: textUtils.int_or_none(found_date["day"]),
-                      KEYS["birthMonth"]: textUtils.int_or_none(found_date["month"]),
-                      KEYS["birthYear"]: textUtils.int_or_none(found_date["year"])}
+        birth_date = {KEYS["birthDay"]: text_utils.int_or_none(found_date["day"]),
+                      KEYS["birthMonth"]: text_utils.int_or_none(found_date["month"]),
+                      KEYS["birthYear"]: text_utils.int_or_none(found_date["year"])}
 
         return birth_date, cursor_location
