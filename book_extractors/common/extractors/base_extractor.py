@@ -2,7 +2,9 @@
 from abc import ABCMeta, abstractmethod
 from book_extractors.common.metadata_helper import MetadataCollector
 from book_extractors.configuration_exceptions import DependencyConfigurationException
-
+from book_extractors.configuration_exceptions import ContextKeywordConfigurationException
+from book_extractors.configuration_exceptions import ParentKeywordConfigurationException
+from book_extractors.extraction_exceptions import ParentKeywordTraversingException
 
 class BaseExtractor:
     __metaclass__ = ABCMeta
@@ -15,6 +17,7 @@ class BaseExtractor:
         self._parent_pipeline_data = {}
         self._dependencies_graph = []
         self._required_dependencies = []
+        self._deps = None
 
         if options is not None and 'output_path' in options:
             self.output_path = options['output_path']
@@ -70,9 +73,60 @@ class BaseExtractor:
         if dependencies_contexts is not None:
             self._build_dependencies_graph(dependencies_contexts)
 
+    def _get_data_from_parent_pipeline_results(self, results, parents_to_traverse):
+        if parents_to_traverse > 0:
+            if 'parent_data' not in results:
+                raise ParentKeywordTraversingException()
+
+            if results['parent_data'] is None:
+                raise ParentKeywordConfigurationException()
+
+            results = results['parent_data']
+            parents_to_traverse -= 1
+            return self._get_data_from_parent_pipeline_results(results, parents_to_traverse)
+        else:
+            return results
+
+    def _get_data_from_main_pipeline(self, results):
+        if results['parent_data'] is None:
+            return results
+        else:
+            results = results['parent_data']
+            return self._get_data_from_main_pipeline(results)
+
+    def _has_duplicates(self, extractor):
+        return sum(dependency_graph_tuple.count(extractor) for dependency_graph_tuple in self._dependencies_graph) > 1
+
+    def _resolve_dependencies(self, current_extraction_results):
+        self._deps = {}
+
+        for dependency in self._dependencies_graph:
+            extractor, context = dependency
+            key = extractor.extraction_key
+
+            if context == 'current':
+                extraction_results = current_extraction_results
+            elif context == 'main':
+                extraction_results = self._get_data_from_main_pipeline(self._parent_pipeline_data)['extraction_results']
+            elif 'parent' in context:
+                parents_to_traverse = context.count('parent') - 1
+                extraction_results = self._get_data_from_parent_pipeline_results(self._parent_pipeline_data,
+                                                                                 parents_to_traverse)['extraction_results']
+            else:
+                raise ContextKeywordConfigurationException()
+
+            result_key = key
+            if self._has_duplicates(extractor):
+                result_key = context + '.' + key
+
+            self._deps[result_key] = extraction_results[key]
+
     def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data={}):
         self._parent_pipeline_data = parent_pipeline_data
         
+        if self._dependencies_graph is not None and self._dependencies_graph != []:
+            self._resolve_dependencies(extraction_results)
+
         extraction_results, extraction_metadata = self._preprocess(entry, extraction_results, extraction_metadata)
         extraction_results, extraction_metadata = self._extract(entry, extraction_results, extraction_metadata)
         extraction_results, extraction_metadata = self._postprocess(entry, extraction_results, extraction_metadata)
