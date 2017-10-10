@@ -2,7 +2,7 @@
 import re
 
 import shared.regexUtils as regexUtils
-import shared.textUtils as textUtils
+import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
@@ -29,7 +29,7 @@ class CommonOwnerExtractor(BaseExtractor):
         return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
 
     def _find_owner(self, text, start_position):
-        text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
+        text = text_utils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
         owner_year_result = self._find_owner_year(text, start_position)
         owner_name_details_result = self._find_owner_name_details(text, start_position)
         owner_birthday_result, metadata = self._find_owner_birthday(text)
@@ -51,7 +51,7 @@ class CommonOwnerExtractor(BaseExtractor):
         try:
             owner_year = regexUtils.safe_search(self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS)
             cursor_location = start_position + owner_year.end()
-            owner_year = textUtils.int_or_none(owner_year.group("year"))
+            owner_year = text_utils.int_or_none(owner_year.group("year"))
         except regexUtils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('ownerYearNotFound', 2)
 

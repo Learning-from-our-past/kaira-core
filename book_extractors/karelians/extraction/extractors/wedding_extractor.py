@@ -4,7 +4,7 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from shared import regexUtils
-from shared import textUtils
+from shared import text_utils
 
 
 class WeddingExtractor(BaseExtractor):
@@ -25,8 +25,8 @@ class WeddingExtractor(BaseExtractor):
         return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
-        t = textUtils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
-        t = textUtils.remove_spaces_from_text(t)
+        t = text_utils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
+        t = text_utils.remove_spaces_from_text(t)
         return t
 
     def _find_date(self, text, start_position):
@@ -36,7 +36,7 @@ class WeddingExtractor(BaseExtractor):
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = wedding.end() + start_position - 4
-            wedding_year = textUtils.int_or_none("19" + wedding.group("year"))
+            wedding_year = text_utils.int_or_none("19" + wedding.group("year"))
         except regexUtils.RegexNoneMatchException:
             wedding_year = None
 
