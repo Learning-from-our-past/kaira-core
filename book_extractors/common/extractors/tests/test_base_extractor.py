@@ -1,5 +1,7 @@
 import pytest
 from book_extractors.common.extractors.base_extractor import BaseExtractor
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
+from book_extractors.configuration_exceptions import DependencyConfigurationException
 
 
 class TestBaseExtractor:
@@ -21,6 +23,51 @@ class TestBaseExtractor:
             results, metadata = extractor.extract(entry, {}, {})
             assert extractor.execution_order == ['extract']
             assert results['mock2'] == 'some result'
+
+    class TestDependencies:
+        def should_correctly_set_up_a_dependency_and_its_context_in_extractor(self):
+            dep_context = 'parent'
+
+            parent_data = {'extraction_results': {MockExtractor.extraction_key: 'test'}}
+            my_pipeline = ExtractionPipeline([
+                configure_extractor(SimpleExtractorForDeps, dependencies_contexts=[dep_context]),
+            ])
+
+            results, metadata = my_pipeline.process({'text': 'test string'}, parent_pipeline_data=parent_data)
+            extractor_dependencies_graph = metadata[SimpleExtractorForDeps.extraction_key]['dependencies_graph'][0]
+            correct_dependencies_graph = (MockExtractor, dep_context)
+            assert extractor_dependencies_graph == correct_dependencies_graph
+
+        def should_correctly_set_up_multiple_dependencies_and_contexts_in_extractor(self):
+            my_pipeline = ExtractionPipeline([
+                configure_extractor(SimpleExtractorForMultiDeps, dependencies_contexts=['parent', 'main', 'main'])
+            ])
+
+            parent_data = {'extraction_results': {MockExtractor.extraction_key: 'test'},
+                           'parent_data': {
+                               'extraction_results': {NoPreAndPostProcessesExtractor.extraction_key: 'test',
+                                                      SimpleExtractorForDeps.extraction_key: 'test'},
+                               'parent_data': None
+                           }}
+
+            results, metadata = my_pipeline.process({'text': 'test string'}, parent_pipeline_data=parent_data)
+            extractor_dependencies_graph = metadata[SimpleExtractorForMultiDeps.extraction_key]['dependencies_graph']
+            correct_dependencies_graph = [
+                (MockExtractor, 'parent'),
+                (NoPreAndPostProcessesExtractor, 'main'),
+                (SimpleExtractorForDeps, 'main')
+            ]
+
+            assert extractor_dependencies_graph == correct_dependencies_graph
+
+        def should_raise_dependency_configuration_error_if_the_number_of_dependencies_and_contexts_does_not_match(self):
+            with pytest.raises(DependencyConfigurationException) as excinfo:
+                my_pipeline = ExtractionPipeline([
+                    configure_extractor(SimpleExtractorForMultiDeps, dependencies_contexts=['main'])
+                ])
+
+            assert excinfo.value.missing_contexts == [NoPreAndPostProcessesExtractor.__name__,
+                                                      SimpleExtractorForDeps.__name__]
 
     class TestMetadata:
         def should_reset_metadata_collector_after_extraction(self, extractor):
@@ -122,3 +169,35 @@ class NoPreAndPostProcessesExtractor(BaseExtractor):
 
         return self._add_to_extraction_results('some result', extraction_results,
                                                extraction_metadata, cursor_location=final_location)
+
+
+class SimpleExtractorForDeps(BaseExtractor):
+    extraction_key = 'mock2deps'
+
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+        super(SimpleExtractorForDeps, self).__init__(key_of_cursor_location_dependent,
+                                                     options)
+
+        my_dependencies = [MockExtractor]
+        self._set_dependencies(my_dependencies, dependencies_contexts)
+
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        self.metadata_collector.set_metadata_property('dependencies_graph', self._dependencies_graph)
+
+        return self._add_to_extraction_results('some result', extraction_results, extraction_metadata)
+
+
+class SimpleExtractorForMultiDeps(BaseExtractor):
+    extraction_key = 'mock2multideps'
+
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+        super(SimpleExtractorForMultiDeps, self).__init__(key_of_cursor_location_dependent,
+                                                          options)
+
+        my_dependencies = [MockExtractor, NoPreAndPostProcessesExtractor, SimpleExtractorForDeps]
+        self._set_dependencies(my_dependencies, dependencies_contexts)
+
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        self.metadata_collector.set_metadata_property('dependencies_graph', self._dependencies_graph)
+
+        return self._add_to_extraction_results('some result', extraction_results, extraction_metadata)
