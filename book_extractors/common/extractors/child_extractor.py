@@ -6,7 +6,7 @@ from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from shared import regexUtils
 from shared.gender_extract import Gender, GenderException
 from shared.geo.geocoding import GeoCoder
-from shared import textUtils
+from shared import text_utils
 
 
 class CommonChildExtractor(BaseExtractor):
@@ -97,9 +97,9 @@ class CommonChildExtractor(BaseExtractor):
                 year_match = regexUtils.safe_search(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
                 year = year_match.group("year")
                 if float(year) < 70:
-                    year = textUtils.int_or_none("19" + year)
+                    year = text_utils.int_or_none("19" + year)
                 else:
-                    year = textUtils.int_or_none("18" + year)
+                    year = text_utils.int_or_none("18" + year)
             except regexUtils.RegexNoneMatchException:
                 year = None
 

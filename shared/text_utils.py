@@ -9,6 +9,11 @@ _unicode_hyphens = [0x002D, 0x007E, 0x058A, 0x05BE, 0x1400, 0x1806,
                     0x2053, 0x207B, 0x208B, 0x2212, 0x2E17, 0x2E3A,
                     0x2E3B, 0x30A0, 0xFE32, 0xFE58, 0xFE63, 0xFF0D]
 _hyphen_regex_pattern = '|'.join(map(chr, _unicode_hyphens))
+_unicode_spaces = [0x0020, 0x00A0, 0x180E, 0x2000, 0x2001, 0x2002,
+                   0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008,
+                   0x2009, 0x200A, 0x200B, 0x202F, 0x205F, 0x3000,
+                   0xFEFF]
+_spaces_regex_pattern = '|'.join(map(chr, _unicode_spaces))
 
 
 def take_sub_str_based_on_pos(text, start, width=None):
@@ -33,14 +38,11 @@ def take_sub_str_based_on_first_regex_occurrence(text, pattern, options=re.UNICO
 
 
 def remove_spaces_from_text(text):
-    text = text.replace('\n', '')
-    text = text.replace(' ', '')
-    return text.replace(' ', '')
+    return re.sub(_spaces_regex_pattern, '', text)
 
 
 def remove_hyphens_from_text(text):
-    text = re.sub(_hyphen_regex_pattern, '', text)
-    return text
+    return re.sub(_hyphen_regex_pattern, '', text)
 
 
 def int_or_none(value):

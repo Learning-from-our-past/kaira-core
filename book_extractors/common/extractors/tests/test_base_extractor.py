@@ -69,6 +69,15 @@ class TestBaseExtractor:
         assert metadata['mock']['cursorLocation'] == 5
         assert metadata['mock']['errors'] == {}
 
+    class TestPassingParentData:
+        def should_correctly_set_parent_data_in_extractor(self, extractor):
+            entry = {'text': 'test string entry'}
+            correct_data = {'test_data': 'i am test, awooooo'}
+            results, metadata = extractor.extract(entry, {}, {}, parent_pipeline_data=correct_data)
+            parent_data = extractor.reveal_parent_data()
+
+            assert parent_data == correct_data
+
 
 class MockExtractor(BaseExtractor):
     extraction_key = 'mock'
@@ -87,12 +96,16 @@ class MockExtractor(BaseExtractor):
 
         final_location = self.get_starting_position(extraction_results, extraction_metadata) + 5
 
-        return self._add_to_extraction_results('some result', extraction_results, extraction_metadata, cursor_location=final_location)
+        return self._add_to_extraction_results('some result', extraction_results,
+                                               extraction_metadata, cursor_location=final_location)
 
     def _postprocess(self, entry, extraction_results, extraction_metadata):
         self.execution_order.append('postprocess')
         extraction_results[self.extraction_key] = extraction_results[self.extraction_key].upper()
         return extraction_results, extraction_metadata
+
+    def reveal_parent_data(self):
+        return self._parent_pipeline_data
 
 
 class NoPreAndPostProcessesExtractor(BaseExtractor):
@@ -108,4 +121,5 @@ class NoPreAndPostProcessesExtractor(BaseExtractor):
 
         final_location = self.get_starting_position(extraction_results, extraction_metadata) + 5
 
-        return self._add_to_extraction_results('some result', extraction_results, extraction_metadata, cursor_location=final_location)
+        return self._add_to_extraction_results('some result', extraction_results,
+                                               extraction_metadata, cursor_location=final_location)
