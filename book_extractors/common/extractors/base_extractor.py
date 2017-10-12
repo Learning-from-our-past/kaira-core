@@ -11,6 +11,7 @@ class BaseExtractor:
         self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
         self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes
         self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
+        self._dependee_results = None
 
         if options is not None and 'output_path' in options:
             self.output_path = options['output_path']
@@ -19,7 +20,54 @@ class BaseExtractor:
 
         self.metadata_collector = MetadataCollector()
 
+    def _get_data_at_parent_depth(self, results, depth):
+        if depth > 0:
+            results = results['parent_data']
+            depth -= 1
+            return self._get_data_at_parent_depth(results, depth)
+        else:
+            return results
+
+    def _get_data_from_main_pipeline(self, results):
+        if results['parent_data'] is None:
+            return results
+        else:
+            results = results['parent_data']
+            return self._get_data_from_main_pipeline(results)
+
+    def _has_duplicates(self, extractor):
+        return sum(this_tuple.count(extractor) for this_tuple in self._dependencies_graph) > 1
+
+    def _resolve_dependencies(self):
+        self._dependee_results = {}
+
+        for dependee in self._dependencies_graph:
+            extractor, context = dependee
+            key = extractor.extraction_key
+
+            extraction_results = {}
+
+            if context == 'current':
+                extraction_results = self._parent_pipeline_data['extraction_results']
+            elif context == 'main':
+                extraction_results = self._get_data_from_main_pipeline(self._parent_pipeline_data)['extraction_results']
+            elif 'parent' in context:
+                results_depth = context.count('parent')
+                extraction_results = self._get_data_at_parent_depth(results_depth)
+            else:
+                raise SyntaxError('Something is wrong with your dependency contexts! The context has to be either'\
+                                  'current, main or a string of however many parents you want.')
+
+            result_key = key
+            if self._has_duplicates(extractor):
+                result_key = context + key
+
+            self._dependee_results[result_key] = extraction_results[key]
+
     def extract(self, entry, extraction_results, extraction_metadata):
+        if self._dependencies_graph is not None and self._dependencies_graph != []:
+            self._resolve_dependencies()
+
         extraction_results, extraction_metadata = self._preprocess(entry, extraction_results, extraction_metadata)
         extraction_results, extraction_metadata = self._extract(entry, extraction_results, extraction_metadata)
         extraction_results, extraction_metadata = self._postprocess(entry, extraction_results, extraction_metadata)
