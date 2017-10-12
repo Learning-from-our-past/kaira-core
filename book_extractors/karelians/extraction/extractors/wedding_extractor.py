@@ -10,7 +10,7 @@ from shared import text_utils
 class WeddingExtractor(BaseExtractor):
     extraction_key = 'wedding'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(WeddingExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.PATTERN = r"(?:avioit)\.?\s?-(?P<year>\d{2,4})"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
