@@ -47,7 +47,7 @@ class TestExtractionPipelineDataPassing:
 class MockExtractorDeepPipelineTest(BaseExtractor):
     extraction_key = 'mock'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None):
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
         super(MockExtractorDeepPipelineTest, self).__init__(key_of_cursor_location_dependent, options)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
@@ -82,7 +82,7 @@ class MockExtractorDeepPipelineTest(BaseExtractor):
 class MockExtractor(BaseExtractor):
     extraction_key = 'mock'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None):
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
         super(MockExtractor, self).__init__(key_of_cursor_location_dependent, options)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
@@ -92,7 +92,7 @@ class MockExtractor(BaseExtractor):
 class MockExtractorAWithSubpipeline(BaseExtractor):
     extraction_key = 'mock_a_with_sub'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None):
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
         super(MockExtractorAWithSubpipeline, self).__init__(key_of_cursor_location_dependent, options)
 
         self._sub_extraction_pipeline = ExtractionPipeline([
@@ -110,7 +110,7 @@ class MockExtractorAWithSubpipeline(BaseExtractor):
 class MockExtractorBWithSubpipeline(BaseExtractor):
     extraction_key = 'mock_b_with_sub'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None):
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
         super(MockExtractorBWithSubpipeline, self).__init__(key_of_cursor_location_dependent, options)
 
         self._sub_extraction_pipeline = ExtractionPipeline([

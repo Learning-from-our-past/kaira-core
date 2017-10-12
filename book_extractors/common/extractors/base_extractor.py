@@ -7,7 +7,7 @@ from book_extractors.configuration_exceptions import DependencyConfigurationExce
 class BaseExtractor:
     __metaclass__ = ABCMeta
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None):
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
         self.key_of_cursor_location_dependent = key_of_cursor_location_dependent    # Tells key of entry in cursorLocations dict this extractor is dependent on
         self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
         self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes

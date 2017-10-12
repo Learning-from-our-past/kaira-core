@@ -5,7 +5,7 @@ from book_extractors.common.extractors.birthday_extractor import CommonBirthdayE
 class BirthdayExtractor(CommonBirthdayExtractor):
     extraction_key = 'birthday'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         if options is None:
             options = {}
         options['PATTERN'] = r"(?:synt|s)\.?,?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|s)(?P<month>\d{1,2})(?:\.|,|:|s)?-?—?(?P<year>\d{2,4}))|-(?P<yearOnly>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D))"
