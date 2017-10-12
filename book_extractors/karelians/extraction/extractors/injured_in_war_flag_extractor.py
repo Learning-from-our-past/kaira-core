@@ -1,12 +1,12 @@
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared.textUtils import remove_hyphens_from_text
+from shared.text_utils import remove_hyphens_from_text
 import regex
 
 
 class InjuredInWarFlagExtractor(BaseExtractor):
     extraction_key = 'injuredInWarFlag'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(InjuredInWarFlagExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.OPTIONS = regex.UNICODE
         self.INJURED_IN_WAR_PATTERN = r'(?:haavoi){s<=1}|(?<!S)(otainvalidi){s<=1}(?:\s|,|\.)'

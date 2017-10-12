@@ -4,9 +4,9 @@ from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from shared import regexUtils, textUtils
+from shared import regexUtils, text_utils
 from book_extractors.common.postprocessors import place_name_cleaner
-from shared.textUtils import remove_hyphens_from_text
+from shared.text_utils import remove_hyphens_from_text
 
 
 class LocationExtractor(BaseExtractor):
@@ -41,7 +41,7 @@ class LocationExtractor(BaseExtractor):
 class BirthdayLocationExtractor(BaseExtractor):
     extraction_key = 'birthLocation'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(BirthdayLocationExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(LocationExtractor)
@@ -78,7 +78,7 @@ class BirthdayLocationExtractor(BaseExtractor):
         return place_name_cleaner.try_to_normalize_place_name(location_entry, self.metadata_collector)
 
     def _prepare_text_for_extraction(self, text, start_position):
-        return textUtils.take_sub_str_based_on_pos(text, start_position - 4, self.SUBSTRING_WIDTH)   # Dirty -4 offset
+        return text_utils.take_sub_str_based_on_pos(text, start_position - 4, self.SUBSTRING_WIDTH)   # Dirty -4 offset
 
     def _find_location(self, text, start_position):
         cursor_location = start_position

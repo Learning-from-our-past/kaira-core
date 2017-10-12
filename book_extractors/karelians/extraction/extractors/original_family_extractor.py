@@ -1,7 +1,7 @@
 import re
 
 import shared.regexUtils as regexUtils
-import shared.textUtils as textUtils
+import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
@@ -14,7 +14,7 @@ class FormerSurnameExtractor(BaseExtractor):
     SEARCH_SPACE = 40
     extraction_key = 'formerSurname'
     
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(FormerSurnameExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.FAMILY_PATTERN = r"(((?:o|0)\.? ?s\.?,? )(?P<family>([a-zä-ö-]*)(, ent\.?,? \w*)?)(?:,|\.))|(?P<family>ent\.?,? \w*)"
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -26,7 +26,7 @@ class FormerSurnameExtractor(BaseExtractor):
         return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, cursor_location=result[1])
 
     def _find_family(self, text, start_position):
-        text = textUtils.take_sub_str_based_on_pos(text, start_position, self.SEARCH_SPACE)
+        text = text_utils.take_sub_str_based_on_pos(text, start_position, self.SEARCH_SPACE)
         cursor_location = 0
         own_family = None
 

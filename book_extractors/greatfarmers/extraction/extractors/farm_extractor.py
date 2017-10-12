@@ -4,12 +4,12 @@ import re
 import shared.regexUtils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared import textUtils
+from shared import text_utils
 
 class FarmExtractor(BaseExtractor):
     extraction_key = KEYS['farmDetails']
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(FarmExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.ALL_AREA_PATTERN = r"(?:(?:kok\.pinta-ala){s<=1,i<=2}|(?:kokonaispinta-ala){s<=1,i<=2}).{0,20}?(?P<area1>\d\d?\d?,?\d?\d?)\sha"
         self.FOREST_AREA_PATTERN = r"(?:metsää{s<=1}\s?(?P<area1>\d\d?\d?,?\d?\d?))|(?:(?P<area2>\d\d?\d?,?\d?\d?)\s?ha\s?metsää{s<=1})"
@@ -31,11 +31,11 @@ class FarmExtractor(BaseExtractor):
         meadow_area = self._get_area(text, self.MEADOW_AREA_PATTERN)
 
         return {
-            KEYS["wholeArea"]: textUtils.float_or_none(whole_area),
-            KEYS["forestArea"]: textUtils.float_or_none(forest_area),
-            KEYS["fieldArea"]: textUtils.float_or_none(field_area),
-            KEYS["wasteArea"]: textUtils.float_or_none(waste_area),
-            KEYS["meadowArea"]: textUtils.float_or_none(meadow_area)
+            KEYS["wholeArea"]: text_utils.float_or_none(whole_area),
+            KEYS["forestArea"]: text_utils.float_or_none(forest_area),
+            KEYS["fieldArea"]: text_utils.float_or_none(field_area),
+            KEYS["wasteArea"]: text_utils.float_or_none(waste_area),
+            KEYS["meadowArea"]: text_utils.float_or_none(meadow_area)
         }
 
     def _get_area(self, text, pattern):

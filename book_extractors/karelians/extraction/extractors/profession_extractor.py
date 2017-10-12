@@ -1,7 +1,7 @@
 import re
 
 import shared.regexUtils as regexUtils
-import shared.textUtils as textUtils
+import shared.text_utils as text_utils
 import csv
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
@@ -10,7 +10,7 @@ class ProfessionExtractor(BaseExtractor):
     SEARCH_SPACE = 60
     extraction_key = 'profession'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(ProfessionExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -58,7 +58,7 @@ class ProfessionExtractor(BaseExtractor):
         return profession_output
 
     def _find_profession(self, text, start_position):
-        text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
+        text = text_utils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
         cursor_location = 0
         profession = None
 
@@ -66,7 +66,7 @@ class ProfessionExtractor(BaseExtractor):
             # limit the search range if there is spouse keyword:
             try:
                 found_spouse_word = regexUtils.safe_search(r"Puol", text, self.PROFESSION_OPTIONS)
-                text = textUtils.take_sub_str_based_on_range(text, 0, found_spouse_word.start())
+                text = text_utils.take_sub_str_based_on_range(text, 0, found_spouse_word.start())
             except regexUtils.RegexNoneMatchException as e:
                 pass
 

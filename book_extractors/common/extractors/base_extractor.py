@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from book_extractors.common.metadata_helper import MetadataCollector
-
+from book_extractors.configuration_exceptions import DependencyConfigurationException
 
 class BaseExtractor:
     __metaclass__ = ABCMeta
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None):
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
         self.key_of_cursor_location_dependent = key_of_cursor_location_dependent    # Tells key of entry in cursorLocations dict this extractor is dependent on
         self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
         self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes
         self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
+        self._dependencies_graph = []
+        self._dependencies = []
 
         if options is not None and 'output_path' in options:
             self.output_path = options['output_path']
@@ -18,6 +20,31 @@ class BaseExtractor:
             self.output_path = None
 
         self.metadata_collector = MetadataCollector()
+
+    def _build_dependencies_graph(self, dependencies_contexts):
+        if self._dependencies is not None and dependencies_contexts != {}:
+            if len(dependencies_contexts) < len(self._dependencies):
+                while len(dependencies_contexts) < len(self._dependencies):
+                    dependencies_contexts.append(None)
+
+                missing_contexts = []
+                for ext, context in zip(self._dependencies, dependencies_contexts):
+                    if context is None:
+                        missing_contexts.append(ext.__name__)
+
+                raise DependencyConfigurationException('There is a mismatch between the amount of dependencies and dependency contexts! '
+                                                       'Please explicitly enter a context for each dependency. '
+                                                       'The following extractors are missing a context: {0}'.format(missing_contexts))
+
+            new_dependencies = [(extractor, context) for extractor, context in zip(self._dependencies, dependencies_contexts)]
+            self._dependencies_graph += new_dependencies
+
+    def _set_dependencies(self, dependencies, dependencies_contexts):
+        for dependency in dependencies:
+            self._dependencies.append(dependency)
+
+        if dependencies_contexts is not None:
+            self._build_dependencies_graph(dependencies_contexts)
 
     def extract(self, entry, extraction_results, extraction_metadata):
         extraction_results, extraction_metadata = self._preprocess(entry, extraction_results, extraction_metadata)

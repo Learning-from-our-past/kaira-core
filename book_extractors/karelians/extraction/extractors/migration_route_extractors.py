@@ -5,7 +5,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers import migration_parser
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from support_datasheets import location_name_white_list
-from shared import regexUtils, textUtils
+from shared import regexUtils, text_utils
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 from book_extractors.karelians.extraction.postprocessors.returned_to_karelia import check_if_person_returned_karelia_in_between_wars
 
@@ -61,7 +61,7 @@ class FinnishLocationsExtractor(BaseExtractor):
     OTHER_REGION_ID = 'other'
     extraction_key = 'finnishLocations'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(FinnishLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -141,12 +141,12 @@ class FinnishLocationsExtractor(BaseExtractor):
             if 'year_information' in location:
                 for migration in location['year_information']:
                     if 'moved_in' in migration:
-                        moved_in = textUtils.int_or_none(migration['moved_in'])
+                        moved_in = text_utils.int_or_none(migration['moved_in'])
                     else:
                         moved_in = None
 
                     if 'moved_out' in migration:
-                        moved_out = textUtils.int_or_none(migration['moved_out'])
+                        moved_out = text_utils.int_or_none(migration['moved_out'])
                     else:
                         moved_out = None
 
@@ -213,7 +213,7 @@ class KarelianLocationsExtractor(BaseExtractor):
 
     extraction_key = 'karelianLocations'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(KarelianLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))"  # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -293,12 +293,12 @@ class KarelianLocationsExtractor(BaseExtractor):
             if 'year_information' in location:
                 for migration in location['year_information']:
                     if 'moved_in' in migration:
-                        moved_in = textUtils.int_or_none(migration['moved_in'])
+                        moved_in = text_utils.int_or_none(migration['moved_in'])
                     else:
                         moved_in = None
 
                     if 'moved_out' in migration:
-                        moved_out = textUtils.int_or_none(migration['moved_out'])
+                        moved_out = text_utils.int_or_none(migration['moved_out'])
                     else:
                         moved_out = None
 
@@ -360,7 +360,7 @@ class KarelianLocationsExtractor(BaseExtractor):
 class MigrationRouteExtractor(BaseExtractor):
     extraction_key = 'migrationHistory'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(MigrationRouteExtractor, self).__init__(key_of_cursor_location_dependent, options)
 
         self._sub_extraction_pipeline = ExtractionPipeline([

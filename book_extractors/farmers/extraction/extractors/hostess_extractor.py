@@ -2,7 +2,7 @@
 import re
 
 import shared.regexUtils as regexUtils
-import shared.textUtils as textUtils
+import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
@@ -12,7 +12,7 @@ from book_extractors.farmers.extraction.extractors.birthday_extractor import Bir
 class HostessExtractor(BaseExtractor):
     extraction_key = KEYS['hostess']
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(HostessExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.SEARCH_SPACE = 400
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+),"
@@ -28,7 +28,7 @@ class HostessExtractor(BaseExtractor):
         return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
 
     def _find_hostess(self, text, start_position):
-        text = textUtils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
+        text = text_utils.take_sub_str_based_on_range(text, start_position, self.SEARCH_SPACE)
 
         try:
             name = self._find_hostess_name(text)

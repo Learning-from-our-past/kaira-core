@@ -4,7 +4,7 @@ from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from book_extractors.extraction_exceptions import StopExtractionException
-from shared import regexUtils, textUtils
+from shared import regexUtils, text_utils
 from shared.gender_extract import Gender
 from shared.gender_extract import GenderException
 from shared.geo.geocoding import GeoCoder, LocationNotFound
@@ -17,7 +17,7 @@ class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
     extraction_key = 'children'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(ChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self._kaira_id_provider = KairaIdProvider()
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika)(;|:)(?P<children>.*?)Asuinp{s<=1}"
@@ -135,7 +135,7 @@ class ChildExtractor(BaseExtractor):
 
         return {KEYS["childName"]: name,
                 KEYS["gender"]: gender,
-                KEYS["birthYear"]: textUtils.int_or_none(year),
+                KEYS["birthYear"]: text_utils.int_or_none(year),
                 KEYS["childLocationName"]: location,
                 KEYS["kairaId"]: self._kaira_id_provider.get_new_id('C')
                 }

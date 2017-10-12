@@ -3,13 +3,13 @@ import re
 
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from shared import regexUtils
-from shared import textUtils
+from shared import text_utils
 
 
 class DeathExtractor(BaseExtractor):
     extraction_key = 'death'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(DeathExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.PATTERN = r"(?:kuoli)\.?\s?-(?P<year>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -24,8 +24,8 @@ class DeathExtractor(BaseExtractor):
         return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
 
     def _prepare_text_for_extraction(self, text, start_position):
-        t = textUtils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
-        t = textUtils.remove_spaces_from_text(t)
+        t = text_utils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
+        t = text_utils.remove_spaces_from_text(t)
         return t
 
     def _find_date(self, text, start_position):
@@ -35,7 +35,7 @@ class DeathExtractor(BaseExtractor):
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = death.end() + start_position - 4
-            death_year = textUtils.int_or_none("19" + death.group("year"))
+            death_year = text_utils.int_or_none("19" + death.group("year"))
         except regexUtils.RegexNoneMatchException as e:
             death_year = None
 

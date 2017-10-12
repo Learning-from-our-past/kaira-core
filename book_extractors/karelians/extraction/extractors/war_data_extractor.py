@@ -7,7 +7,7 @@ from book_extractors.karelians.extraction.extractors.served_during_war_flag_extr
 class WarDataExtractor(BaseExtractor):
     extraction_key = 'warData'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(WarDataExtractor, self).__init__(key_of_cursor_location_dependent, options)
 
         self._sub_extraction_pipeline = ExtractionPipeline([
