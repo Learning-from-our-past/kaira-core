@@ -6,7 +6,7 @@ import regex
 class ServedDuringWarFlagExtractor(BaseExtractor):
     extraction_key = 'servedDuringWarFlag'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(ServedDuringWarFlagExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.OPTIONS = regex.UNICODE
         self.SERVED_IN_WAR_PATTERN = r'(?:palvel(?!uksessa)(?:i|lut|len)){s<=1}'
