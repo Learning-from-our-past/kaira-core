@@ -17,7 +17,7 @@ class BaseExtractor:
         self._parent_pipeline_data = {}
         self._dependencies_graph = []
         self._required_dependencies = []
-        self._deps = None
+        self._deps = {}
 
         if options is not None and 'output_path' in options:
             self.output_path = options['output_path']
