@@ -2,46 +2,43 @@ import pytest
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 
-'''
-TODO: Populate this file with many more tests for extraction_pipeline
-'''
 
-@pytest.mark.skip()
-class TestExtractionPipelineDataPassing:
-    def should_contain_parent_data_deep_in_the_subpipelines(self):
-        test_pipeline = ExtractionPipeline([
-            configure_extractor(MockExtractor),
-            configure_extractor(MockExtractorAWithSubpipeline)
-        ])
-        parent_data = {
-            'extraction_results': {
-                'result': 'test'
-            },
-            'metadata': {
-                'identity': 'i hate meta'
-            },
-            'parent_data': {
+class TestExtractionPipeline:
+    class TestDataPassing:
+        def should_contain_parent_data_deep_in_the_subpipelines(self):
+            test_pipeline = ExtractionPipeline([
+                configure_extractor(MockExtractor),
+                configure_extractor(MockExtractorAWithSubpipeline)
+            ])
+            parent_data = {
                 'extraction_results': {
-                    'name': {
-                        'gender': 'Male'
-                    },
-                    'test_result': 'testiness',
-                    'farmDetails': {
-                        'farmTotalArea': 57.0
-                    }
+                    'result': 'test'
                 },
                 'metadata': {
-                    'identity': 'i love meta'
+                    'identity': 'i hate meta'
                 },
-                'parent_data': None
+                'parent_data': {
+                    'extraction_results': {
+                        'name': {
+                            'gender': 'Male'
+                        },
+                        'test_result': 'testiness',
+                        'farmDetails': {
+                            'farmTotalArea': 57.0
+                        }
+                    },
+                    'metadata': {
+                        'identity': 'i love meta'
+                    },
+                    'parent_data': None
+                }
             }
-        }
 
-        test_pipeline.process({'text': 'test string'}, parent_pipeline_data=parent_data)
-        '''
-        The assert for this test happens in the _extract function of the MockExtractorDeepPipelineTest class.
-        CTRL + F to "parent_results_deep assert here" to get there.
-        '''
+            test_pipeline.process({'text': 'test string'}, parent_pipeline_data=parent_data)
+            '''
+            The assert for this test happens in the _extract function of the MockExtractorDeepPipelineTest class.
+            CTRL + F to "parent_results_deep assert here" to get there.
+            '''
 
 
 class MockExtractorDeepPipelineTest(BaseExtractor):
