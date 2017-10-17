@@ -1,7 +1,9 @@
 import pytest
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.configuration_exceptions import DependencyConfigurationException
+from book_extractors.configuration_exceptions import DependencyConfigurationException, ParentKeywordConfigurationException
+from book_extractors.configuration_exceptions import ContextKeywordConfigurationException
+from book_extractors.extraction_exceptions import ParentKeywordTraversingException
 
 
 class TestBaseExtractor:
@@ -68,6 +70,35 @@ class TestBaseExtractor:
 
             assert excinfo.value.missing_contexts == [NoPreAndPostProcessesExtractor.__name__,
                                                       SimpleExtractorForDeps.__name__]
+
+        def should_raise_parent_context_configuration_error_if_there_are_too_many_parents_in_contexts(self):
+            my_pipeline = ExtractionPipeline([
+                configure_extractor(SimpleExtractorForDeps, dependencies_contexts=['parent.parent'])
+            ])
+
+            parent_data = {'extraction_results': {'test': 'test'},
+                           'parent_data': None}
+
+            with pytest.raises(ParentKeywordConfigurationException):
+                my_pipeline.process({'text': 'test'}, parent_pipeline_data=parent_data)
+
+        def should_raise_parent_traversing_error_if_parent_data_is_missing_from_parent_pipeline_data_during_any_traverse_step(self):
+            my_pipeline = ExtractionPipeline([
+                configure_extractor(SimpleExtractorForDeps, dependencies_contexts=['parent.parent'])
+            ])
+
+            parent_data = {'extraction_results': {'test': 'test'}}
+
+            with pytest.raises(ParentKeywordTraversingException):
+                my_pipeline.process({'text': 'test'}, parent_pipeline_data=parent_data)
+
+        def should_raise_context_keyword_configuration_error_if_context_is_entered_in_an_unrecognized_way(self):
+            my_pipeline = ExtractionPipeline([
+                configure_extractor(SimpleExtractorForDeps, dependencies_contexts=['sfdjhö'])
+            ])
+
+            with pytest.raises(ContextKeywordConfigurationException):
+                my_pipeline.process({'text': 'test'})
 
     class TestMetadata:
         def should_reset_metadata_collector_after_extraction(self, extractor):
