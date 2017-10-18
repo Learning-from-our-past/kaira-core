@@ -12,7 +12,7 @@ class FormerSurnameExtractor(BaseExtractor):
     Tries to find the possible o.s. (omaa sukua) part from entry.
     """
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(FormerSurnameExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.REQUIRES_MATCH_POSITION = True
         self.SEARCH_SPACE = 40

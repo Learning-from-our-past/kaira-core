@@ -41,7 +41,7 @@ class LocationExtractor(BaseExtractor):
 class BirthdayLocationExtractor(BaseExtractor):
     extraction_key = 'birthLocation'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(BirthdayLocationExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(LocationExtractor)
