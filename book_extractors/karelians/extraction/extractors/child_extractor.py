@@ -17,7 +17,7 @@ class ChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
     extraction_key = 'children'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(ChildExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self._kaira_id_provider = KairaIdProvider()
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika)(;|:)(?P<children>.*?)Asuinp{s<=1}"

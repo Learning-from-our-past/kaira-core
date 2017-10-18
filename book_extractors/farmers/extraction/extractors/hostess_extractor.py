@@ -12,7 +12,7 @@ from book_extractors.farmers.extraction.extractors.birthday_extractor import Bir
 class HostessExtractor(BaseExtractor):
     extraction_key = KEYS['hostess']
 
-    def __init__(self, key_of_cursor_location_dependent, options):
+    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(HostessExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.SEARCH_SPACE = 400
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+),"
