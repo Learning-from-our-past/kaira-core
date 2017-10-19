@@ -2,19 +2,22 @@ import pytest
 from book_extractors.karelians.extraction.extractors.war_data_extractor import WarDataExtractor
 from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
 from book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor import ServedDuringWarFlagExtractor
+from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 
 
 class TestWarDataExtraction:
     @pytest.yield_fixture(autouse=True)
     def extractor(self):
-        return WarDataExtractor(None, None)
+        return WarDataExtractor(None, {'in_spouse_extractor': False})
 
     def _verify_flags(self, expected_flags_and_texts, extractor, subflag, gender):
-        extractor_prerequisite_results = {'primaryPerson': {'name': {'gender': gender}}}
         flag = 'warData'
+        parent_data = {'extraction_results': {'primaryPerson': {'name': {'gender': 'Male'}}},
+                       'parent_data': None}
 
         for e in expected_flags_and_texts:
-            results, metadata = extractor.extract({'text': e[0]}, extractor_prerequisite_results, {})
+            results, metadata = extractor.extract({'text': e[0]}, {}, {},
+                                                  parent_pipeline_data=parent_data)
             assert results[flag][subflag] is e[1]
 
     def should_extract_injured_in_war_flag_correctly_as_true_if_primary_person_is_male(self, extractor):
@@ -22,117 +25,137 @@ class TestWarDataExtraction:
             ('Nyymi on sotamies, ja hän palveli JP 1;ssä. Hän haavoittui v. -44 ja on 30 %;n sotainvalidi.', True)
         ], extractor, 'injuredInWarFlag', 'Male')
 
-    def should_extract_injured_in_war_flag_correctly_as_none_if_primary_person_is_female(self, extractor):
-        self._verify_flags([
-            ('Hän on sotamies ja palvellut jatkosodassa JR 6:ssa. Hän on 60 %:n sotainvalidi.', None)
-        ], extractor, 'injuredInWarFlag', 'Female')
-
     def should_extract_served_during_war_flag_correctly_as_true_if_primary_person_is_male(self, extractor):
         self._verify_flags([
             ('Herra Testilä oli molemmissa sodissa mukana palvellen tykkimiehenä.', True)
         ], extractor, 'servedDuringWarFlag', 'Male')
 
-    def should_extract_served_during_war_flag_correctly_as_none_if_primary_person_is_female(self, extractor):
-        self._verify_flags([
-            ('Rouva Testilä oli molemmissa sodissa mukana palvellen ironmanina.', None)
-        ], extractor, 'servedDuringWarFlag', 'Female')
-
 
 class TestInjuredInWarFlag:
-    @pytest.yield_fixture(autouse=True)
-    def extractor(self):
-        return InjuredInWarFlagExtractor(None, None)
-
-    def _verify_flags(self, expected_flags_and_texts, extractor):
+    def _verify_flags(self, expected_flags_and_texts, in_spouse=False, sex='Male'):
         flag = 'injuredInWarFlag'
+        parent_data = {'extraction_results': {'name': {'gender': sex}},
+                       'parent_data': None}
+
+        pipeline = ExtractionPipeline([
+            configure_extractor(InjuredInWarFlagExtractor, extractor_options={'in_spouse_extractor': in_spouse},
+                                dependencies_contexts=['main'])
+        ])
 
         for e in expected_flags_and_texts:
-            results, metadata = extractor.extract({'text': e[0]}, {}, {})
+            results, metadata = pipeline.process({'text': e[0]}, parent_pipeline_data=parent_data)
             assert results[flag] is e[1]
 
-    def should_return_true_if_text_contains_mentions_of_being_injured(self, extractor):
+    def should_return_true_if_text_contains_mentions_of_being_injured(self):
         self._verify_flags([
             ('Nyymi on sotamies, ja hän palveli JP 1;ssä. Hän haavoittui v. -44 ja on 30 %;n sotainvalidi.', True),
             ('Sodassa haavoittumisen vuoksi hän on 30 % invaliidi.', True)
-        ], extractor)
+        ])
 
-    def should_return_true_if_text_contains_mentions_of_being_injured_and_a_hyphen(self, extractor):
+    def should_return_true_if_text_contains_mentions_of_being_injured_and_a_hyphen(self):
         self._verify_flags([
             ('Nyymi on sotamies, ja hän palveli JP 1;ssä. Hän haavoit-tui v. -44 ja on 30 %;n sotainvalidi.', True)
-        ], extractor)
+        ])
 
-    def should_return_true_if_text_contains_mentions_of_being_injured_and_a_typo(self, extractor):
+    def should_return_true_if_text_contains_mentions_of_being_injured_and_a_typo(self):
         self._verify_flags([
             ('Joku on sotamies ja palvellut jatkosodassa JvKoulK 2:ssa ja 4./JR 6:ssa. Hän haavoi7tui kaksi kertaa.', True)
-        ], extractor)
+        ])
 
-    def should_return_true_if_text_contains_mentions_of_being_warhandicapped(self, extractor):
+    def should_return_true_if_text_contains_mentions_of_being_warhandicapped(self):
         self._verify_flags([
             ('asuvat osakehuoneistossa. Rakennusmestari Joku on 20 %:n sotainvalidi. Hänelle on myönnetty', True)
-        ], extractor)
+        ])
 
-    def should_return_true_if_text_contains_mentions_of_being_warhandicapped_and_a_hyphen(self, extractor):
+    def should_return_true_if_text_contains_mentions_of_being_warhandicapped_and_a_hyphen(self):
         self._verify_flags([
             ('asuvat osakehuoneistossa. Rakennusmestari Joku on 20 %:n sota-invalidi. Hänelle on myönnetty', True)
-        ], extractor)
+        ])
 
-    def should_return_true_if_text_contains_mentions_of_being_warhandicapped_and_a_typo(self, extractor):
+    def should_return_true_if_text_contains_mentions_of_being_warhandicapped_and_a_typo(self):
         self._verify_flags([
             ('Hän on sotamies ja palvellut jatkosodassa JR 6:ssa. Hän on 60 %:n sotainvalibi.', True)
-        ], extractor)
+        ])
 
-    def should_return_false_if_text_does_not_mention_injury_or_being_warhandicapped(self, extractor):
+    def should_return_false_if_text_does_not_mention_injury_or_being_warhandicapped(self):
         self._verify_flags([
             ('Joku Meikäläinen on kersantti ja palveli talvisodassa 1./VKK:ssa, 2./VP 19:ssä ja '
              '2./VP 1 :ssä sekä jatkosodassa 1./RaskPsto 14:s sä. Hänelle on myönnetty Vm 2, Ts '
              'mm sekä Js mm. Hän on Lauritsalan Kisan jäsen. Hän kuuluu Paperityöväenliittoon Ul'
              'koilu ja pihanhoito sekä hiihto ovat hänen mieliharrastuksiaan. Rouva Ni-me-tön ku'
              'uluu Liiketyöntekijöihin. Käsityöt ovat hänen harrastuksiaan.', False)
-        ], extractor)
+        ])
 
-    def should_return_false_if_text_mentions_warhandicapped_in_wrong_context(self, extractor):
+    def should_return_false_if_text_mentions_warhandicapped_in_wrong_context(self):
         self._verify_flags([
             ('Satunnainen heppuu asuu yhdessä äitinsä, Satunnaisen Äidin kanssa sotainvalidien talossa.', False),
             ('Hän kuuluu Karjalaseuraan, Rakennustyöväen liittoon ja Sotainvalidien Veljesliittoon.', False)
-        ], extractor)
+        ])
+
+    def should_return_true_if_text_mentions_being_warhandicapped_and_primary_person_sex_is_female_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([
+            ('asuvat osakehuoneistossa. Rakennusmestari Joku on 20 %:n sotainvalidi. Hänelle on myönnetty', True)
+        ], in_spouse=True, sex='Female')
+
+    def should_return_none_if_primary_person_sex_is_female_and_we_are_not_in_spouse_extractor(self):
+        self._verify_flags([
+            ('asuvat osakehuoneistossa. Rakennusmestari Joku on 20 %:n sotainvalidi. Hänelle on myönnetty', None)
+        ], in_spouse=False, sex='Female')
+
+    def should_return_none_if_primary_person_sex_is_male_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([
+            ('asuvat osakehuoneistossa. Rakennusmestari Joku on 20 %:n sotainvalidi. Hänelle on myönnetty', None)
+        ], in_spouse=True, sex='Male')
+
+    def should_return_false_if_text_does_not_mention_being_warhandicapped_or_wounded_and_primary_person_sex_is_female_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Joku Meikäläinen on kersantti ja palveli talvisodassa 1./VKK:ssa, 2./VP 19:ssä ja '
+             '2./VP 1 :ssä sekä jatkosodassa 1./RaskPsto 14:s sä. Hänelle on myönnetty Vm 2, Ts '
+             'mm sekä Js mm. Hän on Lauritsalan Kisan jäsen. Hän kuuluu Paperityöväenliittoon Ul'
+             'koilu ja pihanhoito sekä hiihto ovat hänen mieliharrastuksiaan. Rouva Ni-me-tön ku'
+             'uluu Liiketyöntekijöihin. Käsityöt ovat hänen harrastuksiaan.', False)
+        ], in_spouse=True, sex='Female')
 
 
 class TestServedDuringWarFlagExtraction:
-    @pytest.yield_fixture(autouse=True)
-    def extractor(self):
-        return ServedDuringWarFlagExtractor(None, None)
+    def _verify_flags(self, expected_flags_and_texts, in_spouse=False, sex='Male'):
+        flag = ServedDuringWarFlagExtractor.extraction_key
+        parent_data = {'extraction_results': {'name': {'gender': sex}},
+                       'parent_data': None}
 
-    def _verify_flags(self, expected_flags_and_texts, extractor):
-        flag = 'servedDuringWarFlag'
+        pipeline = ExtractionPipeline([
+            configure_extractor(ServedDuringWarFlagExtractor, extractor_options={'in_spouse_extractor': in_spouse},
+                                dependencies_contexts=['main'])
+        ])
 
         for e in expected_flags_and_texts:
-            results, metadata = extractor.extract({'text': e[0]}, {}, {})
+            results, metadata = pipeline.process({'text': e[0]}, parent_pipeline_data=parent_data)
             assert results[flag] is e[1]
 
-    def should_return_true_if_text_contains_mention_of_having_served_with_lut_suffix(self, extractor):
+    def should_return_true_if_text_contains_mention_of_having_served_with_lut_suffix(self):
         self._verify_flags([
             ('Herra Alikersantti on sotilasarvoltaan alikersantti ja palvellut jatkosodassa ETp/VAK:ssa '
              'sekä ErP 21:ssa.', True)
-        ], extractor)
+        ])
 
-    def should_return_true_if_text_contains_mention_of_having_served_with_li_suffix(self, extractor):
+    def should_return_true_if_text_contains_mention_of_having_served_with_li_suffix(self):
         self._verify_flags([
             ('Muut asuinp.: Kuhmoinen, Orimattila, Perniö 44—, Paimio. Sota Mies palveli sotamiehen'
              'ä jatkosodassa JR 20:ssa, Vapaa-aikansa hän viettää lueskellen.', True)
-        ], extractor)
+        ])
 
-    def should_return_true_if_text_contains_mention_of_having_served_with_len_suffix(self, extractor):
+    def should_return_true_if_text_contains_mention_of_having_served_with_len_suffix(self):
         self._verify_flags([
             ('Herra Testilä oli molemmissa sodissa mukana palvellen tykkimiehenä.', True)
-        ], extractor)
+        ])
 
-    def should_return_true_if_text_contains_mention_of_having_served_with_substitutions_and_or_hyphen(self, extractor):
+    def should_return_true_if_text_contains_mention_of_having_served_with_substitutions_and_or_hyphen(self):
         self._verify_flags([
             ('Herra Alikersantti on sotilasarvoltaan alikersantti ja pa1-vellut jatkosodassa ETp/VAK:ssa '
              'sekä ErP 21:ssa.', True)
-        ], extractor)
+        ])
 
-    def should_return_false_if_text_contains_no_mention_of_having_served(self, extractor):
+    def should_return_false_if_text_contains_no_mention_of_having_served(self):
         self._verify_flags([
             ('Nimettömät asuvat rakentamassaan omakotitalossa. Nyrkkeilijä Nimetön on ammattiosaston jäsen '
              'ja kuuluu nuorisojaostoon. Hän harrastaa yleisurheilua, nyrkkeilyä ja hiihtoa. Nimetön on voi'
@@ -140,9 +163,37 @@ class TestServedDuringWarFlagExtraction:
              'piskellut työväenopistossa. Rouva harrastaa puutarhanhoitoa, käsitöitä ja kirjallisuutta. Hän'
              'on ottanut osaa kirkollisiin toimiin. Herran äiti, Äiti Nimetön o.s. Epänimetön, asuu Kaarlel'
              'assa omakotitalossa.', False)
-        ], extractor)
+        ])
 
-    def should_return_false_if_text_contains_mention_of_having_served_with_luksessa_suffix(self, extractor):
+    def should_return_false_if_text_contains_mention_of_having_served_with_luksessa_suffix(self):
         self._verify_flags([
             ('Rautateiden Partaveitsi on ollut vuodesta -48 lähtien valtion rautateiden palveluksessa.', False)
-        ], extractor)
+        ])
+
+    def should_return_true_if_text_mentions_having_served_and_primary_person_sex_is_female_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Herra Alikersantti on sotilasarvoltaan alikersantti ja palvellut jatkosodassa ETp/VAK:ssa '
+             'sekä ErP 21:ssa.', True)
+        ], in_spouse=True, sex='Female')
+
+    def should_return_none_if_primary_person_sex_is_female_and_we_are_not_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Herra Alikersantti on sotilasarvoltaan alikersantti ja palvellut jatkosodassa ETp/VAK:ssa '
+             'sekä ErP 21:ssa.', None)
+        ], in_spouse=False, sex='Female')
+
+    def should_return_none_if_primary_person_sex_is_male_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Herra Alikersantti on sotilasarvoltaan alikersantti ja palvellut jatkosodassa ETp/VAK:ssa '
+             'sekä ErP 21:ssa.', None)
+        ], in_spouse=True, sex='Male')
+
+    def should_return_false_if_text_does_not_mention_having_served_and_primary_person_sex_is_female_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Nimettömät asuvat rakentamassaan omakotitalossa. Nyrkkeilijä Nimetön on ammattiosaston jäsen '
+             'ja kuuluu nuorisojaostoon. Hän harrastaa yleisurheilua, nyrkkeilyä ja hiihtoa. Nimetön on voi'
+             'ttanut seiväshypyssä piirin mestaruuksia. Hän lukee ammattikirjallisuutta. Rouva Nimetön on o'
+             'piskellut työväenopistossa. Rouva harrastaa puutarhanhoitoa, käsitöitä ja kirjallisuutta. Hän'
+             'on ottanut osaa kirkollisiin toimiin. Herran äiti, Äiti Nimetön o.s. Epänimetön, asuu Kaarlel'
+             'assa omakotitalossa.', False)
+        ], in_spouse=True, sex='Female')
