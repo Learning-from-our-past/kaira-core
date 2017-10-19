@@ -39,7 +39,15 @@ class BaseExtractor:
 
                 raise DependencyConfigurationException(missing_contexts)
 
-            new_dependencies = [(extractor, context) for extractor, context in zip(self._required_dependencies, dependencies_contexts)]
+            contexts = []
+            for context in dependencies_contexts:
+                new_context = context
+                if isinstance(context, str):
+                    new_context = (context, None)
+
+                contexts.append(new_context)
+
+            new_dependencies = [(extractor, context) for extractor, context in zip(self._required_dependencies, contexts)]
             self._dependencies_graph += new_dependencies
 
     def _set_dependencies(self, dependencies, dependencies_contexts):
@@ -102,6 +110,7 @@ class BaseExtractor:
 
         for dependency in self._dependencies_graph:
             extractor, context = dependency
+            context, json_path = context
             key = extractor.extraction_key
 
             if context == 'current':
@@ -119,7 +128,12 @@ class BaseExtractor:
             if self._has_duplicates(extractor):
                 result_key = context + '.' + key
 
-            self._deps[result_key] = extraction_results[key]
+            if json_path is not None:
+                deps = extraction_results[json_path][key]
+            else:
+                deps = extraction_results[key]
+
+            self._deps[result_key] = deps
 
     def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data={}):
         self._parent_pipeline_data = parent_pipeline_data
