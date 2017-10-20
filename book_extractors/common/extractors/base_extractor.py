@@ -135,7 +135,7 @@ class BaseExtractor:
 
             self._deps[result_key] = deps
 
-    def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data={}):
+    def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data=None):
         self._parent_pipeline_data = parent_pipeline_data
         
         if self._dependencies_graph is not None and self._dependencies_graph != []:
