@@ -109,6 +109,51 @@ class TestExtractionPipeline:
             results, metadata = test_pipeline.process({'text': 'awoo am a wolf'}, parent_pipeline_data=parent_data)
             assert results['sameMultipleTimes'] == {'main.hotDay': True, 'parent.hotDay': False}
 
+        def should_correctly_set_up_output_path_to_dependency_results_and_extract_expected_data_based_on_that_information(self):
+            parent_data = {
+                'extraction_results': {
+                    'primaryPerson': {
+                        'name': 'Nyymi'
+                    }
+                },
+                'parent_data': None
+            }
+
+            expected_data = {
+                'name': 'Nyymi'
+            }
+
+            test_pipeline = ExtractionPipeline([
+                configure_extractor(ExtractorWithParentDataBehindOutputPath,
+                                    dependencies_contexts=[('parent', 'primaryPerson')])
+            ])
+
+            results, metadata= test_pipeline.process({'text': 'test'}, parent_pipeline_data=parent_data)
+            assert results[ExtractorWithParentDataBehindOutputPath.extraction_key] == expected_data
+
+        def should_correctly_set_up_interleaved_string_and_tuple_contexts_and_extract_expected_data_based_on_that_information(self):
+            parent_data = {
+                'extraction_results': {
+                    'primaryPerson': {
+                        'name': 'Nyymi'
+                    }
+                },
+                'parent_data': None
+            }
+
+            expected_data = {
+                'name': 'Nyymi'
+            }
+
+            test_pipeline = ExtractionPipeline([
+                configure_extractor(MockExtractor),
+                configure_extractor(ExtractorWithParentDataBehindOutputPath,
+                                    dependencies_contexts=[('parent', 'primaryPerson'), 'current'])
+            ])
+
+            results, metadata = test_pipeline.process({'text': 'test'}, parent_pipeline_data=parent_data)
+            assert results[ExtractorWithParentDataBehindOutputPath.extraction_key] == expected_data
+
         def should_successfully_extract_expected_data_based_on_all_the_dependencies_and_their_contexts(self):
             parent_data = {
                 'extraction_results': {
@@ -274,3 +319,31 @@ class ExtractorWithSameDepMultipleTimes(BaseExtractor):
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         return self._add_to_extraction_results(self._deps, extraction_results, extraction_metadata)
+
+
+class ExtractorWithParentDataBehindOutputPath(BaseExtractor):
+    extraction_key = 'outputPathTest'
+
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+        super(ExtractorWithParentDataBehindOutputPath, self).__init__()
+
+        self._set_dependencies([MockNameExtractor], dependencies_contexts)
+
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        return self._add_to_extraction_results(self._deps, extraction_results, extraction_metadata)
+
+
+class ExtractorWithParentDataBehindOutputPathAndMultipleDeps(BaseExtractor):
+    extraction_key = 'outputPathTest'
+
+    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+        super(ExtractorWithParentDataBehindOutputPathAndMultipleDeps, self).__init__()
+
+        self._set_dependencies([MockNameExtractor, MockExtractor], dependencies_contexts)
+
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        return self._add_to_extraction_results(self._deps, extraction_results, extraction_metadata)
+
+
+class MockNameExtractor:
+    extraction_key = 'name'

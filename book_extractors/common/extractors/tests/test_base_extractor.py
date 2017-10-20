@@ -37,7 +37,7 @@ class TestBaseExtractor:
 
             results, metadata = my_pipeline.process({'text': 'test string'}, parent_pipeline_data=parent_data)
             extractor_dependencies_graph = metadata[SimpleExtractorForDeps.extraction_key]['dependencies_graph'][0]
-            correct_dependencies_graph = (MockExtractor, dep_context)
+            correct_dependencies_graph = (MockExtractor, (dep_context, None))
             assert extractor_dependencies_graph == correct_dependencies_graph
 
         def should_correctly_set_up_multiple_dependencies_and_contexts_in_extractor(self):
@@ -55,9 +55,9 @@ class TestBaseExtractor:
             results, metadata = my_pipeline.process({'text': 'test string'}, parent_pipeline_data=parent_data)
             extractor_dependencies_graph = metadata[SimpleExtractorForMultiDeps.extraction_key]['dependencies_graph']
             correct_dependencies_graph = [
-                (MockExtractor, 'parent'),
-                (NoPreAndPostProcessesExtractor, 'main'),
-                (SimpleExtractorForDeps, 'main')
+                (MockExtractor, ('parent', None)),
+                (NoPreAndPostProcessesExtractor, ('main', None)),
+                (SimpleExtractorForDeps, ('main', None))
             ]
 
             assert extractor_dependencies_graph == correct_dependencies_graph
