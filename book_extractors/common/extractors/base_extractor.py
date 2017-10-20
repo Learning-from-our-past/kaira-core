@@ -135,6 +135,10 @@ class BaseExtractor:
 
             self._deps[result_key] = deps
 
+    def _get_parent_data_for_pipeline(self, extraction_results):
+        return {'extraction_results': extraction_results,
+                'parent_data': self._parent_pipeline_data}
+
     def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data=None):
         self._parent_pipeline_data = parent_pipeline_data
         

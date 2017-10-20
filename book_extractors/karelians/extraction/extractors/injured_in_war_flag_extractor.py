@@ -1,6 +1,7 @@
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from shared.text_utils import remove_hyphens_from_text
 import regex
+from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
 
 
 class InjuredInWarFlagExtractor(BaseExtractor):
@@ -8,6 +9,7 @@ class InjuredInWarFlagExtractor(BaseExtractor):
 
     def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(InjuredInWarFlagExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self._set_dependencies([NameExtractor], dependencies_contexts)
         self.OPTIONS = regex.UNICODE
         self.INJURED_IN_WAR_PATTERN = r'(?:haavoi){s<=1}|(?<!S)(otainvalidi){s<=1}(?:\s|,|\.)'
         self.REGEX_INJURED_IN_WAR = regex.compile(self.INJURED_IN_WAR_PATTERN, self.OPTIONS)
