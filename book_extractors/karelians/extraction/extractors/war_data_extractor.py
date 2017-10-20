@@ -11,12 +11,12 @@ class WarDataExtractor(BaseExtractor):
         super(WarDataExtractor, self).__init__(key_of_cursor_location_dependent, options)
 
         self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(InjuredInWarFlagExtractor),
-            configure_extractor(ServedDuringWarFlagExtractor)
+            configure_extractor(InjuredInWarFlagExtractor, dependencies_contexts=[('main', 'primaryPerson')]),
+            configure_extractor(ServedDuringWarFlagExtractor, dependencies_contexts=[('main', 'primaryPerson')])
         ])
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        results, metadata = self._extract_war_data(entry['text'])
+        results, metadata = self._extract_war_data(entry['text'], self._get_parent_data_for_pipeline(extraction_results))
         return self._add_to_extraction_results(self._nullify_relevant_flags_for_females(results, extraction_results),
                                                extraction_results,
                                                extraction_metadata)
@@ -30,5 +30,5 @@ class WarDataExtractor(BaseExtractor):
 
         return extracted_data
 
-    def _extract_war_data(self, text):
-        return self._sub_extraction_pipeline.process({'text': text})
+    def _extract_war_data(self, text, parent_data):
+        return self._sub_extraction_pipeline.process({'text': text}, parent_pipeline_data=parent_data)

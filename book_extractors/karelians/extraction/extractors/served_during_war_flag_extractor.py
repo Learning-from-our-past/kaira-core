@@ -1,4 +1,5 @@
 from book_extractors.common.extractors.base_extractor import BaseExtractor
+from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
 from shared.text_utils import remove_hyphens_from_text
 import regex
 
@@ -8,6 +9,8 @@ class ServedDuringWarFlagExtractor(BaseExtractor):
 
     def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(ServedDuringWarFlagExtractor, self).__init__(key_of_cursor_location_dependent, options)
+        self._set_dependencies([NameExtractor], dependencies_contexts)
+
         self.OPTIONS = regex.UNICODE
         self.SERVED_IN_WAR_PATTERN = r'(?:palvel(?!uksessa)(?:i|lut|len)){s<=1}'
         self.REGEX_SERVED_IN_WAR = regex.compile(self.SERVED_IN_WAR_PATTERN, self.OPTIONS)
