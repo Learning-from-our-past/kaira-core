@@ -1,0 +1,13 @@
+machine:
+  python:
+    version: 3.5.3
+
+database:
+  override:
+    - wget https://github.com/Learning-from-our-past/Kaira/releases/download/v1.0/mongodump.zip
+    - unzip mongodump.zip
+    - mongorestore dump
+
+test:
+  override:
+    - python -m pytest
