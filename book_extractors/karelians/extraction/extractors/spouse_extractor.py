@@ -10,6 +10,9 @@ from book_extractors.karelians.extraction.extractors.location_extractor import B
 from book_extractors.karelians.extraction.extractors.original_family_extractor import FormerSurnameExtractor
 from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
 from book_extractors.karelians.extraction.extractors.wedding_extractor import WeddingExtractor
+from book_extractors.karelians.extraction.extractors.war_data_extractor import WarDataExtractor
+from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
+from book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor import ServedDuringWarFlagExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from shared import regexUtils
 
@@ -27,6 +30,10 @@ class SpouseExtractor(BaseExtractor):
             configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
             configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
             configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
+        ])
+
+        self._wardata_pipeline = ExtractionPipeline([
+            configure_extractor(WarDataExtractor, extractor_options={'in_spouse_extractor': True})
         ])
 
         self.kaira_id_provider = KairaIdProvider()
@@ -50,13 +57,22 @@ class SpouseExtractor(BaseExtractor):
             KEYS["weddingYear"]: None,
             KEYS["spouseName"]: None,
             KEYS['kairaId']: None,
-            KEYS["hasSpouse"]: False
+            KEYS["hasSpouse"]: False,
+            WarDataExtractor.extraction_key: {
+                InjuredInWarFlagExtractor.extraction_key: None,
+                ServedDuringWarFlagExtractor.extraction_key: None
+            }
         }
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
-        result = self._find_spouse(entry['text'], start_position)
-        return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, cursor_location=result[1])
+        parent_data = self._get_parent_data_for_pipeline(extraction_results)
+        result, cursor_location = self._find_spouse(entry['text'], start_position)
+        if result != self.NO_SPOUSE_RESULT:
+            war_results, war_metadata = self._wardata_pipeline.process(entry, parent_pipeline_data=parent_data)
+            result[WarDataExtractor.extraction_key] = war_results[WarDataExtractor.extraction_key]
+
+        return self._add_to_extraction_results(result, extraction_results, extraction_metadata, cursor_location=cursor_location)
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
