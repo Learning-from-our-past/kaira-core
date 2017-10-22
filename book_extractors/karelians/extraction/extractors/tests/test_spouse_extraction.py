@@ -10,7 +10,9 @@ class TestSpouseExtraction:
 
     def should_extract_spouse_details_correctly(self, spouse_extractor, th):
         spouse_text = 'Puol. Maija Nyymi o.s. Testaaja, emäntä, synt. 30. 6. -19 Testilässä. Avioit. -44. Poika: Joku Jälkeäinen -46 Nyymilä.'
-        result, metadata = spouse_extractor.extract({'text': spouse_text}, {}, {})
+        parent_data = {'extraction_results': {'primaryPerson': {'name': {'gender': 'Male'}}},
+                       'parent_data': None}
+        result, metadata = spouse_extractor.extract({'text': spouse_text}, {}, {}, parent_pipeline_data=parent_data)
         spouse_details = result['spouse']
 
         th.omit_property(spouse_details, 'kairaId')
@@ -41,6 +43,10 @@ class TestSpouseExtraction:
                     'occupationCategory': 3,
                     'socialClassRank': 5
                 }
+            },
+            'warData': {
+                'injuredInWarFlag': None,
+                'servedDuringWarFlag': None
             }
         }
 
@@ -69,5 +75,9 @@ class TestSpouseExtraction:
                 'birthYear': None,
                 'birthLocation': None
             },
-            'profession': None
+            'profession': None,
+            'warData': {
+                'injuredInWarFlag': None,
+                'servedDuringWarFlag': None
+            }
         }
