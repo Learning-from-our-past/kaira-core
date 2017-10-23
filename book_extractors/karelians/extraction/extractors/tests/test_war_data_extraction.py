@@ -3,6 +3,7 @@ from book_extractors.karelians.extraction.extractors.war_data_extractor import W
 from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
 from book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor import ServedDuringWarFlagExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
+from book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor import LottaActivityFlagExtractor
 
 
 class TestWarDataExtraction:
@@ -12,7 +13,7 @@ class TestWarDataExtraction:
 
     def _verify_flags(self, expected_flags_and_texts, extractor, subflag, gender):
         flag = 'warData'
-        parent_data = {'extraction_results': {'primaryPerson': {'name': {'gender': 'Male'}}},
+        parent_data = {'extraction_results': {'primaryPerson': {'name': {'gender': gender}}},
                        'parent_data': None}
 
         for e in expected_flags_and_texts:
@@ -29,6 +30,11 @@ class TestWarDataExtraction:
         self._verify_flags([
             ('Herra Testilä oli molemmissa sodissa mukana palvellen tykkimiehenä.', True)
         ], extractor, 'servedDuringWarFlag', 'Male')
+
+    def should_extract_lotta_activity_flag_correctly_as_true_if_primary_person_is_female(self, extractor):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], extractor, 'lottaActivityFlag', 'Female')
 
 
 class TestInjuredInWarFlag:
@@ -197,3 +203,50 @@ class TestServedDuringWarFlagExtraction:
              'on ottanut osaa kirkollisiin toimiin. Herran äiti, Äiti Nimetön o.s. Epänimetön, asuu Kaarlel'
              'assa omakotitalossa.', False)
         ], in_spouse=True, sex='Female')
+
+
+class TestLottaActivityFlagExtraction:
+    def _verify_flags(self, expected_flags_and_texts, in_spouse=False, sex='Female'):
+        flag = LottaActivityFlagExtractor.extraction_key
+        parent_data = {'extraction_results': {'name': {'gender': sex}},
+                       'parent_data': None}
+
+        pipeline = ExtractionPipeline([
+            configure_extractor(LottaActivityFlagExtractor, extractor_options={'in_spouse_extractor': in_spouse},
+                                dependencies_contexts=['main'])
+        ])
+
+        for e in expected_flags_and_texts:
+            results, metadata = pipeline.process({'text': e[0]}, parent_pipeline_data=parent_data)
+            assert results[flag] is e[1]
+
+    def should_return_true_if_text_contains_mention_of_lotta_activity_and_primary_person_is_female_and_we_are_not_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ])
+
+    def should_return_true_if_text_contains_mention_of_lotta_activity_and_primary_person_is_male_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ], in_spouse=True, sex='Male')
+
+    def should_return_true_if_text_contains_mention_of_lotta_activity_with_typo_and_hyphen(self):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana mukana l0t-tatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
+        ])
+
+    def should_return_false_if_text_does_not_contain_mention_of_lotta_activity_and_primary_person_is_female_and_we_are_not_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana tanssilattioiden partaveitsi eikä piitannut sotatoiminnasta.', False)
+        ], in_spouse=False, sex='Female')
+
+    def should_return_false_if_text_does_not_contain_mention_of_lotta_activity_and_primary_person_is_male_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([
+            ('Emäntä oli sota-aikana tanssilattioiden partaveitsi eikä piitannut sotatoiminnasta.', False)
+        ], in_spouse=True, sex='Male')
+
+    def should_return_none_if_primary_person_is_male_and_we_are_not_in_spouse_extractor(self):
+        self._verify_flags([('foo', None)], in_spouse=False, sex='Male')
+
+    def should_return_none_if_primary_person_is_female_and_we_are_in_spouse_extractor(self):
+        self._verify_flags([('bar', None)], in_spouse=True, sex='Female')
