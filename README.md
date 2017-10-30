@@ -8,10 +8,10 @@ Main module containing logic for data extraction and command line interface.
 
 ## Setup
 ```
-make create-venv
+virtualenv -p python3 kaira-venv
 source kaira-venv/bin/activate
-make setup
-make test
+pip install -r requirements.txt
+invoke setup
 ```
 
 # Attribution
