@@ -1,6 +1,7 @@
 from invoke import task
 import sys
 import os
+from shared.geo.update_geo_db import update_location_db
 
 
 @task()
@@ -53,3 +54,12 @@ def extract_parallel(ctx, parallel=2):
     else:
         print('Error: -p option should be either 2 or 4.')
         sys.exit(1)
+
+
+@task(help={'datasheet': 'Path to the datasheet containing location data.'})
+def update_locationdb(ctx, datasheet=None):
+    """
+    Update location data in the Kaira's location.db which is used to add GPS-coordinates to the
+    extraction results. Datasheet format specification can be found from shared/geo/update_geo_db.py
+    """
+    update_location_db(datasheet)
