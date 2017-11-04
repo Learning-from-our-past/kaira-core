@@ -32,16 +32,6 @@ def callback(current, max):
     sys.stdout.write("Progress: %d%% - %d/%d   \r" % (percentage, current, max))
     sys.stdout.flush()
 
-
-def start_mongodb():
-    if 'DEVELOPMENT' not in os.environ and 'TEST' not in os.environ:
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-        return subprocess.Popen(['mongodb/bin/mongod', '--dbpath', "mongodb/data/db"], startupinfo=startupinfo)
-    else:
-        return None
-
-
 def xml_to_extractor_format(xml_document):
     """
     Transform xml file to dict format. This could be skipped if person raw data were saved as
@@ -69,8 +59,8 @@ def xml_to_extractor_format(xml_document):
 
     return persons
 
+
 def extract(args):
-    mongodb = None
     xml_parser = etree.XMLParser(encoding="utf8")
     xml_document = etree.parse(args['i'], parser=xml_parser).getroot()
     book_series = xml_document.attrib["bookseries"]
@@ -82,14 +72,10 @@ def extract(args):
         sys.exit(1)
 
     print('Book series:', book_series)
-    # mongodb = start_mongodb() # FIXME: Invent a sensible way to check if mongo start is required or not
     extractor = supported_bookseries[book_series]['extractor'](callback)
     extractor.process(xml_to_extractor_format(xml_document))
     extractor.save_results(args['o'], file_format='json')
     print('Process finished successfully.')
-
-    if mongodb is not None:
-        mongodb.kill()
 
 
 def chunk(args):
