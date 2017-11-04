@@ -21,7 +21,7 @@ class MetadataExtractor(BaseExtractor):
         try:
             location_name = entry["location"]
             try:
-                geo = self.geocoder.get_coordinates(location_name.lower(), "finland")
+                geo = self.geocoder.get_coordinates(location_name.lower())
 
             except LocationNotFound:
                 geo = self.geocoder.get_empty_coordinates()
