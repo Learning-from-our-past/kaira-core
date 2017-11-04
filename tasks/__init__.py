@@ -12,18 +12,6 @@ def test(ctx):
     ctx.run('python -m pytest')
 
 
-@task()
-def setup(ctx):
-    """
-    Setup the project by creating mongodb for geotagging.
-    Assumes Mongodb is installed and running.
-    """
-    ctx.run('wget https://github.com/Learning-from-our-past/kaira-core/releases/download/mongodump2/geonames_dump.zip')
-    ctx.run('unzip geonames_dump.zip')
-    ctx.run('mongorestore dump')
-    ctx.run('rm -rf dump/; rm -rf geonames_dump.zip')
-
-
 @task(optional=['bookpath', 'testset'], help={
     'bookpath': 'A path to the data xml-file which should be extracted.',
     'testset': 'If set, extract the testset_I.json file in material directory.'
