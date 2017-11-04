@@ -1,10 +1,10 @@
-from shared.geo.dbhandler import DatabaseHandler
+from shared.geo.dbhandler import database_connection
 
-
+# TODO: This class is completely broken now, fix it in next commits. Fixed just enough to run part of tests.
 class GeoCoder:
 
     def __init__(self):
-        self.db = DatabaseHandler()
+        self.db = database_connection
 
     def get_coordinates(self, location_name, collection):
         locations = self.db.get_from_db({"$text": {"$search": "\"" + location_name + "\""}}, collection)
