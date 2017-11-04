@@ -101,7 +101,7 @@ class FinnishLocationsExtractor(BaseExtractor):
 
             def get_coordinates_by_name(place_name):
                 try:
-                    return self.geocoder.get_coordinates(place_name, "finland")
+                    return self.geocoder.get_coordinates(place_name)
                 except LocationNotFound:
                     return {"latitude": None, "longitude": None}
 
@@ -253,7 +253,7 @@ class KarelianLocationsExtractor(BaseExtractor):
 
             def get_coordinates_by_name(place_name):
                 try:
-                    return self.geocoder.get_coordinates(place_name, "russia")
+                    return self.geocoder.get_coordinates(place_name)
                 except LocationNotFound:
                     return {"latitude": None, "longitude": None}
 

@@ -142,7 +142,6 @@ class TestKarelianLocationExtraction:
     def karelian_extractor(self):
         return KarelianLocationsExtractor(None, None)
 
-
     def should_extract_locations_with_village_names(self, karelian_extractor):
         results, metadata = karelian_extractor.extract({'text': LOCATION_TEXTS[0]}, {}, {})
         locations = results['karelianLocations']['karelianLocations']
@@ -155,8 +154,8 @@ class TestKarelianLocationExtraction:
         assert locations[0]['movedOut'] == 39
 
         assert locations[0]['village']['locationName'] == 'Laasola'
-        assert locations[0]['village']['coordinates']['latitude'] == '60.38876'
-        assert locations[0]['village']['coordinates']['longitude'] == '28.93825'
+        assert locations[0]['village']['coordinates']['latitude'] is None
+        assert locations[0]['village']['coordinates']['longitude'] is None
 
         assert locations[1]['locationName'] == 'Kuolemajärvi'
         assert locations[1]['region'] == 'karelia'
@@ -166,7 +165,6 @@ class TestKarelianLocationExtraction:
         assert locations[1]['movedIn'] == 42
         assert locations[1]['movedOut'] == 44
 
-
     def should_extract_locations_with_missing_village_names(self, karelian_extractor):
         results, metadata = karelian_extractor.extract({'text': LOCATION_TEXTS[2]}, {}, {})
         locations = results['karelianLocations']['karelianLocations']
@@ -175,8 +173,8 @@ class TestKarelianLocationExtraction:
 
         assert locations[0]['locationName'] == 'Viipurin mlk'
         assert locations[0]['region'] == 'karelia'
-        assert locations[0]['coordinates']['longitude'] is None
-        assert locations[0]['coordinates']['latitude'] is None
+        assert locations[0]['coordinates']['latitude'] == '60.7116853059'
+        assert locations[0]['coordinates']['longitude'] == '28.7769366303'
         assert locations[0]['movedIn'] is None
         assert locations[0]['movedOut'] == 27
 

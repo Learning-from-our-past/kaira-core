@@ -142,10 +142,10 @@ class ChildExtractor(BaseExtractor):
 
     def _find_birth_coord(self, location_name):
         try:
-            geocoordinates = self.geocoder.get_coordinates(location_name, "finland")
+            geocoordinates = self.geocoder.get_coordinates(location_name)
         except LocationNotFound as e:
             try:
-                geocoordinates = self.geocoder.get_coordinates(location_name, "russia")
+                geocoordinates = self.geocoder.get_coordinates(location_name)
             except LocationNotFound as e:
                 return self.geocoder.get_empty_coordinates()
         return geocoordinates
