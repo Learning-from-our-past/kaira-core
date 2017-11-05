@@ -57,7 +57,6 @@ class FinnishLocationsExtractor(BaseExtractor):
     """
     Tries to extract the locations of the person in oter places than karelia
     """
-    geocoder = GeoCoder()
     OTHER_REGION_ID = 'other'
     extraction_key = 'finnishLocations'
 
@@ -77,7 +76,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         places = extraction_results[self.extraction_key][KEYS["otherlocations"]]
 
         for i in range(0, len(places)):
-            places[i] = place_name_cleaner.try_to_normalize_place_name(places[i])
+            places[i] = place_name_cleaner.normalize_place_name_with_known_list_of_places(places[i])
 
         return extraction_results, extraction_metadata
 
@@ -94,14 +93,15 @@ class FinnishLocationsExtractor(BaseExtractor):
             village_name = None
 
             if 'municipality' in location:
-                entry_name = location['municipality']
-                village_name = location['place']
+                # Try to normalize place names first so that the coordinate fetch from DB might work better
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['municipality'], True)
+                village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['place'])
             else:
-                entry_name = location['place']
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['place'], True)
 
             def get_coordinates_by_name(place_name):
                 try:
-                    return self.geocoder.get_coordinates(place_name)
+                    return GeoCoder.get_coordinates(place_name)
                 except LocationNotFound:
                     return {"latitude": None, "longitude": None}
 
@@ -134,7 +134,7 @@ class FinnishLocationsExtractor(BaseExtractor):
                     },
                     KEYS["movedOut"]: moved_out,
                     KEYS["movedIn"]: moved_in,
-                    KEYS["region"]: self.OTHER_REGION_ID,
+                    KEYS["region"]: entry_region or self.OTHER_REGION_ID,
                     KEYS["village"]: village_information
                 }
 
@@ -208,7 +208,6 @@ class KarelianLocationsExtractor(BaseExtractor):
     """
     Tries to extract the locations of the person in karelia.
     """
-    geocoder = GeoCoder()
     KARELIAN_REGION_ID = 'karelia'
 
     extraction_key = 'karelianLocations'
@@ -229,7 +228,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         places = extraction_results[self.extraction_key][KEYS["karelianlocations"]]
 
         for i in range(0, len(places)):
-            places[i] = place_name_cleaner.try_to_normalize_place_name(places[i])
+            places[i] = place_name_cleaner.normalize_place_name_with_known_list_of_places(places[i])
 
         return extraction_results, extraction_metadata
 
@@ -246,14 +245,15 @@ class KarelianLocationsExtractor(BaseExtractor):
             location_records = []
 
             if 'municipality' in location:
-                entry_name = location['municipality']
-                village_name = location['place']
+                # Try to normalize place names first so that the coordinate fetch from DB might work better
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['municipality'], True)
+                village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['place'])
             else:
-                entry_name = location['place']
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['place'], True)
 
             def get_coordinates_by_name(place_name):
                 try:
-                    return self.geocoder.get_coordinates(place_name)
+                    return GeoCoder.get_coordinates(place_name)
                 except LocationNotFound:
                     return {"latitude": None, "longitude": None}
 
@@ -286,7 +286,7 @@ class KarelianLocationsExtractor(BaseExtractor):
                     },
                     KEYS["movedOut"]: moved_out,
                     KEYS["movedIn"]: moved_in,
-                    KEYS["region"]: self.KARELIAN_REGION_ID,
+                    KEYS["region"]: entry_region or self.KARELIAN_REGION_ID,
                     KEYS["village"]: village_information
                 }
 

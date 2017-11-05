@@ -75,7 +75,9 @@ class BirthdayLocationExtractor(BaseExtractor):
         }
 
         location_entry = place_name_cleaner.clean_place_name(location_entry)
-        return place_name_cleaner.try_to_normalize_place_name(location_entry, self.metadata_collector)
+        location_entry = place_name_cleaner.normalize_place(location_entry)
+
+        return location_entry
 
     def _prepare_text_for_extraction(self, text, start_position):
         return text_utils.take_sub_str_based_on_pos(text, start_position - 4, self.SUBSTRING_WIDTH)   # Dirty -4 offset
