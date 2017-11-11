@@ -68,7 +68,7 @@ class SpouseExtractor(BaseExtractor):
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
-        parent_data = self._get_parent_data_for_pipeline(extraction_results)
+        parent_data = self._get_parent_data_for_pipeline(extraction_results, extraction_metadata)
         result, cursor_location = self._find_spouse(entry['text'], start_position)
         if result != self.NO_SPOUSE_RESULT:
             war_results, war_metadata = self._wardata_pipeline.process(entry, parent_pipeline_data=parent_data)

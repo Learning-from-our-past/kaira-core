@@ -24,7 +24,9 @@ class WarDataExtractor(BaseExtractor):
         ])
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        results, metadata = self._extract_war_data(entry['text'], self._get_parent_data_for_pipeline(extraction_results))
+        results, metadata = self._extract_war_data(entry['text'],
+                                                   self._get_parent_data_for_pipeline(extraction_results,
+                                                                                      extraction_metadata))
         return self._add_to_extraction_results(results,
                                                extraction_results,
                                                extraction_metadata)
