@@ -12,7 +12,7 @@ class WeddingExtractor(BaseExtractor):
 
     def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(WeddingExtractor, self).__init__(key_of_cursor_location_dependent, options)
-        self.PATTERN = r"(?:avioit)\.?\s?-(?P<year>\d{2,4})"
+        self.PATTERN = r'(?:avioit){s<=1}(?:[,.\s\-*:!;]?\s?-)?(?P<year>\d{2,4})'
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
