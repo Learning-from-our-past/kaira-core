@@ -154,7 +154,7 @@ class TestExtractionPipeline:
             results, metadata = test_pipeline.process({'text': 'test'}, parent_pipeline_data=parent_data)
             assert results[ExtractorWithParentDataBehindOutputPath.extraction_key] == expected_data
 
-        def should_successfully_extract_expected_data_based_on_all_the_dependencies_and_their_contexts(self):
+        def should_successfully_extract_data_and_metadata_based_on_the_dependencies_and_their_contexts(self):
             parent_data = {
                 'extraction_results': {
                     'result': 'test'
@@ -182,7 +182,12 @@ class TestExtractionPipeline:
                                 'personState': 'drowsy',
                                 'preferredDrink': 'coffee'}
 
+            expected_metadata = {'groceryList': {'errors': {}, 'cursorLocation': 0},
+                                 'personState': {'errors': {}, 'cursorLocation': 0},
+                                 'preferredDrink': {'errors': {}, 'cursorLocation': 0, 'metadata_test': 'coffee_test'}}
+
             assert results == expected_results
+            assert metadata == expected_metadata
 
             parent_data['parent_data']['extraction_results']['hotDay'] = False
             results, metadata = test_pipeline.process({'text': 'happy'}, parent_pipeline_data=parent_data)
@@ -192,8 +197,10 @@ class TestExtractionPipeline:
                                 'personState': 'happy',
                                 'preferredDrink': 'water'}
 
-            assert results == expected_results
+            expected_metadata['preferredDrink']['metadata_test'] = 'water_test'
 
+            assert results == expected_results
+            assert metadata == expected_metadata
 
 class MockExtractor(BaseExtractor):
     extraction_key = 'mock'
@@ -229,6 +236,8 @@ class PreferredDrinkExtractor(BaseExtractor):
         if self._deps[PersonStateExtractor.extraction_key] == 'drowsy':
             result = 'coffee'
 
+        self.metadata_collector.set_metadata_property('metadata_test', '{}_test'.format(result))
+
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata)
 
 
@@ -244,9 +253,8 @@ class GroceryListExtractor(BaseExtractor):
         ])
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        parent_data = {'extraction_results': extraction_results,
-                       'metadata': extraction_metadata,
-                       'parent_data': self._parent_pipeline_data}
+        parent_data = self._get_parent_data_for_pipeline(extraction_results, extraction_metadata)
+
         results, metadata = self._test_sub_pipeline.process({'text': 'drowsy'}, parent_pipeline_data=parent_data)
 
         return self._add_to_extraction_results(results, extraction_results, extraction_metadata)
