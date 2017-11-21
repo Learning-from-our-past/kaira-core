@@ -1,5 +1,4 @@
 from book_extractors.processdata import ProcessData
-from book_extractors.karelians.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.karelians.resultjsonbuilder import ResultJsonBuilder
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
@@ -67,15 +66,6 @@ class KarelianBooksExtractor:
                     raise e
 
             writer.closeJson()
-        elif file_format == 'csv':
-            writer = ResultCsvBuilder()
-            writer.openCsv(file)
-
-            for entry in self._results['entries']:
-                try:
-                    writer.writeRow(entry["extractionResults"])
-                except KeyError as e:
-                    raise e
 
 
 def get_karelian_data_entry(name, approximated_page, text, img_path=''):
