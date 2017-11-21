@@ -1,4 +1,3 @@
-from book_extractors.farmers.resultcsvbuilder import ResultCsvBuilder
 from book_extractors.farmers.resultjsonbuilder import ResultJsonBuilder
 from book_extractors.processdata import ProcessData
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
@@ -101,15 +100,6 @@ class SmallFarmersBooksExtractor:
                     raise e
 
             writer.closeJson()
-        elif file_format == 'csv':
-            writer = ResultCsvBuilder()
-            writer.openCsv(file)
-
-            for entry in self._results['entries']:
-                try:
-                    writer.writeRow(entry["extractionResults"])
-                except KeyError as e:
-                    raise e
 
 
 def get_small_farmers_data_entry(name, location, approximated_page, text):
