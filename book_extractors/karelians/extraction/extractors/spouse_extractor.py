@@ -45,32 +45,11 @@ class SpouseExtractor(BaseExtractor):
         self.REQUIRES_MATCH_POSITION = False
         self.SUBSTRING_WIDTH = 100
 
-        self.NO_SPOUSE_RESULT = {
-            KEYS["spouseBirthData"]: {
-                KEYS["birthDay"]: None,
-                KEYS["birthYear"]: None,
-                KEYS["birthMonth"]: None,
-                KEYS["birthLocation"]: None
-            },
-            KEYS["deathYear"]: None,
-            KEYS["formerSurname"]: None,
-            KEYS["profession"]: None,
-            KEYS["weddingYear"]: None,
-            KEYS["spouseName"]: None,
-            KEYS['kairaId']: None,
-            KEYS["hasSpouse"]: False,
-            WarDataExtractor.extraction_key: {
-                InjuredInWarFlagExtractor.extraction_key: None,
-                ServedDuringWarFlagExtractor.extraction_key: None,
-                LottaActivityFlagExtractor.extraction_key: None
-            }
-        }
-
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
         parent_data = self._get_parent_data_for_pipeline(extraction_results, extraction_metadata)
         result, cursor_location = self._find_spouse(entry['text'], start_position)
-        if result != self.NO_SPOUSE_RESULT:
+        if result is not None:
             war_results, war_metadata = self._wardata_pipeline.process(entry, parent_pipeline_data=parent_data)
             result[WarDataExtractor.extraction_key] = war_results[WarDataExtractor.extraction_key]
 
@@ -78,7 +57,7 @@ class SpouseExtractor(BaseExtractor):
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
-        spouse_data = self.NO_SPOUSE_RESULT
+        spouse_data = None
 
         try:
             found_spouse_match = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
@@ -93,7 +72,7 @@ class SpouseExtractor(BaseExtractor):
 
     def _find_spouse_data(self, text):
         spouse_name = ''
-        spouse_details = self.NO_SPOUSE_RESULT
+        spouse_details = None
 
         try:
             spouse_name_match = regexUtils.safe_search(self.NAMEPATTERN, text, self.OPTIONS)
