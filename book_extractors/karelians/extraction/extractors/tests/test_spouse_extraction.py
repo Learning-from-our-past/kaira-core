@@ -63,23 +63,4 @@ class TestSpouseExtraction:
         result, metadata = spouse_extractor.extract({'text': spouse_text}, {}, {})
         spouse_details = result['spouse']
 
-        assert spouse_details == {
-            'kairaId': None,
-            'formerSurname': None,
-            'firstNames': None,
-            'hasSpouse': False,
-            'deathYear': None,
-            'weddingYear': None,
-            'birthData': {
-                'birthDay': None,
-                'birthMonth': None,
-                'birthYear': None,
-                'birthLocation': None
-            },
-            'profession': None,
-            'warData': {
-                'injuredInWarFlag': None,
-                'servedDuringWarFlag': None,
-                'lottaActivityFlag': None
-            }
-        }
+        assert spouse_details is None

@@ -39,38 +39,17 @@ class SpouseExtractor(BaseExtractor):
 
         self.kaira_id_provider = KairaIdProvider()
 
-        self.PATTERN = r"Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))"
-        self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
+        self.PATTERN = r'Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))'
+        self.NAMEPATTERN = r'(?P<name>^[\w\s-]*)'
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = False
         self.SUBSTRING_WIDTH = 100
-
-        self.NO_SPOUSE_RESULT = {
-            KEYS["spouseBirthData"]: {
-                KEYS["birthDay"]: None,
-                KEYS["birthYear"]: None,
-                KEYS["birthMonth"]: None,
-                KEYS["birthLocation"]: None
-            },
-            KEYS["deathYear"]: None,
-            KEYS["formerSurname"]: None,
-            KEYS["profession"]: None,
-            KEYS["weddingYear"]: None,
-            KEYS["spouseName"]: None,
-            KEYS['kairaId']: None,
-            KEYS["hasSpouse"]: False,
-            WarDataExtractor.extraction_key: {
-                InjuredInWarFlagExtractor.extraction_key: None,
-                ServedDuringWarFlagExtractor.extraction_key: None,
-                LottaActivityFlagExtractor.extraction_key: None
-            }
-        }
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
         parent_data = self._get_parent_data_for_pipeline(extraction_results, extraction_metadata)
         result, cursor_location = self._find_spouse(entry['text'], start_position)
-        if result != self.NO_SPOUSE_RESULT:
+        if result is not None:
             war_results, war_metadata = self._wardata_pipeline.process(entry, parent_pipeline_data=parent_data)
             result[WarDataExtractor.extraction_key] = war_results[WarDataExtractor.extraction_key]
 
@@ -78,11 +57,11 @@ class SpouseExtractor(BaseExtractor):
 
     def _find_spouse(self, text, start_position):
         cursor_location = start_position
-        spouse_data = self.NO_SPOUSE_RESULT
+        spouse_data = None
 
         try:
             found_spouse_match = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
-            spouse_data = self._find_spouse_data(found_spouse_match.group("spousedata"))
+            spouse_data = self._find_spouse_data(found_spouse_match.group('spousedata'))
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = found_spouse_match.end() + start_position - 4
@@ -93,12 +72,12 @@ class SpouseExtractor(BaseExtractor):
 
     def _find_spouse_data(self, text):
         spouse_name = ''
-        spouse_details = self.NO_SPOUSE_RESULT
+        spouse_details = None
 
         try:
             spouse_name_match = regexUtils.safe_search(self.NAMEPATTERN, text, self.OPTIONS)
-            spouse_name = spouse_name_match.group("name").strip()
-            spouse_name = re.sub(r"\so$", "", spouse_name)
+            spouse_name = spouse_name_match.group('name').strip()
+            spouse_name = re.sub(r'\so$', '', spouse_name)
             spouse_details, metadata = self._find_spouse_details(text[spouse_name_match.end() - 2:])
 
             # Map data to spouse object
@@ -108,11 +87,11 @@ class SpouseExtractor(BaseExtractor):
                     KEYS['birthLocation']: spouse_details['birthLocation']
                 },
                 KEYS['spouseDeathYear']: spouse_details['death'],
-                KEYS["formerSurname"]: spouse_details['formerSurname'],
-                KEYS["spouseProfession"]: spouse_details['profession'],
-                KEYS["weddingYear"]: spouse_details['wedding'],
-                KEYS["spouseName"]: spouse_name,
-                KEYS["hasSpouse"]: True,
+                KEYS['formerSurname']: spouse_details['formerSurname'],
+                KEYS['spouseProfession']: spouse_details['profession'],
+                KEYS['weddingYear']: spouse_details['wedding'],
+                KEYS['spouseName']: spouse_name,
+                KEYS['hasSpouse']: True,
                 KEYS['kairaId']: self.kaira_id_provider.get_new_id('S')
             }
 
