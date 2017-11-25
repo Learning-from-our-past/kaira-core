@@ -29,7 +29,9 @@ class TestSpouseExtraction:
                 'birthYear': 1919,
                 'birthLocation': {
                     'locationName': 'Testilässä',
-                    'region': None
+                    'region': None,
+                    'latitude': None,
+                    'longitude': None
                 }
             },
             'profession': {
