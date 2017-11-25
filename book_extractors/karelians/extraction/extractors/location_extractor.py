@@ -7,6 +7,7 @@ from book_extractors.extraction_pipeline import ExtractionPipeline, configure_ex
 from shared import regexUtils, text_utils
 from book_extractors.common.postprocessors import place_name_cleaner
 from shared.text_utils import remove_hyphens_from_text
+from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 
 class LocationExtractor(BaseExtractor):
@@ -72,10 +73,20 @@ class BirthdayLocationExtractor(BaseExtractor):
         location_entry = {
             KEYS['locationName']: location_name,
             KEYS['region']: None,
+            KEYS['latitude']: None,
+            KEYS['longitude']: None
         }
 
         location_entry = place_name_cleaner.clean_place_name(location_entry)
         location_entry = place_name_cleaner.normalize_place(location_entry)
+
+        # Try to find coordinates and region of the place from our geo database
+        # If coordinates were found, merge them to the location entry dict.
+        try:
+            region_and_coordinates = GeoCoder.get_coordinates(location_entry[KEYS['locationName']])
+            location_entry = {**location_entry, **region_and_coordinates}
+        except LocationNotFound:
+            pass
 
         return location_entry
 
