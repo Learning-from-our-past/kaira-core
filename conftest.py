@@ -39,12 +39,13 @@ class Th:
 def th():
     return Th
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope='session', autouse=True)
 def constants():
     extraction_constants.BOOK_NUMBER = '1'
     extraction_constants.BOOK_SERIES = 'testbook'
 
-@pytest.fixture(scope="function", autouse=True)
+@pytest.fixture(scope='function', autouse=True)
 def reset_kaira_id():
     p = KairaIdProvider()
     p.reset()
+
