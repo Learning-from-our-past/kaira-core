@@ -49,16 +49,15 @@ class ChildExtractor(BaseExtractor):
             location_entry = {
                 KEYS['locationName']: child[KEYS["childLocationName"]],
                 KEYS['region']: None,
+                KEYS['latitude']: None,
+                KEYS['longitude']: None
             }
 
             location_entry = place_name_cleaner.clean_place_name(location_entry)
             child[KEYS["childLocationName"]] = place_name_cleaner.normalize_place(location_entry)
 
-            coordinates = self._find_birth_coord(child[KEYS["childLocationName"]][KEYS['locationName']])
-            location_entry[KEYS["childCoordinates"]] = {
-                KEYS["latitude"]: coordinates["latitude"],
-                KEYS["longitude"]: coordinates["longitude"]
-            }
+            coordinates = self._find_birth_coord_and_region(child[KEYS["childLocationName"]][KEYS['locationName']])
+            child['location'] = {**location_entry, **coordinates}
 
         return children
 
@@ -140,7 +139,7 @@ class ChildExtractor(BaseExtractor):
                 KEYS["kairaId"]: self._kaira_id_provider.get_new_id('C')
                 }
 
-    def _find_birth_coord(self, location_name):
+    def _find_birth_coord_and_region(self, location_name):
         try:
             geocoordinates = self.geocoder.get_coordinates(location_name)
         except LocationNotFound as e:
