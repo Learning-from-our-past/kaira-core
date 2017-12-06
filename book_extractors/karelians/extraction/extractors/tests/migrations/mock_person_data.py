@@ -177,9 +177,7 @@ LOCATION_TEXTS_WITH_INCORRECT_REGION = [
             'locationName': 'Uusikirkko'
         }, {
             'movedOut': None,
-            'village': {
-              'locationName': None
-            },
+            'village': None,
             'movedIn': 28,
             'region': 'other',
             'locationName': 'Helsinki'
@@ -197,9 +195,7 @@ LOCATION_TEXTS_WITH_INCORRECT_REGION = [
             'locationName': 'Uusikirkko'
         }, {
             'movedOut': None,
-            'village': {
-              'locationName': None
-            },
+            'village': None,
             'movedIn': 28,
             'region': 'karelia',
             'locationName': 'Kanneljärvi'
