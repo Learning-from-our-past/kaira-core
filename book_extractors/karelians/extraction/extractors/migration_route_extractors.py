@@ -178,7 +178,7 @@ class FinnishLocationsExtractor(BaseExtractor):
             try:
                 for loc in parsed_locations:
                     location_entries += _get_location_entries(loc)
-            except InvalidLocationException as e:
+            except InvalidLocationException:
                 pass
         except regexUtils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('otherLocationNotFound', 5)
@@ -246,6 +246,41 @@ class KarelianLocationsExtractor(BaseExtractor):
             KEYS["village"]: village_information
         }
 
+    def _get_coordinates_by_name(self, place_name):
+        try:
+            return GeoCoder.get_coordinates(place_name)
+        except LocationNotFound:
+            return {"latitude": None, "longitude": None}
+
+    def _get_village(self, parsed_location):
+        """
+        Some BNF-parsed location data objects contain information about village in a municipality. If so,
+        record name and coordinates of the said village.
+        :param parsed_location:
+        :return: dict, None
+        """
+        # If there is village information, clean it and get the possible coordinates
+        village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+            parsed_location['place'], return_region=False)
+
+        village_name = validate_village_name(village_name)
+
+        if village_name:
+            # TODO: There could be a check if the region is correct for possible found place
+            village_coordinates = self._get_coordinates_by_name(village_name)
+
+            village_information = {
+                KEYS["karelianlocation"]: village_name,
+                KEYS["kareliancoordinate"]: {
+                    KEYS["latitude"]: village_coordinates["latitude"],
+                    KEYS["longitude"]: village_coordinates["longitude"]
+                }
+            }
+
+            return village_information
+        else:
+            return None
+
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
         text = re.sub(r"\s", r" ", text)
@@ -255,7 +290,7 @@ class KarelianLocationsExtractor(BaseExtractor):
 
         def _get_location_entries(parsed_location):
             # If there is municipality information, use it as an main entry name
-            village_name = None
+            village_information = None
             location_records = []
 
             # Parsed result set may countain municipality and village information. If only one result is in the
@@ -264,34 +299,14 @@ class KarelianLocationsExtractor(BaseExtractor):
                 # Try to normalize place names first so that the coordinate fetch from DB might work better
                 entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
                     parsed_location['municipality'], return_region=True)
-                village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
-                    parsed_location['place'], return_region=False)
+                village_information = self._get_village(parsed_location)
             else:
                 entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
                     parsed_location['place'], return_region=True)
 
-            def get_coordinates_by_name(place_name):
-                try:
-                    return GeoCoder.get_coordinates(place_name)
-                except LocationNotFound:
-                    return {"latitude": None, "longitude": None}
-
-            geocoordinates = get_coordinates_by_name(entry_name)
+            geocoordinates = self._get_coordinates_by_name(entry_name)
 
             entry_name = validate_location_name(entry_name, geocoordinates)
-            village_name = validate_village_name(village_name)
-
-            village_coordinates = {"latitude": None, "longitude": None}
-            if village_name is not None:
-                village_coordinates = get_coordinates_by_name(village_name)
-
-            village_information = {
-                KEYS["karelianlocation"]: village_name or None,
-                KEYS["kareliancoordinate"]: {
-                    KEYS["latitude"]: village_coordinates["latitude"],
-                    KEYS["longitude"]: village_coordinates["longitude"]
-                }
-            }
 
             if 'year_information' in parsed_location:
                 for migration in parsed_location['year_information']:

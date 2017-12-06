@@ -179,9 +179,7 @@ class TestKarelianLocationExtraction:
         assert locations[0]['movedIn'] is None
         assert locations[0]['movedOut'] == 27
 
-        assert locations[0]['village']['locationName'] is None
-        assert locations[0]['village']['coordinates']['latitude'] is None
-        assert locations[0]['village']['coordinates']['longitude'] is None
+        assert locations[0]['village'] is None
 
         assert locations[1]['locationName'] == 'Pohjois Karjala'
         assert locations[1]['region'] == 'karelia'
@@ -190,18 +188,14 @@ class TestKarelianLocationExtraction:
         assert locations[1]['movedIn'] == 31
         assert locations[1]['movedOut'] == 32
 
-        assert locations[1]['village']['locationName'] is None
-        assert locations[1]['village']['coordinates']['latitude'] is None
-        assert locations[1]['village']['coordinates']['longitude'] is None
+        assert locations[1]['village'] is None
 
         assert locations[2]['locationName'] == 'Viipuri'
         assert locations[2]['region'] == 'karelia'
         assert locations[2]['movedIn'] == 32
         assert locations[2]['movedOut'] is None
 
-        assert locations[2]['village']['locationName'] is None
-        assert locations[2]['village']['coordinates']['latitude'] is None
-        assert locations[2]['village']['coordinates']['longitude'] is None
+        assert locations[2]['village'] is None
 
     def should_return_empty_if_no_karelian_locations_listed(self, karelian_extractor):
         results, metadata = karelian_extractor.extract({'text': ''}, {}, {})
