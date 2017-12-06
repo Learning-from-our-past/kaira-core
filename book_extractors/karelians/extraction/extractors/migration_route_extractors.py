@@ -86,6 +86,20 @@ class FinnishLocationsExtractor(BaseExtractor):
         except LocationNotFound:
             return {"latitude": None, "longitude": None}
 
+    def _get_location_entry(self, entry_name, entry_region, geocoordinates, village_information, moved_in=None,
+                            moved_out=None):
+        return {
+            KEYS["otherlocation"]: entry_name,
+            KEYS["othercoordinate"]: {
+                KEYS["latitude"]: geocoordinates["latitude"],
+                KEYS["longitude"]: geocoordinates["longitude"]
+            },
+            KEYS["movedOut"]: moved_out,
+            KEYS["movedIn"]: moved_in,
+            KEYS["region"]: entry_region or self.OTHER_REGION_ID,
+            KEYS["village"]: village_information
+        }
+
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
         text = re.sub(r"\s", r" ", text)
@@ -125,24 +139,8 @@ class FinnishLocationsExtractor(BaseExtractor):
                 }
             }
 
-            moved_in = None
-            moved_out = None
-
-            def get_location_entry():
-                return {
-                    KEYS["otherlocation"]: entry_name,
-                    KEYS["othercoordinate"]: {
-                        KEYS["latitude"]: geocoordinates["latitude"],
-                        KEYS["longitude"]: geocoordinates["longitude"]
-                    },
-                    KEYS["movedOut"]: moved_out,
-                    KEYS["movedIn"]: moved_in,
-                    KEYS["region"]: entry_region or self.OTHER_REGION_ID,
-                    KEYS["village"]: village_information
-                }
-
-            if 'year_information' in location:
-                for migration in location['year_information']:
+            if 'year_information' in parsed_location:
+                for migration in parsed_location['year_information']:
                     if 'moved_in' in migration:
                         moved_in = text_utils.int_or_none(migration['moved_in'])
                     else:
@@ -156,14 +154,15 @@ class FinnishLocationsExtractor(BaseExtractor):
                     location_records.append(
                         # FIXME: Refactor this to the _postprocess method?
                         place_name_cleaner.clean_place_name(
-                            get_location_entry()
+                            self._get_location_entry(entry_name, entry_region, geocoordinates, village_information,
+                                                     moved_in, moved_out)
                         )
                     )
             else:
                 location_records.append(
                     # FIXME: Refactor this to the _postprocess method?
                     place_name_cleaner.clean_place_name(
-                        get_location_entry()
+                        self._get_location_entry(entry_name, entry_region, geocoordinates, village_information)
                     )
                 )
 
