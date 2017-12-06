@@ -100,36 +100,21 @@ class FinnishLocationsExtractor(BaseExtractor):
             KEYS["village"]: village_information
         }
 
-    def _find_locations(self, text):
-        # Replace all weird invisible white space characters with regular space
-        text = re.sub(r"\s", r" ", text)
+    def _get_village(self, parsed_location):
+        """
+        Some BNF-parsed location data objects contain information about village in a municipality. If so,
+        record name and coordinates of the said village.
+        :param parsed_location:
+        :return: dict, None
+        """
+        village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+            parsed_location['place'], return_region=False)
 
-        cursor_location = 0
-        location_entries = []
+        village_name = validate_village_name(village_name)
 
-        def _get_location_entries(parsed_location):
-            location_records = []
-            # If there is municipality information, use it as an main entry name
-            village_name = None
-
-            if 'municipality' in parsed_location:
-                # Try to normalize place names first so that the coordinate fetch from DB might work better
-                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
-                    parsed_location['municipality'], return_region=True)
-                village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
-                    parsed_location['place'], return_region=False)
-            else:
-                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
-                    parsed_location['place'], return_region=True)
-
-            geocoordinates = self._get_coordinates_by_name(entry_name)
-
-            entry_name = validate_location_name(entry_name, geocoordinates)
-            village_name = validate_village_name(village_name)
-
-            # FIXME: Village coordinates are not trivial to deduce because of multiple same named
-            # villages and locations in map name data sets.
-            village_coordinates = {"latitude": None, "longitude": None}
+        if village_name:
+            # TODO: There could be a check if the region is correct for possible found place
+            village_coordinates = self._get_coordinates_by_name(village_name)
 
             village_information = {
                 KEYS["otherlocation"]: village_name or None,
@@ -138,6 +123,37 @@ class FinnishLocationsExtractor(BaseExtractor):
                     KEYS["longitude"]: village_coordinates["longitude"]
                 }
             }
+
+            return village_information
+        else:
+            return None
+
+    def _find_locations(self, text):
+        # Replace all weird invisible white space characters with regular space
+        text = re.sub(r"\s", r" ", text)
+
+        cursor_location = 0
+        location_entries = []
+
+        def _get_location_entries(parsed_location):
+            village_information = None
+            location_records = []
+
+            # Parsed result set may countain municipality and village information. If only one result is in the
+            # result set, interpret it as municipality
+            if 'municipality' in parsed_location:
+                # Try to normalize place names first so that the coordinate fetch from DB might work better
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+                    parsed_location['municipality'], return_region=True)
+                village_information = self._get_village(parsed_location)
+
+            else:
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+                    parsed_location['place'], return_region=True)
+
+            geocoordinates = self._get_coordinates_by_name(entry_name)
+
+            entry_name = validate_location_name(entry_name, geocoordinates)
 
             if 'year_information' in parsed_location:
                 for migration in parsed_location['year_information']:
