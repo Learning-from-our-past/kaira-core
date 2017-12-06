@@ -232,6 +232,20 @@ class KarelianLocationsExtractor(BaseExtractor):
 
         return extraction_results, extraction_metadata
 
+    def _get_location_entry(self, entry_name, entry_region, geocoordinates, village_information, moved_in=None,
+                           moved_out=None):
+        return {
+            KEYS["karelianlocation"]: entry_name,
+            KEYS["kareliancoordinate"]: {
+                KEYS["latitude"]: geocoordinates["latitude"],
+                KEYS["longitude"]: geocoordinates["longitude"]
+            },
+            KEYS["movedOut"]: moved_out,
+            KEYS["movedIn"]: moved_in,
+            KEYS["region"]: entry_region or self.KARELIAN_REGION_ID,
+            KEYS["village"]: village_information
+        }
+
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
         text = re.sub(r"\s", r" ", text)
@@ -239,17 +253,22 @@ class KarelianLocationsExtractor(BaseExtractor):
         cursor_location = 0
         location_entries = []
 
-        def _get_location_entries(location):
+        def _get_location_entries(parsed_location):
             # If there is municipality information, use it as an main entry name
             village_name = None
             location_records = []
 
-            if 'municipality' in location:
+            # Parsed result set may countain municipality and village information. If only one result is in the
+            # result set, interpret it as municipality
+            if 'municipality' in parsed_location:
                 # Try to normalize place names first so that the coordinate fetch from DB might work better
-                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['municipality'], True)
-                village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['place'])
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+                    parsed_location['municipality'], return_region=True)
+                village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+                    parsed_location['place'], return_region=False)
             else:
-                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['place'], True)
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+                    parsed_location['place'], return_region=True)
 
             def get_coordinates_by_name(place_name):
                 try:
@@ -274,24 +293,8 @@ class KarelianLocationsExtractor(BaseExtractor):
                 }
             }
 
-            moved_in = None
-            moved_out = None
-
-            def get_location_entry():
-                return {
-                    KEYS["karelianlocation"]: entry_name,
-                    KEYS["kareliancoordinate"]: {
-                        KEYS["latitude"]: geocoordinates["latitude"],
-                        KEYS["longitude"]: geocoordinates["longitude"]
-                    },
-                    KEYS["movedOut"]: moved_out,
-                    KEYS["movedIn"]: moved_in,
-                    KEYS["region"]: entry_region or self.KARELIAN_REGION_ID,
-                    KEYS["village"]: village_information
-                }
-
-            if 'year_information' in location:
-                for migration in location['year_information']:
+            if 'year_information' in parsed_location:
+                for migration in parsed_location['year_information']:
                     if 'moved_in' in migration:
                         moved_in = text_utils.int_or_none(migration['moved_in'])
                     else:
@@ -305,14 +308,14 @@ class KarelianLocationsExtractor(BaseExtractor):
                     location_records.append(
                         # FIXME: Refactor this to the _postprocess method?
                         place_name_cleaner.clean_place_name(
-                            get_location_entry()
+                            self._get_location_entry(entry_name, entry_region, geocoordinates, village_information, moved_in, moved_out)
                         )
                     )
             else:
                 location_records.append(
                     # FIXME: Refactor this to the _postprocess method?
                     place_name_cleaner.clean_place_name(
-                        get_location_entry()
+                        self._get_location_entry(entry_name, entry_region, geocoordinates, village_information)
                     )
                 )
 
@@ -325,14 +328,14 @@ class KarelianLocationsExtractor(BaseExtractor):
             locations = self._clean_locations(locations)
 
             # Parse location string with BNF parser
-            parsed_locations = migration_parser.parse_locations(locations)
+            parsed_locations_substrings = migration_parser.parse_locations(locations)
 
             try:
-                for loc in parsed_locations:
+                for loc in parsed_locations_substrings:
                     location_entries += _get_location_entries(loc)
-            except InvalidLocationException as e:
+            except InvalidLocationException:
                 pass
-        except regexUtils.RegexNoneMatchException as e:
+        except regexUtils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('karelianLocationNotFound', 5)
 
         return location_entries, cursor_location
