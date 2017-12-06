@@ -60,6 +60,31 @@ def get_coordinates_by_name(place_name):
         return {"latitude": None, "longitude": None}
 
 
+def clean_locations(locations):
+    """
+    Locations string which hold the migration records often contain some troublesome characters. Strip
+    them away before feeding them to the BNF-parser.
+    :param locations:
+    :return:
+    """
+    locations = locations.strip(",")
+    locations = locations.strip(".")
+    locations = locations.strip()
+
+    # Strip away spaces and hyphens from center of words
+    locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
+
+    # if string contains word some of known incorrect words, split string from that position
+    lowercase = locations.lower()
+    for word in KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS:
+        position = re.search(word, lowercase)
+
+        if position is not None:
+            locations = locations[0:position.start()]
+
+    return locations.lstrip()
+
+
 class FinnishLocationsExtractor(BaseExtractor):
     """
     Tries to extract the locations of the person in oter places than karelia
@@ -189,7 +214,7 @@ class FinnishLocationsExtractor(BaseExtractor):
             found_locations = regexUtils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             cursor_location = found_locations.end()
             locations = found_locations.group("asuinpaikat")
-            locations = self._clean_locations_string(locations)
+            locations = clean_locations(locations)
 
             # Parse location string with BNF parser
             parsed_locations = migration_parser.parse_locations(locations)
@@ -203,24 +228,6 @@ class FinnishLocationsExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('otherLocationNotFound', 5)
 
         return location_entries, cursor_location
-
-    @staticmethod
-    def _clean_locations_string(locations):
-        locations = locations.strip(",")
-        locations = locations.strip(".")
-        locations = locations.strip()
-        locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
-        locations = locations.lstrip()
-
-        # if string contains word some of known incorrect words, split string from that position
-        lowercase = locations.lower()
-        for word in KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS:
-            position = re.search(word, lowercase)
-
-            if position is not None:
-                locations = locations[0:position.start()]
-
-        return locations
 
 
 class KarelianLocationsExtractor(BaseExtractor):
@@ -353,7 +360,7 @@ class KarelianLocationsExtractor(BaseExtractor):
             found_locations = regexUtils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             cursor_location = found_locations.end()
             locations = found_locations.group("asuinpaikat")
-            locations = self._clean_locations(locations)
+            locations = clean_locations(locations)
 
             # Parse location string with BNF parser
             parsed_locations_substrings = migration_parser.parse_locations(locations)
@@ -367,25 +374,6 @@ class KarelianLocationsExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('karelianLocationNotFound', 5)
 
         return location_entries, cursor_location
-
-    @staticmethod
-    def _clean_locations(locations):
-        locations = locations.strip(",")
-        locations = locations.strip(".")
-        locations = locations.strip()
-
-        # Strip away spaces and hyphens from center of words
-        locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
-
-        # if string contains word some of known incorrect words, split string from that position
-        lowercase = locations.lower()
-        for word in KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS:
-            position = re.search(word, lowercase)
-
-            if position is not None:
-                locations = locations[0:position.start()]
-
-        return locations.lstrip()
 
 
 class MigrationRouteExtractor(BaseExtractor):
