@@ -80,6 +80,12 @@ class FinnishLocationsExtractor(BaseExtractor):
 
         return extraction_results, extraction_metadata
 
+    def _get_coordinates_by_name(self, place_name):
+        try:
+            return GeoCoder.get_coordinates(place_name)
+        except LocationNotFound:
+            return {"latitude": None, "longitude": None}
+
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
         text = re.sub(r"\s", r" ", text)
@@ -87,25 +93,22 @@ class FinnishLocationsExtractor(BaseExtractor):
         cursor_location = 0
         location_entries = []
 
-        def _get_location_entries(location):
+        def _get_location_entries(parsed_location):
             location_records = []
             # If there is municipality information, use it as an main entry name
             village_name = None
 
-            if 'municipality' in location:
+            if 'municipality' in parsed_location:
                 # Try to normalize place names first so that the coordinate fetch from DB might work better
-                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['municipality'], True)
-                village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['place'])
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+                    parsed_location['municipality'], return_region=True)
+                village_name = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+                    parsed_location['place'], return_region=False)
             else:
-                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(location['place'], True)
+                entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
+                    parsed_location['place'], return_region=True)
 
-            def get_coordinates_by_name(place_name):
-                try:
-                    return GeoCoder.get_coordinates(place_name)
-                except LocationNotFound:
-                    return {"latitude": None, "longitude": None}
-
-            geocoordinates = get_coordinates_by_name(entry_name)
+            geocoordinates = self._get_coordinates_by_name(entry_name)
 
             entry_name = validate_location_name(entry_name, geocoordinates)
             village_name = validate_village_name(village_name)
