@@ -240,27 +240,21 @@ LOCATION_HEURISTICS = {
         'expected': [
           {
             'movedOut': 40,
-            'village': {
-              'locationName': None
-            },
+            'village': None,
             'movedIn': 39,
             'region': 'other',
             'locationName': 'Kankaanpää'
           },
           {
             'movedOut': 40,
-            'village': {
-              'locationName': None
-            },
+            'village': None,
             'movedIn': None,
             'region': 'other',
             'locationName': 'Hirvensalo'
           },
           {
             'movedOut': 40,
-            'village': {
-              'locationName': None
-            },
+            'village': None,
             'movedIn': None,
             'region': 'other',
             'locationName': 'Perniö'
@@ -295,18 +289,14 @@ LOCATION_HEURISTICS = {
                 'region': 'other',
                 'locationName': 'Hirvensalo',
                 'movedIn': None,
-                'village': {
-                  'locationName': None
-                },
+                'village': None,
                 'movedOut': 40
            },
            {
                 'region': 'other',
                 'locationName': 'Perniö',
                 'movedIn': None,
-                'village': {
-                  'locationName': None
-                },
+                'village': None,
                 'movedOut': 40
            },
            {
@@ -331,9 +321,7 @@ EXPECTED_RESULTS = [
             'region': 'other',
             'movedOut': 40,
             'locationName': 'Urjala',
-            'village': {
-              'locationName': None
-            }
+            'village': None
           }, {
             'movedIn': 40,
             'region': 'other',
@@ -367,49 +355,37 @@ EXPECTED_RESULTS = [
             'region': 'other',
             'movedOut': 42,
             'locationName': 'Ypäjä',
-            'village': {
-              'locationName': None
-            }
+            'village': None
           }, {
             'movedIn': None,
             'region': 'other',
             'movedOut': None,
             'locationName': 'Kuhmoinen',
-            'village': {
-              'locationName': None
-            }
+            'village': None
           }, {
             'movedIn': None,
             'region': 'other',
             'movedOut': None,
             'locationName': 'Längelmäki',
-            'village': {
-              'locationName': None
-            }
+            'village': None
           }, {
             'movedIn': None,
             'region': 'other',
             'movedOut': None,
             'locationName': 'Hiukkaa',
-            'village': {
-              'locationName': None
-            }
+            'village': None
           }, {
             'movedIn': None,
             'region': 'other',
             'movedOut': None,
             'locationName': 'Längelmäki',
-            'village': {
-              'locationName': None
-            }
+            'village': None
           }, {
             'movedIn': None,
             'region': 'other',
             'movedOut': None,
             'locationName': 'Länkipohja',
-            'village': {
-              'locationName': None
-            }
+            'village': None
           }
         ]
     }
