@@ -53,6 +53,13 @@ def validate_village_name(village_name):
         return village_name
 
 
+def get_coordinates_by_name(place_name):
+    try:
+        return GeoCoder.get_coordinates(place_name)
+    except LocationNotFound:
+        return {"latitude": None, "longitude": None}
+
+
 class FinnishLocationsExtractor(BaseExtractor):
     """
     Tries to extract the locations of the person in oter places than karelia
@@ -79,12 +86,6 @@ class FinnishLocationsExtractor(BaseExtractor):
             places[i] = place_name_cleaner.normalize_place_name_with_known_list_of_places(places[i])
 
         return extraction_results, extraction_metadata
-
-    def _get_coordinates_by_name(self, place_name):
-        try:
-            return GeoCoder.get_coordinates(place_name)
-        except LocationNotFound:
-            return {"latitude": None, "longitude": None}
 
     def _get_location_entry(self, entry_name, entry_region, geocoordinates, village_information, moved_in=None,
                             moved_out=None):
@@ -114,7 +115,7 @@ class FinnishLocationsExtractor(BaseExtractor):
 
         if village_name:
             # TODO: There could be a check if the region is correct for possible found place
-            village_coordinates = self._get_coordinates_by_name(village_name)
+            village_coordinates = get_coordinates_by_name(village_name)
 
             village_information = {
                 KEYS["otherlocation"]: village_name or None,
@@ -151,7 +152,7 @@ class FinnishLocationsExtractor(BaseExtractor):
                 entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
                     parsed_location['place'], return_region=True)
 
-            geocoordinates = self._get_coordinates_by_name(entry_name)
+            geocoordinates = get_coordinates_by_name(entry_name)
 
             entry_name = validate_location_name(entry_name, geocoordinates)
 
@@ -264,12 +265,6 @@ class KarelianLocationsExtractor(BaseExtractor):
             KEYS["village"]: village_information
         }
 
-    def _get_coordinates_by_name(self, place_name):
-        try:
-            return GeoCoder.get_coordinates(place_name)
-        except LocationNotFound:
-            return {"latitude": None, "longitude": None}
-
     def _get_village(self, parsed_location):
         """
         Some BNF-parsed location data objects contain information about village in a municipality. If so,
@@ -285,7 +280,7 @@ class KarelianLocationsExtractor(BaseExtractor):
 
         if village_name:
             # TODO: There could be a check if the region is correct for possible found place
-            village_coordinates = self._get_coordinates_by_name(village_name)
+            village_coordinates = get_coordinates_by_name(village_name)
 
             village_information = {
                 KEYS["karelianlocation"]: village_name,
@@ -322,7 +317,7 @@ class KarelianLocationsExtractor(BaseExtractor):
                 entry_name, entry_region = place_name_cleaner.try_to_normalize_place_name_with_known_aliases(
                     parsed_location['place'], return_region=True)
 
-            geocoordinates = self._get_coordinates_by_name(entry_name)
+            geocoordinates = get_coordinates_by_name(entry_name)
 
             entry_name = validate_location_name(entry_name, geocoordinates)
 
