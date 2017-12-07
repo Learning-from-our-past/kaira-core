@@ -200,6 +200,24 @@ LOCATION_TEXTS_WITH_INCORRECT_REGION = [
             'region': 'karelia',
             'locationName': 'Kanneljärvi'
         }]
+     },
+    {'text': 'Poika -53 Helsinki. Asuinp. Karjalassa: Mordor. Nurn 12—28. Muut asuinp.: Lothlorien 28—. Testiset asuvat',
+     'expected': [
+        {
+            'movedOut': 28,
+            'village': {
+              'locationName': 'Nurn'
+            },
+            'movedIn': 12,
+            'region': 'other',
+            'locationName': 'Mordor'
+        }, {
+            'movedOut': None,
+            'village': None,
+            'movedIn': 28,
+            'region': 'karelia',
+            'locationName': 'Lothlorien'
+        }]
      }
 ]
 
