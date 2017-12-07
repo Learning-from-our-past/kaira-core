@@ -14,76 +14,6 @@ MIN_PLACE_NAME_LENGTH = 4
 # Known words which often after in migration results which should clip the string which is parsed to list of places
 KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS = ['rouva', 'saima(?!a)', 'muutasuinp']
 
-def validate_location_name(entry_name, geocoordinates):
-    if len(entry_name) > MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] is None and geocoordinates['longitude'] is None:
-        name_is_ok = False
-
-        # Check if there is white list pattern which matches to current name
-        for pattern in location_name_white_list.WHITE_LIST['patterns']:
-            result = pattern['find'].subn(pattern['replace'], entry_name)
-
-            if result[1] > 0:  # Replace success, end loop
-                entry_name = result[0]
-                name_is_ok = True
-                break
-
-        if not name_is_ok:
-            raise InvalidLocationException(entry_name)
-
-    if len(entry_name) < MIN_PLACE_NAME_LENGTH:
-        name_is_ok = False
-        ln = entry_name.lower()
-        if ln in location_name_white_list.WHITE_LIST['names']:
-            # The name is in white list, so it is ok to use!
-            # Also check if there is known alias for it
-            name_is_ok = True
-            if 'alias' in location_name_white_list.WHITE_LIST['names'][ln]:
-                entry_name = location_name_white_list.WHITE_LIST['names'][ln]['alias']
-
-        if not name_is_ok:
-            raise InvalidLocationException(entry_name)
-
-    return entry_name
-
-
-def validate_village_name(village_name):
-    if village_name is not None and (len(village_name) > MAX_PLACE_NAME_LENGTH or len(village_name) < MIN_PLACE_NAME_LENGTH):
-        return None
-    else:
-        return village_name
-
-
-def get_coordinates_by_name(place_name):
-    try:
-        return GeoCoder.get_coordinates(place_name)
-    except LocationNotFound:
-        return {'latitude': None, 'longitude': None}
-
-
-def clean_locations(locations):
-    """
-    Locations string which hold the migration records often contain some troublesome characters. Strip
-    them away before feeding them to the BNF-parser.
-    :param locations:
-    :return:
-    """
-    locations = locations.strip(',')
-    locations = locations.strip('.')
-    locations = locations.strip()
-
-    # Strip away spaces and hyphens from center of words
-    locations = re.sub(r'([a-zä-ö])(?:\s|\-)([a-zä-ö])', r'\1\2', locations)
-
-    # if string contains word some of known incorrect words, split string from that position
-    lowercase = locations.lower()
-    for word in KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS:
-        position = re.search(word, lowercase)
-
-        if position is not None:
-            locations = locations[0:position.start()]
-
-    return locations.lstrip()
-
 
 class FinnishLocationsExtractor(BaseExtractor):
     """
@@ -408,6 +338,77 @@ class MigrationRouteExtractor(BaseExtractor):
     def _postprocess(self, entry, extraction_results, extraction_metadata):
         self._get_output_path(extraction_results)['migrationHistory'][KEYS['returnedkarelia']] = check_if_person_returned_karelia_in_between_wars(self._get_output_path(extraction_results)['migrationHistory']['locations'], self.metadata_collector)
         return extraction_results, extraction_metadata
+
+
+def validate_location_name(entry_name, geocoordinates):
+    if len(entry_name) > MAX_PLACE_NAME_LENGTH and geocoordinates['latitude'] is None and geocoordinates['longitude'] is None:
+        name_is_ok = False
+
+        # Check if there is white list pattern which matches to current name
+        for pattern in location_name_white_list.WHITE_LIST['patterns']:
+            result = pattern['find'].subn(pattern['replace'], entry_name)
+
+            if result[1] > 0:  # Replace success, end loop
+                entry_name = result[0]
+                name_is_ok = True
+                break
+
+        if not name_is_ok:
+            raise InvalidLocationException(entry_name)
+
+    if len(entry_name) < MIN_PLACE_NAME_LENGTH:
+        name_is_ok = False
+        ln = entry_name.lower()
+        if ln in location_name_white_list.WHITE_LIST['names']:
+            # The name is in white list, so it is ok to use!
+            # Also check if there is known alias for it
+            name_is_ok = True
+            if 'alias' in location_name_white_list.WHITE_LIST['names'][ln]:
+                entry_name = location_name_white_list.WHITE_LIST['names'][ln]['alias']
+
+        if not name_is_ok:
+            raise InvalidLocationException(entry_name)
+
+    return entry_name
+
+
+def validate_village_name(village_name):
+    if village_name is not None and (len(village_name) > MAX_PLACE_NAME_LENGTH or len(village_name) < MIN_PLACE_NAME_LENGTH):
+        return None
+    else:
+        return village_name
+
+
+def get_coordinates_by_name(place_name):
+    try:
+        return GeoCoder.get_coordinates(place_name)
+    except LocationNotFound:
+        return {'latitude': None, 'longitude': None}
+
+
+def clean_locations(locations):
+    """
+    Locations string which hold the migration records often contain some troublesome characters. Strip
+    them away before feeding them to the BNF-parser.
+    :param locations:
+    :return:
+    """
+    locations = locations.strip(',')
+    locations = locations.strip('.')
+    locations = locations.strip()
+
+    # Strip away spaces and hyphens from center of words
+    locations = re.sub(r'([a-zä-ö])(?:\s|\-)([a-zä-ö])', r'\1\2', locations)
+
+    # if string contains word some of known incorrect words, split string from that position
+    lowercase = locations.lower()
+    for word in KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS:
+        position = re.search(word, lowercase)
+
+        if position is not None:
+            locations = locations[0:position.start()]
+
+    return locations.lstrip()
 
 
 class LocationThresholdException(Exception):
