@@ -181,6 +181,10 @@ class FinnishLocationsExtractor(BaseExtractor):
 
             entry_name = validate_location_name(entry_name, geocoordinates)
 
+            # If region was in db associated to coordinates, override previously set region with it
+            if 'region' in geocoordinates:
+                entry_region = geocoordinates['region']
+
             if 'year_information' in parsed_location:
                 for migration in parsed_location['year_information']:
                     if 'moved_in' in migration:
@@ -325,6 +329,10 @@ class KarelianLocationsExtractor(BaseExtractor):
                     parsed_location['place'], return_region=True)
 
             geocoordinates = get_coordinates_by_name(entry_name)
+
+            # If region was in db associated to coordinates, override previously set region with it
+            if 'region' in geocoordinates:
+                entry_region = geocoordinates['region']
 
             entry_name = validate_location_name(entry_name, geocoordinates)
 

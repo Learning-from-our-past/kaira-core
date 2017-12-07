@@ -6,6 +6,8 @@ from book_extractors.karelians.extraction.extractors.migration_route_extractors 
     KarelianLocationsExtractor, MigrationRouteExtractor
 from book_extractors.karelians.extraction.extractors.tests.migrations.mock_person_data import LOCATION_TEXTS, \
     EXPECTED_RESULTS, LOCATION_HEURISTICS, LOCATION_TEXTS_WITH_ROUVA_WORD, LOCATION_TEXTS_WITH_INCORRECT_REGION
+from playhouse.test_utils import test_database
+from shared.geo.dbhandler import Place, Location
 
 
 class TestMigrationParser:
@@ -285,6 +287,39 @@ class TestMigrationRouteExtractor:
 
         assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected'])
         assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected']
+
+    def should_fix_incorrectly_listed_region_to_correct_one_from_geo_db(self, migration_extractor, th, test_geo_db):
+        # Set up a case where place Mordor is listed in text as place in Karelia while in reality its region should
+        # be "other". Region is fixed by retrieving it from geo db along with coordinates
+        with test_database(test_geo_db, (Place, Location), create_tables=False):
+            other_location = Location.get(Location.region == 'other')
+            mock_other_place = Place(name='Mordor', location=other_location.id)
+            mock_other_place.save()
+
+            karelian_location = Location.get(Location.region =='karelia')
+            mock_karelia_place = Place(name='Lothlorien', location=karelian_location.id)
+            mock_karelia_place.save()
+
+            text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
+
+            results, metadata = migration_extractor.extract({'text': text}, {}, {})
+            th.omit_property(results, 'coordinates')
+            result_locations = results['migrationHistory']['locations']
+
+            assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['expected'])
+            assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['expected']
+
+    def should_leave_region_as_is_if_it_is_not_found_from_db(self,  migration_extractor, th):
+        text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
+
+        results, metadata = migration_extractor.extract({'text': text}, {}, {})
+        th.omit_property(results, 'coordinates')
+        result_locations = results['migrationHistory']['locations']
+
+        assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['expected'])
+        # Assign regions based on the list in book when db does not have any overriding info
+        assert result_locations[0]['region'] == 'karelia'
+        assert result_locations[1]['region'] == 'other'
 
     class TestExcludingIncorrectWords:
 
