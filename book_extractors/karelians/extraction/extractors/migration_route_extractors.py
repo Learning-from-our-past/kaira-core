@@ -57,7 +57,7 @@ def get_coordinates_by_name(place_name):
     try:
         return GeoCoder.get_coordinates(place_name)
     except LocationNotFound:
-        return {"latitude": None, "longitude": None}
+        return {'latitude': None, 'longitude': None}
 
 
 def clean_locations(locations):
@@ -67,12 +67,12 @@ def clean_locations(locations):
     :param locations:
     :return:
     """
-    locations = locations.strip(",")
-    locations = locations.strip(".")
+    locations = locations.strip(',')
+    locations = locations.strip('.')
     locations = locations.strip()
 
     # Strip away spaces and hyphens from center of words
-    locations = re.sub(r"([a-zä-ö])(?:\s|\-)([a-zä-ö])", r"\1\2", locations)
+    locations = re.sub(r'([a-zä-ö])(?:\s|\-)([a-zä-ö])', r'\1\2', locations)
 
     # if string contains word some of known incorrect words, split string from that position
     lowercase = locations.lower()
@@ -94,18 +94,18 @@ class FinnishLocationsExtractor(BaseExtractor):
 
     def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(FinnishLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
-        self.LOCATION_PATTERN = r"Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)"
+        self.LOCATION_PATTERN = r'Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)'
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         location_listing_results = self._find_locations(entry['text'])
 
         return self._add_to_extraction_results({
-            KEYS["otherlocations"]: location_listing_results[0]},
+            KEYS['otherlocations']: location_listing_results[0]},
             extraction_results, extraction_metadata, location_listing_results[1])
 
     def _postprocess(self, entry, extraction_results, extraction_metadata):
-        places = extraction_results[self.extraction_key][KEYS["otherlocations"]]
+        places = extraction_results[self.extraction_key][KEYS['otherlocations']]
 
         for i in range(0, len(places)):
             places[i] = place_name_cleaner.normalize_place_name_with_known_list_of_places(places[i])
@@ -115,15 +115,15 @@ class FinnishLocationsExtractor(BaseExtractor):
     def _get_location_entry(self, entry_name, entry_region, geocoordinates, village_information, moved_in=None,
                             moved_out=None):
         return {
-            KEYS["otherlocation"]: entry_name,
-            KEYS["othercoordinate"]: {
-                KEYS["latitude"]: geocoordinates["latitude"],
-                KEYS["longitude"]: geocoordinates["longitude"]
+            KEYS['otherlocation']: entry_name,
+            KEYS['othercoordinate']: {
+                KEYS['latitude']: geocoordinates['latitude'],
+                KEYS['longitude']: geocoordinates['longitude']
             },
-            KEYS["movedOut"]: moved_out,
-            KEYS["movedIn"]: moved_in,
-            KEYS["region"]: entry_region or self.OTHER_REGION_ID,
-            KEYS["village"]: village_information
+            KEYS['movedOut']: moved_out,
+            KEYS['movedIn']: moved_in,
+            KEYS['region']: entry_region or self.OTHER_REGION_ID,
+            KEYS['village']: village_information
         }
 
     def _get_village(self, parsed_location):
@@ -143,10 +143,10 @@ class FinnishLocationsExtractor(BaseExtractor):
             village_coordinates = get_coordinates_by_name(village_name)
 
             village_information = {
-                KEYS["otherlocation"]: village_name or None,
-                KEYS["othercoordinate"]: {
-                    KEYS["latitude"]: village_coordinates["latitude"],
-                    KEYS["longitude"]: village_coordinates["longitude"]
+                KEYS['otherlocation']: village_name or None,
+                KEYS['othercoordinate']: {
+                    KEYS['latitude']: village_coordinates['latitude'],
+                    KEYS['longitude']: village_coordinates['longitude']
                 }
             }
 
@@ -156,7 +156,7 @@ class FinnishLocationsExtractor(BaseExtractor):
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
-        text = re.sub(r"\s", r" ", text)
+        text = re.sub(r'\s', r' ', text)
 
         cursor_location = 0
         location_entries = []
@@ -217,7 +217,7 @@ class FinnishLocationsExtractor(BaseExtractor):
         try:
             found_locations = regexUtils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             cursor_location = found_locations.end()
-            locations = found_locations.group("asuinpaikat")
+            locations = found_locations.group('asuinpaikat')
             locations = clean_locations(locations)
 
             # Parse location string with BNF parser
@@ -244,18 +244,18 @@ class KarelianLocationsExtractor(BaseExtractor):
 
     def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
         super(KarelianLocationsExtractor, self).__init__(key_of_cursor_location_dependent, options)
-        self.LOCATION_PATTERN = r"Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))"  # r"Muut\.?,?\s?(?:asuinp(\.|,)){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=—)"
+        self.LOCATION_PATTERN = r'Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))'
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         location_listing_results = self._find_locations(entry['text'])
 
         return self._add_to_extraction_results({
-            KEYS["karelianlocations"]: location_listing_results[0],
+            KEYS['karelianlocations']: location_listing_results[0],
         }, extraction_results, extraction_metadata, location_listing_results[1])
 
     def _postprocess(self, entry, extraction_results, extraction_metadata):
-        places = extraction_results[self.extraction_key][KEYS["karelianlocations"]]
+        places = extraction_results[self.extraction_key][KEYS['karelianlocations']]
 
         for i in range(0, len(places)):
             places[i] = place_name_cleaner.normalize_place_name_with_known_list_of_places(places[i])
@@ -265,15 +265,15 @@ class KarelianLocationsExtractor(BaseExtractor):
     def _get_location_entry(self, entry_name, entry_region, geocoordinates, village_information, moved_in=None,
                            moved_out=None):
         return {
-            KEYS["karelianlocation"]: entry_name,
-            KEYS["kareliancoordinate"]: {
-                KEYS["latitude"]: geocoordinates["latitude"],
-                KEYS["longitude"]: geocoordinates["longitude"]
+            KEYS['karelianlocation']: entry_name,
+            KEYS['kareliancoordinate']: {
+                KEYS['latitude']: geocoordinates['latitude'],
+                KEYS['longitude']: geocoordinates['longitude']
             },
-            KEYS["movedOut"]: moved_out,
-            KEYS["movedIn"]: moved_in,
-            KEYS["region"]: entry_region or self.KARELIAN_REGION_ID,
-            KEYS["village"]: village_information
+            KEYS['movedOut']: moved_out,
+            KEYS['movedIn']: moved_in,
+            KEYS['region']: entry_region or self.KARELIAN_REGION_ID,
+            KEYS['village']: village_information
         }
 
     def _get_village(self, parsed_location):
@@ -294,10 +294,10 @@ class KarelianLocationsExtractor(BaseExtractor):
             village_coordinates = get_coordinates_by_name(village_name)
 
             village_information = {
-                KEYS["karelianlocation"]: village_name,
-                KEYS["kareliancoordinate"]: {
-                    KEYS["latitude"]: village_coordinates["latitude"],
-                    KEYS["longitude"]: village_coordinates["longitude"]
+                KEYS['karelianlocation']: village_name,
+                KEYS['kareliancoordinate']: {
+                    KEYS['latitude']: village_coordinates['latitude'],
+                    KEYS['longitude']: village_coordinates['longitude']
                 }
             }
 
@@ -307,7 +307,7 @@ class KarelianLocationsExtractor(BaseExtractor):
 
     def _find_locations(self, text):
         # Replace all weird invisible white space characters with regular space
-        text = re.sub(r"\s", r" ", text)
+        text = re.sub(r'\s', r' ', text)
 
         cursor_location = 0
         location_entries = []
@@ -367,7 +367,7 @@ class KarelianLocationsExtractor(BaseExtractor):
         try:
             found_locations = regexUtils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             cursor_location = found_locations.end()
-            locations = found_locations.group("asuinpaikat")
+            locations = found_locations.group('asuinpaikat')
             locations = clean_locations(locations)
 
             # Parse location string with BNF parser
@@ -399,26 +399,26 @@ class MigrationRouteExtractor(BaseExtractor):
         results = self._sub_extraction_pipeline.process(entry)
 
         return self._add_to_extraction_results({
-            KEYS["locations"]: results[0]['karelianLocations'][KEYS['karelianlocations']] + results[0]['finnishLocations'][KEYS['otherlocations']]
+            KEYS['locations']: results[0]['karelianLocations'][KEYS['karelianlocations']] + results[0]['finnishLocations'][KEYS['otherlocations']]
         },
             extraction_results,
             extraction_metadata,
             cursor_location=results[1]['finnishLocations']['cursorLocation'])
 
     def _postprocess(self, entry, extraction_results, extraction_metadata):
-        self._get_output_path(extraction_results)['migrationHistory'][KEYS["returnedkarelia"]] = check_if_person_returned_karelia_in_between_wars(self._get_output_path(extraction_results)['migrationHistory']['locations'], self.metadata_collector)
+        self._get_output_path(extraction_results)['migrationHistory'][KEYS['returnedkarelia']] = check_if_person_returned_karelia_in_between_wars(self._get_output_path(extraction_results)['migrationHistory']['locations'], self.metadata_collector)
         return extraction_results, extraction_metadata
 
 
 class LocationThresholdException(Exception):
-    message = "Locations couldn't be found from db"
+    message = 'Locations couldn\'t be found from db'
 
     def __unicode__(self):
         return repr(self.message)
 
 
 class InvalidLocationException(Exception):
-    message = "Location name likely not a valid place: "
+    message = 'Location name likely not a valid place: '
 
     def __init__(self, place_name):
         self._place_name = place_name
