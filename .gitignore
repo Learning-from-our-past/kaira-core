@@ -1,5 +1,4 @@
 dist/
-mongodb/
 build/
 *venv*
 .idea/
@@ -11,3 +10,4 @@ build/
 .cache/
 material/
 temp/
+.env

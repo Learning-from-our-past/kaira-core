@@ -3,7 +3,6 @@
 Main module containing logic for data extraction and command line interface.
 
 ## Dependencies
-* Mongodb 3.4.9
 * Python 3
 
 ## Setup
@@ -11,7 +10,6 @@ Main module containing logic for data extraction and command line interface.
 virtualenv -p python3 kaira-venv
 source kaira-venv/bin/activate
 pip install -r requirements.txt
-invoke setup
 ```
 
 # Attribution
