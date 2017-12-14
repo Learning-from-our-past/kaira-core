@@ -11,7 +11,8 @@ from book_extractors.karelians.extraction.postprocessors.returned_to_karelia imp
 
 MAX_PLACE_NAME_LENGTH = 15
 MIN_PLACE_NAME_LENGTH = 4
-# Known words which often after in migration results which should clip the string which is parsed to list of places
+# Known words which often occur after migration records list and should be clipped out of the list before
+# parsing the list with BNF
 KNOWN_INCORRECT_WORDS_IN_MIGRATION_LISTS = ['rouva', 'saima(?!a)', 'muutasuinp']
 
 
