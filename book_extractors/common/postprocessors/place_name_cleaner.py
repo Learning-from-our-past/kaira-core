@@ -45,21 +45,45 @@ manually_fixed_place_names_file.close()
 list_of_known_places_file.close()
 
 
-def try_to_normalize_place_name(location_entry, metadata_collector=None):
-    if location_entry[KEYS['locationName']]:
-        search_key = stemmer.stem(location_entry[KEYS['locationName']])
+def try_to_normalize_place_name_with_known_aliases(location_name, return_region=False):
+    """
+    Try to normalize the name by using a list of known typos and aliases for the given place.
+    place_names_with_alternative_forms.json contains list of place names and common typos and aliases for them. Using
+    this manually created list we can normalize some of the most common typos in the data.
+
+    If normalized name is not found, just return the name unchanged.
+
+    If return_region is set true, this function returns possible region info too.
+
+    :param location_name:
+    :param return_region:
+    :return:
+    """
+    fixed_name = location_name
+    region = None
+
+    if location_name:
+        search_key = stemmer.stem(location_name)
         if search_key in manual_place_name_index:
-            location_entry[KEYS['locationName']] = manual_place_name_index[search_key]['fixed_name']
+            fixed_name = manual_place_name_index[search_key]['fixed_name']
+            region = manual_place_name_index[search_key]['region']
 
-            if manual_place_name_index[search_key]['region'] is not None:
-                location_entry[KEYS['region']] = manual_place_name_index[search_key]['region']
-        else:
-            location_entry = normalize_place_name_with_known_list_of_places(location_entry, metadata_collector)
-
-    return location_entry
+    if return_region:
+        return fixed_name, region
+    else:
+        return fixed_name
 
 
 def normalize_place_name_with_known_list_of_places(location_entry, metadata_collector=None):
+    """
+    Try to normalize name to known places in the database. We have a list of place names from
+    database. Try to avoid creating completely new place names because of some minor typo differences
+    by finding closest match from existing place names with Jaro-Winkler distance.
+    
+    :param location_entry:
+    :param metadata_collector:
+    :return:
+    """
     jaro_winkler_threshold = 0.97
 
     # If place has coordinates, it is likely a proper name already. Do nothing.
@@ -112,6 +136,28 @@ def normalize_place_name_with_known_list_of_places(location_entry, metadata_coll
             if metadata_collector is not None:
                 metadata_collector.add_error_record('locationNameNotFoundFromLists', 2)
             return location_entry
+
+
+def normalize_place(location_entry, metadata_collector=None):
+    """
+    Run both normalization processes for location_entry. This is utility function for cases when both
+    normalizations can be run sequentially. If fix from manual json list is found, we do not need to run the
+    known places list check.
+
+    :param location_entry:
+    :param metadata_collector:
+    :return:
+    """
+
+    fixed_name, region = try_to_normalize_place_name_with_known_aliases(location_entry[KEYS['locationName']], True)
+
+    if location_entry[KEYS['locationName']] != fixed_name:
+        location_entry[KEYS['locationName']] = fixed_name
+        location_entry[KEYS['region']] = region
+    else:
+        location_entry = normalize_place_name_with_known_list_of_places(location_entry, metadata_collector)
+
+    return location_entry
 
 
 def clean_place_name(location_entry):

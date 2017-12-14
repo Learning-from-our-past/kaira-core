@@ -1,10 +1,13 @@
-import pytest
 import re
+import pytest
 from book_extractors.common.extraction_keys import KEYS
-
-from book_extractors.karelians.tests.extraction.locations.mock_person_data import LOCATION_TEXTS, EXPECTED_RESULTS, LOCATION_HEURISTICS, LOCATION_TEXTS_WITH_ROUVA_WORD, LOCATION_TEXTS_WITH_INCORRECT_REGION
-from book_extractors.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, KarelianLocationsExtractor, MigrationRouteExtractor
 from book_extractors.karelians.extraction.extractors.bnf_parsers.migration_parser import parse_locations
+from book_extractors.karelians.extraction.extractors.migration_route_extractors import FinnishLocationsExtractor, \
+    KarelianLocationsExtractor, MigrationRouteExtractor
+from book_extractors.karelians.extraction.extractors.tests.migrations.mock_person_data import LOCATION_TEXTS, \
+    EXPECTED_RESULTS, LOCATION_HEURISTICS, LOCATION_TEXTS_WITH_ROUVA_WORD, LOCATION_TEXTS_WITH_INCORRECT_REGION
+from playhouse.test_utils import test_database
+from shared.geo.dbhandler import Place, Location
 
 
 class TestMigrationParser:
@@ -142,7 +145,6 @@ class TestKarelianLocationExtraction:
     def karelian_extractor(self):
         return KarelianLocationsExtractor(None, None)
 
-
     def should_extract_locations_with_village_names(self, karelian_extractor):
         results, metadata = karelian_extractor.extract({'text': LOCATION_TEXTS[0]}, {}, {})
         locations = results['karelianLocations']['karelianLocations']
@@ -155,8 +157,8 @@ class TestKarelianLocationExtraction:
         assert locations[0]['movedOut'] == 39
 
         assert locations[0]['village']['locationName'] == 'Laasola'
-        assert locations[0]['village']['coordinates']['latitude'] == '60.38876'
-        assert locations[0]['village']['coordinates']['longitude'] == '28.93825'
+        assert locations[0]['village']['coordinates']['latitude'] is None
+        assert locations[0]['village']['coordinates']['longitude'] is None
 
         assert locations[1]['locationName'] == 'Kuolemajärvi'
         assert locations[1]['region'] == 'karelia'
@@ -166,7 +168,6 @@ class TestKarelianLocationExtraction:
         assert locations[1]['movedIn'] == 42
         assert locations[1]['movedOut'] == 44
 
-
     def should_extract_locations_with_missing_village_names(self, karelian_extractor):
         results, metadata = karelian_extractor.extract({'text': LOCATION_TEXTS[2]}, {}, {})
         locations = results['karelianLocations']['karelianLocations']
@@ -175,14 +176,12 @@ class TestKarelianLocationExtraction:
 
         assert locations[0]['locationName'] == 'Viipurin mlk'
         assert locations[0]['region'] == 'karelia'
-        assert locations[0]['coordinates']['longitude'] is None
-        assert locations[0]['coordinates']['latitude'] is None
+        assert locations[0]['coordinates']['latitude'] == '60.7116853059'
+        assert locations[0]['coordinates']['longitude'] == '28.7769366303'
         assert locations[0]['movedIn'] is None
         assert locations[0]['movedOut'] == 27
 
-        assert locations[0]['village']['locationName'] is None
-        assert locations[0]['village']['coordinates']['latitude'] is None
-        assert locations[0]['village']['coordinates']['longitude'] is None
+        assert locations[0]['village'] is None
 
         assert locations[1]['locationName'] == 'Pohjois Karjala'
         assert locations[1]['region'] == 'karelia'
@@ -191,18 +190,14 @@ class TestKarelianLocationExtraction:
         assert locations[1]['movedIn'] == 31
         assert locations[1]['movedOut'] == 32
 
-        assert locations[1]['village']['locationName'] is None
-        assert locations[1]['village']['coordinates']['latitude'] is None
-        assert locations[1]['village']['coordinates']['longitude'] is None
+        assert locations[1]['village'] is None
 
         assert locations[2]['locationName'] == 'Viipuri'
         assert locations[2]['region'] == 'karelia'
         assert locations[2]['movedIn'] == 32
         assert locations[2]['movedOut'] is None
 
-        assert locations[2]['village']['locationName'] is None
-        assert locations[2]['village']['coordinates']['latitude'] is None
-        assert locations[2]['village']['coordinates']['longitude'] is None
+        assert locations[2]['village'] is None
 
     def should_return_empty_if_no_karelian_locations_listed(self, karelian_extractor):
         results, metadata = karelian_extractor.extract({'text': ''}, {}, {})
@@ -292,6 +287,39 @@ class TestMigrationRouteExtractor:
 
         assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected'])
         assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected']
+
+    def should_fix_incorrectly_listed_region_to_correct_one_from_geo_db(self, migration_extractor, th, test_geo_db):
+        # Set up a case where place Mordor is listed in text as place in Karelia while in reality its region should
+        # be "other". Region is fixed by retrieving it from geo db along with coordinates
+        with test_database(test_geo_db, (Place, Location), create_tables=False):
+            other_location = Location.get(Location.region == 'other')
+            mock_other_place = Place(name='Mordor', location=other_location.id)
+            mock_other_place.save()
+
+            karelian_location = Location.get(Location.region =='karelia')
+            mock_karelia_place = Place(name='Lothlorien', location=karelian_location.id)
+            mock_karelia_place.save()
+
+            text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
+
+            results, metadata = migration_extractor.extract({'text': text}, {}, {})
+            th.omit_property(results, 'coordinates')
+            result_locations = results['migrationHistory']['locations']
+
+            assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['expected'])
+            assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['expected']
+
+    def should_leave_region_as_is_if_it_is_not_found_from_db(self,  migration_extractor, th):
+        text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
+
+        results, metadata = migration_extractor.extract({'text': text}, {}, {})
+        th.omit_property(results, 'coordinates')
+        result_locations = results['migrationHistory']['locations']
+
+        assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['expected'])
+        # Assign regions based on the list in book when db does not have any overriding info
+        assert result_locations[0]['region'] == 'karelia'
+        assert result_locations[1]['region'] == 'other'
 
     class TestExcludingIncorrectWords:
 

@@ -1,37 +1,24 @@
-# -*- coding: utf-8 -*-
-from pymongo import MongoClient, ASCENDING
-from bson import ObjectId
-import pytz
+from peewee import *
+
+database_connection = SqliteDatabase('support_datasheets/location.db', threadlocals=True)
+database_connection.connect()
 
 
-class DatabaseHandler:
-    db_name = 'geonames'  # name of the db where collections are located
-    mongo_db_address = 'localhost'
-    mongo_port = 27017
+class Location(Model):
+    latitude = TextField()
+    longitude = TextField()
+    region = TextField()
 
-    def __init__(self):
-        self.client = MongoClient(self.mongo_db_address, self.mongo_port)
-        self.db = self.client[self.db_name]
+    class Meta:
+        database = database_connection
 
-    def check_if_collection_exists(self, name):
-        coll = self.db.collection_names()
-        if name in coll:
-            return True
-        else:
-            return False
 
-    def store_to_db(self, entry, collection_name):
-        self.db[collection_name].insert(entry)
+class Place(Model):
+    name = TextField()
+    location = ForeignKeyField(db_column='locationId', null=True, rel_model=Location, to_field='id')
 
-    def get_from_db(self, query, collection_name):
-        found = list(self.db[collection_name].find(query, {"score": {"$meta": "textScore"}}).sort([("score", {"$meta": "textScore"})]))
-        return found
+    class Meta:
+        database = database_connection
 
-    def save_to_db(self, entry, collection):
-        collection.save(entry)
 
-    def clear_collection(self, collection):
-        collection.remove()
 
-    def drop_collection(self, name):
-        self.db[name].drop()
