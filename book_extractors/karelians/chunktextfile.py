@@ -15,6 +15,14 @@ def read_html_file(path):
 class PersonPreprocessor(ChunkTextInterface):
 
     def __init__(self):
+        self._save_path = None
+        self._book_number = None
+        self._persons_document = None
+        self._map_name_to_person = None
+        self._current_person = None
+        self._page_number = None
+        self._images = None
+
         # This regular expression tries to match a name by the following pattern:
         # First there should be a name containing your typical alphabet and a hyphen, and it can be in
         # two parts, separated by a space. After that, there can be a space or a hyphen, followed by
@@ -31,21 +39,21 @@ class PersonPreprocessor(ChunkTextInterface):
                                                 re.UNICODE)
 
     def chunk_text(self, text, destination_path, book_number):
-        self.save_path = destination_path
-        self.book_number = book_number
+        self._save_path = destination_path
+        self._book_number = book_number
         text = re.sub(r'(<sup>)|</sup>', '', text)  # remove sup tags
         parsed = html.document_fromstring(text)
-        persons = self.process(parsed)
+        persons = self._process(parsed)
         return etree.tostring(persons, pretty_print=True, encoding='unicode')
 
-    def process(self, tree):
-        self.persons_document = etree.Element('DATA')
-        self.persons_document.attrib['bookseries'] = BOOK_SERIES_ID
-        self.persons_document.attrib['book_number'] = str(self.book_number)
-        self.map_name_to_person = {}
-        self.current_person = None
-        self.page_number = 1
-        self.images = []
+    def _process(self, tree):
+        self._persons_document = etree.Element('DATA')
+        self._persons_document.attrib['bookseries'] = BOOK_SERIES_ID
+        self._persons_document.attrib['book_number'] = str(self._book_number)
+        self._map_name_to_person = {}
+        self._current_person = None
+        self._page_number = 1
+        self._images = []
         person_document = self._walk_tree(tree)
         self._join_images_to_persons()
         return person_document
@@ -57,16 +65,16 @@ class PersonPreprocessor(ChunkTextInterface):
 
             if e.text is not None:
                 try:
-                    self.page_number = int(e.text)
+                    self._page_number = int(e.text)
                 except ValueError:
                     if e.text[0:100].isupper() and self._ENTRY_NAME_REGEX.search(e.text) is not None:
-                        self._add_person(self.current_person)
-                        self.current_person = self._create_person(name=e.text, entry='')
-                    elif self.current_person is not None:
+                        self._add_person(self._current_person)
+                        self._current_person = self._create_person(name=e.text, entry='')
+                    elif self._current_person is not None:
                         self._process_element(e)
 
-        self._add_person(self.current_person)
-        return self.persons_document
+        self._add_person(self._current_person)
+        return self._persons_document
 
     def _process_element(self, e):
         if len(e.text) > 40:
@@ -76,15 +84,15 @@ class PersonPreprocessor(ChunkTextInterface):
             # TODO: Karkea. Pitäisi muuttaa rekursiiviseksi, jotta jos samassa entryssä on > 2
             # TODO: ihmistä, heidät eroteltaisiin myös.
             if mid_entry_person is not None:
-                self.current_person.text += e.text[0:mid_entry_person.start()]
-                self._add_person(self.current_person)
+                self._current_person.text += e.text[0:mid_entry_person.start()]
+                self._add_person(self._current_person)
                 new_person_name = mid_entry_person.group(0).strip(' ').strip('\xa0')
-                self.current_person = self._create_person(name=new_person_name, entry=e.text[mid_entry_person.end():])
+                self._current_person = self._create_person(name=new_person_name, entry=e.text[mid_entry_person.end():])
             else:
-                self.current_person.text += e.text
+                self._current_person.text += e.text
 
-            self.current_person.text = re.sub('\n', ' ', self.current_person.text)
-            self.current_person.text = re.sub('\s{2,4}', ' ', self.current_person.text)
+            self._current_person.text = re.sub('\n', ' ', self._current_person.text)
+            self._current_person.text = re.sub('\s{2,4}', ' ', self._current_person.text)
 
     def _parse_image(self, element):
         image_path = element.attrib['src']
@@ -103,10 +111,10 @@ class PersonPreprocessor(ChunkTextInterface):
 
         if name != '':
             new_path = re.sub(r'(?:[^a-zä-ö0-9]|(?<=[\'"])s)', r'', name, flags=re.IGNORECASE) + '.jpg'
-            file_prefix = os.path.basename(os.path.splitext(self.save_path)[0])
+            file_prefix = os.path.basename(os.path.splitext(self._save_path)[0])
             new_path = os.path.join(file_prefix + '_images', new_path)
             self._copy_rename_imagefiles(new_path, image_path)
-            self.images.append({'name': self._convert_image_name(name), 'image': new_path})
+            self._images.append({'name': self._convert_image_name(name), 'image': new_path})
 
     def _find_prev_caption_text(self, element):
         prev = element.getprevious()
@@ -149,9 +157,9 @@ class PersonPreprocessor(ChunkTextInterface):
         # TODO: It would be nice to provide error message to user rather than fail silently
         try:
             # copy the image files and rename them according to person's name
-            file_prefix = os.path.basename(os.path.splitext(self.save_path)[0])
-            new_path = os.path.join(os.path.dirname(self.save_path), new_path)
-            os.makedirs(os.path.dirname(self.save_path) + '/' + file_prefix + '_images', exist_ok=True)
+            file_prefix = os.path.basename(os.path.splitext(self._save_path)[0])
+            new_path = os.path.join(os.path.dirname(self._save_path), new_path)
+            os.makedirs(os.path.dirname(self._save_path) + '/' + file_prefix + '_images', exist_ok=True)
             if not os.path.isfile(os.path.join(new_path)):
                 old_image_path = os.path.join(os.getcwd(), os.path.join(*image_path.split('\\')))
                 shutil.copy(old_image_path, new_path)
@@ -171,21 +179,21 @@ class PersonPreprocessor(ChunkTextInterface):
         return newname
 
     def _join_images_to_persons(self):
-        for image in self.images:
-            if image['name'] in self.map_name_to_person:
-                self.map_name_to_person[image['name']].attrib['img_path'] = image['image']
+        for image in self._images:
+            if image['name'] in self._map_name_to_person:
+                self._map_name_to_person[image['name']].attrib['img_path'] = image['image']
 
     def _create_person(self, name, entry):
         person = etree.Element('PERSON')
         person.attrib['name'] = name
-        person.attrib['approximated_page'] = str(self.page_number-1) + '-' + str(self.page_number+1)
+        person.attrib['approximated_page'] = str(self._page_number - 1) + '-' + str(self._page_number + 1)
         person.text = entry
-        self.map_name_to_person[name] = person
+        self._map_name_to_person[name] = person
         return person
 
     def _add_person(self, person):
         if person is not None and len(person.text) > 4:
-            self.persons_document.append(person)
+            self._persons_document.append(person)
 
 
 def convert_html_file_to_xml(input_file, output_file, book_number):
