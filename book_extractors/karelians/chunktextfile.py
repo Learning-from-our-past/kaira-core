@@ -78,11 +78,11 @@ class PersonPreprocessor(ChunkTextInterface):
 
     def _process_element(self, e):
         if len(e.text) > 40:
-            # pyritään huomaamaan ihmiset joiden entry alkaa toisen sisältä
+            # Attempt to detect people, whose entries start from within other people
             mid_entry_person = self._MID_ENTRY_NAME_REGEX.search(e.text)
 
-            # TODO: Karkea. Pitäisi muuttaa rekursiiviseksi, jotta jos samassa entryssä on > 2
-            # TODO: ihmistä, heidät eroteltaisiin myös.
+            # TODO: Rough. Should be made recursive, so that if there are more than two people
+            # TODO: in the same entry, they get separated as well.
             if mid_entry_person is not None:
                 self._current_person.text += e.text[0:mid_entry_person.start()]
                 self._add_person(self._current_person)
