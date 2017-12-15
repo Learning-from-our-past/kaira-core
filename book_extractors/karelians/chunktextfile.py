@@ -14,6 +14,15 @@ def read_html_file(path):
 
 class PersonPreprocessor(ChunkTextInterface):
 
+    def __init__(self):
+        # This regular expression tries to match a name by the following pattern:
+        # First there should be a name containing your typical alphabet and a hyphen, and it can be in
+        # two parts, separated by a space. After that, there can be a space or a hyphen, followed by
+        # a dot or a comma, followed by another possible space or hyphen. Then there can be up to three
+        # words (names) after that, each at least one character long.
+        self._ENTRY_NAME_REGEX = re.compile(r'(?:[A-ZÄÖ-]+\s?){1,2}[\s-]?[.,][\s-]?(?:\w+[\s-]?){1,3}',
+                                            re.UNICODE)
+
     def chunk_text(self, text, destination_path, book_number):
         self.save_path = destination_path
         self.book_number = book_number
@@ -43,7 +52,7 @@ class PersonPreprocessor(ChunkTextInterface):
                 try:
                     self.page_number = int(e.text)
                 except ValueError:
-                    if e.text[0:100].isupper() and re.search('[A-ZÄ-Ö -]{3,}(,|\.)[A-ZÄ-Ö -]{3,}', e.text) is not None:
+                    if e.text[0:100].isupper() and self._ENTRY_NAME_REGEX.search(e.text) is not None:
                         self._add_person(self.current_person)
                         self.current_person = self._create_person(name=e.text, entry='')
                     elif self.current_person is not None:
