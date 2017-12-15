@@ -110,9 +110,9 @@ class PersonPreprocessor(ChunkTextInterface):
                 name = found_next['next'].text
 
         if name != '':
-            new_path = re.sub(r'(?:[^a-zä-ö0-9]|(?<=[\'"])s)', r'', name, flags=re.IGNORECASE) + '.jpg'
+            new_path = '{}.jpg'.format(re.sub(r'(?:[^a-zä-ö0-9]|(?<=[\'"])s)', r'', name, flags=re.IGNORECASE))
             file_prefix = os.path.basename(os.path.splitext(self._save_path)[0])
-            new_path = os.path.join(file_prefix + '_images', new_path)
+            new_path = os.path.join('{}_images'.format(file_prefix), new_path)
             self._copy_rename_image_files(new_path, image_path)
             self._images.append({'name': self._convert_image_name(name), 'image': new_path})
 
@@ -161,7 +161,7 @@ class PersonPreprocessor(ChunkTextInterface):
             # copy the image files and rename them according to person's name
             file_prefix = os.path.basename(os.path.splitext(self._save_path)[0])
             new_path = os.path.join(os.path.dirname(self._save_path), new_path)
-            os.makedirs(os.path.dirname(self._save_path) + '/' + file_prefix + '_images', exist_ok=True)
+            os.makedirs('{}/{}_images'.format(os.path.dirname(self._save_path), file_prefix), exist_ok=True)
             if not os.path.isfile(os.path.join(new_path)):
                 old_image_path = os.path.join(os.getcwd(), os.path.join(*image_path.split('\\')))
                 shutil.copy(old_image_path, new_path)
@@ -173,10 +173,10 @@ class PersonPreprocessor(ChunkTextInterface):
         names = name.split(' ')
         names.reverse()
         new_name = ''
-        new_name += names[0] + ', '
+        new_name = '{}{}, '.format(new_name, names[0])
         names.pop(0)
         for n in names:
-            new_name += n + ' '
+            new_name = '{}{} '.format(new_name, n)
         new_name = new_name.strip()
         return new_name
 
@@ -188,7 +188,7 @@ class PersonPreprocessor(ChunkTextInterface):
     def _create_person(self, name, entry):
         person = etree.Element('PERSON')
         person.attrib['name'] = name
-        person.attrib['approximated_page'] = str(self._page_number - 1) + '-' + str(self._page_number + 1)
+        person.attrib['approximated_page'] = '{}-{}'.format(self._page_number - 1, self._page_number + 1)
         person.text = entry
         self._map_name_to_person[name] = person
         return person
