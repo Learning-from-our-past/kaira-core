@@ -122,8 +122,9 @@ class PersonPreprocessor(ChunkTextInterface):
         counter = 1
         while not found_prev:
             try:
-                if prev_element is not None and prev_element.text is not None and \
-                                re.search('[A-ZÄ-Ö][a-zä-ö]{1,}', prev_element.text) is not None and len(prev_element.text) < 30:
+                if (prev_element is not None and prev_element.text is not None
+                        and re.search('[A-ZÄ-Ö][a-zä-ö]{1,}', prev_element.text) is not None
+                        and len(prev_element.text) < 30):
                     found_prev = True
                 else:
                     prev_element = prev_element.getprevious()
@@ -141,8 +142,9 @@ class PersonPreprocessor(ChunkTextInterface):
         counter = 1
         while not found_next:
             try:
-                if next_element is not None and next_element.text is not None and \
-                                re.search('[A-ZÄ-Ö][a-zä-ö]{1,}', next_element.text) is not None and len(next_element.text) < 30:
+                if (next_element is not None and next_element.text is not None
+                        and re.search('[A-ZÄ-Ö][a-zä-ö]{1,}', next_element.text) is not None
+                        and len(next_element.text) < 30):
                     found_next = True
                 else:
                     next_element = next_element.getnext()
