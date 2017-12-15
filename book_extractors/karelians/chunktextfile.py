@@ -100,60 +100,60 @@ class PersonPreprocessor(ChunkTextInterface):
         name = ''
 
         # Find caption text
-        foundPrev = self._find_prev_caption_text(element)
+        found_prev = self._find_prev_caption_text(element)
 
-        if foundPrev['found']:
-            name = foundPrev['prev'].text
+        if found_prev['found']:
+            name = found_prev['prev'].text
         else:
-            foundNext = self._find_next_caption_text(element)
-            if foundNext['found']:
-                name = foundNext['next'].text
+            found_next = self._find_next_caption_text(element)
+            if found_next['found']:
+                name = found_next['next'].text
 
         if name != '':
             new_path = re.sub(r'(?:[^a-zä-ö0-9]|(?<=[\'"])s)', r'', name, flags=re.IGNORECASE) + '.jpg'
             file_prefix = os.path.basename(os.path.splitext(self._save_path)[0])
             new_path = os.path.join(file_prefix + '_images', new_path)
-            self._copy_rename_imagefiles(new_path, image_path)
+            self._copy_rename_image_files(new_path, image_path)
             self._images.append({'name': self._convert_image_name(name), 'image': new_path})
 
     def _find_prev_caption_text(self, element):
-        prev = element.getprevious()
-        foundPrev = False
+        prev_element = element.getprevious()
+        found_prev = False
         counter = 1
-        while not foundPrev:
+        while not found_prev:
             try:
-                if prev is not None and prev.text is not None and \
-                                re.search('[A-ZÄ-Ö][a-zä-ö]{1,}', prev.text) is not None and len(prev.text) < 30:
-                    foundPrev = True
+                if prev_element is not None and prev_element.text is not None and \
+                                re.search('[A-ZÄ-Ö][a-zä-ö]{1,}', prev_element.text) is not None and len(prev_element.text) < 30:
+                    found_prev = True
                 else:
-                    prev = prev.getprevious()
+                    prev_element = prev_element.getprevious()
                     counter -= 1
 
                 if counter == 0:
                     break
             except AttributeError:
                 break
-        return {'prev': prev, 'found': foundPrev}
+        return {'prev': prev_element, 'found': found_prev}
 
     def _find_next_caption_text(self, element):
-        foundNext = False
-        next = element.getnext()
+        found_next = False
+        next_element = element.getnext()
         counter = 1
-        while not foundNext:
+        while not found_next:
             try:
-                if next is not None and next.text is not None and \
-                                re.search('[A-ZÄ-Ö][a-zä-ö]{1,}', next.text) is not None and len(next.text) < 30:
-                    foundNext = True
+                if next_element is not None and next_element.text is not None and \
+                                re.search('[A-ZÄ-Ö][a-zä-ö]{1,}', next_element.text) is not None and len(next_element.text) < 30:
+                    found_next = True
                 else:
-                    next = next.getnext()
+                    next_element = next_element.getnext()
                     counter -= 1
                 if counter == 0:
                     break
             except AttributeError:
                 break
-        return {'next': next, 'found': foundNext}
+        return {'next': next_element, 'found': found_next}
 
-    def _copy_rename_imagefiles(self, new_path, image_path):
+    def _copy_rename_image_files(self, new_path, image_path):
         # TODO: It would be nice to provide error message to user rather than fail silently
         try:
             # copy the image files and rename them according to person's name
@@ -170,13 +170,13 @@ class PersonPreprocessor(ChunkTextInterface):
         name = name.upper()
         names = name.split(' ')
         names.reverse()
-        newname = ''
-        newname += names[0] + ', '
+        new_name = ''
+        new_name += names[0] + ', '
         names.pop(0)
         for n in names:
-            newname += n + ' '
-        newname = newname.strip()
-        return newname
+            new_name += n + ' '
+        new_name = new_name.strip()
+        return new_name
 
     def _join_images_to_persons(self):
         for image in self._images:
