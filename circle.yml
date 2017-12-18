@@ -2,6 +2,10 @@ machine:
   python:
     version: 3.5.3
 
+dependencies:
+  pre:
+    - sudo apt-get install libfuzzy-dev ssdeep
+
 test:
   override:
     - python -m pytest
