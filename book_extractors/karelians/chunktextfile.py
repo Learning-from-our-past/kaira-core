@@ -6,6 +6,7 @@ import os, nturl2path
 import shutil
 from interface.chunktextinterface import ChunkTextInterface
 from book_extractors.karelians.main import BOOK_SERIES_ID
+from book_extractors.karelians.duplicate_deleter import DuplicateDeleter
 
 
 def read_html_file(path):
@@ -44,7 +45,7 @@ class PersonPreprocessor(ChunkTextInterface):
         text = re.sub(r'(<sup>)|</sup>', '', text)  # remove sup tags
         parsed = html.document_fromstring(text)
         persons = self._process(parsed)
-        return etree.tostring(persons, pretty_print=True, encoding='unicode')
+        return persons
 
     def _process(self, tree):
         self._persons_document = etree.Element('DATA')
@@ -198,10 +199,20 @@ class PersonPreprocessor(ChunkTextInterface):
             self._persons_document.append(person)
 
 
-def convert_html_file_to_xml(input_file, output_file, book_number):
-    text = input_file.read()
-    p = PersonPreprocessor()
-    persons = p.chunk_text(text, output_file.name, book_number)
-    output_file.write(persons)
-    output_file.close()
-    print('File converted to xml and saved!')
+def convert_html_file_to_xml(input_files, output_files, book_numbers, filter_duplicates=False):
+    books = []
+    
+    for input_file, output_file, book_number in zip(input_files, output_files, book_numbers):
+        text = input_file.read()
+        p = PersonPreprocessor()
+        persons = p.chunk_text(text, output_file.name, book_number)
+        books.append(persons)
+    
+    if filter_duplicates:
+        deleter = DuplicateDeleter()
+        books = deleter.delete_duplicate_persons(books)
+    
+    for output_file, book in zip(output_files, books):
+        output_file.write(etree.tostring(book, pretty_print=True, encoding='unicode'))
+        output_file.close()
+        print('File converted to xml and saved!')
