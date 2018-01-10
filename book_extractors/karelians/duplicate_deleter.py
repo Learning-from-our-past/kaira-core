@@ -21,7 +21,8 @@ class DuplicateDeleter:
     def __init__(self, duplicate_match_threshold=80, potential_match_threshold=30,
                  minimum_str_length_for_potential_matches=400,
                  potential_bday_match_name_distance_threshold=4,
-                 potential_typo_in_name_match_distance_threshold=1):
+                 potential_typo_in_name_match_distance_threshold=1,
+                 update_callback=None):
         """
         Configure the DuplicateDeleter using the arguments of this constructor.
 
@@ -50,6 +51,7 @@ class DuplicateDeleter:
         self._potential_typo_in_name_match_distance_threshold = potential_typo_in_name_match_distance_threshold
         self._unique_entries = {}
         self._potential_matches = []
+        self._update_callback_function = update_callback
 
         birthday_regex_pattern = r'(?:synt)\.?,?(?:\s+)?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|\s+|s)\s?(?P<month>\d{1,2})(?:\.|,|:|\s+|s)?(?:\s+)?-?(?P<year>\d{2,4}))|\s?-(?P<yearOnly>\d{2,4})(?!\.|,|\s|\d)(?=\D\D\D\D\D))'
         self._BIRTHDAY_REGEX = regex.compile(birthday_regex_pattern, regex.UNICODE | regex.IGNORECASE)
@@ -75,15 +77,11 @@ class DuplicateDeleter:
             print('Filtering duplicates in file number {}.'.format(book_id+1))
             unique_entry_id = 0
             files_without_duplicates.append(book)
+            book_length = len(book)
 
             for entry_id, child in enumerate(files_without_duplicates[book_id]):
-                if entry_id % 1000 == 0:
-                    elapsed = datetime.datetime.now() - start_time
-                    print('Progress: {}/{}\nElapsed time: {} seconds'.format(
-                        entry_id,
-                        len(files_without_duplicates[book_id]),
-                        elapsed.seconds)
-                    )
+                if self._update_callback_function is not None:
+                    self._update_callback_function(entry_id, book_length)
 
                 current_entry = self._get_current_entry(child, unique_entry_id, book_id)
                 unique_entry_match = self._try_to_find_matching_entry(current_entry)

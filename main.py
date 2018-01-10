@@ -3,6 +3,7 @@ import os
 import subprocess
 import argparse
 import re
+import shutil
 from lxml import etree
 from book_extractors.karelians.main import KarelianBooksExtractor, get_karelian_data_entry, BOOK_SERIES_ID as KARELIAN_BOOK_ID
 import book_extractors.karelians.chunktextfile as karelian_converter
@@ -19,6 +20,8 @@ supported_bookseries = {
 }
 
 help_str = 'Bookseries where data is from: {}'.format(', '.join(list(supported_bookseries.keys())))
+progress_str = 'Progress: {}% - {}/{}'
+progress_bar_str = '{} [{}{}] \r'
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')
 parser.add_argument('-i', nargs='?', type=argparse.FileType('r', encoding='utf8'), help='Input file to extract data from. Should be XML.', default=None)
@@ -29,8 +32,13 @@ parser.add_argument('-n', nargs='*', type=int, help='Number of book in series', 
 parser.add_argument('--filter', action='store_true', help='Whether to delete duplicates.')
 
 def callback(current, max):
-    percentage = round((current / max)*100)
-    sys.stdout.write("Progress: %d%% - %d/%d   \r" % (percentage, current, max))
+    percentage = round((current / max) * 100)
+    progress_bar = progress_str.format(percentage, current, max)
+    console_width = int(shutil.get_terminal_size()[0] / 2)
+    bar_width = console_width - len(progress_bar)
+    bar_fill = round(percentage * bar_width / 100)
+    progress_bar = progress_bar_str.format(progress_bar, '#' * bar_fill, '-' * (bar_width - bar_fill))
+    sys.stdout.write(progress_bar)
     sys.stdout.flush()
 
 def xml_to_extractor_format(xml_document):
@@ -108,7 +116,8 @@ def chunk(args):
         input_files,
         output_files,
         book_numbers,
-        filter_duplicates=args['filter']
+        filter_duplicates=args['filter'],
+        callback=callback
     )
 
 
