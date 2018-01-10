@@ -199,7 +199,7 @@ class PersonPreprocessor(ChunkTextInterface):
             self._persons_document.append(person)
 
 
-def convert_html_file_to_xml(input_files, output_files, book_numbers, filter_duplicates=False):
+def convert_html_file_to_xml(input_files, output_files, book_numbers, filter_duplicates=False, callback=None):
     books = []
     
     for input_file, output_file, book_number in zip(input_files, output_files, book_numbers):
@@ -209,9 +209,9 @@ def convert_html_file_to_xml(input_files, output_files, book_numbers, filter_dup
         books.append(persons)
     
     if filter_duplicates:
-        deleter = DuplicateDeleter()
+        deleter = DuplicateDeleter(update_callback=callback)
         books = deleter.delete_duplicate_persons(books)
-    
+
     for output_file, book in zip(output_files, books):
         output_file.write(etree.tostring(book, pretty_print=True, encoding='unicode'))
         output_file.close()
