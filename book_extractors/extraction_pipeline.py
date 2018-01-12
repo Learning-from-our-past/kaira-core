@@ -3,9 +3,21 @@ import re
 
 class ExtractionPipeline:
 
-    def __init__(self, extractor_configurations):
-        self._extractor_configurations = extractor_configurations
-        self._extractors = self._build_extraction_pipeline()
+    def __init__(self, extractors, pass_extractors_directly=False):
+        """
+        Build the pipeline from either extractor configuration objects or from already
+        instantiated extractors. This is a temporary solution to support both YAML-based pipeline
+        configuration and old code-based configuration.
+        TODO: Remove old extractor configuration method and _build_extraction_pipeline method.
+        :param extractors:
+        :param pass_extractors_directly:
+        """
+
+        if pass_extractors_directly:
+            self._extractors = extractors
+        else:
+            self._extractor_configurations = extractors
+            self._extractors = self._build_extraction_pipeline()
 
     def _build_extraction_pipeline(self):
         extractors = []
