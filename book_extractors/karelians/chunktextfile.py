@@ -22,6 +22,13 @@ class PersonPreprocessor(ChunkTextInterface):
         # words (names) after that, each at least one character long.
         self._ENTRY_NAME_REGEX = re.compile(r'(?:[A-ZÄÖ-]+\s?){1,2}[\s-]?[.,][\s-]?(?:\w+[\s-]?){1,3}',
                                             re.UNICODE)
+        
+        # This regular expression is used to detect when a person's entry in the .html file begins from
+        # within another person's entry. This regex is quite a bit more refined than the original one and
+        # does not pick up non-names, like military unit/regiment abbreviations. It also has a better rate
+        # of getting both the first and surnames of a person, instead of just one of them.
+        self._MID_ENTRY_NAME_REGEX = re.compile(r'(?:[A-ZÄ-Ö0-9!^%#]{4,}\s?){1,3}\s?[.,]\s?(?:[A-ZÄ-Ö0-9!^%#]{4,}\s?){1,3}',
+                                                re.UNICODE)
 
     def chunk_text(self, text, destination_path, book_number):
         self.save_path = destination_path
@@ -63,14 +70,15 @@ class PersonPreprocessor(ChunkTextInterface):
     def _process_element(self, e):
         if len(e.text) > 40:
             # pyritään huomaamaan ihmiset joiden entry alkaa toisen sisältä
-            uppercase = re.search('[A-ZÄ-Ö, ]{8,}', e.text)
+            mid_entry_person = self._MID_ENTRY_NAME_REGEX.search(e.text)
 
             # TODO: Karkea. Pitäisi muuttaa rekursiiviseksi, jotta jos samassa entryssä on > 2
             # TODO: ihmistä, heidät eroteltaisiin myös.
-            if uppercase is not None:
-                self.current_person.text += e.text[0:uppercase.start()]
+            if mid_entry_person is not None:
+                self.current_person.text += e.text[0:mid_entry_person.start()]
                 self._add_person(self.current_person)
-                self.current_person = self._create_person(name=uppercase.group(0).strip(' '), entry=e.text[uppercase.end():])
+                new_person_name = mid_entry_person.group(0).strip(' ').strip('\xa0')
+                self.current_person = self._create_person(name=new_person_name, entry=e.text[mid_entry_person.end():])
             else:
                 self.current_person.text += e.text
 
