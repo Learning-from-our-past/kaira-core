@@ -7,14 +7,14 @@ pipeline:
     }
   ]
   - !!python/object/apply:book_extractors.karelians.extraction.extractors.image_extractor.ImageExtractor []
-  - !!python/object/apply:book_extractors.karelians.extraction.extractors.original_family_extractor.FormerSurnameExtractor [
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.original_family_extractor.FormerSurnameExtractor &FormerSurname [
     null,
     {
       path: "primaryPerson"
     }
   ]
   - !!python/object/apply:book_extractors.karelians.extraction.extractors.profession_extractor.ProfessionExtractor [
-    "formerSurname",
+    *FormerSurname,
     {
       path: "primaryPerson"
     }

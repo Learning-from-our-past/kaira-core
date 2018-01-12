@@ -14,8 +14,8 @@ class FarmDetailsExtractor(BaseExtractor):
     """
     extraction_key = 'farmDetails'
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(FarmDetailsExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+        super(FarmDetailsExtractor, self).__init__(cursor_location_depend_on, options)
 
         boolean_flag_patterns = {
             KEYS['animalHusbandry']: r'karjataloutta|karjanhoitoa?\b|karjatalous\b',

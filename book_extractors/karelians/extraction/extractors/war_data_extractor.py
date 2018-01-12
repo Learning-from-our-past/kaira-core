@@ -8,8 +8,8 @@ from book_extractors.karelians.extraction.extractors.lotta_activity_flag_extract
 class WarDataExtractor(BaseExtractor):
     extraction_key = 'warData'
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(WarDataExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+        super(WarDataExtractor, self).__init__(cursor_location_depend_on, options)
 
         self._sub_extraction_pipeline = ExtractionPipeline([
             configure_extractor(InjuredInWarFlagExtractor,
