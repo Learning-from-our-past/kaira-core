@@ -7,8 +7,8 @@ from book_extractors.karelians.extraction.extractors.name_extractor import NameE
 class MarttaActivityFlagExtractor(BaseExtractor):
     extraction_key = 'marttaActivityFlag'
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(MarttaActivityFlagExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
+        super(MarttaActivityFlagExtractor, self).__init__(cursor_location_depend_on, options)
         self._set_dependencies([NameExtractor], dependencies_contexts)
         self._in_spouse_extractor = options['in_spouse_extractor']
 
