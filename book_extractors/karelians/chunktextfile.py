@@ -65,6 +65,7 @@ class PersonPreprocessor(ChunkTextInterface):
                     elif self.current_person is not None:
                         self._process_element(e)
 
+        self._add_person(self.current_person)
         return self.persons_document
 
     def _process_element(self, e):
@@ -152,7 +153,8 @@ class PersonPreprocessor(ChunkTextInterface):
             new_path = os.path.join(os.path.dirname(self.save_path), new_path)
             os.makedirs(os.path.dirname(self.save_path) + '/' + file_prefix + '_images', exist_ok=True)
             if not os.path.isfile(os.path.join(new_path)):
-                shutil.copy(os.path.join(os.getcwd(), image_path), new_path)
+                old_image_path = os.path.join(os.getcwd(), os.path.join(*image_path.split('\\')))
+                shutil.copy(old_image_path, new_path)
         except Exception:
             pass
 
