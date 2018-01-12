@@ -3,19 +3,65 @@ pipeline:
   - !!python/object/apply:book_extractors.karelians.extraction.extractors.name_extractor.NameExtractor [
     null,
     {
-      path: "primaryPerson"
+      output_path: "primaryPerson"
     }
   ]
   - !!python/object/apply:book_extractors.karelians.extraction.extractors.image_extractor.ImageExtractor []
   - !!python/object/apply:book_extractors.karelians.extraction.extractors.original_family_extractor.FormerSurnameExtractor &FormerSurname [
     null,
     {
-      path: "primaryPerson"
+      output_path: "primaryPerson"
     }
   ]
   - !!python/object/apply:book_extractors.karelians.extraction.extractors.profession_extractor.ProfessionExtractor [
     *FormerSurname,
     {
-      path: "primaryPerson"
+      output_path: "primaryPerson"
+    }
+  ]
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.birthday_extractor.BirthdayExtractor &Birthday [
+    *FormerSurname,
+    {
+      output_path: "primaryPerson"
+    }
+  ]
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.location_extractor.BirthdayLocationExtractor [
+    *Birthday,
+    {
+      output_path: "primaryPerson"
+    }
+  ]
+  - !!python/object/apply:book_extractors.common.extractors.previous_marriages_flag_extractor.PreviousMarriagesFlagExtractor [
+    null,
+    {
+      output_path: "primaryPerson"
+    }
+  ]
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.war_data_extractor.WarDataExtractor [
+    null,
+    {
+      output_path: "primaryPerson",
+      in_spouse_extractor: false
+    }
+  ]
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.migration_route_extractors.MigrationRouteExtractor [
+    null,
+    {
+      output_path: "primaryPerson",
+    }
+  ]
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.omakotitalo_extractor.OmakotitaloExtractor [
+    null,
+    {
+      output_path: "primaryPerson",
+    }
+  ]
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.spouse_extractor.SpouseExtractor []
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.child_extractor.ChildExtractor []
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.farm_extractor.FarmDetailsExtractor []
+  - !!python/object/apply:book_extractors.common.extractors.kaira_id_extractor.KairaIdExtractor [
+    null,
+    {
+      output_path: "primaryPerson",
     }
   ]

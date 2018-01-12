@@ -13,7 +13,7 @@ class CommonChildExtractor(BaseExtractor):
     geocoder = GeoCoder()
     extraction_key = 'children'
 
-    def __init__(self, cursor_location_depend_on, options):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(CommonChildExtractor, self).__init__(cursor_location_depend_on, options)
         self._kaira_id_provider = KairaIdProvider()
 

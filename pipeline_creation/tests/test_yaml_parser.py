@@ -5,7 +5,7 @@ from book_extractors.karelians.extraction.extractors.name_extractor import NameE
 def should_load_yaml():
     result = parse_config('pipeline_creation/tests/test_config.yaml')
     assert result['book_series'] == 'Siirtokarjalaisten tie'
-    assert len(result['pipeline']) == 4
+    assert len(result['pipeline']) == 14
     assert type(result['pipeline'][0]) is NameExtractor
 
 
@@ -24,5 +24,5 @@ def should_build_and_run_pipeline():
 
     results = pipeline.process(test_data)
 
-    assert results[0]['name']['surname'] == 'TESTINEN'
-    assert results[0]['profession']['professionName'] == 'maanviljelijä'
+    assert results[0]['primaryPerson']['name']['surname'] == 'TESTINEN'
+    assert results[0]['primaryPerson']['profession']['professionName'] == 'maanviljelijä'

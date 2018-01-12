@@ -19,7 +19,7 @@ from shared import regexUtils
 class SpouseExtractor(BaseExtractor):
     extraction_key = 'spouse'
 
-    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(SpouseExtractor, self).__init__(cursor_location_depend_on, options)
 
         self._sub_extraction_pipeline = ExtractionPipeline([
