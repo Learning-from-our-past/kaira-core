@@ -205,8 +205,8 @@ class TestExtractionPipeline:
 class MockExtractor(BaseExtractor):
     extraction_key = 'mock'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
-        super(MockExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
+        super(MockExtractor, self).__init__(cursor_location_depend_on, options)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         return self._add_to_extraction_results('mock result', extraction_results, extraction_metadata)
@@ -215,7 +215,7 @@ class MockExtractor(BaseExtractor):
 class PersonStateExtractor(BaseExtractor):
     extraction_key = 'personState'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(PersonStateExtractor, self).__init__()
 
     def _extract(self, entry, extraction_results, extraction_metadata):
@@ -225,7 +225,7 @@ class PersonStateExtractor(BaseExtractor):
 class PreferredDrinkExtractor(BaseExtractor):
     extraction_key = 'preferredDrink'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(PreferredDrinkExtractor, self).__init__()
 
         self._set_dependencies([PersonStateExtractor], dependencies_contexts)
@@ -244,7 +244,7 @@ class PreferredDrinkExtractor(BaseExtractor):
 class GroceryListExtractor(BaseExtractor):
     extraction_key = 'groceryList'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(GroceryListExtractor, self).__init__()
 
         self._test_sub_pipeline = ExtractionPipeline([
@@ -263,7 +263,7 @@ class GroceryListExtractor(BaseExtractor):
 class BuyCoffeeExtractor(BaseExtractor):
     extraction_key = 'buyCoffee'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(BuyCoffeeExtractor, self).__init__()
 
         self._set_dependencies([PreferredDrinkExtractor], dependencies_contexts)
@@ -276,7 +276,7 @@ class BuyCoffeeExtractor(BaseExtractor):
 class PreferredCoffeeDrinkExtractor(PreferredDrinkExtractor):
     extraction_key = 'preferredCoffeeDrink'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(PreferredCoffeeDrinkExtractor, self).__init__()
         self._set_dependencies([HotDayFlagExtractor], dependencies_contexts=dependencies_contexts)
 
@@ -292,7 +292,7 @@ class HotDayFlagExtractor:
 class ExtractorWithMultipleDependencies(BaseExtractor):
     extraction_key = 'superMultiDeps'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(ExtractorWithMultipleDependencies, self).__init__()
 
         self._set_dependencies([PreferredDrinkExtractor, HotDayFlagExtractor], dependencies_contexts)
@@ -306,7 +306,7 @@ class ExtractorWithMultipleDependencies(BaseExtractor):
 class SubExtractorWithMultipleDependencies(ExtractorWithMultipleDependencies):
     extraction_key = 'subMultiDeps'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(SubExtractorWithMultipleDependencies, self).__init__()
 
         self._set_dependencies([PreferredCoffeeDrinkExtractor, PersonStateExtractor], dependencies_contexts)
@@ -320,7 +320,7 @@ class SubExtractorWithMultipleDependencies(ExtractorWithMultipleDependencies):
 class ExtractorWithSameDepMultipleTimes(BaseExtractor):
     extraction_key = 'sameMultipleTimes'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(ExtractorWithSameDepMultipleTimes, self).__init__()
 
         self._set_dependencies([HotDayFlagExtractor, HotDayFlagExtractor], dependencies_contexts)
@@ -332,7 +332,7 @@ class ExtractorWithSameDepMultipleTimes(BaseExtractor):
 class ExtractorWithParentDataBehindOutputPath(BaseExtractor):
     extraction_key = 'outputPathTest'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(ExtractorWithParentDataBehindOutputPath, self).__init__()
 
         self._set_dependencies([MockNameExtractor], dependencies_contexts)
@@ -344,7 +344,7 @@ class ExtractorWithParentDataBehindOutputPath(BaseExtractor):
 class ExtractorWithParentDataBehindOutputPathAndMultipleDeps(BaseExtractor):
     extraction_key = 'outputPathTest'
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(ExtractorWithParentDataBehindOutputPathAndMultipleDeps, self).__init__()
 
         self._set_dependencies([MockNameExtractor, MockExtractor], dependencies_contexts)

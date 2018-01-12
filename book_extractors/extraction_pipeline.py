@@ -24,7 +24,7 @@ class ExtractionPipeline:
 
         for config in self._extractor_configurations:
             extractor = config['extractor_class'](
-                key_of_cursor_location_dependent=config['depends_on_match_position_of_extractor'],
+                cursor_location_depend_on=config['cursor_location_depend_on'],
                 options=config['extractor_options'],
                 dependencies_contexts=config['dependencies_contexts']
             )
@@ -66,7 +66,7 @@ def configure_extractor(extractor_class, dependencies_contexts=None, extractor_o
 
     depends_on = None
     if depends_on_match_position_of_extractor is not None:
-        depends_on = depends_on_match_position_of_extractor.extraction_key
+        depends_on = depends_on_match_position_of_extractor
 
     if extractor_options is not None:
         extractor_options['output_path'] = path
@@ -75,7 +75,7 @@ def configure_extractor(extractor_class, dependencies_contexts=None, extractor_o
 
     config = {
         'extractor_class': extractor_class,
-        'depends_on_match_position_of_extractor': depends_on,
+        'cursor_location_depend_on': depends_on,
         'extractor_options': extractor_options,
         'dependencies_contexts': dependencies_contexts
     }

@@ -14,8 +14,8 @@ from shared import text_utils
 class CommonBirthdayExtractor(BaseExtractor):
     extraction_key = KEYS['birthData']
 
-    def __init__(self, key_of_cursor_location_dependent, options):
-        super(CommonBirthdayExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depend_on, options):
+        super(CommonBirthdayExtractor, self).__init__(cursor_location_depend_on, options)
         self.PATTERN = options['PATTERN']
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = True

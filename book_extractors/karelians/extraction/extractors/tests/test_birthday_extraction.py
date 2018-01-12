@@ -6,7 +6,7 @@ from book_extractors.karelians.extraction.extractors.birthday_extractor import B
 class TestBirthDayLocation:
     @pytest.yield_fixture(autouse=True)
     def location_extractor(self):
-        return BirthdayLocationExtractor(BirthdayExtractor.extraction_key, None)
+        return BirthdayLocationExtractor(BirthdayExtractor, None)
 
     def should_extract_birth_location_and_fill_in_region_and_coordinates_from_geo_db(self, location_extractor):
         # Simulate the stopping location of the previous extractor which gives this extractor the 'anchor point' to

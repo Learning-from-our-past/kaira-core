@@ -9,8 +9,8 @@ from shared import text_utils
 class FarmExtractor(BaseExtractor):
     extraction_key = KEYS['farmDetails']
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(FarmExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+        super(FarmExtractor, self).__init__(cursor_location_depend_on, options)
         self.ALL_AREA_PATTERN = r"(?:(?:kok\.pinta-ala){s<=1,i<=2}|(?:kokonaispinta-ala){s<=1,i<=2}).{0,20}?(?P<area1>\d\d?\d?,?\d?\d?)\sha"
         self.FOREST_AREA_PATTERN = r"(?:metsää{s<=1}\s?(?P<area1>\d\d?\d?,?\d?\d?))|(?:(?P<area2>\d\d?\d?,?\d?\d?)\s?ha\s?metsää{s<=1})"
         self.FIELD_AREA_PATTERN = r"(?:(?:(?:salaojitettua\s){s<=1,i<=1})?peltoa{s<=1}\s?(?P<area1>\d\d?\d?,?\d?\d?))|(?:(?P<area2>\d\d?\d?,?\d?\d?)\s?ha\s?(?:salaojitettua\s{s<=1,i<=1})?peltoa{s<=1})"

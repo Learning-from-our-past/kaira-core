@@ -8,8 +8,8 @@ from shared import text_utils
 class DateExtractor(BaseExtractor):
     extraction_key = 'date'
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(DateExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+        super(DateExtractor, self).__init__(cursor_location_depend_on, options)
         self.PATTERN = options['PATTERN']
         self.OPTIONS = options['OPTIONS']
         self.MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik": 4,
