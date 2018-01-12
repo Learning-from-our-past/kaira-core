@@ -14,7 +14,7 @@ class FormerSurnameExtractor(BaseExtractor):
     SEARCH_SPACE = 40
     extraction_key = 'formerSurname'
     
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
+    def __init__(self, key_of_cursor_location_dependent, options=None, dependencies_contexts=None):
         super(FormerSurnameExtractor, self).__init__(key_of_cursor_location_dependent, options)
         self.FAMILY_PATTERN = r"(((?:o|0)\.? ?s\.?,? )(?P<family>([a-zä-ö-]*)(, ent\.?,? \w*)?)(?:,|\.))|(?P<family>ent\.?,? \w*)"
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)

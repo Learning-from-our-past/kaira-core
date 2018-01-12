@@ -1,0 +1,21 @@
+book_series: Siirtokarjalaisten tie
+pipeline:
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.name_extractor.NameExtractor [
+    null,
+    {
+      path: "primaryPerson"
+    }
+  ]
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.image_extractor.ImageExtractor []
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.original_family_extractor.FormerSurnameExtractor [
+    null,
+    {
+      path: "primaryPerson"
+    }
+  ]
+  - !!python/object/apply:book_extractors.karelians.extraction.extractors.profession_extractor.ProfessionExtractor [
+    "formerSurname",
+    {
+      path: "primaryPerson"
+    }
+  ]
