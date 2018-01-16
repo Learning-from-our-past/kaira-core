@@ -94,10 +94,10 @@ class PersonPreprocessor(ChunkTextInterface):
             return True
 
 
-def convert_html_file_to_xml(input_file, output_file, book_number):
-    text = input_file.read()
+def convert_html_file_to_xml(input_file, output_file, book_number, filter_duplicates=False, callback=None):
+    text = input_file[0].read()
     p = PersonPreprocessor()
-    persons = p.chunk_text(text, output_file.name, book_number)
-    output_file.write(persons)
-    output_file.close()
+    persons = p.chunk_text(text, output_file[0].name, book_number[0])
+    output_file[0].write(persons)
+    output_file[0].close()
     print('File converted to xml and saved!')

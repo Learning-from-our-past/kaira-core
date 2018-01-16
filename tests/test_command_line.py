@@ -114,7 +114,7 @@ class TestCommandLineSmoke:
 
             assert book_series == 'siirtokarjalaiset'
             assert book_number == '1'
-            assert len(xml_document) == 2  # FIXME: There is a bug here. Does not produce last person. This should be 3.
+            assert len(xml_document) == 3
 
         def should_convert_great_farmers_html_to_xml(self):
             file_path = 'temp/xml_export_tests/results.xml'
