@@ -2,6 +2,7 @@ import pytest
 from pipeline_creation.yaml_parser import parse_config, build_pipeline_from_yaml
 from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
 
+
 def should_load_yaml():
     result = parse_config('pipeline_creation/tests/test_config.yaml')
     assert result['book_series'] == 'Siirtokarjalaisten tie'
