@@ -5,6 +5,8 @@ from book_extractors.configuration_exceptions import DependencyConfigurationExce
 from book_extractors.configuration_exceptions import ContextKeywordConfigurationException
 from book_extractors.configuration_exceptions import ParentKeywordConfigurationException
 from book_extractors.extraction_exceptions import ParentKeywordTraversingException
+from book_extractors.extraction_pipeline import ExtractionPipeline
+
 
 class BaseExtractor:
     __metaclass__ = ABCMeta
@@ -23,6 +25,7 @@ class BaseExtractor:
         self._dependencies_graph = []
         self._required_dependencies = []
         self._deps = {}
+        self._sub_extraction_pipeline = None
 
         if options is not None and 'output_path' in options:
             self.output_path = options['output_path']
@@ -30,6 +33,14 @@ class BaseExtractor:
             self.output_path = None
 
         self.metadata_collector = MetadataCollector()
+
+    def set_subpipeline(self, extractors):
+        """
+        Defines the sub pipeline for the extractor. Called during YAML-parsing process.
+        :param extractors:
+        :return:
+        """
+        self._sub_extraction_pipeline = ExtractionPipeline(extractors, pass_extractors_directly=True)
 
     def _build_dependencies_graph(self, dependencies_contexts):
         if dependencies_contexts:

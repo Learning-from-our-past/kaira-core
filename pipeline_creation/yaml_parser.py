@@ -15,8 +15,12 @@ def extractor_constructor(loader, node):
 
     cursor_location_dependence = extractor_params['cursor_location_depend_on'] if 'cursor_location_depend_on' in extractor_params else None
     options = extractor_params['options'] if 'options' in extractor_params else None
+    extractor = extractor_class(cursor_location_dependence, options)
 
-    return extractor_class(cursor_location_dependence, options)
+    if 'pipeline' in extractor_params:
+        extractor.set_subpipeline(extractor_params['pipeline'])
+
+    return extractor
 
 
 yaml.add_constructor('!Extractor', extractor_constructor)
