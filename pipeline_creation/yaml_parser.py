@@ -5,7 +5,8 @@ from book_extractors.extraction_pipeline import ExtractionPipeline
 
 class YamlParser:
 
-    def __init__(self):
+    def __init__(self, extraction_results_map):
+        self._extraction_results_map = extraction_results_map
         yaml.add_constructor('!Extractor', self._extractor_constructor)
 
     def _extractor_constructor(self, loader, node):
@@ -22,6 +23,9 @@ class YamlParser:
                                                                                       extractor_params else None
         options = extractor_params['options'] if 'options' in extractor_params else None
         extractor = extractor_class(cursor_location_dependence, options)
+
+        # TODO: Pass result map via constructor
+        extractor.set_extraction_results_map(self._extraction_results_map)
 
         if 'pipeline' in extractor_params:
             extractor.set_subpipeline(extractor_params['pipeline'])

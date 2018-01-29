@@ -26,6 +26,7 @@ class BaseExtractor:
         self._required_dependencies = []
         self._deps = {}
         self._sub_extraction_pipeline = None
+        self._extraction_results_map = None
 
         if options is not None and 'output_path' in options:
             self.output_path = options['output_path']
@@ -41,6 +42,17 @@ class BaseExtractor:
         :return:
         """
         self._sub_extraction_pipeline = ExtractionPipeline(extractors, pass_extractors_directly=True)
+
+    def set_extraction_results_map(self, results_map):
+        """
+        TODO: This is a temporary method to pass the result map to extractors without modifying
+        constructor signature yet. After everything works ok with YAML pipeline building and the new
+        dependency resolving system is in place, results map can be passed to extractor via constructor
+        and signature can be changed.
+        :param results_map:
+        :return:
+        """
+        self._extraction_results_map = results_map
 
     def _build_dependencies_graph(self, dependencies_contexts):
         if dependencies_contexts:
@@ -169,6 +181,9 @@ class BaseExtractor:
         # Add finally the metadata after post process has been run since it might add metadata
         self._get_output_path(extraction_metadata)[self.extraction_key] = self.metadata_collector.get_metadata()
         self.metadata_collector.clear()
+
+        # Store this extractor's results to the map so that it can be used later for dependency resolving
+        self._extraction_results_map.add_results(id(self), extraction_results)
 
         return extraction_results, extraction_metadata
 
