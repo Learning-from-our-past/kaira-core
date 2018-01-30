@@ -10,27 +10,18 @@ from shared.text_utils import remove_hyphens_from_text
 from shared.geo.geocoding import GeoCoder, LocationNotFound
 
 
-class LocationExtractor(BaseExtractor):
+class FindLocation:
     PATTERN = r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
     OPTIONS = re.UNICODE
     matchFinalPosition = 0
     foundLocation = None
 
-    extraction_key = 'location'
-
-    def _extract(self, entry, extraction_results, extraction_metadata):
+    def find_location(self, text):
         """
         Note: Returns match-object for caller instead of string.
-        :param entry:
-        :param start_location:
+        :param text:
         :return:
         """
-        result = self._find_location(entry['text'])
-        return self._add_to_extraction_results({
-            "locationMatch": result[0]
-        }, extraction_results, extraction_metadata, result[1])
-
-    def _find_location(self, text):
         try:
             found_location_match = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
             cursor_location = found_location_match.end()
@@ -44,9 +35,6 @@ class BirthdayLocationExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
         super(BirthdayLocationExtractor, self).__init__(cursor_location_depend_on, options)
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(LocationExtractor)
-        ])
 
         self.DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
         self.REQUIRES_MATCH_POSITION = True
@@ -97,18 +85,33 @@ class BirthdayLocationExtractor(BaseExtractor):
         cursor_location = start_position
 
         try:
-            results, metadata = self._sub_extraction_pipeline.process({'text': text})
-            self._check_if_location_is_valid(text, results['location']['locationMatch'])
-            location = results['location']['locationMatch'].group("location")
+            location_match, match_end = self._find_location_match(text)
+            self._check_if_location_is_valid(text, location_match)
+            location = location_match.group('location')
             location = remove_hyphens_from_text(location)
             location = location.replace('\s', '')
 
-            cursor_location = self.get_last_cursor_location(results, metadata) + start_position - 4
+            # FIXME: Why there is a magic number "4" here...? What is the point of it? See also text preparation function.
+            cursor_location = match_end + start_position - 4
         except LocationException:
             self.metadata_collector.add_error_record('birthLocationNotFound', 2)
             location = ''
 
         return location, cursor_location
+
+    def _find_location_match(self, text):
+        """
+        Note: Returns match-object for caller instead of string.
+        :param text:
+        :return:
+        """
+        pattern = r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
+        try:
+            found_location_match = regexUtils.safe_search(pattern, text, re.UNICODE)
+            cursor_location = found_location_match.end()
+            return found_location_match, cursor_location
+        except regexUtils.RegexNoneMatchException:
+            raise LocationException(text)
 
     def _check_if_location_is_valid(self, text, found_location):
         # check if the string has data on death. If it is before the location, be careful to not
