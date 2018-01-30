@@ -5,7 +5,6 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.extraction_exceptions import *
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared import regexUtils
 from shared import text_utils
 
@@ -25,16 +24,14 @@ class CommonBirthdayExtractor(BaseExtractor):
         else:
             self._remove_spaces_from_text = True
 
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(DateExtractor, extractor_options={'PATTERN': self.PATTERN, 'OPTIONS': self.OPTIONS})
-        ])
+        self._date_finder = DateFinder(self.PATTERN, self.OPTIONS)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
-        result = self._find_date(prepared_text, start_position)
+        found_birth_date, cursor_location = self._find_date(prepared_text, start_position)
 
-        return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
+        return self._add_to_extraction_results(found_birth_date, extraction_results, extraction_metadata, cursor_location)
 
     def _prepare_text_for_extraction(self, text, start_position):
         t = text_utils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
@@ -52,13 +49,11 @@ class CommonBirthdayExtractor(BaseExtractor):
         cursor_location = start_position
 
         try:
-            result, metadata = self._sub_extraction_pipeline.process({'text': text})
-            found_date = result['date']
-            cursor_location = self.get_last_cursor_location(result, metadata) + start_position - 4
+            found_date, cursor_location = self._date_finder.find_date(text, cursor_location)
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?
-            found_date = {"day": None, "month": None, "year": None, "cursorLocation": 0}
-            self.metadata_collector.add_error_record('birthDateNotFound', 2)
+            found_date = {"day": None, "month": None, "year": None}
+            cursor_location = 0
 
         # Map date to birthDate
         birth_date = {KEYS["birthDay"]: text_utils.int_or_none(found_date["day"]),
@@ -68,27 +63,26 @@ class CommonBirthdayExtractor(BaseExtractor):
         return birth_date, cursor_location
 
 
-class DateExtractor(BaseExtractor):
-    extraction_key = 'date'
-
-    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
-        super(DateExtractor, self).__init__(cursor_location_depend_on, options)
-        self.PATTERN = options['PATTERN']
-        self.OPTIONS = options['OPTIONS']
+class DateFinder:
+    """
+    An utility class for date finding purposes. Not an extractor itself though.
+    """
+    def __init__(self, pattern, options):
+        self.PATTERN = pattern
+        self.OPTIONS = options
         self.MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik": 4,
                                           "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
 
-    def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
-        prepared_text = self._prepare_text_for_extraction(entry['text'])
+    def find_date(self, text, start_position):
+        prepared_text = self._prepare_text_for_extraction(text)
 
         try:
-            result = self._find_date(prepared_text, start_position)
+            result, cursor_location = self._find_date(prepared_text, start_position)
         except DateException:
             # non-space pattern match didn't produce results, try with including spaces
-            result = self._find_date(entry['text'], start_position)
+            result, cursor_location = self._find_date(text, start_position)
 
-        return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
+        return result, cursor_location
 
     @staticmethod
     def _prepare_text_for_extraction(text):
