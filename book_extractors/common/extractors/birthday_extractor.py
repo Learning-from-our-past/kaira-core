@@ -39,7 +39,7 @@ class CommonBirthdayExtractor(BaseExtractor):
         if self._remove_spaces_from_text:
             t = text_utils.remove_spaces_from_text(t)
 
-        spouse_found = regexUtils.find_first_position_with_regex_search("puol", t, re.IGNORECASE | re.UNICODE)
+        spouse_found = regexUtils.find_first_position_with_regex_search('puol', t, re.IGNORECASE | re.UNICODE)
         if spouse_found != -1:
             t = t[0:spouse_found]
 
@@ -52,13 +52,13 @@ class CommonBirthdayExtractor(BaseExtractor):
             found_date, cursor_location = self._date_finder.find_date(text, cursor_location)
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?
-            found_date = {"day": None, "month": None, "year": None}
+            found_date = {'day': None, 'month': None, 'year': None}
             cursor_location = 0
 
         # Map date to birthDate
-        birth_date = {KEYS["birthDay"]: text_utils.int_or_none(found_date["day"]),
-                      KEYS["birthMonth"]: text_utils.int_or_none(found_date["month"]),
-                      KEYS["birthYear"]: text_utils.int_or_none(found_date["year"])}
+        birth_date = {KEYS['birthDay']: text_utils.int_or_none(found_date['day']),
+                      KEYS['birthMonth']: text_utils.int_or_none(found_date['month']),
+                      KEYS['birthYear']: text_utils.int_or_none(found_date['year'])}
 
         return birth_date, cursor_location
 
@@ -70,8 +70,9 @@ class DateFinder:
     def __init__(self, pattern, options):
         self.PATTERN = pattern
         self.OPTIONS = options
-        self.MONTH_NAME_NUMBER_MAPPING = {"syks": 9, "marrask": 11, "eiok": 8, "elok": 8, "heinäk": 7, "helmik": 2, "huhtik": 4,
-                                          "jouluk": 12, "kesäk": 6, "lokak": 10, "maalisk": 3, "maallsk": 3, "syysk": 9, "tammik": 1, "toukok": 5}
+        self.MONTH_NAME_NUMBER_MAPPING = {'syks': 9, 'marrask': 11, 'eiok': 8, 'elok': 8, 'heinäk': 7, 'helmik': 2,
+                                          'huhtik': 4,'jouluk': 12, 'kesäk': 6, 'lokak': 10, 'maalisk': 3, 'maallsk': 3,
+                                          'syysk': 9, 'tammik': 1, 'toukok': 5}
 
     def find_date(self, text, start_position):
         prepared_text = self._prepare_text_for_extraction(text)
@@ -106,16 +107,16 @@ class DateFinder:
     @staticmethod
     def _get_month_and_day_from_match(date_match):
         return {
-            'day': text_utils.int_or_none(date_match.group("day")),
-            'month': text_utils.int_or_none(date_match.group("month"))
+            'day': text_utils.int_or_none(date_match.group('day')),
+            'month': text_utils.int_or_none(date_match.group('month'))
         }
 
     def _if_written_month_names_extract_them(self, date_match):
         try:
             # year and month available
-            month_match = date_match.group("monthName")
+            month_match = date_match.group('monthName')
             month = self._map_month_name_to_number(month_match)
-            year = date_match.group("monthYear")    # special capture group.
+            year = date_match.group('monthYear')    # special capture group.
             year = self._transform_year(year)
             return month, year
         except (IndexError, TypeError):
@@ -130,10 +131,10 @@ class DateFinder:
     def _get_year_from_match(self, date_match):
         # get the result from correct capturegroup.
         # If there is full date (12.7.18) it is in 1, if only year it is in 2.
-        if date_match.group("year") is None:
-            year = self._transform_year(date_match.group("yearOnly"))
+        if date_match.group('year') is None:
+            year = self._transform_year(date_match.group('yearOnly'))
         else:
-            year = self._transform_year(date_match.group("year"))
+            year = self._transform_year(date_match.group('year'))
         self._check_is_year_sensible(year)
         return year
 
@@ -141,9 +142,9 @@ class DateFinder:
     def _transform_year(year):
         # fix years to four digit format.
         if int(year) < 70:
-            year = "19" + year
+            year = '19' + year
         elif int(year) < 1800:
-            year = "18" + year
+            year = '18' + year
 
         return text_utils.int_or_none(year)
 
