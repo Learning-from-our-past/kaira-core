@@ -49,7 +49,7 @@ class TestSpouseExtraction:
             'warData': {
                 'injuredInWarFlag': None,
                 'servedDuringWarFlag': None,
-                'lottaActivityFlag': False
+                'lottaActivityFlags': {'lotta': False}
             }
         }
 
