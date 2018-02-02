@@ -1,9 +1,6 @@
 import pytest
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.configuration_exceptions import DependencyConfigurationException, ParentKeywordConfigurationException
-from book_extractors.configuration_exceptions import ContextKeywordConfigurationException
-from book_extractors.extraction_exceptions import ParentKeywordTraversingException
 
 
 class TestBaseExtractor:
@@ -155,6 +152,16 @@ class TestBaseExtractor:
             parent_data = metadata[extractor.extraction_key]['parent_pipeline_data']
 
             assert parent_data == correct_data
+
+
+@pytest.mark.skip()
+class DepResolving:
+
+    def should_resolve_dependencies_based_on_defined_dependencies(self):
+        pass
+
+    def should_not_overwrite_earlier_deps_with_same_extraction_key(self):
+        pass
 
 
 class MockExtractor(BaseExtractor):

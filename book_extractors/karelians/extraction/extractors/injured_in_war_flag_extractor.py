@@ -9,7 +9,6 @@ class InjuredInWarFlagExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
         super(InjuredInWarFlagExtractor, self).__init__(cursor_location_depend_on, options)
-        self._set_dependencies([NameExtractor], dependencies_contexts)
         self._in_spouse_extractor = options['in_spouse_extractor']
         
         self.OPTIONS = regex.UNICODE
@@ -26,9 +25,9 @@ class InjuredInWarFlagExtractor(BaseExtractor):
         """
         should_extract = False
 
-        if self._in_spouse_extractor and self._deps['name']['gender'] == 'Female':
+        if self._in_spouse_extractor and self._deps['name']['name']['gender'] == 'Female':
             should_extract = True
-        elif not self._in_spouse_extractor and self._deps['name']['gender'] == 'Male':
+        elif not self._in_spouse_extractor and self._deps['name']['name']['gender'] == 'Male':
             should_extract = True
 
         return should_extract

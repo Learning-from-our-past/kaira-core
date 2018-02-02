@@ -179,20 +179,6 @@ class HostessNameException(ExtractionException):
     def __unicode__(self):
         return repr(self.message)
 
-
-class ParentKeywordTraversingException(ExtractionException):
-    eType = 'PARENT_DATA DOES NOT EXIST'
-    message = 'Keyword parent_data not present in parent pipeline results. This means there is probably an ' \
-              'issue with passing parent_data to the subpipeline.'
-    details = ''
-
-    def __init(self, text):
-        self.details = text
-
-    def __str__(self):
-        return repr(self.message)
-
-
 class ShortEntryException(ExtractionException):
     eType = "ENTRY REALLY SHORT"
     message = "Short entry: "
