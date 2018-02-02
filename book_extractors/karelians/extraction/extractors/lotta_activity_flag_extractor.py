@@ -12,7 +12,6 @@ class LottaActivityFlagExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
         super(LottaActivityFlagExtractor, self).__init__(cursor_location_depend_on, options)
-        self._set_dependencies([NameExtractor], dependencies_contexts)
         self._in_spouse_extractor = options['in_spouse_extractor']
 
         lotta_org_pattern = r'(?P<lottaOrg>(?:[Ll]otta\s?(?:S|s)värd|[Ll]ottayhdis|[Ll]ottajärjes)){s<=1}'
@@ -85,9 +84,9 @@ class LottaActivityFlagExtractor(BaseExtractor):
         """
         is_female = False
 
-        if self._in_spouse_extractor and self._deps['name']['gender'] == 'Male':
+        if self._in_spouse_extractor and self._deps['name']['name']['gender'] == 'Male':
             is_female = True
-        elif not self._in_spouse_extractor and self._deps['name']['gender'] == 'Female':
+        elif not self._in_spouse_extractor and self._deps['name']['name']['gender'] == 'Female':
             is_female = True
 
         return is_female

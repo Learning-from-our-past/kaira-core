@@ -1,6 +1,6 @@
 book_series: Siirtokarjalaisten tie
 pipeline:
-  - !Extractor {
+  - !Extractor &PrimaryPersonName {
       module: "book_extractors.karelians.extraction.extractors.name_extractor",
       class_name: "NameExtractor",
       options: {
@@ -60,9 +60,34 @@ pipeline:
       module: "book_extractors.karelians.extraction.extractors.war_data_extractor",
       class_name: "WarDataExtractor",
       options: {
-        output_path: "primaryPerson",
-        in_spouse_extractor: false
-      }
+        output_path: "primaryPerson"
+      },
+      pipeline: [
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor",
+          class_name: "InjuredInWarFlagExtractor",
+          depends_on: [ *PrimaryPersonName ],
+          options: {
+            in_spouse_extractor: false
+          }
+        },
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor",
+          class_name: "ServedDuringWarFlagExtractor",
+          depends_on: [ *PrimaryPersonName ],
+          options: {
+            in_spouse_extractor: false
+          }
+        },
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor",
+          class_name: "LottaActivityFlagExtractor",
+          depends_on: [ *PrimaryPersonName ],
+          options: {
+            in_spouse_extractor: false
+          }
+        },
+      ]
     }
 
   - !Extractor {
