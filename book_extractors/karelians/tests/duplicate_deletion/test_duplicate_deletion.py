@@ -1,9 +1,11 @@
 import pytest
+import importlib
 from lxml import etree
 from book_extractors.karelians.duplicate_deleter import DuplicateDeleter
 from book_extractors.karelians.tests.duplicate_deletion import mock_xml_data
 
 
+@pytest.mark.skipif(not importlib.util.find_spec('ssdeep'), reason='Tests cannot be ran without ssdeep which is difficult to install on MacOS.')
 class TestDuplicateDeletion:
     @pytest.fixture(autouse=True)
     def duplicate_deleter(self):
