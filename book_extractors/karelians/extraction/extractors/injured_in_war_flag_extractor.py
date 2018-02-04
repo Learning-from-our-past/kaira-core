@@ -15,6 +15,8 @@ class InjuredInWarFlagExtractor(BaseExtractor):
         self.INJURED_IN_WAR_PATTERN = r'(?:haavoi){s<=1}|(?<!S)(otainvalidi){s<=1}(?:\s|,|\.)'
         self.REGEX_INJURED_IN_WAR = regex.compile(self.INJURED_IN_WAR_PATTERN, self.OPTIONS)
 
+        self._declare_expected_dependency_names(['person'])
+
     def _is_person_male(self):
         """
         This function assumes only heterosexual marriages and checks that the person, whose
@@ -25,9 +27,9 @@ class InjuredInWarFlagExtractor(BaseExtractor):
         """
         should_extract = False
 
-        if self._in_spouse_extractor and self._deps[0]['name']['gender'] == 'Female':
+        if self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Female':
             should_extract = True
-        elif not self._in_spouse_extractor and self._deps[0]['name']['gender'] == 'Male':
+        elif not self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Male':
             should_extract = True
 
         return should_extract
