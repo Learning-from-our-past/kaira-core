@@ -25,9 +25,9 @@ class ServedDuringWarFlagExtractor(BaseExtractor):
         """
         should_extract = False
 
-        if self._in_spouse_extractor and self._deps['name']['name']['gender'] == 'Female':
+        if self._in_spouse_extractor and self._deps[0]['name']['gender'] == 'Female':
             should_extract = True
-        elif not self._in_spouse_extractor and self._deps['name']['name']['gender'] == 'Male':
+        elif not self._in_spouse_extractor and self._deps[0]['name']['gender'] == 'Male':
             should_extract = True
 
         return should_extract

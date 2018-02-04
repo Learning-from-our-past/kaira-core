@@ -56,13 +56,10 @@ class BaseExtractor:
         dependencies can be resolved from the extraction_results_map during the extraction.
         :return:
         """
-        self._required_dependencies = [(extractor.extraction_key, id(extractor)) for extractor in extractor_objects]
+        self._required_dependencies = [id(extractor) for extractor in extractor_objects]
 
     def _resolve_dependencies(self):
-        # TODO: Dependencies should be resolved here somehow so that there is no collisions with same named
-        # extractors. Object ids handle the data fetching from the result map, but those results should somehow be
-        # mapped to the structure where programmer can fetch them for use...
-        self._deps = {dep_name: self._extraction_results_map.get_results(dep_id) for (dep_name, dep_id) in self._required_dependencies}
+        self._deps = [self._extraction_results_map.get_results(dep_id) for dep_id in self._required_dependencies]
 
     def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data=None):
         self._resolve_dependencies()

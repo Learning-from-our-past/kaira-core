@@ -12,7 +12,7 @@ test_data = {
             'Armas Juhani -57. Merja Riitta Sinikka -59, Marjatta Raija Orvokki -63. Syntyneet Enossa Asuinp. '
             'Karjalassa: Ruskeala, Kaalamo 27—40, 40—44 Muut asuinp.: Svsmä, Rapola -40 Isokyrö. Lehmijoki 41—45, '
             'Kiihtelysvaara 45—48, Eno, Haapalahti 48—. Testiset asuvat maatilalla, jonka pinta-ala on 15,5 ha, '
-            'viljeltyä on 5.7 ha. Maanviljelyksen ohella harjoitetaan karjanhoitoa.'
+            'viljeltyä on 5.7 ha. Maanviljelyksen ohella harjoitetaan karjanhoitoa. Väinö haavoittui sodassa.'
 }
 
 @pytest.fixture()
@@ -35,6 +35,14 @@ def should_build_and_run_pipeline(parser):
 
     assert results[0]['primaryPerson']['name']['surname'] == 'TESTINEN'
     assert results[0]['primaryPerson']['profession']['professionName'] == 'maanviljelijä'
+
+
+class TestDependencyConfiguration:
+    def should_resolve_dependencies_and_produce_correct_results(self, parser):
+        pipeline = parser.build_pipeline_from_yaml('pipeline_creation/tests/dependency_test_config.yaml')
+        results = pipeline.process(test_data)
+
+        assert results[0]['dependent'] == 'This is from standalone extractor: Standalone extractor'
 
 
 class TestSubPipelineCreation:
@@ -72,7 +80,8 @@ class OuterExtractor(BaseExtractor):
         results = {}
         if self._sub_extraction_pipeline:
             results, metadata = self._sub_extraction_pipeline.process({'text': entry['text']})
-            results['message'] = self.message
+
+        results['message'] = self.message
 
         return self._add_to_extraction_results(results, extraction_results, extraction_metadata)
 
@@ -92,3 +101,15 @@ class SubExtractor(BaseExtractor):
         results['message'] = self.message
 
         return self._add_to_extraction_results(results, extraction_results, extraction_metadata)
+
+
+class DependentExtractor(BaseExtractor):
+    extraction_key = 'dependent'
+
+    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
+        super(DependentExtractor, self).__init__(cursor_location_depend_on,
+                                                     options)
+
+    def _extract(self, entry, extraction_results, extraction_metadata):
+        result = 'This is from standalone extractor: {}'.format(self._deps[0]['outerExtractor']['message'])
+        return self._add_to_extraction_results(result, extraction_results, extraction_metadata)
