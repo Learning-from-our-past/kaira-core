@@ -74,6 +74,8 @@ class LottaActivityFlagExtractor(BaseExtractor):
         self._word_suffix_length = 4
         self._surroundings_radius = 15
 
+        self._declare_expected_dependency_names(['person'])
+
     def _is_person_female(self):
         """
         This function assumes only heterosexual marriages and checks that the person, whose
@@ -84,9 +86,9 @@ class LottaActivityFlagExtractor(BaseExtractor):
         """
         is_female = False
 
-        if self._in_spouse_extractor and self._deps[0]['name']['gender'] == 'Male':
+        if self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Male':
             is_female = True
-        elif not self._in_spouse_extractor and self._deps[0]['name']['gender'] == 'Female':
+        elif not self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Female':
             is_female = True
 
         return is_female

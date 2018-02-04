@@ -1,5 +1,6 @@
 import pytest
 from book_extractors.common.extractors.base_extractor import BaseExtractor
+from book_extractors.configuration_exceptions import RequiredDependenciesAreMissing
 from book_extractors.extraction_pipeline import ExtractionPipeline
 from pipeline_creation.dependency_resolver import ExtractorResultsMap
 
@@ -90,35 +91,56 @@ class TestBaseExtractor:
             Set two extractors where the second one depends on first.
             """
             extractor1 = MockExtractor()
+            extractor2 = MockExtractor()
+            extractor1.set_extraction_results_map(result_map)
+            extractor2.set_extraction_results_map(result_map)
+
+            dependent_extractor = SimpleExtractorForDeps()
+            dependent_extractor.set_extraction_results_map(result_map)
+
+            dependent_extractor.set_required_dependencies([extractor1, extractor2])
+
+            return {'standalone': [extractor1, extractor2], 'dependent': dependent_extractor}
+
+        def should_set_ids_of_required_extractors(self, dep_extractors):
+            # Extractor should hold the id of the extractor1 which will be used for resolving
+            assert dep_extractors['dependent']._required_dependencies == [id(dep_extractors['standalone'][0]),
+                                                                          id(dep_extractors['standalone'][1])]
+
+        def should_assign_dependency_names_to_a_corresponding_dependencies(self, dep_extractors):
+            # The declared names and the order of set dependencies should be the same
+            assert dep_extractors['dependent']._required_dependencies == [id(dep_extractors['standalone'][0]),
+                                                                          id(dep_extractors['standalone'][1])]
+            assert dep_extractors['dependent']._expected_dependencies_names == ['standalone', 'standalone2']
+
+        def should_resolve_dependencies_to_deps_object_before_extraction(self, dep_extractors):
+            extractors = [dep_extractors['standalone'][0], dep_extractors['standalone'][1], dep_extractors['dependent']]
+            pipeline = ExtractionPipeline(extractors, True)
+            results = pipeline.process({'text': 'test string'})
+
+            # The result of the standalone extractor should be available in latter extractor
+            assert dep_extractors['dependent']._deps == {'standalone': {'mock': 'SOME RESULT'},
+                                                         'standalone2': {'mock': 'SOME RESULT'}}
+            # And it should have been used to generate the results
+            assert results[0]['mock2deps'] == 'This is from standalone extractor: SOME RESULT'
+
+        def should_store_extraction_results_to_the_extraction_results_map(self, result_map, dep_extractors):
+            extractors = [dep_extractors['standalone'][0], dep_extractors['standalone'][1], dep_extractors['dependent']]
+            pipeline = ExtractionPipeline(extractors, True)
+            pipeline.process({'text': 'test string'})
+
+            assert result_map.get_results(id(dep_extractors['standalone'][0])) == {'mock': 'SOME RESULT'}
+            assert result_map.get_results(id(dep_extractors['standalone'][1])) == {'mock': 'SOME RESULT'}
+
+        def should_raise_error_if_incorrect_amount_of_dependencies_were_provided(self, result_map):
+            extractor1 = MockExtractor()
             extractor1.set_extraction_results_map(result_map)
 
             dependent_extractor = SimpleExtractorForDeps()
             dependent_extractor.set_extraction_results_map(result_map)
 
-            dependent_extractor.set_required_dependencies([extractor1])
-
-            return {'standalone': extractor1, 'dependent': dependent_extractor}
-
-        def should_set_ids_of_required_extractors(self, dep_extractors):
-            # Extractor should hold the id of the extractor1 which will be used for resolving
-            assert dep_extractors['dependent']._required_dependencies == [id(dep_extractors['standalone'])]
-
-        def should_resolve_dependencies_to_deps_object_before_extraction(self, dep_extractors):
-            extractors = [dep_extractors['standalone'], dep_extractors['dependent']]
-            pipeline = ExtractionPipeline(extractors, True)
-            results = pipeline.process({'text': 'test string'})
-
-            # The result of the standalone extractor should be available in latter extractor
-            assert dep_extractors['dependent']._deps == [{'mock': 'SOME RESULT'}]
-            # And it should have been used to generate the results
-            assert results[0]['mock2deps'] == 'This is from standalone extractor: SOME RESULT'
-
-        def should_store_extraction_results_to_the_extraction_results_map(self, result_map, dep_extractors):
-            extractors = [dep_extractors['standalone'], dep_extractors['dependent']]
-            pipeline = ExtractionPipeline(extractors, True)
-            pipeline.process({'text': 'test string'})
-
-            assert result_map.get_results(id(dep_extractors['standalone'])) == {'mock': 'SOME RESULT'}
+            with pytest.raises(RequiredDependenciesAreMissing):
+                dependent_extractor.set_required_dependencies([extractor1, extractor1, extractor1])
 
         @pytest.mark.skip()
         def should_raise_resolving_error_if_dependency_could_not_be_resolved(self):
@@ -175,6 +197,8 @@ class SimpleExtractorForDeps(BaseExtractor):
         super(SimpleExtractorForDeps, self).__init__(cursor_location_depend_on,
                                                      options)
 
+        self._declare_expected_dependency_names(['standalone', 'standalone2'])
+
     def _extract(self, entry, extraction_results, extraction_metadata):
-        result = 'This is from standalone extractor: {}'.format(self._deps[0]['mock'])
+        result = 'This is from standalone extractor: {}'.format(self._deps['standalone']['mock'])
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata)

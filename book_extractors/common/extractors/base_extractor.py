@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from book_extractors.common.metadata_helper import MetadataCollector
+from book_extractors.configuration_exceptions import RequiredDependenciesAreMissing
 from book_extractors.extraction_pipeline import ExtractionPipeline
 
 
@@ -20,6 +21,7 @@ class BaseExtractor:
         self._sub_extraction_pipeline = None
         self._extraction_results_map = None
 
+        self._expected_dependencies_names = []
         self._required_dependencies = []
         self._deps = {}
 
@@ -49,8 +51,19 @@ class BaseExtractor:
         """
         self._extraction_results_map = results_map
 
+    def _declare_expected_dependency_names(self, dependency_names):
+        """
+        If extractor has dependencies, declare their names here in constructor. The provided names
+        are just names which can later be used to fetch resolved results during extraction. However, the amount
+        of the names is verified when required dependencies are set, so that no less nor no more dependencies
+        are injected to the extractor than is expected.
+        The names should be defined in the same order as dependencies are listed in the yaml-configuration.
+        :param dependency_names: list of strings
+        :return:
+        """
+        self._expected_dependencies_names = dependency_names
+
     def set_required_dependencies(self, extractor_objects):
-        # TODO: Set this in constructor?
         """
         Set possible required dependencies based on YAML config. A list of extractor ids so that the
         dependencies can be resolved from the extraction_results_map during the extraction.
@@ -58,8 +71,14 @@ class BaseExtractor:
         """
         self._required_dependencies = [id(extractor) for extractor in extractor_objects]
 
+        if len(self._required_dependencies) != len(self._expected_dependencies_names):
+            raise RequiredDependenciesAreMissing()
+
     def _resolve_dependencies(self):
-        self._deps = [self._extraction_results_map.get_results(dep_id) for dep_id in self._required_dependencies]
+
+        result_data = [self._extraction_results_map.get_results(dep_id) for dep_id in self._required_dependencies]
+
+        self._deps = {key: data for (key, data) in zip(self._expected_dependencies_names, result_data)}
 
     def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data=None):
         self._resolve_dependencies()
@@ -74,7 +93,6 @@ class BaseExtractor:
 
         # Store this extractor's results to the map so that it can be used later for dependency resolving
         # Strip the output path, since we don't want to store it to the result map
-        # TODO: Or do we? Maybe it could be used to avoid some of the collisions in names? Likely not.
         extraction_results_without_output_path = extraction_results
         if self.output_path:
             extraction_results_without_output_path = extraction_results[self.output_path]
