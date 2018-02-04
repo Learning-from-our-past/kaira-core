@@ -84,9 +84,9 @@ class LottaActivityFlagExtractor(BaseExtractor):
         """
         is_female = False
 
-        if self._in_spouse_extractor and self._deps['name']['name']['gender'] == 'Male':
+        if self._in_spouse_extractor and self._deps[0]['name']['gender'] == 'Male':
             is_female = True
-        elif not self._in_spouse_extractor and self._deps['name']['name']['gender'] == 'Female':
+        elif not self._in_spouse_extractor and self._deps[0]['name']['gender'] == 'Female':
             is_female = True
 
         return is_female
