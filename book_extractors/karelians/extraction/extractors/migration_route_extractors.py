@@ -321,11 +321,6 @@ class MigrationRouteExtractor(BaseExtractor):
     def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
         super(MigrationRouteExtractor, self).__init__(cursor_location_depend_on, options)
 
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(KarelianLocationsExtractor),
-            configure_extractor(FinnishLocationsExtractor),
-        ])
-
     def _extract(self, entry, extraction_results, extraction_metadata):
         results = self._sub_extraction_pipeline.process(entry)
 

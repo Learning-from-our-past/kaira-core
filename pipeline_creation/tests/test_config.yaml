@@ -95,7 +95,17 @@ pipeline:
       class_name: "MigrationRouteExtractor",
       options: {
         output_path: "primaryPerson"
-      }
+      },
+      pipeline: [
+        !Extractor {
+            module: "book_extractors.karelians.extraction.extractors.migration_route_extractors",
+            class_name: "KarelianLocationsExtractor"
+        },
+        !Extractor {
+            module: "book_extractors.karelians.extraction.extractors.migration_route_extractors",
+            class_name: "FinnishLocationsExtractor"
+        }
+      ]
     }
 
   - !Extractor {
