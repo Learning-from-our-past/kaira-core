@@ -51,7 +51,8 @@ class TestSpouseExtraction:
                 'servedDuringWarFlag': None,
                 'lottaActivityFlags': {'lotta': False,
                                        'foodLotta': False,
-                                       'officeLotta': False}
+                                       'officeLotta': False,
+                                       'nurseLotta': False}
             }
         }
 

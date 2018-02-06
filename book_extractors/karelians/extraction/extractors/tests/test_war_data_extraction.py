@@ -34,7 +34,8 @@ class TestWarDataExtraction:
     def should_extract_lotta_activity_flag_correctly_as_true_if_primary_person_is_female(self, extractor):
         expected_result = {'lotta': True,
                            'foodLotta': False,
-                           'officeLotta': False}
+                           'officeLotta': False,
+                           'nurseLotta': False}
         self._verify_flags([
             ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', expected_result)
         ], extractor, LottaActivityFlagExtractor.extraction_key, 'Female')
@@ -314,3 +315,22 @@ class TestLottaActivityFlagsExtraction:
                 ('ja palveli talvisodassa Viestijoukoissa ja', False),
                 ('Satunnainen Nimi on Hausjärven puhelinlaitoksen palveluksessa', False)
             ], in_spouse=False, sex='Female', subflag='officeLotta')
+
+    class TestNurseLottaFlag:
+        def should_extract_nurselotta_true_if_text_contains_mention_of_lotta_working_in_a_health_care_role(self):
+            verify_flags([
+                ('Nyymi on suorittanut lääkintälottakurs-sin Helsingissä -40 ja on sen', True),
+                ('Hän toimi lääkintälottana talvisodassa- ja', True)
+            ], in_spouse=False, sex='Female', subflag='nurseLotta')
+
+        def should_extract_nurselotta_true_if_text_contains_mention_of_lotta_working_in_a_health_care_role_with_typos(self):
+            verify_flags([
+                ('Nyymi on suorittanut lääkin-tä1-ottakurs-sin Helsingissä -40 ja on sen', True),
+                ('Hän toimi lääkintäl0ttana talvisodassa- ja', True)
+            ], in_spouse=False, sex='Female', subflag='nurseLotta')
+
+        def should_not_extract_nurselotta_when_there_is_no_mention_of_nurselotta_work(self):
+            verify_flags([
+                ('Mystinen Voima palveli lääkintäsotamiehenä jatkosodan.', False),
+                ('käynyt keskikoulun ja suorittanut lääkintävoimistelijakurssin.', False)
+            ], in_spouse=False, sex='Female', subflag='nurseLotta')
