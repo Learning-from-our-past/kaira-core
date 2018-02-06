@@ -33,7 +33,8 @@ class TestWarDataExtraction:
 
     def should_extract_lotta_activity_flag_correctly_as_true_if_primary_person_is_female(self, extractor):
         expected_result = {'lotta': True,
-                           'foodLotta': False}
+                           'foodLotta': False,
+                           'officeLotta': False}
         self._verify_flags([
             ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', expected_result)
         ], extractor, LottaActivityFlagExtractor.extraction_key, 'Female')
@@ -287,3 +288,29 @@ class TestLottaActivityFlagsExtraction:
             verify_flags([
                 ('Rouva toimi sota-aikana kodinhoitajana.', False)
             ], in_spouse=False, sex='Female', subflag='foodLotta')
+
+    class TestOfficeLottaFlag:
+        def should_extract_officelotta_true_if_text_contains_mention_of_lotta_working_in_an_office_role(self):
+            verify_flags([
+                ('Sodan aikana hän työskenteli kenttäpostissa ja kanslialottana.', True),
+                ('Talvisodan aikana hän toimi keskuslottana Vahvialasssa.', True),
+                ('Hän toimi sodan aikana viestilottana.', True),
+                ('Hän oli viestityslottana sotien aikana.', True),
+                ('Rouva Nyymi oli jatkosodan aikana toimistolottana.', True)
+            ], in_spouse=False, sex='Female', subflag='officeLotta')
+
+        def should_extract_officelotta_true_if_text_contains_mention_of_lotta_working_in_an_office_role_with_typos(self):
+            verify_flags([
+                ('Sodan aikana hän työskenteli kenttäpostissa ja kanslial0ttana.', True),
+                ('Talvisodan aikana hän toimi keskus-lottana Vahvialasssa.', True),
+                ('Hän toimi sodan aikana vie5tilottana.', True),
+                ('Hän oli viestituslottana sotien aikana.', True),
+                ('Rouva Nyymi oli jatkosodan aikana toimisto!ottana.', True)
+            ], in_spouse=False, sex='Female', subflag='officeLotta')
+
+        def should_not_extract_officelotta_when_there_is_no_mention_of_officelotta_work(self):
+            verify_flags([
+                ('on saanut Maanviljelysseurojen keskusliiton hopeisen ansiomerkin.', False),
+                ('ja palveli talvisodassa Viestijoukoissa ja', False),
+                ('Satunnainen Nimi on Hausjärven puhelinlaitoksen palveluksessa', False)
+            ], in_spouse=False, sex='Female', subflag='officeLotta')
