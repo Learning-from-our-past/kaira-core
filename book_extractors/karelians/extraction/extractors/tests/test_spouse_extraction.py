@@ -53,7 +53,8 @@ class TestSpouseExtraction:
                                        'foodLotta': False,
                                        'officeLotta': False,
                                        'nurseLotta': False,
-                                       'antiairLotta': False}
+                                       'antiairLotta': False,
+                                       'pikkulotta': False}
             }
         }
 
