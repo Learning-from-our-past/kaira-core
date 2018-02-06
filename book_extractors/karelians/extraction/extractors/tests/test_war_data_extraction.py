@@ -35,7 +35,8 @@ class TestWarDataExtraction:
         expected_result = {'lotta': True,
                            'foodLotta': False,
                            'officeLotta': False,
-                           'nurseLotta': False}
+                           'nurseLotta': False,
+                           'antiairLotta': False}
         self._verify_flags([
             ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', expected_result)
         ], extractor, LottaActivityFlagExtractor.extraction_key, 'Female')
@@ -334,3 +335,25 @@ class TestLottaActivityFlagsExtraction:
                 ('Mystinen Voima palveli lääkintäsotamiehenä jatkosodan.', False),
                 ('käynyt keskikoulun ja suorittanut lääkintävoimistelijakurssin.', False)
             ], in_spouse=False, sex='Female', subflag='nurseLotta')
+
+    class TestAntiairLottaFlag:
+        def should_extract_antiairlotta_true_if_text_contains_mention_of_lotta_working_in_air_surveillance_role(self):
+            verify_flags([
+                ('Rouva oli sodan aikana ilmaval-vontalottana.', True),
+                ('Rouva on toiminut Iv-lottana', True)
+            ], in_spouse=False, sex='Female', subflag='antiairLotta')
+
+        def should_extract_antiairlotta_true_if_text_contains_mention_of_lotta_working_in_air_surveillance_role_with_typos(self):
+            verify_flags([
+                ('Rouva oli sodan aikana ilmav4l-vontalottana.', True),
+                ('Rouva on toiminut Iv-lottana', True),
+                ('Rouva on toiminut is-lottana', True),
+                ('Rouva on toiminut Islottana', True),
+                ('Rouva on toiminut It-lottana', True)
+            ], in_spouse=False, sex='Female', subflag='antiairLotta')
+
+        def should_not_extract_antiairlotta_when_there_is_no_mention_of_antiairlotta_work(self):
+            verify_flags([
+                ('Hän on saanut 10-vuotislottamerkin', False),
+                ('palveli jatkosodassa ilmavalvontajoukoissa.', False)
+            ], in_spouse=False, sex='Female', subflag='antiairLotta')

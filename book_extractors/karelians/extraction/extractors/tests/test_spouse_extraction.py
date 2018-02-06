@@ -52,7 +52,8 @@ class TestSpouseExtraction:
                 'lottaActivityFlags': {'lotta': False,
                                        'foodLotta': False,
                                        'officeLotta': False,
-                                       'nurseLotta': False}
+                                       'nurseLotta': False,
+                                       'antiairLotta': False}
             }
         }
 
