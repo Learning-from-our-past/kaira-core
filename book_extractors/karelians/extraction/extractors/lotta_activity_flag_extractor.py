@@ -49,6 +49,7 @@ class LottaActivityFlagExtractor(BaseExtractor):
 
         food_lotta_pattern = r'(?:(?:uonituslott)|(?:anttiinilott)){s<=2}|(?:(?:uonitustehtä)|(?:anttiinitehtä)){s<=2}'
         office_lotta_pattern = r'(?:(?:anslialott)|(?:oimistolott)|(?:eskuslott)|(?:uhelinlott)|(?:iesti(?:tys|ntä)?lott)){s<=1}'
+        nurse_lotta_pattern = r'(?:lääkintälott[ai]){s<=2}'
 
         regex_options = regex.UNICODE
         self._REGEX_LOTTA_ORGANIZATION = regex.compile(lotta_org_pattern, regex_options)
@@ -57,10 +58,12 @@ class LottaActivityFlagExtractor(BaseExtractor):
         self._REGEX_LOTTA_WORD = regex.compile(lotta_word_pattern, regex_options)
         self._REGEX_FOOD_LOTTA = regex.compile(food_lotta_pattern, regex_options)
         self._REGEX_OFFICE_LOTTA = regex.compile(office_lotta_pattern, regex_options)
+        self._REGEX_NURSE_LOTTA = regex.compile(nurse_lotta_pattern, regex_options)
 
         self._NO_RESULT = {'lotta': None,
                            'foodLotta': None,
-                           'officeLotta': None}
+                           'officeLotta': None,
+                           'nurseLotta': None}
 
         self._word_suffix_length = 4
         self._surroundings_radius = 15
@@ -90,6 +93,7 @@ class LottaActivityFlagExtractor(BaseExtractor):
             lotta_activity['lotta'] = self._check_for_lotta_activity(text)
             lotta_activity['foodLotta'] = self._REGEX_FOOD_LOTTA.search(text) is not None
             lotta_activity['officeLotta'] = self._REGEX_OFFICE_LOTTA.search(text) is not None
+            lotta_activity['nurseLotta'] = self._REGEX_NURSE_LOTTA.search(text) is not None
         else:
             lotta_activity = self._NO_RESULT
 
