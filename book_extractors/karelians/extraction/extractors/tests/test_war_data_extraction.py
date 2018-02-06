@@ -36,7 +36,8 @@ class TestWarDataExtraction:
                            'foodLotta': False,
                            'officeLotta': False,
                            'nurseLotta': False,
-                           'antiairLotta': False}
+                           'antiairLotta': False,
+                           'pikkulotta': False}
         self._verify_flags([
             ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', expected_result)
         ], extractor, LottaActivityFlagExtractor.extraction_key, 'Female')
@@ -357,3 +358,21 @@ class TestLottaActivityFlagsExtraction:
                 ('Hän on saanut 10-vuotislottamerkin', False),
                 ('palveli jatkosodassa ilmavalvontajoukoissa.', False)
             ], in_spouse=False, sex='Female', subflag='antiairLotta')
+
+    class TestPikkulottaFlag:
+        def should_extract_pikkulotta_true_if_text_contains_mention_of_person_being_a_pikkulotta(self):
+            verify_flags([
+                ('Nyymi kuului sodan aikana Pikkulottiin.', True),
+                ('Rouva Agentti on toiminut pikkulottana.', True)
+            ], in_spouse=False, sex='Female', subflag='pikkulotta')
+
+        def should_extract_pikkulotta_true_if_text_contains_mention_of_person_being_a_pikkulotta_with_typos(self):
+            verify_flags([
+                ('Nyymi kuului sodan aikana Pikku1ottiin.', True),
+                ('Rouva Agentti on toiminut pikkul0t-tana.', True)
+            ], in_spouse=False, sex='Female', subflag='pikkulotta')
+
+        def should_not_extract_pikkulotta_if_text_contains_no_mention_of_person_being_a_pikkulotta(self):
+            verify_flags([
+                ('Hän on toiminut vaatturina pikkupojasta lähtien.', False)
+            ], in_spouse=False, sex='Female', subflag='pikkulotta')
