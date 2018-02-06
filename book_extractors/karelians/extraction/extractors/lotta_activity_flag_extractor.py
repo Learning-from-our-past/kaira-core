@@ -47,13 +47,17 @@ class LottaActivityFlagExtractor(BaseExtractor):
 
         lotta_word_pattern = r'(?<=[\s.,])\w{0,12}(lotta){s<=1}\w{0,12}(?=[\s.,])'
 
+        food_lotta_pattern = r'(?:(?:uonituslott)|(?:anttiinilott)){s<=2}|(?:(?:uonitustehtä)|(?:anttiinitehtä)){s<=2}'
+
         regex_options = regex.UNICODE
         self._REGEX_LOTTA_ORGANIZATION = regex.compile(lotta_org_pattern, regex_options)
         self._REGEX_GENERAL_LOTTA_PATTERN_ONE = regex.compile(lotta_activity_pattern_one, regex_options)
         self._REGEX_GENERAL_LOTTA_PATTERN_TWO = regex.compile(lotta_activity_pattern_two, regex_options)
         self._REGEX_LOTTA_WORD = regex.compile(lotta_word_pattern, regex_options)
+        self._REGEX_FOOD_LOTTA = regex.compile(food_lotta_pattern, regex_options)
 
-        self._NO_RESULT = {'lotta': None}
+        self._NO_RESULT = {'lotta': None,
+                           'foodLotta': None}
 
         self._word_suffix_length = 4
         self._surroundings_radius = 15
@@ -79,14 +83,15 @@ class LottaActivityFlagExtractor(BaseExtractor):
         lotta_activity = {}
 
         if self._is_person_female():
-            lotta_activity['lotta'] = self._check_for_lotta_activity(entry['text'])
+            text = remove_hyphens_from_text(entry['text'])
+            lotta_activity['lotta'] = self._check_for_lotta_activity(text)
+            lotta_activity['foodLotta'] = self._REGEX_FOOD_LOTTA.search(text) is not None
         else:
             lotta_activity = self._NO_RESULT
 
         return self._add_to_extraction_results(lotta_activity, extraction_results, extraction_metadata)
 
     def _check_for_lotta_activity(self, text):
-        text = remove_hyphens_from_text(text)
         lotta = self._check_for_lotta_organization(text)
         if not lotta:
             lotta = self._check_for_first_lotta_pattern_variant(text)
