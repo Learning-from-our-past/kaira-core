@@ -37,7 +37,8 @@ class TestWarDataExtraction:
                            'officeLotta': False,
                            'nurseLotta': False,
                            'antiairLotta': False,
-                           'pikkulotta': False}
+                           'pikkulotta': False,
+                           'organizationLotta': False}
         self._verify_flags([
             ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', expected_result)
         ], extractor, LottaActivityFlagExtractor.extraction_key, 'Female')
@@ -376,3 +377,23 @@ class TestLottaActivityFlagsExtraction:
             verify_flags([
                 ('Hän on toiminut vaatturina pikkupojasta lähtien.', False)
             ], in_spouse=False, sex='Female', subflag='pikkulotta')
+    
+    class TestOrganizationLottaFlag:
+        def should_extract_organizationlotta_when_there_is_mention_of_belonging_to_lotta_org(self):
+            verify_flags([
+                ('Hän kuului jatkosodassa Lotta Svärd-järjestöön.', True),
+                ('Hän on toiminut lottajärjestössä.', True),
+                ('Hän on osallistunut nuorisoseuratyöhön, Lottayhdistyksen ja', True)
+            ], in_spouse=False, sex='Female', subflag='organizationLotta')
+    
+        def should_not_extract_organizationlotta_when_there_is_no_mention_of_belonging_to_lotta_org(self):
+            verify_flags([
+                ('Hän oli talvisodassa mustekaloihin erikoistuva kokki.', False),
+            ], in_spouse=False, sex='Female', subflag='organizationLotta')
+    
+        def should_not_extract_organizationlotta_when_there_is_mention_of_lotta_specialization_and_mention_of_lotta_org(
+                self):
+            verify_flags([
+                ('Hän palveli muonituslottana talvisodassa ja oli Lotta Svärd-järjestön jäsen.', False),
+                ('Hän oli lääkintälotta jatkosodassa ja kuului lottajärjestöön.', False)
+            ], in_spouse=False, sex='Female', subflag='organizationLotta')
