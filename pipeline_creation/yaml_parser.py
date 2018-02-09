@@ -47,9 +47,9 @@ class YamlParser:
     def build_pipeline_from_yaml(self, yaml_path):
         config = self._parse_config(yaml_path)
 
-        return ExtractionPipeline(config['pipeline'], True)
+        return ExtractionPipeline(config['pipeline'])
 
     def build_pipeline_from_yaml_string(self, yaml_string):
         config = self._parse_config_from_string(yaml_string)
 
-        return ExtractionPipeline(config['pipeline'], True)
+        return ExtractionPipeline(config['pipeline'])

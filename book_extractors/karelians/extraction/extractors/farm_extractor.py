@@ -17,21 +17,6 @@ class FarmDetailsExtractor(BaseExtractor):
     def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(FarmDetailsExtractor, self).__init__(cursor_location_depend_on, options)
 
-        # FIXME: Merge these to the options object and remove definitions from YAML
-        boolean_flag_patterns = {
-            KEYS['animalHusbandry']: r'karjataloutta|karjanhoitoa?\b|karjatalous\b',
-            KEYS['dairyFarm']: r'lypsy-|lypsy\b|lypsykarja(?!sta)',
-            KEYS['asutustila']: r'(?:asutustila){s<=1,i<=1}|(?:pika-asutustila){s<=1,i<=1}',
-            KEYS['maanhankintalaki']: r'(?:maanhankinta){s<=1,i<=1}',
-            KEYS['coldFarm']: r'kylmät'
-        }
-
-        # FIXME: Remove this pipeline setup from here once the whole YAML subpipeline system works ok
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(BoolExtractor, extractor_options={'patterns': boolean_flag_patterns}),
-            configure_extractor(FarmAreaExtractor)
-        ])
-
     def _extract(self, entry, extraction_results, extraction_metadata):
         results, metadata = self._extract_farm_details(entry['text'])
         return self._add_to_extraction_results(self._get_data_or_none(results), extraction_results, extraction_metadata)

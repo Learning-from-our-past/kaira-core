@@ -110,7 +110,7 @@ class TestBaseExtractor:
 
         def should_resolve_dependencies_to_deps_object_before_extraction(self, dep_extractors):
             extractors = [dep_extractors['standalone'][0], dep_extractors['standalone'][1], dep_extractors['dependent']]
-            pipeline = ExtractionPipeline(extractors, True)
+            pipeline = ExtractionPipeline(extractors)
             results = pipeline.process({'text': 'test string'})
 
             # The result of the standalone extractor should be available in latter extractor
@@ -121,7 +121,7 @@ class TestBaseExtractor:
 
         def should_store_extraction_results_to_the_extraction_results_map(self, result_map, dep_extractors):
             extractors = [dep_extractors['standalone'][0], dep_extractors['standalone'][1], dep_extractors['dependent']]
-            pipeline = ExtractionPipeline(extractors, True)
+            pipeline = ExtractionPipeline(extractors)
             pipeline.process({'text': 'test string'})
 
             assert result_map.get_results(id(dep_extractors['standalone'][0])) == {'mock': 'SOME RESULT'}
