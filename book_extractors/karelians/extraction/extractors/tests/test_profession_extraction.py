@@ -5,8 +5,8 @@ from book_extractors.karelians.extraction.extractors.profession_extractor import
 class TestProfessionExtraction:
 
     @pytest.yield_fixture(autouse=True)
-    def profession_extractor(self):
-        return ProfessionExtractor(None, None)
+    def profession_extractor(self, th):
+        return th.setup_extractor(ProfessionExtractor(None, None))
 
     def should_add_extra_info_to_profession_if_it_is_available(self, profession_extractor):
         text = 'maanviljelijä, synt. 18. 6. -29 Hiitolassa. Puol. Vaimo Vaimokas'

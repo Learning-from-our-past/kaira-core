@@ -1,21 +1,20 @@
 import pytest
-from book_extractors.karelians.extraction.extractors.farm_extractor import FarmDetailsExtractor
 from book_extractors.karelians.extraction.extractors.farm_area_extractor import FarmAreaExtractor
 
 
 class TestFarmExtraction:
-    @pytest.yield_fixture(autouse=True)
-    def farm_extractor(self):
-        return FarmDetailsExtractor(None, None)
+    @pytest.fixture(autouse=True)
+    def farm_extractor(self, th):
+        return th.build_pipeline_from_yaml(FARM_EXTRACTOR_CONFIG)
 
     def verify_flags(self, expected_flags_and_texts, flag, farm_extractor):
         for e in expected_flags_and_texts:
-            results, metadata = farm_extractor.extract({'text': e[0]}, {}, {})
+            results, metadata = farm_extractor.process({'text': e[0]})
             assert results['farmDetails'][flag] is e[1]
 
     def verify_farm_details_were_found(self, expected, farm_extractor):
         for e in expected:
-            results, metadata = farm_extractor.extract({'text': e[0]}, {}, {})
+            results, metadata = farm_extractor.process({'text': e[0]})
             assert (results['farmDetails'] is not None) is e[1]
 
     def should_mark_animal_husbandry_true_if_it_is_mentioned_in_text(self, farm_extractor):
@@ -67,14 +66,14 @@ class TestFarmExtraction:
         ], 'coldFarm', farm_extractor)
 
     def should_extract_farm_area(self, farm_extractor):
-        results, metadata = farm_extractor.extract({'text': 'Anonyymit asuvat maatilallaan, jonka pinta-ala on 35.20 ha ja siitä on viljeltyä 3.37 ha.'}, {}, {})
+        results, metadata = farm_extractor.process({'text': 'Anonyymit asuvat maatilallaan, jonka pinta-ala on 35.20 ha ja siitä on viljeltyä 3.37 ha.'})
         assert results['farmDetails']['farmTotalArea'] == 35.2
 
 
 class TestFarmAreaExtraction:
     @pytest.yield_fixture(autouse=True)
-    def farm_area_extractor(self):
-        return FarmAreaExtractor(None, None)
+    def farm_area_extractor(self, th):
+        return th.setup_extractor(FarmAreaExtractor(None, None))
 
     class TestFarmAreaIsPattern:
         def should_extract_hectares_correctly_as_float(self, farm_area_extractor):
@@ -127,3 +126,31 @@ class TestFarmAreaExtraction:
         def should_extract_hectares_correctly_as_none_if_whitespace_in_value_of_area(self, farm_area_extractor):
             results, metadata = farm_area_extractor.extract({'text': 'Testiset asuvat1 7 ha.n suuruisella asutustilallaan, jossa on 5 ha viljeltyä.'}, {}, {})
             assert results['farmTotalArea'] is None
+
+
+FARM_EXTRACTOR_CONFIG = """
+pipeline:
+  - !Extractor {
+      module: "book_extractors.karelians.extraction.extractors.farm_extractor",
+      class_name: "FarmDetailsExtractor",
+      pipeline: [
+        !Extractor {
+            module: "book_extractors.common.extractors.bool_extractor",
+            class_name: "BoolExtractor",
+            options: {
+              patterns: {
+                animalHusbandry: 'karjataloutta|karjanhoitoa?\\b|karjatalous\\b',
+                dairyFarm: 'lypsy-|lypsy\\b|lypsykarja(?!sta)',
+                asutustila: '(?:asutustila){s<=1,i<=1}|(?:pika-asutustila){s<=1,i<=1}',
+                maanhankintalaki: '(?:maanhankinta){s<=1,i<=1}',
+                coldFarm: 'kylmät'
+              }
+            }
+        },
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.farm_area_extractor",
+          class_name: "FarmAreaExtractor"
+        }
+      ]
+    }
+"""

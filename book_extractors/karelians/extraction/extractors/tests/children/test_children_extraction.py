@@ -6,8 +6,8 @@ from book_extractors.karelians.extraction.extractors.tests.children.mock_person_
 class TestChildrenExtraction:
 
     @pytest.yield_fixture(autouse=True)
-    def child_extractor(self):
-        return ChildExtractor(None, None)
+    def child_extractor(self, th):
+        return th.setup_extractor(ChildExtractor(None, None))
 
     def should_extract_children_correctly_when_string_ends_to_syntyneet_word_and_fill_birth_location_accordingly(self, child_extractor, th):
         result, metadata = child_extractor.extract({'text': CHILDREN_TEXTS['common_birth_place']}, {}, {})

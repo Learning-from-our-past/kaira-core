@@ -5,8 +5,8 @@ from book_extractors.common.extractors.previous_marriages_flag_extractor import 
 class TestPreviousMarriagesFlag:
 
     @pytest.yield_fixture(autouse=True)
-    def extractor(self):
-        return PreviousMarriagesFlagExtractor(None, None)
+    def extractor(self, th):
+        return th.setup_extractor(PreviousMarriagesFlagExtractor(None, None))
 
     def should_return_true_if_text_contains_mentions_of_previous_marriages(self, extractor):
         entry = {'text': 'maanviljelijä, synt. 15. 10. 99 Kurkijoella. Puol. Vaimo o.s. Vaimoke, emäntä, '
