@@ -14,6 +14,7 @@ from book_extractors.karelians.extraction.extractors.war_data_extractor import W
 from book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor import InjuredInWarFlagExtractor
 from book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor import ServedDuringWarFlagExtractor
 from book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor import LottaActivityFlagExtractor
+from book_extractors.karelians.extraction.extractors.martta_activity_flag_extractor import MarttaActivityFlagExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from shared import regexUtils
 
@@ -30,11 +31,14 @@ class SpouseExtractor(BaseExtractor):
             configure_extractor(BirthdayExtractor),
             configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
             configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
-            configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
+            configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor)
         ])
 
-        self._wardata_pipeline = ExtractionPipeline([
-            configure_extractor(WarDataExtractor, extractor_options={'in_spouse_extractor': True})
+        self._additional_extraction_pipeline = ExtractionPipeline([
+            configure_extractor(WarDataExtractor, extractor_options={'in_spouse_extractor': True}),
+            configure_extractor(MarttaActivityFlagExtractor,
+                                extractor_options={'in_spouse_extractor': True},
+                                dependencies_contexts=[('main', 'primaryPerson')])
         ])
 
         self.kaira_id_provider = KairaIdProvider()
@@ -50,8 +54,9 @@ class SpouseExtractor(BaseExtractor):
         parent_data = self._get_parent_data_for_pipeline(extraction_results, extraction_metadata)
         result, cursor_location = self._find_spouse(entry['text'], start_position)
         if result is not None:
-            war_results, war_metadata = self._wardata_pipeline.process(entry, parent_pipeline_data=parent_data)
-            result[WarDataExtractor.extraction_key] = war_results[WarDataExtractor.extraction_key]
+            additional_results, additional_metadata = self._additional_extraction_pipeline.process(entry, parent_pipeline_data=parent_data)
+            result[WarDataExtractor.extraction_key] = additional_results[WarDataExtractor.extraction_key]
+            result[MarttaActivityFlagExtractor.extraction_key] = additional_results[MarttaActivityFlagExtractor.extraction_key]
 
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata, cursor_location=cursor_location)
 
