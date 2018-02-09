@@ -110,6 +110,8 @@ class DependentExtractor(BaseExtractor):
         super(DependentExtractor, self).__init__(cursor_location_depend_on,
                                                      options)
 
+        self._declare_expected_dependency_names(['outer'])
+
     def _extract(self, entry, extraction_results, extraction_metadata):
-        result = 'This is from standalone extractor: {}'.format(self._deps[0]['outerExtractor']['message'])
+        result = 'This is from standalone extractor: {}'.format(self._deps['outer']['outerExtractor']['message'])
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata)
