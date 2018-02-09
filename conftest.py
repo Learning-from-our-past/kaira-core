@@ -5,6 +5,7 @@ import os
 
 from book_extractors import extraction_constants
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
+from pipeline_creation.dependency_resolver import ExtractorResultsMap
 
 
 def pytest_collection_modifyitems(session, config, items):
@@ -37,6 +38,12 @@ class Th:
         if type(target) is dict:
             for key, item in target.items():
                 Th.omit_property(item, property_name)
+
+    @staticmethod
+    def setup_extractor(extractor):
+        extractor.set_extraction_results_map(ExtractorResultsMap())
+        return extractor
+
 
 @pytest.fixture
 def th():

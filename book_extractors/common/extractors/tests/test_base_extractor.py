@@ -5,11 +5,6 @@ from book_extractors.extraction_pipeline import ExtractionPipeline
 from pipeline_creation.dependency_resolver import ExtractorResultsMap
 
 
-def setup_extractor(extractor):
-    extractor.set_extraction_results_map(ExtractorResultsMap())
-    return extractor
-
-
 class TestBaseExtractor:
 
     @pytest.yield_fixture(autouse=True)
@@ -25,8 +20,8 @@ class TestBaseExtractor:
             assert extractor.execution_order == ['preprocess', 'extract', 'postprocess']
             assert results['mock'] == 'SOME RESULT'
 
-        def should_not_run_preprocess_and_post_process_if_they_are_not_implemented(self):
-            extractor = setup_extractor(NoPreAndPostProcessesExtractor())
+        def should_not_run_preprocess_and_post_process_if_they_are_not_implemented(self, th):
+            extractor = th.setup_extractor(NoPreAndPostProcessesExtractor())
             entry = {'text': 'test string entry'}
             results, metadata = extractor.extract(entry, {}, {})
             assert extractor.execution_order == ['extract']
@@ -43,8 +38,8 @@ class TestBaseExtractor:
             assert metadata['mock']['important'] is True
             assert extractor.metadata_collector.get_metadata() == {'errors': {}} # Collector should be empty again
 
-        def should_provide_starting_position_and_get_previous_cursor_location_correctly_when_required(self):
-            extractor = setup_extractor(MockExtractor(NoPreAndPostProcessesExtractor))
+        def should_provide_starting_position_and_get_previous_cursor_location_correctly_when_required(self, th):
+            extractor = th.setup_extractor(MockExtractor(NoPreAndPostProcessesExtractor))
             entry = {'text': 'test string entry'}
             extraction_results = {
                 'mock2': {
