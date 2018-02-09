@@ -1,13 +1,8 @@
 import pytest
 from pipeline_creation.yaml_parser import YamlParser
-from pipeline_creation.dependency_resolver import ExtractorResultsMap
 
 
 class TestSpouseExtraction:
-
-    @pytest.fixture()
-    def result_map(self):
-        return ExtractorResultsMap()
 
     @pytest.fixture(autouse=True)
     def spouse_extractor(self, result_map):

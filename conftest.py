@@ -49,6 +49,10 @@ class Th:
 def th():
     return Th
 
+@pytest.fixture()
+def result_map():
+    return ExtractorResultsMap()
+
 @pytest.fixture(scope='session', autouse=True)
 def constants():
     extraction_constants.BOOK_NUMBER = '1'
