@@ -5,8 +5,8 @@ from book_extractors.karelians.extraction.extractors.birthday_extractor import B
 
 class TestBirthDayLocation:
     @pytest.yield_fixture(autouse=True)
-    def location_extractor(self):
-        return BirthdayLocationExtractor(BirthdayExtractor, None)
+    def location_extractor(self, th):
+        return th.setup_extractor(BirthdayLocationExtractor(BirthdayExtractor, None))
 
     def should_extract_birth_location_and_fill_in_region_and_coordinates_from_geo_db(self, location_extractor):
         # Simulate the stopping location of the previous extractor which gives this extractor the 'anchor point' to
@@ -55,8 +55,8 @@ class TestBirthDayExtractor:
             {'text': 'Testaaja, maanviljelijä, synt. -91 Uudellakirkolla. Kuoli. -63 Halikossa. Lapset: ', 'result': 'NoneNone1891'}
         ]
 
-    def should_extract_dates_correctly(self,  mock_entries):
-        birthday_extractor = BirthdayExtractor(None, None)
+    def should_extract_dates_correctly(self,  mock_entries, th):
+        birthday_extractor = th.setup_extractor(BirthdayExtractor(None, None))
 
         for test_text in mock_entries:
             result, metadata = birthday_extractor.extract(test_text, {}, {})

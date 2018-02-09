@@ -74,8 +74,8 @@ class TestMigrationParser:
 class TestFinnishLocationExtraction:
 
     @pytest.yield_fixture(autouse=True)
-    def finnish_extractor(self):
-        return FinnishLocationsExtractor(None, None)
+    def finnish_extractor(self, th):
+        return th.setup_extractor(FinnishLocationsExtractor(None, None))
 
 
     def should_extract_locations(self, finnish_extractor, th):
@@ -142,8 +142,8 @@ class TestFinnishLocationExtraction:
 class TestKarelianLocationExtraction:
 
     @pytest.yield_fixture(autouse=True)
-    def karelian_extractor(self):
-        return KarelianLocationsExtractor(None, None)
+    def karelian_extractor(self, th):
+        return th.setup_extractor(KarelianLocationsExtractor(None, None))
 
     def should_extract_locations_with_village_names(self, karelian_extractor):
         results, metadata = karelian_extractor.extract({'text': LOCATION_TEXTS[0]}, {}, {})
@@ -247,48 +247,47 @@ class TestKarelianLocationExtraction:
 
 
 class TestMigrationRouteExtractor:
-    @pytest.yield_fixture(autouse=True)
-    def migration_extractor(self):
-        return MigrationRouteExtractor(None, None)
+    @pytest.fixture(autouse=True)
+    def migration_pipeline(self, th):
+        return th.build_pipeline_from_yaml(MIGRATION_CONFIG)
 
-
-    def should_run_post_process_to_mark_if_person_returned_to_karelia(self, migration_extractor, th):
+    def should_run_post_process_to_mark_if_person_returned_to_karelia(self, migration_pipeline, th):
         text = re.sub(r"\s", r" ", LOCATION_TEXTS[0])
 
-        results, metadata = migration_extractor.extract({'text': text}, {}, {})
+        results, metadata = migration_pipeline.process({'text': text})
         th.omit_property(results, 'coordinates')
         assert results['migrationHistory']['returnedToKarelia'] is True
 
     @pytest.mark.skip
-    def should_extract_location_list_with_missing_years_properly(self, migration_extractor, th):
+    def should_extract_location_list_with_missing_years_properly(self, migration_pipeline, th):
         # TODO: Here both karelian and finnish location extraction breaks weirdly. Only Ypäjä is recognized as finnish location and
         # others will be classified as karelian locations. Something strange is going on.
         text = re.sub(r"\s", r" ", LOCATION_TEXTS[5])
 
-        results, metadata = migration_extractor.extract({'text': text}, {}, {})
+        results, metadata = migration_pipeline.extract({'text': text}, {}, {})
         th.omit_property(results, 'coordinates')
 
-    def should_fix_helsinkis_region_from_karelia_to_other(self, migration_extractor, th):
+    def should_fix_helsinkis_region_from_karelia_to_other(self, migration_pipeline, th):
         text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[0]['text'])
 
-        results, metadata = migration_extractor.extract({'text': text}, {}, {})
+        results, metadata = migration_pipeline.process({'text': text})
         th.omit_property(results, 'coordinates')
         result_locations = results['migrationHistory']['locations']
 
         assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[0]['expected'])
         assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[0]['expected']
 
-    def should_fix_kanneljärvi_region_from_other_to_karelia(self, migration_extractor, th):
+    def should_fix_kanneljärvi_region_from_other_to_karelia(self, migration_pipeline, th):
         text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['text'])
 
-        results, metadata = migration_extractor.extract({'text': text}, {}, {})
+        results, metadata = migration_pipeline.process({'text': text})
         th.omit_property(results, 'coordinates')
         result_locations = results['migrationHistory']['locations']
 
         assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected'])
         assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['expected']
 
-    def should_fix_incorrectly_listed_region_to_correct_one_from_geo_db(self, migration_extractor, th, test_geo_db):
+    def should_fix_incorrectly_listed_region_to_correct_one_from_geo_db(self, migration_pipeline, th, test_geo_db):
         # Set up a case where place Mordor is listed in text as place in Karelia while in reality its region should
         # be "other". Region is fixed by retrieving it from geo db along with coordinates
         with test_database(test_geo_db, (Place, Location), create_tables=False):
@@ -302,17 +301,17 @@ class TestMigrationRouteExtractor:
 
             text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
 
-            results, metadata = migration_extractor.extract({'text': text}, {}, {})
+            results, metadata = migration_pipeline.process({'text': text})
             th.omit_property(results, 'coordinates')
             result_locations = results['migrationHistory']['locations']
 
             assert len(result_locations) == len(LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['expected'])
             assert result_locations == LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['expected']
 
-    def should_leave_region_as_is_if_it_is_not_found_from_db(self,  migration_extractor, th):
+    def should_leave_region_as_is_if_it_is_not_found_from_db(self,  migration_pipeline, th):
         text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
 
-        results, metadata = migration_extractor.extract({'text': text}, {}, {})
+        results, metadata = migration_pipeline.process({'text': text})
         th.omit_property(results, 'coordinates')
         result_locations = results['migrationHistory']['locations']
 
@@ -321,11 +320,12 @@ class TestMigrationRouteExtractor:
         assert result_locations[0]['region'] == 'karelia'
         assert result_locations[1]['region'] == 'other'
 
+
     class TestExcludingIncorrectWords:
 
-        def extract_and_assert(self, person_data, migration_extractor, th):
+        def extract_and_assert(self, person_data, migration_pipeline, th):
             text = re.sub(r"\s", r" ", person_data['text'])
-            results, metadata = migration_extractor.extract({'text': text}, {}, {})
+            results, metadata = migration_pipeline.process({'text': text})
             th.omit_property(results, 'coordinates')
             th.omit_property(results, 'village')
             result_locations = results['migrationHistory']['locations']
@@ -333,9 +333,27 @@ class TestMigrationRouteExtractor:
             assert len(result_locations) == len(person_data['expected'])
             assert result_locations == person_data['expected']
 
-        def should_not_contain_incorrect_word_rouva_as_location(self, migration_extractor, th):
+        def should_not_contain_incorrect_word_rouva_as_location(self, migration_pipeline, th):
             # Regression test to remove word Rouva from results
-            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[0], migration_extractor, th)
-            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[1], migration_extractor, th)
-            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[2], migration_extractor, th)
-            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[3], migration_extractor, th)
+            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[0], migration_pipeline, th)
+            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[1], migration_pipeline, th)
+            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[2], migration_pipeline, th)
+            self.extract_and_assert(LOCATION_TEXTS_WITH_ROUVA_WORD[3], migration_pipeline, th)
+
+MIGRATION_CONFIG = """
+pipeline:
+  - !Extractor {
+      module: "book_extractors.karelians.extraction.extractors.migration_route_extractors",
+      class_name: "MigrationRouteExtractor",
+      pipeline: [
+        !Extractor {
+            module: "book_extractors.karelians.extraction.extractors.migration_route_extractors",
+            class_name: "KarelianLocationsExtractor"
+        },
+        !Extractor {
+            module: "book_extractors.karelians.extraction.extractors.migration_route_extractors",
+            class_name: "FinnishLocationsExtractor"
+        }
+      ]
+    }
+"""
