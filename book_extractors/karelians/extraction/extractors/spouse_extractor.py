@@ -3,15 +3,6 @@ import re
 
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.karelians.extraction.extractors.birthday_extractor import BirthdayExtractor
-from book_extractors.karelians.extraction.extractors.death_extractor import DeathExtractor
-from book_extractors.karelians.extraction.extractors.location_extractor import BirthdayLocationExtractor
-from book_extractors.karelians.extraction.extractors.original_family_extractor import FormerSurnameExtractor
-from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
-from book_extractors.karelians.extraction.extractors.wedding_extractor import WeddingExtractor
-from book_extractors.karelians.extraction.extractors.war_data_extractor import WarDataExtractor
-from book_extractors.karelians.extraction.extractors.martta_activity_flag_extractor import MarttaActivityFlagExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from shared import regexUtils
 
@@ -21,23 +12,6 @@ class SpouseExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(SpouseExtractor, self).__init__(cursor_location_depend_on, options)
-
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(FormerSurnameExtractor),
-            configure_extractor(ProfessionExtractor, depends_on_match_position_of_extractor=FormerSurnameExtractor),
-            configure_extractor(BirthdayExtractor),
-            configure_extractor(BirthdayLocationExtractor, depends_on_match_position_of_extractor=BirthdayExtractor),
-            configure_extractor(DeathExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor),
-            configure_extractor(WeddingExtractor, depends_on_match_position_of_extractor=BirthdayLocationExtractor)
-        ])
-
-        self._additional_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(WarDataExtractor, extractor_options={'in_spouse_extractor': True}),
-            configure_extractor(MarttaActivityFlagExtractor,
-                                extractor_options={'in_spouse_extractor': True},
-                                dependencies_contexts=[('main', 'primaryPerson')])
-        ])
-
         self.kaira_id_provider = KairaIdProvider()
 
         self.PATTERN = r'Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))'
@@ -48,12 +22,7 @@ class SpouseExtractor(BaseExtractor):
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
-        parent_data = self._get_parent_data_for_pipeline(extraction_results, extraction_metadata)
         result, cursor_location = self._find_spouse(entry['text'], start_position)
-        if result is not None:
-            additional_results, additional_metadata = self._additional_extraction_pipeline.process(entry, parent_pipeline_data=parent_data)
-            result[WarDataExtractor.extraction_key] = additional_results[WarDataExtractor.extraction_key]
-            result[MarttaActivityFlagExtractor.extraction_key] = additional_results[MarttaActivityFlagExtractor.extraction_key]
 
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata, cursor_location=cursor_location)
 
@@ -81,7 +50,9 @@ class SpouseExtractor(BaseExtractor):
             spouse_name = spouse_name_match.group('name').strip()
             spouse_name = re.sub(r'\so$', '', spouse_name)
             spouse_details, metadata = self._find_spouse_details(text[spouse_name_match.end() - 2:])
+            spouse_details = spouse_details['spouse']
 
+            # FIXME: This will break when adding new extractors to YAML configuration
             # Map data to spouse object
             return {
                 KEYS['birthData']: {
@@ -94,7 +65,9 @@ class SpouseExtractor(BaseExtractor):
                 KEYS['weddingYear']: spouse_details['wedding'],
                 KEYS['spouseName']: spouse_name,
                 KEYS['hasSpouse']: True,
-                KEYS['kairaId']: self.kaira_id_provider.get_new_id('S')
+                KEYS['kairaId']: self.kaira_id_provider.get_new_id('S'),
+                'warData': spouse_details['warData'],
+                'marttaActivityFlag': spouse_details['marttaActivityFlag']
             }
 
         except regexUtils.RegexNoneMatchException:

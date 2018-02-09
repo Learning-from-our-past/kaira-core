@@ -40,8 +40,16 @@ class YamlParser:
         loaded = yaml.load(file)
         return loaded
 
+    def _parse_config_from_string(self, config):
+        loaded = yaml.load(config)
+        return loaded
+
     def build_pipeline_from_yaml(self, yaml_path):
         config = self._parse_config(yaml_path)
 
         return ExtractionPipeline(config['pipeline'], True)
 
+    def build_pipeline_from_yaml_string(self, yaml_string):
+        config = self._parse_config_from_string(yaml_string)
+
+        return ExtractionPipeline(config['pipeline'], True)
