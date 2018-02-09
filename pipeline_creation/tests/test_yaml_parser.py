@@ -24,7 +24,7 @@ def parser():
 def should_load_yaml(parser):
     result = parser._parse_config('pipeline_creation/tests/test_config.yaml')
     assert result['book_series'] == 'Siirtokarjalaisten tie'
-    assert len(result['pipeline']) == 14
+    assert len(result['pipeline']) == 15
     assert type(result['pipeline'][0]) is NameExtractor
 
 

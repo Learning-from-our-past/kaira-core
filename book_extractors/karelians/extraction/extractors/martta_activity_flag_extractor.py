@@ -1,7 +1,6 @@
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from shared.text_utils import remove_hyphens_from_text
 import regex
-from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
 
 
 class MarttaActivityFlagExtractor(BaseExtractor):
@@ -9,7 +8,7 @@ class MarttaActivityFlagExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
         super(MarttaActivityFlagExtractor, self).__init__(cursor_location_depend_on, options)
-        self._set_dependencies([NameExtractor], dependencies_contexts)
+        self._declare_expected_dependency_names(['person'])
         self._in_spouse_extractor = options['in_spouse_extractor']
 
         regex_options = (regex.UNICODE | regex.IGNORECASE)
@@ -34,9 +33,9 @@ class MarttaActivityFlagExtractor(BaseExtractor):
         """
         is_female = False
 
-        if self._in_spouse_extractor and self._deps['name']['gender'] == 'Male':
+        if self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Male':
             is_female = True
-        elif not self._in_spouse_extractor and self._deps['name']['gender'] == 'Female':
+        elif not self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Female':
             is_female = True
 
         return is_female

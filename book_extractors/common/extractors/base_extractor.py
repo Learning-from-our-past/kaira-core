@@ -63,13 +63,26 @@ class BaseExtractor:
         """
         self._expected_dependencies_names = dependency_names
 
-    def set_required_dependencies(self, extractor_objects):
+    def set_required_dependencies(self, extractor_dependencies):
         """
-        Set possible required dependencies based on YAML config. A list of extractor ids so that the
+        Set possible required dependencies based on YAML config. A list of extractors or their ids/names so that the
         dependencies can be resolved from the extraction_results_map during the extraction.
+
+        Usually one should provide extractor objects like YamlParser does when config-file uses PyYaml anchors. However,
+        it is also possible to just pass a strings which will then act as keys in the extraction results map instead
+        of object ids. This is recommended approach when mocking dependencies in unit tests.
+
+        :param extractor_dependencies: Extractor object or string.
         :return:
         """
-        self._required_dependencies = [id(extractor) for extractor in extractor_objects]
+
+        def map_dependencies(dep):
+            if type(dep) is str:
+                return dep
+            else:
+                return id(dep)
+
+        self._required_dependencies = list(map(map_dependencies, extractor_dependencies))
 
         if len(self._required_dependencies) != len(self._expected_dependencies_names):
             raise RequiredDependenciesAreMissing()

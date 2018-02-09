@@ -57,6 +57,16 @@ pipeline:
     }
 
   - !Extractor {
+      module: "book_extractors.karelians.extraction.extractors.martta_activity_flag_extractor",
+      class_name: "MarttaActivityFlagExtractor",
+      depends_on: [ *PrimaryPersonName ],
+      options: {
+        in_spouse_extractor: false,
+        output_path: "primaryPerson"
+      }
+    }
+
+  - !Extractor {
       module: "book_extractors.karelians.extraction.extractors.war_data_extractor",
       class_name: "WarDataExtractor",
       options: {
@@ -118,7 +128,98 @@ pipeline:
 
   - !Extractor {
       module: "book_extractors.karelians.extraction.extractors.spouse_extractor",
-      class_name: "SpouseExtractor"
+      class_name: "SpouseExtractor",
+      pipeline: [
+        !Extractor &SpouseFormerSurname {
+          module: "book_extractors.karelians.extraction.extractors.original_family_extractor",
+          class_name: "FormerSurnameExtractor",
+          options: {
+            output_path: "spouse"
+          }
+        },
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.profession_extractor",
+          class_name: "ProfessionExtractor",
+          cursor_location_depend_on: *SpouseFormerSurname,
+          options: {
+            output_path: "spouse"
+          }
+        },
+        !Extractor &SpouseBirthday {
+          module: "book_extractors.karelians.extraction.extractors.birthday_extractor",
+          class_name: "BirthdayExtractor",
+          cursor_location_depend_on: *SpouseFormerSurname,
+          options: {
+            output_path: "spouse"
+          }
+        },
+        !Extractor &SpouseBirthLocation {
+          module: "book_extractors.karelians.extraction.extractors.location_extractor",
+          class_name: "BirthdayLocationExtractor",
+          cursor_location_depend_on: *SpouseBirthday,
+          options: {
+            output_path: "spouse"
+          }
+        },
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.death_extractor",
+          class_name: "DeathExtractor",
+          cursor_location_depend_on: *SpouseBirthLocation,
+          options: {
+            output_path: "spouse"
+          }
+        },
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.wedding_extractor",
+          class_name: "WeddingExtractor",
+          cursor_location_depend_on: *SpouseBirthLocation,
+          options: {
+            output_path: "spouse"
+          }
+        },
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.martta_activity_flag_extractor",
+          class_name: "MarttaActivityFlagExtractor",
+          depends_on: [ *PrimaryPersonName ],
+          options: {
+            in_spouse_extractor: true,
+            output_path: "spouse"
+          }
+        },
+        !Extractor {
+          module: "book_extractors.karelians.extraction.extractors.war_data_extractor",
+          class_name: "WarDataExtractor",
+          options: {
+            output_path: "spouse"
+          },
+          pipeline: [
+            !Extractor {
+              module: "book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor",
+              class_name: "InjuredInWarFlagExtractor",
+              depends_on: [ *PrimaryPersonName ],
+              options: {
+                in_spouse_extractor: true
+              }
+            },
+            !Extractor {
+              module: "book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor",
+              class_name: "ServedDuringWarFlagExtractor",
+              depends_on: [ *PrimaryPersonName ],
+              options: {
+                in_spouse_extractor: true
+              }
+            },
+            !Extractor {
+              module: "book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor",
+              class_name: "LottaActivityFlagExtractor",
+              depends_on: [ *PrimaryPersonName ],
+              options: {
+                in_spouse_extractor: true
+              }
+            }
+          ]
+        }
+      ]
     }
 
   - !Extractor {
