@@ -38,7 +38,7 @@ class BaseExtractor:
         :param extractors:
         :return:
         """
-        self._sub_extraction_pipeline = ExtractionPipeline(extractors, pass_extractors_directly=True)
+        self._sub_extraction_pipeline = ExtractionPipeline(extractors)
 
     def set_extraction_results_map(self, results_map):
         """
