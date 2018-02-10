@@ -18,7 +18,7 @@ class FarmDetailsExtractor(BaseExtractor):
         super(FarmDetailsExtractor, self).__init__(cursor_location_depend_on, options)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        results, metadata = self._extract_farm_details(entry['text'])
+        results, metadata = self._extract_farm_details(entry)
         return self._add_to_extraction_results(self._get_data_or_none(results), extraction_results, extraction_metadata)
 
     def _get_data_or_none(self, extracted_data):
@@ -28,8 +28,8 @@ class FarmDetailsExtractor(BaseExtractor):
                 return extracted_data
         return None
 
-    def _extract_farm_details(self, text):
-        results, metadata = self._sub_extraction_pipeline.process({'text': text})
+    def _extract_farm_details(self, entry):
+        results, metadata = self._sub_extraction_pipeline.process(entry)
 
         # Flatten dict flags out of the result dict:
         flags = results.pop('flags')
