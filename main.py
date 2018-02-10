@@ -1,8 +1,5 @@
 import sys
-import os
-import subprocess
 import argparse
-import re
 import shutil
 from lxml import etree
 from book_extractors.karelians.main import KarelianBooksExtractor, get_karelian_data_entry, BOOK_SERIES_ID as KARELIAN_BOOK_ID

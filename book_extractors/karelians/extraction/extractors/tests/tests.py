@@ -1,5 +1,4 @@
 from nose.tools import *
-import lxml
 import lxml.etree as etree
 from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
 from book_extractors.karelians.extraction.extractors.profession_extractor import ProfessionExtractor
