@@ -103,3 +103,27 @@ def update_locationdb(ctx, datasheet=None):
     extraction results. Datasheet format specification can be found from shared/geo/update_geo_db.py
     """
     update_location_db(datasheet)
+
+@task(optional=['input', 'output', 'books'],
+      help={'input': 'Input file with KairaIDs, one per row. Default: ids.txt',
+            'output': 'Output file to place all the generated XML in. Default: ids.xml',
+            'books': 'Paths to the books where the person entries corresponding to the KairaIDs can be found from. Default: siirtokarjalaiset_I-IV.xml in material/'})
+def kairaid2xml(ctx, input_file=None, output_file=None, books=None):
+    """
+    Use a file that contains newline separated KairaIDs to generate an XML file with the person entries corresponding to those KairaIDs.
+    """
+    kairaid2xml_cmd = '-input {} -output {} -books {}'
+
+    if not input_file:
+        input_file = 'material/ids.txt'
+
+    if not output_file:
+        output_file = 'material/ids.xml'
+
+    if not books:
+        path_template = 'material/siirtokarjalaiset_{}.xml'
+        book_suffices = ('I', 'II', 'III', 'IV')
+        books = ' '.join([path_template.format(x) for x in book_suffices])
+
+    kairaid2xml_cmd = kairaid2xml_cmd.format(input_file, output_file, books)
+    ctx.run('python analysis_toolkit/kairaid2xml.py {}'.format(kairaid2xml_cmd))
