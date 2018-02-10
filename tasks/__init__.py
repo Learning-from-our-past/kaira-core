@@ -77,7 +77,7 @@ def extract(ctx, bookpath=None, testset=None):
     if testset:
         ctx.run('python main.py -i material/testset_I.xml -o material/testset_I.json')
     elif bookpath:
-        file_name = os.path.basename(bookpath)[0]
+        file_name = os.path.splitext(os.path.basename(bookpath))[0]
         ctx.run('python main.py -i {} -o material/{}.json'.format(bookpath, file_name))
     else:
         print('Error: either valid book path should be provided with option -p or run the test set with -t option.')
