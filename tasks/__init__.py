@@ -127,3 +127,34 @@ def kairaid2xml(ctx, input_file=None, output_file=None, books=None):
 
     kairaid2xml_cmd = kairaid2xml_cmd.format(input_file, output_file, books)
     ctx.run('python analysis_toolkit/kairaid2xml.py {}'.format(kairaid2xml_cmd))
+
+
+@task(optional=['books'],
+      help={'regex': 'The regular expression to use for testing.',
+            'books': 'Paths to the books. Default: siirtokarjalaiset_I-IV.xml in material/',
+            'hyphens': 'Whether to remove hyphens from text before checking for regex matches.',
+            'spaces': 'Whether to remove spaces from text before checking for regex matches.',
+            'display-text': 'Whether to display the person entries that had regex matches after regex test.'})
+def regex_test(ctx, regex=None, books=None, hyphens=False, spaces=False, display_text=False):
+    """
+    Run an "extraction" test using regex and get information about what kind of strings the regex matched and the frequency of each match.
+    """
+    regex_ext_cmd = '"{}" -books {} {}'
+
+    if not books:
+        path_template = 'material/siirtokarjalaiset_{}.xml'
+        book_suffices = ('I', 'II', 'III', 'IV')
+        books = ' '.join([path_template.format(x) for x in book_suffices])
+
+    flag_list = []
+    if hyphens:
+        flag_list.append('--hyphens')
+    if spaces:
+        flag_list.append('--spaces')
+    if display_text:
+        flag_list.append('--display-text')
+
+    flags = ' '.join(flag_list)
+    regex_ext_cmd = regex_ext_cmd.format(regex, books, flags)
+    print('cmd: {}'.format(regex_ext_cmd))
+    ctx.run('python analysis_toolkit/simple_regex_extractor.py {}'.format(regex_ext_cmd))
