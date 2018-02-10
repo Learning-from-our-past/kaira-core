@@ -102,7 +102,7 @@ class LottaActivityFlagExtractor(BaseExtractor):
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         if self._is_person_female():
-            text = remove_hyphens_from_text(entry['text'])
+            text = remove_hyphens_from_text(entry['full_text'])
             lotta_activity = self._extract_lotta_flags(text)
         else:
             lotta_activity = self._NO_RESULT

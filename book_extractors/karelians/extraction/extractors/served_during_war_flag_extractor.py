@@ -37,7 +37,7 @@ class ServedDuringWarFlagExtractor(BaseExtractor):
     def _extract(self, entry, extraction_results, extraction_metadata):
         served_during_war = None
         if self._is_person_male():
-            served_during_war = self._check_served_during_war(entry['text'])
+            served_during_war = self._check_served_during_war(entry['full_text'])
 
         return self._add_to_extraction_results(served_during_war, extraction_results, extraction_metadata)
 

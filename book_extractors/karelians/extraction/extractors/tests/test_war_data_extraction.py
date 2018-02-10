@@ -16,7 +16,8 @@ class TestInjuredInWarFlag:
         extractor.set_required_dependencies(['mockPrimaryPerson'])
 
         for e in expected_flags_and_texts:
-            results, metadata = extractor.extract({'text': e[0]}, {}, {})
+            shortened_text = e[0][0:15] # Make sure the extractor uses full_text, not this substring
+            results, metadata = extractor.extract({'text': shortened_text, 'full_text': e[0]}, {}, {})
             assert results[flag] is e[1]
 
     def should_return_true_if_text_contains_mentions_of_being_injured(self, result_map):
@@ -102,7 +103,8 @@ class TestServedDuringWarFlagExtraction:
         extractor.set_required_dependencies(['mockPrimaryPerson'])
 
         for e in expected_flags_and_texts:
-            results, metadata = extractor.extract({'text': e[0]}, {}, {})
+            shortened_text = e[0][0:15]  # Make sure the extractor uses full_text, not this substring
+            results, metadata = extractor.extract({'text': shortened_text, 'full_text': e[0]}, {}, {})
             assert results[flag] is e[1]
 
     def should_return_true_if_text_contains_mention_of_having_served_with_lut_suffix(self, result_map):
@@ -183,7 +185,8 @@ def verify_flags(expected_flags_and_texts, result_map, in_spouse=False, sex='Fem
     extractor.set_required_dependencies(['mockPrimaryPerson'])
 
     for e in expected_flags_and_texts:
-        results, metadata = extractor.extract({'text': e[0]}, {}, {})
+        shortened_text = e[0][0:15]  # Make sure the extractor uses full_text, not this substring
+        results, metadata = extractor.extract({'text': shortened_text, 'full_text': e[0]}, {}, {})
         assert results[flag][subflag] is e[1]
 
 

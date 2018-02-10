@@ -47,5 +47,6 @@ def get_karelian_data_entry(name, approximated_page, text, img_path=''):
         'name': name,
         'approximated_page': approximated_page,
         'image_path': img_path,
-        'text': text
+        'text': text,
+        'full_text': text
     }

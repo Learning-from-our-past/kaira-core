@@ -118,6 +118,7 @@ def get_great_farmers_data_entry(name, location, approximated_page, text):
         'name': name,
         'location': location,
         'approximated_page': approximated_page,
-        'text': text
+        'text': text,
+        'full_text': text
     }
 

@@ -22,6 +22,13 @@ class ExtractionPipeline:
         # Replace invisible whitespace and control characters
         entry['text'] = re.sub(r"\s", r" ", entry['text'])
 
+        # Some pipelines might be provided only sub text of the whole text while some extractors in the pipeline
+        # might need the whole text. So make sure one is available always.
+        if 'full_text' in entry:
+            entry['full_text'] = re.sub(r"\s", r" ", entry['full_text'])
+        else:
+            entry['full_text'] = entry['text']
+
         for ext in self._extractors:
             extraction_output, extraction_metadata = ext.extract(entry,
                                                                  extraction_output,
