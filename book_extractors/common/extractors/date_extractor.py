@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import shared.text_utils as text_utils
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
 from shared import regexUtils
