@@ -14,6 +14,7 @@ from book_extractors.karelians.extraction.extractors.child_extractor import Chil
 from book_extractors.karelians.extraction.extractors.farm_extractor import FarmDetailsExtractor
 from book_extractors.karelians.extraction.extractors.war_data_extractor import WarDataExtractor
 from book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor import LottaActivityFlagExtractor
+from book_extractors.karelians.extraction.extractors.martta_activity_flag_extractor import MarttaActivityFlagExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
 from book_extractors.common.extractors.previous_marriages_flag_extractor import PreviousMarriagesFlagExtractor
 from shared.gender_extract import Gender
@@ -46,7 +47,11 @@ class KarelianBooksExtractor:
             configure_extractor(SpouseExtractor),
             configure_extractor(ChildExtractor),
             configure_extractor(FarmDetailsExtractor),
-            configure_extractor(KairaIdExtractor, path='primaryPerson')
+            configure_extractor(KairaIdExtractor, path='primaryPerson'),
+            configure_extractor(MarttaActivityFlagExtractor,
+                                extractor_options={'in_spouse_extractor': False},
+                                path='primaryPerson',
+                                dependencies_contexts=[('current', 'primaryPerson')])
         ]
 
         return ExtractionPipeline(pipeline_components)
