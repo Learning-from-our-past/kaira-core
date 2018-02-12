@@ -37,6 +37,13 @@ def take_sub_str_based_on_first_regex_occurrence(text, pattern, options=re.UNICO
         return text[0:pos]
 
 
+def take_sub_str_based_on_start_and_end_and_radius(text, start, end, radius):
+    substr_start = start - radius
+    substr_end = end + radius
+
+    return text[substr_start:substr_end]
+
+
 def remove_spaces_from_text(text):
     return re.sub(_spaces_regex_pattern, '', text)
 
@@ -58,3 +65,17 @@ def float_or_none(value):
         return float(value.replace(',', '.'))
     except (TypeError, ValueError, AttributeError):
         return None
+
+
+def check_string_for_substrings(substrings, string, ignore_case=False):
+    for substring in substrings:
+        if ignore_case:
+            if substring.lower() in string.lower():
+                return True
+        else:
+            if substring in string:
+                return True
+    return False
+
+def is_first_character_lower_case(string):
+    return string[0].islower()

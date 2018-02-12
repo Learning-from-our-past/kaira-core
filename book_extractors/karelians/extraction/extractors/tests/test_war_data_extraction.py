@@ -19,7 +19,7 @@ class TestWarDataExtraction:
         for e in expected_flags_and_texts:
             results, metadata = extractor.extract({'text': e[0]}, {}, {},
                                                   parent_pipeline_data=parent_data)
-            assert results[flag][subflag] is e[1]
+            assert results[flag][subflag] == e[1]
 
     def should_extract_injured_in_war_flag_correctly_as_true_if_primary_person_is_male(self, extractor):
         self._verify_flags([
@@ -32,9 +32,16 @@ class TestWarDataExtraction:
         ], extractor, 'servedDuringWarFlag', 'Male')
 
     def should_extract_lotta_activity_flag_correctly_as_true_if_primary_person_is_female(self, extractor):
+        expected_result = {'lotta': True,
+                           'foodLotta': False,
+                           'officeLotta': False,
+                           'nurseLotta': False,
+                           'antiairLotta': False,
+                           'pikkulotta': False,
+                           'organizationLotta': False}
         self._verify_flags([
-            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
-        ], extractor, 'lottaActivityFlag', 'Female')
+            ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', expected_result)
+        ], extractor, LottaActivityFlagExtractor.extraction_key, 'Female')
 
 
 class TestInjuredInWarFlag:
@@ -205,48 +212,188 @@ class TestServedDuringWarFlagExtraction:
         ], in_spouse=True, sex='Female')
 
 
-class TestLottaActivityFlagExtraction:
-    def _verify_flags(self, expected_flags_and_texts, in_spouse=False, sex='Female'):
-        flag = LottaActivityFlagExtractor.extraction_key
-        parent_data = {'extraction_results': {'name': {'gender': sex}},
-                       'parent_data': None}
+def verify_flags(expected_flags_and_texts, in_spouse=False, sex='Female', subflag='lotta'):
+    flag = LottaActivityFlagExtractor.extraction_key
+    parent_data = {'extraction_results': {'name': {'gender': sex}},
+                   'parent_data': None}
 
-        pipeline = ExtractionPipeline([
-            configure_extractor(LottaActivityFlagExtractor, extractor_options={'in_spouse_extractor': in_spouse},
-                                dependencies_contexts=['main'])
-        ])
+    pipeline = ExtractionPipeline([
+        configure_extractor(LottaActivityFlagExtractor, extractor_options={'in_spouse_extractor': in_spouse},
+                            dependencies_contexts=['main'])
+    ])
 
-        for e in expected_flags_and_texts:
-            results, metadata = pipeline.process({'text': e[0]}, parent_pipeline_data=parent_data)
-            assert results[flag] is e[1]
+    for e in expected_flags_and_texts:
+        results, metadata = pipeline.process({'text': e[0]}, parent_pipeline_data=parent_data)
+        assert results[flag][subflag] is e[1]
 
-    def should_return_true_if_text_contains_mention_of_lotta_activity_and_primary_person_is_female_and_we_are_not_in_spouse_extractor(self):
-        self._verify_flags([
+
+class TestLottaActivityFlagsExtraction:
+    def should_return_true_if_text_contains_mention_of_lotta_activity(self):
+        verify_flags([
             ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
         ])
 
-    def should_return_true_if_text_contains_mention_of_lotta_activity_and_primary_person_is_male_and_we_are_in_spouse_extractor(self):
-        self._verify_flags([
+    def should_return_true_if_text_contains_mention_of_lotta_activity(self):
+        verify_flags([
             ('Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
         ], in_spouse=True, sex='Male')
 
     def should_return_true_if_text_contains_mention_of_lotta_activity_with_typo_and_hyphen(self):
-        self._verify_flags([
+        verify_flags([
             ('Emäntä oli sota-aikana mukana l0t-tatoiminnas-sa ja hän on saanut talvisodan muistomitalin.', True)
         ])
 
-    def should_return_false_if_text_does_not_contain_mention_of_lotta_activity_and_primary_person_is_female_and_we_are_not_in_spouse_extractor(self):
-        self._verify_flags([
+    def should_return_false_if_text_does_not_contain_mention_of_lotta_activity(self):
+        verify_flags([
             ('Emäntä oli sota-aikana tanssilattioiden partaveitsi eikä piitannut sotatoiminnasta.', False)
         ], in_spouse=False, sex='Female')
 
-    def should_return_false_if_text_does_not_contain_mention_of_lotta_activity_and_primary_person_is_male_and_we_are_in_spouse_extractor(self):
-        self._verify_flags([
+    def should_return_false_if_text_does_not_contain_mention_of_lotta_activity(self):
+        verify_flags([
             ('Emäntä oli sota-aikana tanssilattioiden partaveitsi eikä piitannut sotatoiminnasta.', False)
         ], in_spouse=True, sex='Male')
 
+    def should_return_false_if_text_contains_lotta_name(self):
+        verify_flags([
+            ('Emännän nimi oli Lotta ja hän', False)
+        ], in_spouse=False, sex='Female')
+
+    def should_return_false_if_text_contains_word_vuotta(self):
+        verify_flags([
+            ('Emäntä asui kymmenen vuotta Vitsauskylässä.', False)
+        ], in_spouse=False, sex='Female')
+
+    def should_return_false_if_text_contains_lotta_like_word_with_wrong_suffix(self):
+        verify_flags([
+            ('Emäntä tuli ulos omakotitalosta ja kirkui.', False),
+            ('Emäntä oli luullut olevansa kiillottaja koko elämänsä ajan.', False)
+        ], in_spouse=False, sex='Female')
+
     def should_return_none_if_primary_person_is_male_and_we_are_not_in_spouse_extractor(self):
-        self._verify_flags([('foo', None)], in_spouse=False, sex='Male')
+        verify_flags([('foo', None)], in_spouse=False, sex='Male')
 
     def should_return_none_if_primary_person_is_female_and_we_are_in_spouse_extractor(self):
-        self._verify_flags([('bar', None)], in_spouse=True, sex='Female')
+        verify_flags([('bar', None)], in_spouse=True, sex='Female')
+
+    class TestFoodLottaFlag:
+        def should_extract_foodlotta_true_if_text_contains_mention_of_lotta_working_in_a_food_role(self):
+            verify_flags([
+                ('Rouva toimi sota-aikana muonituslottana.', True),
+                ('Sodan aikana hän oli kanttiinilottana.', True),
+            ], in_spouse=False, sex='Female', subflag='foodLotta')
+
+        def should_extract_foodlotta_true_if_text_contains_mention_of_lotta_working_in_a_food_role_with_typos(self):
+            verify_flags([
+                ('Rouva toimi sota-aikana muoni-tuslot-tana.', True),
+                ('Sodan aikana hän oli kantt11nilottana.', True),
+            ], in_spouse=False, sex='Female', subflag='foodLotta')
+
+        def should_not_extract_foodlotta_when_there_is_no_mention_of_foodlotta_work(self):
+            verify_flags([
+                ('Rouva toimi sota-aikana kodinhoitajana.', False)
+            ], in_spouse=False, sex='Female', subflag='foodLotta')
+
+    class TestOfficeLottaFlag:
+        def should_extract_officelotta_true_if_text_contains_mention_of_lotta_working_in_an_office_role(self):
+            verify_flags([
+                ('Sodan aikana hän työskenteli kenttäpostissa ja kanslialottana.', True),
+                ('Talvisodan aikana hän toimi keskuslottana Vahvialasssa.', True),
+                ('Hän toimi sodan aikana viestilottana.', True),
+                ('Hän oli viestityslottana sotien aikana.', True),
+                ('Rouva Nyymi oli jatkosodan aikana toimistolottana.', True)
+            ], in_spouse=False, sex='Female', subflag='officeLotta')
+
+        def should_extract_officelotta_true_if_text_contains_mention_of_lotta_working_in_an_office_role_with_typos(self):
+            verify_flags([
+                ('Sodan aikana hän työskenteli kenttäpostissa ja kanslial0ttana.', True),
+                ('Talvisodan aikana hän toimi keskus-lottana Vahvialasssa.', True),
+                ('Hän toimi sodan aikana vie5tilottana.', True),
+                ('Hän oli viestituslottana sotien aikana.', True),
+                ('Rouva Nyymi oli jatkosodan aikana toimisto!ottana.', True)
+            ], in_spouse=False, sex='Female', subflag='officeLotta')
+
+        def should_not_extract_officelotta_when_there_is_no_mention_of_officelotta_work(self):
+            verify_flags([
+                ('on saanut Maanviljelysseurojen keskusliiton hopeisen ansiomerkin.', False),
+                ('ja palveli talvisodassa Viestijoukoissa ja', False),
+                ('Satunnainen Nimi on Hausjärven puhelinlaitoksen palveluksessa', False)
+            ], in_spouse=False, sex='Female', subflag='officeLotta')
+
+    class TestNurseLottaFlag:
+        def should_extract_nurselotta_true_if_text_contains_mention_of_lotta_working_in_a_health_care_role(self):
+            verify_flags([
+                ('Nyymi on suorittanut lääkintälottakurs-sin Helsingissä -40 ja on sen', True),
+                ('Hän toimi lääkintälottana talvisodassa- ja', True)
+            ], in_spouse=False, sex='Female', subflag='nurseLotta')
+
+        def should_extract_nurselotta_true_if_text_contains_mention_of_lotta_working_in_a_health_care_role_with_typos(self):
+            verify_flags([
+                ('Nyymi on suorittanut lääkin-tä1-ottakurs-sin Helsingissä -40 ja on sen', True),
+                ('Hän toimi lääkintäl0ttana talvisodassa- ja', True)
+            ], in_spouse=False, sex='Female', subflag='nurseLotta')
+
+        def should_not_extract_nurselotta_when_there_is_no_mention_of_nurselotta_work(self):
+            verify_flags([
+                ('Mystinen Voima palveli lääkintäsotamiehenä jatkosodan.', False),
+                ('käynyt keskikoulun ja suorittanut lääkintävoimistelijakurssin.', False)
+            ], in_spouse=False, sex='Female', subflag='nurseLotta')
+
+    class TestAntiairLottaFlag:
+        def should_extract_antiairlotta_true_if_text_contains_mention_of_lotta_working_in_air_surveillance_role(self):
+            verify_flags([
+                ('Rouva oli sodan aikana ilmaval-vontalottana.', True),
+                ('Rouva on toiminut Iv-lottana', True)
+            ], in_spouse=False, sex='Female', subflag='antiairLotta')
+
+        def should_extract_antiairlotta_true_if_text_contains_mention_of_lotta_working_in_air_surveillance_role_with_typos(self):
+            verify_flags([
+                ('Rouva oli sodan aikana ilmav4l-vontalottana.', True),
+                ('Rouva on toiminut Iv-lottana', True),
+                ('Rouva on toiminut is-lottana', True),
+                ('Rouva on toiminut Islottana', True),
+                ('Rouva on toiminut It-lottana', True)
+            ], in_spouse=False, sex='Female', subflag='antiairLotta')
+
+        def should_not_extract_antiairlotta_when_there_is_no_mention_of_antiairlotta_work(self):
+            verify_flags([
+                ('Hän on saanut 10-vuotislottamerkin', False),
+                ('palveli jatkosodassa ilmavalvontajoukoissa.', False)
+            ], in_spouse=False, sex='Female', subflag='antiairLotta')
+
+    class TestPikkulottaFlag:
+        def should_extract_pikkulotta_true_if_text_contains_mention_of_person_being_a_pikkulotta(self):
+            verify_flags([
+                ('Nyymi kuului sodan aikana Pikkulottiin.', True),
+                ('Rouva Agentti on toiminut pikkulottana.', True)
+            ], in_spouse=False, sex='Female', subflag='pikkulotta')
+
+        def should_extract_pikkulotta_true_if_text_contains_mention_of_person_being_a_pikkulotta_with_typos(self):
+            verify_flags([
+                ('Nyymi kuului sodan aikana Pikku1ottiin.', True),
+                ('Rouva Agentti on toiminut pikkul0t-tana.', True)
+            ], in_spouse=False, sex='Female', subflag='pikkulotta')
+
+        def should_not_extract_pikkulotta_if_text_contains_no_mention_of_person_being_a_pikkulotta(self):
+            verify_flags([
+                ('Hän on toiminut vaatturina pikkupojasta lähtien.', False)
+            ], in_spouse=False, sex='Female', subflag='pikkulotta')
+    
+    class TestOrganizationLottaFlag:
+        def should_extract_organizationlotta_when_there_is_mention_of_belonging_to_lotta_org(self):
+            verify_flags([
+                ('Hän kuului jatkosodassa Lotta Svärd-järjestöön.', True),
+                ('Hän on toiminut lottajärjestössä.', True),
+                ('Hän on osallistunut nuorisoseuratyöhön, Lottayhdistyksen ja', True)
+            ], in_spouse=False, sex='Female', subflag='organizationLotta')
+    
+        def should_not_extract_organizationlotta_when_there_is_no_mention_of_belonging_to_lotta_org(self):
+            verify_flags([
+                ('Hän oli talvisodassa mustekaloihin erikoistuva kokki.', False),
+            ], in_spouse=False, sex='Female', subflag='organizationLotta')
+    
+        def should_not_extract_organizationlotta_when_there_is_mention_of_lotta_specialization_and_mention_of_lotta_org(
+                self):
+            verify_flags([
+                ('Hän palveli muonituslottana talvisodassa ja oli Lotta Svärd-järjestön jäsen.', False),
+                ('Hän oli lääkintälotta jatkosodassa ja kuului lottajärjestöön.', False)
+            ], in_spouse=False, sex='Female', subflag='organizationLotta')
