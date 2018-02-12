@@ -1,8 +1,5 @@
 import sys
-import os
-import subprocess
 import argparse
-import re
 import shutil
 from lxml import etree
 from book_extractors.karelians.main import KarelianBooksExtractor, get_karelian_data_entry, BOOK_SERIES_ID as KARELIAN_BOOK_ID
@@ -20,7 +17,7 @@ supported_bookseries = {
 }
 
 help_str = 'Bookseries where data is from: {}'.format(', '.join(list(supported_bookseries.keys())))
-progress_str = 'Progress: {}% - {}/{}'
+progress_str = 'Progress:{:>4}% - {:>5}/{:>5}'
 progress_bar_str = '{} [{}{}] \r'
 
 parser = argparse.ArgumentParser(description='Extract information from matrikel books.')

@@ -64,23 +64,23 @@ def chunk(ctx, bookseries=None, input_files=None, filter_duplicates=False, defau
     ctx.run(kaira_cmd)
 
 
-@task(optional=['bookpath', 'testset'], help={
+@task(help={
     'bookpath': 'A path to the data xml-file which should be extracted.',
-    'testset': 'If set, extract the testset_I.json file in material directory.'
+    'testset': 'If set, extract the testset_I.json file in material directory. Overrides -b.'
 })
-def extract(ctx, bookpath=None, testset=None):
+def extract(ctx, bookpath=None, testset=False):
     """
     Extract data from xml-file and save it to json-format.
-    Extract either predefined test_set_I.json from material/ directory with option -t
+    Extract either predefined testset_I.xml from material/ directory with option -t
     or any xml-datafile from path provided with option -b.
     """
     if testset:
         ctx.run('python main.py -i material/testset_I.xml -o material/testset_I.json')
     elif bookpath:
-        file_name = os.path.basename(bookpath)[0]
+        file_name = os.path.splitext(os.path.basename(bookpath))[0]
         ctx.run('python main.py -i {} -o material/{}.json'.format(bookpath, file_name))
     else:
-        print('Error: either valid book path should be provided with option -p or run the test set with -t option.')
+        print('Error: either valid book path should be provided with option -b or run the test set with -t option.')
         sys.exit(1)
 
 
