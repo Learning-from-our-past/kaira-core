@@ -100,29 +100,30 @@ class LottaActivityFlagExtractor(BaseExtractor):
         return False
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        lotta_activity = {}
-
         if self._is_person_female():
             text = remove_hyphens_from_text(entry['text'])
-
-            lotta_activity['foodLotta'] = self._REGEX_FOOD_LOTTA.search(text) is not None
-            lotta_activity['officeLotta'] = self._REGEX_OFFICE_LOTTA.search(text) is not None
-            lotta_activity['nurseLotta'] = self._REGEX_NURSE_LOTTA.search(text) is not None
-            lotta_activity['antiairLotta'] = self._REGEX_ANTIAIR_LOTTA.search(text) is not None
-            lotta_activity['pikkulotta'] = self._REGEX_PIKKULOTTA.search(text) is not None
-
-            lotta = True
-            org_lotta = False
-            if not LottaActivityFlagExtractor.is_any_value_in_dict_true(lotta_activity):
-                lotta = self._check_for_lotta_activity(text)
-                org_lotta = self._REGEX_LOTTA_ORGANIZATION.search(text) is not None
-
-            lotta_activity['lotta'] = lotta
-            lotta_activity['organizationLotta'] = org_lotta
+            lotta_activity = self._extract_lotta_flags(text)
         else:
             lotta_activity = self._NO_RESULT
 
         return self._add_to_extraction_results(lotta_activity, extraction_results, extraction_metadata)
+
+    def _extract_lotta_flags(self, text):
+        lotta_flags = {'foodLotta': self._REGEX_FOOD_LOTTA.search(text) is not None,
+                       'officeLotta': self._REGEX_OFFICE_LOTTA.search(text) is not None,
+                       'nurseLotta': self._REGEX_NURSE_LOTTA.search(text) is not None,
+                       'antiairLotta': self._REGEX_ANTIAIR_LOTTA.search(text) is not None,
+                       'pikkulotta': self._REGEX_PIKKULOTTA.search(text) is not None}
+
+        lotta = True
+        org_lotta = False
+        if not self.is_any_value_in_dict_true(lotta_flags):
+            lotta = self._check_for_lotta_activity(text)
+            org_lotta = self._REGEX_LOTTA_ORGANIZATION.search(text) is not None
+
+        lotta_flags['lotta'] = lotta
+        lotta_flags['organizationLotta'] = org_lotta
+        return lotta_flags
 
     def _check_for_lotta_activity(self, text):
         lotta = self._check_for_lotta_organization(text)
