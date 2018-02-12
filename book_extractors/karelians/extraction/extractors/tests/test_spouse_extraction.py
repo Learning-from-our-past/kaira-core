@@ -56,7 +56,8 @@ class TestSpouseExtraction:
                                        'antiairLotta': False,
                                        'pikkulotta': False,
                                        'organizationLotta': False}
-            }
+            },
+            'marttaActivityFlag': False
         }
 
         assert metadata == {
