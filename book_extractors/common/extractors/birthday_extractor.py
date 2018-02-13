@@ -49,11 +49,10 @@ class CommonBirthdayExtractor(BaseExtractor):
         cursor_location = start_position
 
         try:
-            found_date, cursor_location = self._date_finder.find_date(text, cursor_location)
+            found_date, cursor_location = self._date_finder.find_date(text)
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?
             found_date = {'day': None, 'month': None, 'year': None}
-            cursor_location = 0
 
         # Map date to birthDate
         birth_date = {KEYS['birthDay']: text_utils.int_or_none(found_date['day']),
@@ -74,14 +73,14 @@ class DateFinder:
                                           'huhtik': 4,'jouluk': 12, 'kesäk': 6, 'lokak': 10, 'maalisk': 3, 'maallsk': 3,
                                           'syysk': 9, 'tammik': 1, 'toukok': 5}
 
-    def find_date(self, text, start_position):
+    def find_date(self, text):
         prepared_text = self._prepare_text_for_extraction(text)
 
         try:
-            result, cursor_location = self._find_date(prepared_text, start_position)
+            result, cursor_location = self._find_date(prepared_text)
         except DateException:
             # non-space pattern match didn't produce results, try with including spaces
-            result, cursor_location = self._find_date(text, start_position)
+            result, cursor_location = self._find_date(text)
 
         return result, cursor_location
 
@@ -89,11 +88,11 @@ class DateFinder:
     def _prepare_text_for_extraction(text):
         return text_utils.remove_spaces_from_text(text)
 
-    def _find_date(self, text, start_position):
+    def _find_date(self, text):
         try:
             found_date_matches = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
             months_and_years_from_words = self._if_written_month_names_extract_them(found_date_matches)
-            cursor_location = start_position + found_date_matches.end()
+            cursor_location = found_date_matches.end()
             if months_and_years_from_words is None:
                 year = self._get_year_from_match(found_date_matches)
                 day_and_month = self._get_month_and_day_from_match(found_date_matches)
