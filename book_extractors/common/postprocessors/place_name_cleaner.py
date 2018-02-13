@@ -1,4 +1,5 @@
 import json
+import collections
 import csv
 import nltk.stem.snowball as snowball
 import jellyfish
@@ -27,7 +28,7 @@ because same place name has slight difference in the end of the word such as con
 """
 list_of_known_places_file = open('support_datasheets/place_name_list.csv', encoding='utf8')
 list_of_known_places = list(csv.DictReader(list_of_known_places_file))
-place_list_index = {}
+place_list_index = collections.OrderedDict()
 
 # Create a hash map which has as a key different writing styles of place names
 # which refer to correct data entry for those place names
