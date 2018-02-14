@@ -52,27 +52,28 @@ def _get_names(row):
 
 
 def _populate_place(place_data):
-
-    try:
-        new_location = Location.get(
-            (Location.latitude == place_data['latitude']) &
-            (Location.longitude == place_data['longitude']))
-    except Location.DoesNotExist:
-        new_location = Location.create(
-            latitude=place_data['latitude'],
-            longitude=place_data['longitude'],
-            region=place_data['region'])
+    location, created = Location.get_or_create(
+        latitude=place_data['latitude'],
+        longitude=place_data['longitude'],
+        defaults={'region': place_data['region']}
+    )
+    if not created:
+        if location.region != place_data['region']:
+            location.region = place_data['region']
+            location.save()
 
     for name in place_data['names']:
         if name:
             try:
-                Place.get(Place.name == name)
+                place = Place.get(Place.name == name)
+                if place.locationId != location.id:
+                    place.locationId = location.id
+                    place.save()
             except Place.DoesNotExist:
                 Place.create(
                     name=name,
-                    location=new_location
+                    location=location
                 )
-
 
 
 def update_location_db(datasheet_path):
@@ -93,3 +94,6 @@ def update_location_db(datasheet_path):
 
     for place_row in place_rows:
         _populate_place(place_row)
+
+    used_locations = Place.select(Place.locationId)
+    Location.delete().where(Location.id.not_in(used_locations)).execute()
