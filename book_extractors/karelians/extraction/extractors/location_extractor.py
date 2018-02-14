@@ -3,7 +3,6 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.extraction_exceptions import *
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared import regexUtils, text_utils
 from book_extractors.common.postprocessors import place_name_cleaner
 from shared.text_utils import remove_hyphens_from_text
@@ -38,7 +37,9 @@ class BirthdayLocationExtractor(BaseExtractor):
 
         self.DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
         self.REQUIRES_MATCH_POSITION = True
-        self.SUBSTRING_WIDTH = 32
+        # FIXME: This might need some adjusting still. 32 -> 42 improved results quite a bit though lowered
+        # the DeathYear extraction results a bit.
+        self.SUBSTRING_WIDTH = 42
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
