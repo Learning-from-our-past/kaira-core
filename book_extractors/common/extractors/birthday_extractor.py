@@ -46,10 +46,12 @@ class CommonBirthdayExtractor(BaseExtractor):
         return t
 
     def _find_date(self, text, start_position):
+        # By default we want assume the cursor location to be at start_position
         cursor_location = start_position
 
         try:
-            found_date, cursor_location = self._date_finder.find_date(text)
+            found_date, date_cursor_location = self._date_finder.find_date(text)
+            cursor_location = date_cursor_location + start_position - 4
         except DateException:
             # TODO: Better idea to have in DateExtractor class maybe?
             found_date = {'day': None, 'month': None, 'year': None}
