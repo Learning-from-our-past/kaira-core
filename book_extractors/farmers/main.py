@@ -6,7 +6,7 @@ from book_extractors.farmers.extraction.extractors.owner_extractor import OwnerE
 from book_extractors.farmers.extraction.extractors.hostess_extractor import HostessExtractor
 from book_extractors.farmers.extraction.extractors.child_extractor import ChildExtractor
 from book_extractors.farmers.extraction.extractors.farm_extractor import FarmExtractor
-from book_extractors.farmers.extraction.extractors.bool_extractor import BoolExtractor
+from book_extractors.common.extractors.bool_extractor import BoolExtractor
 from book_extractors.farmers.extraction.extractors.quantity_extractor import QuantityExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
 from book_extractors.common.extractors.previous_marriages_flag_extractor import PreviousMarriagesFlagExtractor
