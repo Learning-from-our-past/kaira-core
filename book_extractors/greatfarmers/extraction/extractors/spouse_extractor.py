@@ -3,9 +3,6 @@ import re
 
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.greatfarmers.extraction.extractors.birthday_extractor import BirthdayExtractor
-from book_extractors.greatfarmers.extraction.extractors.original_family_extractor import FormerSurnameExtractor
 from shared import regexUtils
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 
@@ -20,11 +17,6 @@ class SpouseExtractor(BaseExtractor):
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = False
         self.SUBSTRING_WIDTH = 100
-
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(FormerSurnameExtractor),
-            configure_extractor(BirthdayExtractor),
-        ])
 
         self.kaira_id_provider = KairaIdProvider()
 
