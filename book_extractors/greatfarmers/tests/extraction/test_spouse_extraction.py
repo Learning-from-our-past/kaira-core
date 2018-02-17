@@ -1,16 +1,17 @@
 import pytest
-from book_extractors.greatfarmers.extraction.extractors.spouse_extractor import SpouseExtractor
+from pipeline_creation.yaml_parser import YamlParser
 
 
 class TestSpouseExtraction:
 
-    @pytest.yield_fixture(autouse=True)
-    def spouse_extractor(self):
-        return SpouseExtractor(None, None)
+    @pytest.fixture(autouse=True)
+    def spouse_extractor(self, result_map):
+        parser = YamlParser(result_map)
+        return parser.build_pipeline_from_yaml_string(SPOUSE_CONFIG)
 
     def should_extract_spouse_details_correctly(self, spouse_extractor, th):
         spouse_text = "om vsta 1951 Testi Mies Testilä s 25. 9.—12, vmo Anna-Liisa o.s. Testilä s 19. 4. -21. Lapset: Lapsi Lapsekas -38, Lapsikas"
-        result, metadata = spouse_extractor.extract({'text': spouse_text}, {}, {})
+        result, metadata = spouse_extractor.process({'text': spouse_text})
         spouse_details = result['spouse']
 
         th.omit_property(spouse_details, 'kairaId')
@@ -34,11 +35,26 @@ class TestSpouseExtraction:
 
     def should_return_none_if_spouse_not_available(self, spouse_extractor):
         spouse_text = "om. Testi Testisen perikunta. Viljelijä Mies Testinen. Tila sijaitsee Antooran kylässä. Kokonaispinta-ala on 80,67 ha."
-        result, metadata = spouse_extractor.extract({'text': spouse_text}, {}, {})
+        result, metadata = spouse_extractor.process({'text': spouse_text})
         spouse_details = result['spouse']
 
         assert spouse_details is None
 
 
-
-
+SPOUSE_CONFIG = """
+pipeline:
+  - !Extractor {
+      module: "book_extractors.greatfarmers.extraction.extractors.spouse_extractor",
+      class_name: "SpouseExtractor",
+      pipeline: [
+        !Extractor {
+            module: "book_extractors.greatfarmers.extraction.extractors.birthday_extractor",
+            class_name: "BirthdayExtractor"
+        },
+        !Extractor {
+            module: "book_extractors.greatfarmers.extraction.extractors.original_family_extractor",
+            class_name: "FormerSurnameExtractor"
+        }
+      ]
+    }
+"""
