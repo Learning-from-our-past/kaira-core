@@ -19,7 +19,7 @@ class QuantityExtractor(BaseExtractor):
                            "seitsemän": 7, "kahdeksan": 8, "yhdeksän": 9, "kymmenen": 10}
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         results = self._find_patterns(entry['text'])
         return self._add_to_extraction_results(results, extraction_results, extraction_metadata, start_position)
 

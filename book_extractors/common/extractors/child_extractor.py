@@ -18,7 +18,7 @@ class CommonChildExtractor(BaseExtractor):
         self._kaira_id_provider = KairaIdProvider()
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
 
         children_results = self._find_children(entry['text'], start_position)
         return self._add_to_extraction_results(children_results[0], extraction_results, extraction_metadata, children_results[1])

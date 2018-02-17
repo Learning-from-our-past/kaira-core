@@ -20,7 +20,7 @@ class FormerSurnameExtractor(BaseExtractor):
         self.FAMILY_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
     def _extract(self, entry, extraction_results):
-        start_position = self.get_starting_position(extraction_results)
+        start_position = self.get_starting_position()
         result = self._find_family(entry['text'], start_position)
         return self._add_to_extraction_results(result[0], extraction_results, result[1])
 

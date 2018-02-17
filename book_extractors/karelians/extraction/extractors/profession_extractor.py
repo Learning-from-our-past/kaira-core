@@ -37,7 +37,7 @@ class ProfessionExtractor(BaseExtractor):
                 }
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         profession_results = self._get_profession(entry['text'], start_position)
 
         return self._add_to_extraction_results(profession_results[0], extraction_results, extraction_metadata, profession_results[1])

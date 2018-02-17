@@ -21,7 +21,7 @@ class SpouseExtractor(BaseExtractor):
         self.kaira_id_provider = KairaIdProvider()
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         results = self._find_spouse(entry['text'], start_position)
         return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, cursor_location=results[1])
 

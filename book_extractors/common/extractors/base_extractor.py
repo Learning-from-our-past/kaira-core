@@ -139,13 +139,13 @@ class BaseExtractor:
         """
         return extraction_results, extraction_metadata
 
-    def get_starting_position(self, extraction_results, extraction_metadata):
+    def get_starting_position(self, extraction_metadata):
         if self.key_of_cursor_location_dependent is not None:
             return self._get_output_path(extraction_metadata)[self.key_of_cursor_location_dependent]['cursorLocation']
         else:
             return 0
 
-    def get_last_cursor_location(self, extraction_results, extraction_metadata):
+    def get_last_cursor_location(self, extraction_metadata):
         cursor_locations_in_result_metadatas = [x['cursorLocation'] for x in extraction_metadata.values()]
         return max(cursor_locations_in_result_metadatas)
 
