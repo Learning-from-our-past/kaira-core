@@ -8,7 +8,7 @@ from book_extractors.extraction_pipeline import ExtractionPipeline
 class BaseExtractor:
     __metaclass__ = ABCMeta
 
-    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
 
         if cursor_location_depend_on:
             self.key_of_cursor_location_dependent = cursor_location_depend_on.extraction_key # Tells key of entry in cursorLocations dict this extractor is dependent on
@@ -42,10 +42,8 @@ class BaseExtractor:
 
     def set_extraction_results_map(self, results_map):
         """
-        TODO: This is a temporary method to pass the result map to extractors without modifying
-        constructor signature yet. After everything works ok with YAML pipeline building and the new
-        dependency resolving system is in place, results map can be passed to extractor via constructor
-        and signature can be changed.
+        Pass the result map to extractor. It contains the pure unmodified extraction results of the previous
+        extractors in a map which can be used to resolve those results as a dependencies to this extractor.
         :param results_map:
         :return:
         """

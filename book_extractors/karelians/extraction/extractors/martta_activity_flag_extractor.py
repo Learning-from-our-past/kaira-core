@@ -6,7 +6,7 @@ import regex
 class MarttaActivityFlagExtractor(BaseExtractor):
     extraction_key = 'marttaActivityFlag'
 
-    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(MarttaActivityFlagExtractor, self).__init__(cursor_location_depend_on, options)
         self._declare_expected_dependency_names(['person'])
         self._in_spouse_extractor = options['in_spouse_extractor']

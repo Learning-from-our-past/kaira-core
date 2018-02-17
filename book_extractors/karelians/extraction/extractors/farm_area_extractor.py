@@ -9,7 +9,7 @@ class FarmAreaExtractor(BaseExtractor):
 
     extraction_key = 'farmTotalArea'
 
-    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(FarmAreaExtractor, self).__init__(cursor_location_depend_on, options)
         self.OPTIONS = (regex.UNICODE | regex.IGNORECASE)
         self.PATTERN_MATCH_PINTAALA_ON = r'(pinta-ala){s<=1}\son\s(?P<area>\d{1,3}(?:,|\.)\d{1,2}|\d{1,3}(?!\s\d))\s?(?P<unit>ha|m|aar)'

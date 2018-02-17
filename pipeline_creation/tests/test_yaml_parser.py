@@ -72,7 +72,7 @@ class TestSubPipelineCreation:
 class OuterExtractor(BaseExtractor):
     extraction_key = 'outerExtractor'
 
-    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(OuterExtractor, self).__init__()
         self.message = options['message']
 
@@ -89,7 +89,7 @@ class OuterExtractor(BaseExtractor):
 class SubExtractor(BaseExtractor):
     extraction_key = 'innerExtractor'
 
-    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(SubExtractor, self).__init__()
         self.message = options['message']
 
@@ -106,9 +106,8 @@ class SubExtractor(BaseExtractor):
 class DependentExtractor(BaseExtractor):
     extraction_key = 'dependent'
 
-    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
-        super(DependentExtractor, self).__init__(cursor_location_depend_on,
-                                                     options)
+    def __init__(self, cursor_location_depend_on=None, options=None):
+        super(DependentExtractor, self).__init__(cursor_location_depend_on, options)
 
         self._declare_expected_dependency_names(['outer'])
 

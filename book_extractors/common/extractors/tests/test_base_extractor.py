@@ -188,9 +188,8 @@ class NoPreAndPostProcessesExtractor(BaseExtractor):
 class SimpleExtractorForDeps(BaseExtractor):
     extraction_key = 'mock2deps'
 
-    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
-        super(SimpleExtractorForDeps, self).__init__(cursor_location_depend_on,
-                                                     options)
+    def __init__(self, cursor_location_depend_on=None, options=None):
+        super(SimpleExtractorForDeps, self).__init__(cursor_location_depend_on, options)
 
         self._declare_expected_dependency_names(['standalone', 'standalone2'])
 

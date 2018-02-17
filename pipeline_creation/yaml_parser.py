@@ -24,7 +24,6 @@ class YamlParser:
         options = extractor_params['options'] if 'options' in extractor_params else None
         extractor = extractor_class(cursor_location_dependence, options)
 
-        # TODO: Pass result map via constructor
         extractor.set_extraction_results_map(self._extraction_results_map)
 
         if 'depends_on' in extractor_params:

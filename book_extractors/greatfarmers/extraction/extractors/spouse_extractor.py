@@ -10,7 +10,7 @@ from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 class SpouseExtractor(BaseExtractor):
     extraction_key = KEYS["spouse"]
 
-    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(SpouseExtractor, self).__init__(cursor_location_depend_on, options)
         self.PATTERN = r"vmo\.?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp|suvulla|tila))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
