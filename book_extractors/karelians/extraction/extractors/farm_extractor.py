@@ -1,8 +1,4 @@
-from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.common.extractors.bool_extractor import BoolExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.karelians.extraction.extractors.farm_area_extractor import FarmAreaExtractor
 
 
 class FarmDetailsExtractor(BaseExtractor):
