@@ -5,8 +5,6 @@ import shared.regexUtils as regexUtils
 import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.farmers.extraction.extractors.birthday_extractor import BirthdayExtractor
 
 
 class HostessExtractor(BaseExtractor):
@@ -17,10 +15,6 @@ class HostessExtractor(BaseExtractor):
         self.SEARCH_SPACE = 400
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+),"
         self.HOSTESS_OPTIONS = (re.UNICODE | re.IGNORECASE)
-
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(BirthdayExtractor)
-        ])
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)
