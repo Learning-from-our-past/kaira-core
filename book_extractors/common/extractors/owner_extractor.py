@@ -5,7 +5,6 @@ import shared.regexUtils as regexUtils
 import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared.gender_extract import Gender, GenderException
 
 
@@ -18,10 +17,6 @@ class CommonOwnerExtractor(BaseExtractor):
         self.OWNER_YEAR_PATTERN = options['OWNER_YEAR_PATTERN']
         self.OWNER_NAME_PATTERN = options['OWNER_NAME_PATTERN']
         self.OWNER_OPTIONS = (re.UNICODE | re.IGNORECASE)
-
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(options['BIRTHDAY_EXTRACTOR'])
-        ])
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_results, extraction_metadata)

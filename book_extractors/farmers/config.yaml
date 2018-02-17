@@ -1,0 +1,104 @@
+book_series: "Suomen Pienviljelijät"
+pipeline:
+  - !Extractor {
+      module: "book_extractors.farmers.extraction.extractors.metadata_extractor",
+      class_name: "MetadataExtractor"
+    }
+
+  - !Extractor {
+      module: "book_extractors.farmers.extraction.extractors.owner_extractor",
+      class_name: "OwnerExtractor",
+      pipeline: [
+       !Extractor {
+          module: "book_extractors.farmers.extraction.extractors.birthday_extractor",
+          class_name: "BirthdayExtractor"
+        }
+      ]
+    }
+
+  - !Extractor {
+      module: "book_extractors.farmers.extraction.extractors.hostess_extractor",
+      class_name: "HostessExtractor",
+      pipeline: [
+       !Extractor {
+          module: "book_extractors.farmers.extraction.extractors.birthday_extractor",
+          class_name: "BirthdayExtractor"
+        }
+      ]
+    }
+
+  - !Extractor {
+      module: "book_extractors.farmers.extraction.extractors.farm_extractor",
+      class_name: "FarmExtractor"
+    }
+
+  - !Extractor &Birthday {
+      module: "book_extractors.farmers.extraction.extractors.child_extractor",
+      class_name: "ChildExtractor"
+    }
+
+  - !Extractor {
+      module: "book_extractors.common.extractors.previous_marriages_flag_extractor",
+      class_name: "PreviousMarriagesFlagExtractor"
+    }
+
+  - !Extractor {
+      module: "book_extractors.common.extractors.bool_extractor",
+      class_name: "BoolExtractor",
+      options: {
+        patterns: {
+          garage: 'autotalli',
+          barley: 'ohra',
+          birch: 'koivu(?!nen|niem)',
+          chicken: 'kanoja|\skanaa',
+          cowhouse: 'navetta|navetan',
+          hay: '(heinä(?!mäki))',
+          hiesu: 'hiesu',
+          hieta: '(hieta(?!nen))',
+          horse: 'hevonen|hevos',
+          kantatila: 'kantatila',
+          milkingMachine: 'lypsykone',
+          moreeni: 'moreeni',
+          mud: 'muta',
+          oat: '(kaura(?!nen))',
+          pine: 'mänty(?!nen)',
+          potatoes: 'peruna',
+          rye: 'ruis',
+          salaojitus: '(salaojitettu|salaojitus)',
+          sauna: 'sauna',
+          savi: '(savi(?!taipale))',
+          siirtotila: 'siirtotila',
+          soil: 'multa',
+          someoneDead: 'kuoli|kuollut|kaatui|kaatunut',
+          spruce: 'kuusi(?!nen)',
+          stable: '(?!auto)talli',
+          sugarbeet: 'sokerijuuri',
+          swedishTurnip: 'lanttu',
+          threshingMachine: 'puimakone',
+          tractor: 'traktori',
+          wheat: 'vehnä'
+        }
+      }
+    }
+
+  - !Extractor {
+      module: "book_extractors.farmers.extraction.extractors.quantity_extractor",
+      class_name: "QuantityExtractor",
+      options: {
+        patterns: {
+          emakko: '(?:emakko){s<=1,i<=1}',
+          chicken: '(?:kanoja|(?:kanaa{s<=1,i<=1}))',
+          sheep: '(?:lammasta){s<=1,i<=1}',
+          lihotussika: '(?:lihotus-?sik){s<=1,i<=1}',
+          dairyCow: '(?:lypsylehmää){s<=1,i<=1}',
+          nuori: '(?:nuori|(?:nuorta{s<=1,i<=1}))',
+          rooms: '(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})',
+          slaughterAnimal: '(?:teuras){s<=1,i<=1}'
+        }
+      }
+    }
+
+  - !Extractor {
+      module: "book_extractors.common.extractors.kaira_id_extractor",
+      class_name: "KairaIdExtractor"
+    }

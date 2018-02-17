@@ -6,8 +6,8 @@ from book_extractors.farmers.tests.extraction.children.mock_person_data import E
 class TestChildrenExtraction:
 
     @pytest.yield_fixture(autouse=True)
-    def child_extractor(self):
-        return ChildExtractor(None, None)
+    def child_extractor(self, th):
+        return th.setup_extractor(ChildExtractor(None, None))
 
     @pytest.mark.skip
     def should_extract_twins_correctly(self):

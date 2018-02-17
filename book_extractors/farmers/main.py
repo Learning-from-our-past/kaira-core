@@ -1,89 +1,21 @@
 from book_extractors.farmers.resultjsonbuilder import ResultJsonBuilder
 from book_extractors.processdata import ProcessData
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.farmers.extraction.extractors.metadata_extractor import MetadataExtractor
-from book_extractors.farmers.extraction.extractors.owner_extractor import OwnerExtractor
-from book_extractors.farmers.extraction.extractors.hostess_extractor import HostessExtractor
-from book_extractors.farmers.extraction.extractors.child_extractor import ChildExtractor
-from book_extractors.farmers.extraction.extractors.farm_extractor import FarmExtractor
-from book_extractors.common.extractors.bool_extractor import BoolExtractor
-from book_extractors.farmers.extraction.extractors.quantity_extractor import QuantityExtractor
-from book_extractors.common.extractors.kaira_id_extractor import KairaIdExtractor
-from book_extractors.common.extractors.previous_marriages_flag_extractor import PreviousMarriagesFlagExtractor
-from book_extractors.common.extraction_keys import KEYS
+from pipeline_creation.dependency_resolver import ExtractorResultsMap
+from pipeline_creation.yaml_parser import YamlParser
 from shared.gender_extract import Gender
 
 BOOK_SERIES_ID = 'pienviljelijat'    # Used to identify this book series in xml files
+
 
 class SmallFarmersBooksExtractor:
 
     def __init__(self, update_callback):
         Gender.load_names()
-        self._extractor_pipeline = self._define_extraction_pipeline()
-        self._extractor = ProcessData(self._extractor_pipeline, update_callback)
+        self._extraction_result_map = ExtractorResultsMap()
+        self._parser = YamlParser(self._extraction_result_map)
+        self._extractor_pipeline = self._parser.build_pipeline_from_yaml('./book_extractors/farmers/config.yaml')
+        self._extractor = ProcessData(self._extractor_pipeline, self._extraction_result_map, update_callback)
         self._results = None
-
-    @staticmethod
-    def _define_extraction_pipeline():
-        # TODO: Maybe create separate classes with these definitions which then call boolean extractor with these patterns?
-        boolean_flag_patterns = {
-            KEYS["oat"] : r"(kaura(?!nen))",
-            KEYS["barley"] : r"ohra",
-            KEYS["hay"] : r"(heinä(?!mäki))",
-            KEYS["potatoes"] : r"peruna",
-            KEYS["wheat"] : r"vehnä",
-            KEYS["rye"] : r"ruis",
-            KEYS["sugarbeet"] : r"sokerijuuri",
-            KEYS["lanttu"] : r"lanttu",
-            KEYS["puimakone"] : r"puimakone",
-            KEYS["tractor"] : r"traktori",
-            KEYS["horse"] : r"hevonen|hevos",
-            KEYS["chicken"] : r"kanoja|\skanaa",
-            KEYS["siirtotila"] : r"siirtotila",
-            KEYS["kantatila"] : r"kantatila",
-            KEYS["moreeni"] : r"moreeni",
-            KEYS["hiesu"] : r"hiesu",
-            KEYS["hieta"] : r"(hieta(?!nen))",
-            KEYS["muta"] : r"muta",
-            KEYS["savi"] : r"(savi(?!taipale))",
-            KEYS["multa"] : r"multa",
-            KEYS["salaojitus"] : r"(salaojitettu|salaojitus)",
-
-            KEYS["talli"] : r"(?!auto)talli",
-            KEYS["pine"] : r"mänty(?!nen)",
-            KEYS["spruce"] : r"kuusi(?!nen)",
-            KEYS["birch"] : r"koivu(?!nen|niem)",
-            KEYS["sauna"] : r"sauna",
-            KEYS["navetta"] : r"navetta|navetan",
-            KEYS["lypsykone"] : r"lypsykone",
-            KEYS["autotalli"] : r"autotalli",
-            KEYS["someonedead"] : r"kuoli|kuollut|kaatui|kaatunut",
-        }
-
-        quantity_patterns = {
-            KEYS["rooms"] : r"(?:(?:asuinhuonetta){s<=1,i<=1}|(?:huonetta){s<=1,i<=1})",
-            KEYS["lypsylehma"] : r"(?:lypsylehmää){s<=1,i<=1}",
-            KEYS["teuras"] : r"(?:teuras){s<=1,i<=1}",
-            KEYS["lammas"] : r"(?:lammasta){s<=1,i<=1}",
-            KEYS["lihotussika"] : r"(?:lihotus-?sik){s<=1,i<=1}",
-            KEYS["emakko"] : r"(?:emakko){s<=1,i<=1}",
-            KEYS["nuori"] : r"(?:nuori|(?:nuorta{s<=1,i<=1}))",
-            KEYS["kanoja"] : r"(?:kanoja|(?:kanaa{s<=1,i<=1}))"
-         }
-
-        pipeline_components = [
-            configure_extractor(MetadataExtractor),
-            configure_extractor(OwnerExtractor),
-            configure_extractor(HostessExtractor),
-            configure_extractor(FarmExtractor),
-            configure_extractor(ChildExtractor),
-            configure_extractor(PreviousMarriagesFlagExtractor),
-            configure_extractor(BoolExtractor, extractor_options={'patterns': boolean_flag_patterns}),
-            configure_extractor(QuantityExtractor, extractor_options={'patterns': quantity_patterns}),
-            configure_extractor(KairaIdExtractor)
-        ]
-
-        return ExtractionPipeline(pipeline_components)
 
     def process(self, person_data):
         self._results = self._extractor.run_extraction(person_data)
