@@ -10,7 +10,7 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 class HostessExtractor(BaseExtractor):
     extraction_key = KEYS['hostess']
 
-    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(HostessExtractor, self).__init__(cursor_location_depend_on, options)
         self.SEARCH_SPACE = 400
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+),"

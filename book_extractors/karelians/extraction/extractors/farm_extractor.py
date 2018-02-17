@@ -10,7 +10,7 @@ class FarmDetailsExtractor(BaseExtractor):
     """
     extraction_key = 'farmDetails'
 
-    def __init__(self, cursor_location_depend_on=None, options=None, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(FarmDetailsExtractor, self).__init__(cursor_location_depend_on, options)
 
     def _extract(self, entry, extraction_results, extraction_metadata):

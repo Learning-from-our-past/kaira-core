@@ -10,7 +10,7 @@ import regex
 class LottaActivityFlagExtractor(BaseExtractor):
     extraction_key = 'lottaActivityFlags'
 
-    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(LottaActivityFlagExtractor, self).__init__(cursor_location_depend_on, options)
         self._in_spouse_extractor = options['in_spouse_extractor']
 

@@ -7,7 +7,7 @@ from book_extractors.common.extraction_keys import KEYS
 class OwnerExtractor(CommonOwnerExtractor):
     extraction_key = KEYS['ownerDetails']
 
-    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         if options is None:
             options = {}
 

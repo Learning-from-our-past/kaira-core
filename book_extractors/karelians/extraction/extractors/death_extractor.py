@@ -9,7 +9,7 @@ from shared import text_utils
 class DeathExtractor(BaseExtractor):
     extraction_key = 'death'
 
-    def __init__(self, cursor_location_depend_on, options, dependencies_contexts=None):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(DeathExtractor, self).__init__(cursor_location_depend_on, options)
         self.PATTERN = r"(?:kuoli)\.?\s?-(?P<year>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)

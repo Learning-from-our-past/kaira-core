@@ -55,7 +55,7 @@ class TestProfessionExtractor():
 
     def test_no_profession(self):
         ValueWrapper.xmlEntry = self.mockXml2
-        ex = ProfessionExtractor(self.mockXml2, self.eLogger, self.mockXml2)
+        ex = ProfessionExtractor(self.mockXml2, self.eLogger)
         ex.setDependencyMatchPositionToZero()
         result = ex.extract(self.mockXml2.text, {"xml":self.mockXml2})
         assert_equals(result[KEYS["profession"]].value, "")

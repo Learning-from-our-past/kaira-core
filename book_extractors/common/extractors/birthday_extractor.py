@@ -12,7 +12,7 @@ from shared import text_utils
 class CommonBirthdayExtractor(BaseExtractor):
     extraction_key = KEYS['birthData']
 
-    def __init__(self, cursor_location_depend_on, options):
+    def __init__(self, cursor_location_depend_on=None, options=None):
         super(CommonBirthdayExtractor, self).__init__(cursor_location_depend_on, options)
         self.PATTERN = options['PATTERN']
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
