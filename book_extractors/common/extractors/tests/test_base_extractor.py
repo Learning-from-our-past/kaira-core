@@ -60,7 +60,7 @@ class TestBaseExtractor:
         entry = {'text': 'test string entry'}
         results, metadata = extractor.extract(entry, {}, {})
 
-        last_position = extractor.get_last_cursor_location(results, metadata)
+        last_position = extractor.get_last_cursor_location(metadata)
         assert last_position == 5
 
     def should_add_results_with_metadata_to_data_passed_in(self, extractor):
@@ -157,7 +157,7 @@ class MockExtractor(BaseExtractor):
         self.execution_order.append('extract')
         self.metadata_collector.set_metadata_property('important', True)
 
-        final_location = self.get_starting_position(extraction_results, extraction_metadata) + 5
+        final_location = self.get_starting_position(extraction_metadata) + 5
 
         return self._add_to_extraction_results('some result', extraction_results,
                                                extraction_metadata, cursor_location=final_location)
@@ -179,7 +179,7 @@ class NoPreAndPostProcessesExtractor(BaseExtractor):
         self.execution_order.append('extract')
         self.metadata_collector.set_metadata_property('important', True)
 
-        final_location = self.get_starting_position(extraction_results, extraction_metadata) + 5
+        final_location = self.get_starting_position(extraction_metadata) + 5
 
         return self._add_to_extraction_results('some result', extraction_results,
                                                extraction_metadata, cursor_location=final_location)

@@ -21,7 +21,7 @@ class SpouseExtractor(BaseExtractor):
         self.SUBSTRING_WIDTH = 100
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         result, cursor_location = self._find_spouse(entry, start_position)
 
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata, cursor_location=cursor_location)

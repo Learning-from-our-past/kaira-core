@@ -17,7 +17,7 @@ class HostessExtractor(BaseExtractor):
         self.HOSTESS_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         results = self._find_hostess(entry['text'], start_position)
         return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
 
@@ -44,7 +44,7 @@ class HostessExtractor(BaseExtractor):
 
     def _find_hostess_birthday(self, text):
         results, metadata = self._sub_extraction_pipeline.process({'text': text})
-        final_cursor_location = self.get_last_cursor_location(results, metadata)
+        final_cursor_location = self.get_last_cursor_location(metadata)
         return results['birthday'], final_cursor_location
 
     def _find_hostess_name(self, text):

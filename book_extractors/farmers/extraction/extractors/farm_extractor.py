@@ -19,7 +19,7 @@ class FarmExtractor(BaseExtractor):
         self.AREA_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         result = self._find_areas(entry['text'])
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata, start_position)
 

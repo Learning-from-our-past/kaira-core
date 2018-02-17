@@ -27,7 +27,7 @@ class CommonBirthdayExtractor(BaseExtractor):
         self._date_finder = DateFinder(self.PATTERN, self.OPTIONS)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
         found_birth_date, cursor_location = self._find_date(prepared_text, start_position)
 
