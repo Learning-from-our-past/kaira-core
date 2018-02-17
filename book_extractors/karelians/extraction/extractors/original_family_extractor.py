@@ -10,7 +10,6 @@ class FormerSurnameExtractor(BaseExtractor):
     """
     Tries to find the possible o.s. (omaa sukua) part from entry.
     """
-    REQUIRES_MATCH_POSITION = True
     SEARCH_SPACE = 40
     extraction_key = 'formerSurname'
     

@@ -11,13 +11,11 @@ class BaseExtractor:
     def __init__(self, cursor_location_depend_on=None, options=None):
 
         if cursor_location_depend_on:
-            self.key_of_cursor_location_dependent = cursor_location_depend_on.extraction_key # Tells key of entry in cursorLocations dict this extractor is dependent on
+            # Tells key of entry in cursorLocations dict this extractor is dependent on
+            self.key_of_cursor_location_dependent = cursor_location_depend_on.extraction_key
         else:
             self.key_of_cursor_location_dependent = None
 
-        self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
-        self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes
-        self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
         self._sub_extraction_pipeline = None
         self._extraction_results_map = None
 
