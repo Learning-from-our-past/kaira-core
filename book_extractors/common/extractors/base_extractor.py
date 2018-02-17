@@ -93,7 +93,7 @@ class BaseExtractor:
 
         self._deps = {key: data for (key, data) in zip(self._expected_dependencies_names, result_data)}
 
-    def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data=None):
+    def extract(self, entry, extraction_results, extraction_metadata):
         self._resolve_dependencies()
 
         extraction_results, extraction_metadata = self._preprocess(entry, extraction_results, extraction_metadata)

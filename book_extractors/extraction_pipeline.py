@@ -14,7 +14,7 @@ class ExtractionPipeline:
 
         self._extractors = extractors
 
-    def process(self, entry, parent_pipeline_data=None):
+    def process(self, entry):
         extraction_output = {}
         extraction_metadata = {}
 
@@ -32,7 +32,6 @@ class ExtractionPipeline:
         for ext in self._extractors:
             extraction_output, extraction_metadata = ext.extract(entry,
                                                                  extraction_output,
-                                                                 extraction_metadata,
-                                                                 parent_pipeline_data=parent_pipeline_data)
+                                                                 extraction_metadata)
 
         return extraction_output, extraction_metadata
