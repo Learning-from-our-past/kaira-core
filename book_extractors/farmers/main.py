@@ -23,15 +23,15 @@ class SmallFarmersBooksExtractor:
     def save_results(self, file, file_format='json'):
         if file_format == 'json':
             writer = ResultJsonBuilder()
-            writer.openJson(file)
+            writer.open_json(file)
 
             for entry in self._results['entries']:
                 try:
-                    writer.writeEntry(entry["extractionResults"][0])
+                    writer.write_entry(entry["extractionResults"][0])
                 except KeyError as e:
                     raise e
 
-            writer.closeJson()
+            writer.close_json()
 
 
 def get_small_farmers_data_entry(name, location, approximated_page, text):

@@ -2,31 +2,34 @@
 import json
 from core.interface.jsonbuilderinterface import ResultJsonBuilderInterface
 
+
 class ResultJsonBuilder(ResultJsonBuilderInterface):
 
     def __init__(self):
-        pass
+        super(ResultJsonBuilder).__init__()
+        self._opened_json = None
+        self._json_format = []
 
-    def openJson(self, file):
+    def open_json(self, file):
         if type(file) == str:
-            self.openedJson = open(file, "w", newline='', encoding="utf-8")
+            self._opened_json = open(file, 'w', newline='', encoding='utf-8')
         else:
-            self.openedJson = file
+            self._opened_json = file
 
-        self.jsonFormat = []
+        self._json_format = []
 
-    def writeEntry(self, dataDict):
-        self._writeJsonEntry(dataDict)
+    def write_entry(self, data_dict):
+        self._write_json_entry(data_dict)
 
-    def _writeJsonEntry(self, dataDict):
+    def _write_json_entry(self, data_dict):
         person = {}
-        for key, property in dataDict.items():
-            if key != "cursorLocation":
+        for key, property in data_dict.items():
+            if key != 'cursorLocation':
                 person[key] = property
 
-        self.jsonFormat.append(person)
+        self._json_format.append(person)
 
-    def closeJson(self):
-        json.dump(self.jsonFormat,self.openedJson, indent=4, ensure_ascii=False)
-        self.openedJson.close()
-        self.openedJson = None
+    def close_json(self):
+        json.dump(self._json_format, self._opened_json, indent=4, ensure_ascii=False)
+        self._opened_json.close()
+        self._opened_json = None

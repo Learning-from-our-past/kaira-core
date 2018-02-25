@@ -8,15 +8,15 @@ class ResultJsonBuilderInterface:
         pass
 
     @abstractmethod
-    def openJson(self, filepath):
+    def open_json(self, filepath):
         pass
 
     @abstractmethod
-    def writeEntry(self, dataDict):
+    def write_entry(self, dataDict):
         pass
 
     @abstractmethod
-    def closeJson(self):
+    def close_json(self):
         pass
 
     def int_or_none(self, value):
