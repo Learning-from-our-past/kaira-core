@@ -1,5 +1,5 @@
 import pytest
-from pipeline_creation.yaml_parser import YamlParser
+from pipeline.yaml_parser import YamlParser
 
 
 class TestSpouseExtraction:

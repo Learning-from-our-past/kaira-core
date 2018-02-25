@@ -1,21 +1,21 @@
 book_series: Siirtokarjalaisten tie
 pipeline:
   - !Extractor {
-      module: "pipeline_creation.tests.test_yaml_parser",
+      module: "pipeline.tests.test_yaml_parser",
       class_name: "OuterExtractor",
       options: {
         message: "Level 1"
       },
       pipeline: [
         !Extractor {
-          module: "pipeline_creation.tests.test_yaml_parser",
+          module: "pipeline.tests.test_yaml_parser",
           class_name: "SubExtractor",
           options: {
             message: "Level 2"
           },
           pipeline: [
             !Extractor {
-              module: "pipeline_creation.tests.test_yaml_parser",
+              module: "pipeline.tests.test_yaml_parser",
               class_name: "SubExtractor",
               options: {
                 message: "Level 3"

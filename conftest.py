@@ -5,8 +5,8 @@ import os
 
 from book_extractors import extraction_constants
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from pipeline_creation.dependency_resolver import ExtractorResultsMap
-from pipeline_creation.yaml_parser import YamlParser
+from pipeline.dependency_resolver import ExtractorResultsMap
+from pipeline.yaml_parser import YamlParser
 
 
 def pytest_collection_modifyitems(session, config, items):

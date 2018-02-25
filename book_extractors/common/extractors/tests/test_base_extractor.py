@@ -2,7 +2,7 @@ import pytest
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.configuration_exceptions import RequiredDependenciesAreMissing
 from book_extractors.extraction_pipeline import ExtractionPipeline
-from pipeline_creation.dependency_resolver import ExtractorResultsMap
+from pipeline.dependency_resolver import ExtractorResultsMap
 
 
 class TestBaseExtractor:
