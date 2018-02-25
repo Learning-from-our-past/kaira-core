@@ -2,7 +2,7 @@ from lxml.html import *
 from lxml import etree
 from lxml import html
 import re
-from pipeline.interface.chunktextinterface import ChunkTextInterface
+from core.interface.chunktextinterface import ChunkTextInterface
 from book_extractors.greatfarmers.main import BOOK_SERIES_ID
 
 def read_html_file(path):

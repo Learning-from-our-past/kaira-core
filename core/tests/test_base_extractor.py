@@ -1,8 +1,8 @@
 import pytest
-from pipeline.base_extractor import BaseExtractor
-from pipeline.configuration_exceptions import RequiredDependenciesAreMissing
-from pipeline.extraction_pipeline import ExtractionPipeline
-from pipeline.dependency_resolver import ExtractorResultsMap
+from core.base_extractor import BaseExtractor
+from core.configuration_exceptions import RequiredDependenciesAreMissing
+from core.extraction_pipeline import ExtractionPipeline
+from core.dependency_resolver import ExtractorResultsMap
 
 
 class TestBaseExtractor:

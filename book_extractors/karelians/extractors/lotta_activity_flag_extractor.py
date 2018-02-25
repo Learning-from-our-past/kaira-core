@@ -1,4 +1,4 @@
-from pipeline.base_extractor import BaseExtractor
+from core.base_extractor import BaseExtractor
 from utils.text_utils import remove_hyphens_from_text
 from utils.text_utils import check_string_for_substrings
 from utils.text_utils import take_sub_str_based_on_start_and_end_and_radius

@@ -3,10 +3,10 @@ from peewee import *
 import shutil
 import os
 
-from pipeline import extraction_constants
+from core import extraction_constants
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from pipeline.dependency_resolver import ExtractorResultsMap
-from pipeline.yaml_parser import YamlParser
+from core.dependency_resolver import ExtractorResultsMap
+from core.yaml_parser import YamlParser
 
 
 def pytest_collection_modifyitems(session, config, items):

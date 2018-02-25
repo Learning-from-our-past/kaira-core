@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from book_extractors.common.extraction_keys import KEYS
-from pipeline.base_extractor import BaseExtractor
+from core.base_extractor import BaseExtractor
 from utils import regexUtils, text_utils
 from book_extractors.common.postprocessors import place_name_cleaner
 from utils.text_utils import remove_hyphens_from_text
