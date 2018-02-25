@@ -2,7 +2,6 @@
 import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from pipeline.extraction_exceptions import *
 from shared import regexUtils, text_utils
 from book_extractors.common.postprocessors import place_name_cleaner
 from shared.text_utils import remove_hyphens_from_text
@@ -121,3 +120,15 @@ class BirthdayLocationExtractor(BaseExtractor):
         if death_position != -1:
             if death_position < found_location.end(): # there is word kaat, or " k " before location match.
                 raise LocationException(text)
+
+
+class LocationException(Exception):
+    eType = "LOCATION"
+    message = "ERROR in location extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+    def __unicode__(self):
+        return repr(self.message)
