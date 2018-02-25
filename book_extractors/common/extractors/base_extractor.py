@@ -1,21 +1,25 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from book_extractors.common.metadata_helper import MetadataCollector
-from book_extractors.configuration_exceptions import DependencyConfigurationException
-from book_extractors.configuration_exceptions import ContextKeywordConfigurationException
-from book_extractors.configuration_exceptions import ParentKeywordConfigurationException
-from book_extractors.extraction_exceptions import ParentKeywordTraversingException
+from book_extractors.configuration_exceptions import RequiredDependenciesAreMissing
+from book_extractors.extraction_pipeline import ExtractionPipeline
+
 
 class BaseExtractor:
     __metaclass__ = ABCMeta
 
-    def __init__(self, key_of_cursor_location_dependent=None, options=None, dependencies_contexts=None):
-        self.key_of_cursor_location_dependent = key_of_cursor_location_dependent    # Tells key of entry in cursorLocations dict this extractor is dependent on
-        self.REQUIRES_MATCH_POSITION = False    # Set this to true in subclass if you want to enforce dependsOnMatchPositionOf() before extract()
-        self.matchStartPosition = 0             # position in string where to begin match. Only used on certain classes
-        self.matchFinalPosition = 0             # after extractor is finished, save the ending position of the match
-        self._parent_pipeline_data = {}
-        self._dependencies_graph = []
+    def __init__(self, cursor_location_depends_on=None, options=None):
+
+        if cursor_location_depends_on:
+            # Tells key of entry in cursorLocations dict this extractor is dependent on
+            self.key_of_cursor_location_dependent = cursor_location_depends_on.extraction_key
+        else:
+            self.key_of_cursor_location_dependent = None
+
+        self._sub_extraction_pipeline = None
+        self._extraction_results_map = None
+
+        self._expected_dependencies_names = []
         self._required_dependencies = []
         self._deps = {}
 
@@ -26,125 +30,67 @@ class BaseExtractor:
 
         self.metadata_collector = MetadataCollector()
 
-    def _build_dependencies_graph(self, dependencies_contexts):
-        if dependencies_contexts:
-            if len(dependencies_contexts) < len(self._required_dependencies):
-                while len(dependencies_contexts) < len(self._required_dependencies):
-                    dependencies_contexts.append(None)
-
-                missing_contexts = []
-                for ext, context in zip(self._required_dependencies, dependencies_contexts):
-                    if context is None:
-                        missing_contexts.append(ext.__name__)
-
-                raise DependencyConfigurationException(missing_contexts)
-
-            contexts = []
-            for context in dependencies_contexts:
-                new_context = context
-                if isinstance(context, str):
-                    new_context = (context, None)
-
-                contexts.append(new_context)
-
-            new_dependencies = [(extractor, context) for extractor, context in zip(self._required_dependencies, contexts)]
-            self._dependencies_graph += new_dependencies
-
-    def _set_dependencies(self, dependencies, dependencies_contexts):
+    def set_subpipeline(self, extractors):
         """
-        When calling this function, contexts for every dependency need to be defined,
-        including those that this extractor possibly inherits from its superclasses.
-        The dependency and context lists must match each other positionally.
-
-        Example: dependencies = [NameExtractor, SpouseExtractor]
-                 contexts     = ['parent.parent', 'main']
-
-        This tells the dependency system to look for MockExtractor's results in the
-        parent pipeline of the parent pipeline, and for FoodExtractor's results in the
-        main pipeline.
-
-        When this function is called from a constructor that is called through super
-        in a subclass, no contexts are passed. The superclass (and its superclasses)
-        merely inserts its dependencies and is done. When this function is called
-        through configure_extractor as it calls the extractor's constructor, the
-        dependency graph is built as the contexts are passed into the constructor
-        (and through that, here) through the extractor configuration.
-
-        :param dependencies: A list of extractors (classes) whose results this extractor depends on.
-        :param dependencies_contexts: A list of contexts for this extractor's dependencies. Contexts tell the dependency
-        system where to find the dependencies. Valid keywords: 'current', 'main', 'parent', 'parent.parent.', ...
+        Defines the sub pipeline for the extractor. Called during YAML-parsing process.
+        :param extractors:
         :return:
         """
-        for dependency in reversed(dependencies):
-            self._required_dependencies.insert(0, dependency)
+        self._sub_extraction_pipeline = ExtractionPipeline(extractors)
 
-        if dependencies_contexts is not None:
-            self._build_dependencies_graph(dependencies_contexts)
+    def set_extraction_results_map(self, results_map):
+        """
+        Pass the result map to extractor. It contains the pure unmodified extraction results of the previous
+        extractors in a map which can be used to resolve those results as a dependencies to this extractor.
+        :param results_map:
+        :return:
+        """
+        self._extraction_results_map = results_map
 
-    def _get_data_from_parent_pipeline_results(self, results, parents_to_traverse):
-        if parents_to_traverse > 0:
-            if 'parent_data' not in results:
-                raise ParentKeywordTraversingException()
+    def _declare_expected_dependency_names(self, dependency_names):
+        """
+        If extractor has dependencies, declare their names here in constructor. The provided names
+        are just names which can later be used to fetch resolved results during extraction. However, the amount
+        of the names is verified when required dependencies are set, so that no less nor no more dependencies
+        are injected to the extractor than is expected.
+        The names should be defined in the same order as dependencies are listed in the yaml-configuration.
+        :param dependency_names: list of strings
+        :return:
+        """
+        self._expected_dependencies_names = dependency_names
 
-            if results['parent_data'] is None:
-                raise ParentKeywordConfigurationException()
+    def set_required_dependencies(self, extractor_dependencies):
+        """
+        Set possible required dependencies based on YAML config. A list of extractors or their ids/names so that the
+        dependencies can be resolved from the extraction_results_map during the extraction.
 
-            results = results['parent_data']
-            parents_to_traverse -= 1
-            return self._get_data_from_parent_pipeline_results(results, parents_to_traverse)
-        else:
-            return results
+        Usually one should provide extractor objects like YamlParser does when config-file uses PyYaml anchors. However,
+        it is also possible to just pass a strings which will then act as keys in the extraction results map instead
+        of object ids. This is recommended approach when mocking dependencies in unit tests.
 
-    def _get_data_from_main_pipeline(self, results):
-        if results['parent_data'] is None:
-            return results
-        else:
-            results = results['parent_data']
-            return self._get_data_from_main_pipeline(results)
+        :param extractor_dependencies: Extractor object or string.
+        :return:
+        """
 
-    def _has_duplicates(self, extractor):
-        return sum(dependency_graph_tuple.count(extractor) for dependency_graph_tuple in self._dependencies_graph) > 1
-
-    def _resolve_dependencies(self, current_extraction_results):
-        self._deps = {}
-
-        for dependency in self._dependencies_graph:
-            extractor, context = dependency
-            context, json_path = context
-            key = extractor.extraction_key
-
-            if context == 'current':
-                extraction_results = current_extraction_results
-            elif context == 'main':
-                extraction_results = self._get_data_from_main_pipeline(self._parent_pipeline_data)['extraction_results']
-            elif 'parent' in context:
-                parents_to_traverse = context.count('parent') - 1
-                extraction_results = self._get_data_from_parent_pipeline_results(self._parent_pipeline_data,
-                                                                                 parents_to_traverse)['extraction_results']
+        def map_dependencies(dep):
+            if type(dep) is str:
+                return dep
             else:
-                raise ContextKeywordConfigurationException()
+                return id(dep)
 
-            result_key = key
-            if self._has_duplicates(extractor):
-                result_key = context + '.' + key
+        self._required_dependencies = list(map(map_dependencies, extractor_dependencies))
 
-            if json_path is not None:
-                deps = extraction_results[json_path][key]
-            else:
-                deps = extraction_results[key]
+        if len(self._required_dependencies) != len(self._expected_dependencies_names):
+            raise RequiredDependenciesAreMissing()
 
-            self._deps[result_key] = deps
+    def _resolve_dependencies(self):
 
-    def _get_parent_data_for_pipeline(self, extraction_results, metadata):
-        return {'extraction_results': extraction_results,
-                'metadata': metadata,
-                'parent_data': self._parent_pipeline_data}
+        result_data = [self._extraction_results_map.get_results(dep_id) for dep_id in self._required_dependencies]
 
-    def extract(self, entry, extraction_results, extraction_metadata, parent_pipeline_data=None):
-        self._parent_pipeline_data = parent_pipeline_data
-        
-        if self._dependencies_graph is not None and self._dependencies_graph != []:
-            self._resolve_dependencies(extraction_results)
+        self._deps = {key: data for (key, data) in zip(self._expected_dependencies_names, result_data)}
+
+    def extract(self, entry, extraction_results, extraction_metadata):
+        self._resolve_dependencies()
 
         extraction_results, extraction_metadata = self._preprocess(entry, extraction_results, extraction_metadata)
         extraction_results, extraction_metadata = self._extract(entry, extraction_results, extraction_metadata)
@@ -153,6 +99,13 @@ class BaseExtractor:
         # Add finally the metadata after post process has been run since it might add metadata
         self._get_output_path(extraction_metadata)[self.extraction_key] = self.metadata_collector.get_metadata()
         self.metadata_collector.clear()
+
+        # Store this extractor's results to the map so that it can be used later for dependency resolving
+        # Strip the output path, since we don't want to store it to the result map
+        extraction_results_without_output_path = extraction_results
+        if self.output_path:
+            extraction_results_without_output_path = extraction_results[self.output_path]
+        self._extraction_results_map.add_results(id(self), extraction_results_without_output_path)
 
         return extraction_results, extraction_metadata
 
@@ -186,13 +139,13 @@ class BaseExtractor:
         """
         return extraction_results, extraction_metadata
 
-    def get_starting_position(self, extraction_results, extraction_metadata):
+    def get_starting_position(self, extraction_metadata):
         if self.key_of_cursor_location_dependent is not None:
             return self._get_output_path(extraction_metadata)[self.key_of_cursor_location_dependent]['cursorLocation']
         else:
             return 0
 
-    def get_last_cursor_location(self, extraction_results, extraction_metadata):
+    def get_last_cursor_location(self, extraction_metadata):
         cursor_locations_in_result_metadatas = [x['cursorLocation'] for x in extraction_metadata.values()]
         return max(cursor_locations_in_result_metadatas)
 

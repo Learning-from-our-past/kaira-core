@@ -5,26 +5,21 @@ import shared.regexUtils as regexUtils
 import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
 from shared.gender_extract import Gender, GenderException
 
 
 class CommonOwnerExtractor(BaseExtractor):
     extraction_key = 'owner'
 
-    def __init__(self, key_of_cursor_location_dependent, options):
-        super(CommonOwnerExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(CommonOwnerExtractor, self).__init__(cursor_location_depends_on, options)
         self.SEARCH_SPACE = 200
         self.OWNER_YEAR_PATTERN = options['OWNER_YEAR_PATTERN']
         self.OWNER_NAME_PATTERN = options['OWNER_NAME_PATTERN']
         self.OWNER_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(options['BIRTHDAY_EXTRACTOR'])
-        ])
-
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         result = self._find_owner(entry['text'], start_position)
         return self._add_to_extraction_results(result[0], extraction_results, extraction_metadata, result[1])
 
@@ -34,7 +29,8 @@ class CommonOwnerExtractor(BaseExtractor):
         owner_name_details_result = self._find_owner_name_details(text, start_position)
         owner_birthday_result, metadata = self._find_owner_birthday(text)
 
-        cursor_location = max(owner_year_result[1], owner_name_details_result[1], self.get_last_cursor_location(owner_birthday_result, metadata))
+        cursor_location = max(owner_year_result[1], owner_name_details_result[1],
+                              self.get_last_cursor_location(metadata))
         result = {
             KEYS["ownerFrom"]: owner_year_result[0],
             KEYS["firstnames"]: owner_name_details_result[0][0],

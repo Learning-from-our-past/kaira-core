@@ -5,8 +5,8 @@ from book_extractors.karelians.extraction.extractors.wedding_extractor import We
 class TestWeddingExtraction:
 
     @pytest.yield_fixture(autouse=True)
-    def extractor(self):
-        return WeddingExtractor(None, None)
+    def extractor(self, th):
+        return th.setup_extractor(WeddingExtractor(None, None))
 
     def _verify_years(self, expected_texts_and_years, extractor):
         flag = 'wedding'

@@ -5,6 +5,8 @@ import os
 
 from book_extractors import extraction_constants
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
+from pipeline_creation.dependency_resolver import ExtractorResultsMap
+from pipeline_creation.yaml_parser import YamlParser
 
 
 def pytest_collection_modifyitems(session, config, items):
@@ -38,9 +40,24 @@ class Th:
             for key, item in target.items():
                 Th.omit_property(item, property_name)
 
+    @staticmethod
+    def setup_extractor(extractor):
+        extractor.set_extraction_results_map(ExtractorResultsMap())
+        return extractor
+
+    @staticmethod
+    def build_pipeline_from_yaml(config):
+        parser = YamlParser(ExtractorResultsMap())
+        return parser.build_pipeline_from_yaml_string(config)
+
+
 @pytest.fixture
 def th():
     return Th
+
+@pytest.fixture()
+def result_map():
+    return ExtractorResultsMap()
 
 @pytest.fixture(scope='session', autouse=True)
 def constants():

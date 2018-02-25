@@ -7,14 +7,15 @@ from book_extractors.karelians.extraction.extractors.name_extractor import NameE
 class InjuredInWarFlagExtractor(BaseExtractor):
     extraction_key = 'injuredInWarFlag'
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(InjuredInWarFlagExtractor, self).__init__(key_of_cursor_location_dependent, options)
-        self._set_dependencies([NameExtractor], dependencies_contexts)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(InjuredInWarFlagExtractor, self).__init__(cursor_location_depends_on, options)
         self._in_spouse_extractor = options['in_spouse_extractor']
         
         self.OPTIONS = regex.UNICODE
         self.INJURED_IN_WAR_PATTERN = r'(?:haavoi){s<=1}|(?<!S)(otainvalidi){s<=1}(?:\s|,|\.)'
         self.REGEX_INJURED_IN_WAR = regex.compile(self.INJURED_IN_WAR_PATTERN, self.OPTIONS)
+
+        self._declare_expected_dependency_names(['person'])
 
     def _is_person_male(self):
         """
@@ -26,9 +27,9 @@ class InjuredInWarFlagExtractor(BaseExtractor):
         """
         should_extract = False
 
-        if self._in_spouse_extractor and self._deps['name']['gender'] == 'Female':
+        if self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Female':
             should_extract = True
-        elif not self._in_spouse_extractor and self._deps['name']['gender'] == 'Male':
+        elif not self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Male':
             should_extract = True
 
         return should_extract
@@ -36,7 +37,7 @@ class InjuredInWarFlagExtractor(BaseExtractor):
     def _extract(self, entry, extraction_results, extraction_metadata):
         injured_in_war = None
         if self._is_person_male():
-            injured_in_war = self._check_injured_in_war(entry['text'])
+            injured_in_war = self._check_injured_in_war(entry['full_text'])
 
         return self._add_to_extraction_results(injured_in_war, extraction_results, extraction_metadata)
 

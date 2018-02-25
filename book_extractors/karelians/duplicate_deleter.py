@@ -1,8 +1,8 @@
 import datetime
 import regex
-import importlib
+from importlib import util as import_util
 from jellyfish import levenshtein_distance as distance
-if importlib.util.find_spec('ssdeep'):
+if import_util.find_spec('ssdeep'):
     # This package is difficult to install on MacOS so to keep tests etc. from breaking, import it conditionally
     import ssdeep
 
