@@ -1,4 +1,4 @@
-from book_extractors.farmers.resultjsonbuilder import ResultJsonBuilder
+from core.resultjsonbuilder import ResultJsonBuilder
 from core.processdata import ProcessData
 from core.dependency_resolver import ExtractorResultsMap
 from core.yaml_parser import YamlParser

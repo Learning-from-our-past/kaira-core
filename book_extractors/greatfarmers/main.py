@@ -1,5 +1,5 @@
 from core.processdata import ProcessData
-from book_extractors.greatfarmers.resultjsonbuilder import ResultJsonBuilder
+from core.resultjsonbuilder import ResultJsonBuilder
 from core.dependency_resolver import ExtractorResultsMap
 from core.yaml_parser import YamlParser
 from core.utils.gender_extract import Gender
