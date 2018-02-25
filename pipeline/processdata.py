@@ -1,4 +1,4 @@
-from book_extractors.extraction_exceptions import ExtractionException
+from pipeline.extraction_exceptions import ExtractionException
 
 
 class ProcessData:

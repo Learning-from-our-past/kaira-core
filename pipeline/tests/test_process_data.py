@@ -1,5 +1,5 @@
 import pytest
-from book_extractors.processdata import ProcessData
+from pipeline.processdata import ProcessData
 from pipeline.dependency_resolver import ExtractorResultsMap
 
 

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from book_extractors.common.metadata_helper import MetadataCollector
-from book_extractors.configuration_exceptions import RequiredDependenciesAreMissing
-from book_extractors.extraction_pipeline import ExtractionPipeline
+from pipeline.configuration_exceptions import RequiredDependenciesAreMissing
+from pipeline.extraction_pipeline import ExtractionPipeline
 
 
 class BaseExtractor:

@@ -1,5 +1,5 @@
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-import book_extractors.extraction_constants as extraction_constants
+import pipeline.extraction_constants as extraction_constants
 
 
 class KairaIdProvider:
@@ -32,12 +32,12 @@ class KairaIdProvider:
 
         if person_type == 'S':
             full_id = '{}_{}_{}{}_{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER,
-                                          KairaIdProvider._main_id_num, person_type, KairaIdProvider._spouse_id_num)
+                                             KairaIdProvider._main_id_num, person_type, KairaIdProvider._spouse_id_num)
             KairaIdProvider._spouse_id_num += 1
 
         if person_type == 'C':
             full_id = '{}_{}_{}{}_{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER,
-                                          KairaIdProvider._main_id_num, person_type, KairaIdProvider._children_id_num)
+                                             KairaIdProvider._main_id_num, person_type, KairaIdProvider._children_id_num)
             KairaIdProvider._children_id_num += 1
 
         return full_id

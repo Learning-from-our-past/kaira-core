@@ -4,7 +4,7 @@ import re
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.extraction_exceptions import *
+from pipeline.extraction_exceptions import *
 from shared import regexUtils
 from shared import text_utils
 

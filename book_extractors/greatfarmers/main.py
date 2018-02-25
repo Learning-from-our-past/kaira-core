@@ -1,4 +1,4 @@
-from book_extractors.processdata import ProcessData
+from pipeline.processdata import ProcessData
 from book_extractors.greatfarmers.resultjsonbuilder import ResultJsonBuilder
 from pipeline.dependency_resolver import ExtractorResultsMap
 from pipeline.yaml_parser import YamlParser
