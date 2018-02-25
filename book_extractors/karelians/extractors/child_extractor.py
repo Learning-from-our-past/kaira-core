@@ -3,7 +3,6 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from pipeline.extraction_exceptions import StopExtractionException
 from shared import regexUtils, text_utils
 from shared.gender_extract import Gender
 from shared.gender_extract import GenderException
@@ -89,7 +88,7 @@ class ChildExtractor(BaseExtractor):
         for m in found_children:
             try:
                 children.append(self._process_child(m.group("child"), children))
-            except (regexUtils.RegexNoneMatchException, StopExtractionException):
+            except (regexUtils.RegexNoneMatchException, StopChildExtractionException):
                 pass
 
         return children
@@ -101,7 +100,7 @@ class ChildExtractor(BaseExtractor):
             for c in child_list:
                 if c[KEYS["childLocationName"]] == "":
                     c[KEYS["childLocationName"]] = birth_loc.group("location")
-            raise StopExtractionException('Child extraction should be stopped here. Current child is not valid child.')
+            raise StopChildExtractionException('Child extraction should be stopped here. Current child is not valid child.')
 
         name = regexUtils.safe_search(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
         name = name.strip()
@@ -148,3 +147,12 @@ class ChildExtractor(BaseExtractor):
             except LocationNotFound as e:
                 return self.geocoder.get_empty_coordinates()
         return geocoordinates
+
+
+class StopChildExtractionException(Exception):
+
+    def __init__(self, message):
+        self.message = message
+
+    def __unicode__(self):
+        return self.message

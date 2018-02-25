@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
-
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-
 from book_extractors.common.extraction_keys import KEYS
-from pipeline.extraction_exceptions import *
 from shared import regexUtils
 from shared import text_utils
 
@@ -153,3 +150,15 @@ class DateFinder:
     def _check_is_year_sensible(year):
         if int(year) > 2000 or int(year) < 1800:
             raise DateException('Date is not sensible.')
+
+
+class DateException(Exception):
+    eType = "DATE"
+    message = "ERROR in date extraction: "
+    details = u""
+
+    def __init__(self, text):
+        self.details = text
+
+    def __unicode__(self):
+        return repr(self.message)
