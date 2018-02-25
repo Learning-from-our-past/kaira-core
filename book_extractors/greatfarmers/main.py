@@ -1,7 +1,7 @@
 from book_extractors.processdata import ProcessData
 from book_extractors.greatfarmers.resultjsonbuilder import ResultJsonBuilder
-from pipeline_creation.dependency_resolver import ExtractorResultsMap
-from pipeline_creation.yaml_parser import YamlParser
+from pipeline.dependency_resolver import ExtractorResultsMap
+from pipeline.yaml_parser import YamlParser
 from shared.gender_extract import Gender
 
 BOOK_SERIES_ID = 'suuretmaatilat'    # Used to identify this book series in xml files
