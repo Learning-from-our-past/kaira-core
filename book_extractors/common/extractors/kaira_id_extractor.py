@@ -1,4 +1,4 @@
-from book_extractors.common.extractors.base_extractor import BaseExtractor
+from pipeline.base_extractor import BaseExtractor
 import pipeline.extraction_constants as extraction_constants
 
 

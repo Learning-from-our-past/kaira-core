@@ -3,7 +3,7 @@ import re
 import utils.regexUtils as regexUtils
 import utils.text_utils as text_utils
 import csv
-from book_extractors.common.extractors.base_extractor import BaseExtractor
+from pipeline.base_extractor import BaseExtractor
 
 
 class ProfessionExtractor(BaseExtractor):

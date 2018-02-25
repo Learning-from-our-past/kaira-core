@@ -1,5 +1,4 @@
-from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.karelians.extractors.name_extractor import NameExtractor
+from pipeline.base_extractor import BaseExtractor
 from utils.text_utils import remove_hyphens_from_text
 import regex
 
