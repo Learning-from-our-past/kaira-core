@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from interface.jsonbuilderinterface import ResultJsonBuilderInterface
+from pipeline.interface.jsonbuilderinterface import ResultJsonBuilderInterface
 
 
 class ResultJsonBuilder(ResultJsonBuilderInterface):
