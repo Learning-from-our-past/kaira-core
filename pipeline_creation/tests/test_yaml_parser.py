@@ -2,7 +2,7 @@ import pytest
 
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from pipeline_creation.yaml_parser import YamlParser
-from book_extractors.karelians.extraction.extractors.name_extractor import NameExtractor
+from book_extractors.karelians.extractors.name_extractor import NameExtractor
 from pipeline_creation.dependency_resolver import ExtractorResultsMap
 
 test_data = {

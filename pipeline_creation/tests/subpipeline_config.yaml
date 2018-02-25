@@ -1,7 +1,7 @@
 book_series: Siirtokarjalaisten tie
 pipeline:
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.farm_extractor",
+      module: "book_extractors.karelians.extractors.farm_extractor",
       class_name: "FarmDetailsExtractor",
       pipeline: [
         !Extractor {
@@ -21,7 +21,7 @@ pipeline:
             }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.farm_area_extractor",
+          module: "book_extractors.karelians.extractors.farm_area_extractor",
           class_name: "FarmAreaExtractor"
         }
       ]

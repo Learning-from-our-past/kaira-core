@@ -1,7 +1,7 @@
 book_series: Siirtokarjalaisten tie
 pipeline:
   - !Extractor &PrimaryPersonName {
-      module: "book_extractors.karelians.extraction.extractors.name_extractor",
+      module: "book_extractors.karelians.extractors.name_extractor",
       class_name: "NameExtractor",
       options: {
         output_path: "primaryPerson"
@@ -9,12 +9,12 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.image_extractor",
+      module: "book_extractors.karelians.extractors.image_extractor",
       class_name: "ImageExtractor"
     }
 
   - !Extractor &FormerSurname {
-      module: "book_extractors.karelians.extraction.extractors.original_family_extractor",
+      module: "book_extractors.karelians.extractors.original_family_extractor",
       class_name: "FormerSurnameExtractor",
       options: {
         output_path: "primaryPerson"
@@ -22,7 +22,7 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.profession_extractor",
+      module: "book_extractors.karelians.extractors.profession_extractor",
       class_name: "ProfessionExtractor",
       cursor_location_depend_on: *FormerSurname,
       options: {
@@ -31,7 +31,7 @@ pipeline:
     }
 
   - !Extractor &Birthday {
-      module: "book_extractors.karelians.extraction.extractors.birthday_extractor",
+      module: "book_extractors.karelians.extractors.birthday_extractor",
       class_name: "BirthdayExtractor",
       cursor_location_depend_on: *FormerSurname,
       options: {
@@ -40,7 +40,7 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.location_extractor",
+      module: "book_extractors.karelians.extractors.location_extractor",
       class_name: "BirthdayLocationExtractor",
       cursor_location_depend_on: *Birthday,
       options: {
@@ -57,7 +57,7 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.martta_activity_flag_extractor",
+      module: "book_extractors.karelians.extractors.martta_activity_flag_extractor",
       class_name: "MarttaActivityFlagExtractor",
       depends_on: [ *PrimaryPersonName ],
       options: {
@@ -67,14 +67,14 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.war_data_extractor",
+      module: "book_extractors.karelians.extractors.war_data_extractor",
       class_name: "WarDataExtractor",
       options: {
         output_path: "primaryPerson"
       },
       pipeline: [
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor",
+          module: "book_extractors.karelians.extractors.injured_in_war_flag_extractor",
           class_name: "InjuredInWarFlagExtractor",
           depends_on: [ *PrimaryPersonName ],
           options: {
@@ -82,7 +82,7 @@ pipeline:
           }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor",
+          module: "book_extractors.karelians.extractors.served_during_war_flag_extractor",
           class_name: "ServedDuringWarFlagExtractor",
           depends_on: [ *PrimaryPersonName ],
           options: {
@@ -90,7 +90,7 @@ pipeline:
           }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor",
+          module: "book_extractors.karelians.extractors.lotta_activity_flag_extractor",
           class_name: "LottaActivityFlagExtractor",
           depends_on: [ *PrimaryPersonName ],
           options: {
@@ -101,25 +101,25 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.migration_route_extractors",
+      module: "book_extractors.karelians.extractors.migration_route_extractors",
       class_name: "MigrationRouteExtractor",
       options: {
         output_path: "primaryPerson"
       },
       pipeline: [
         !Extractor {
-            module: "book_extractors.karelians.extraction.extractors.migration_route_extractors",
+            module: "book_extractors.karelians.extractors.migration_route_extractors",
             class_name: "KarelianLocationsExtractor"
         },
         !Extractor {
-            module: "book_extractors.karelians.extraction.extractors.migration_route_extractors",
+            module: "book_extractors.karelians.extractors.migration_route_extractors",
             class_name: "FinnishLocationsExtractor"
         }
       ]
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.omakotitalo_extractor",
+      module: "book_extractors.karelians.extractors.omakotitalo_extractor",
       class_name: "OmakotitaloExtractor",
       options: {
         output_path: "primaryPerson"
@@ -127,18 +127,18 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.spouse_extractor",
+      module: "book_extractors.karelians.extractors.spouse_extractor",
       class_name: "SpouseExtractor",
       pipeline: [
         !Extractor &SpouseFormerSurname {
-          module: "book_extractors.karelians.extraction.extractors.original_family_extractor",
+          module: "book_extractors.karelians.extractors.original_family_extractor",
           class_name: "FormerSurnameExtractor",
           options: {
             output_path: "spouse"
           }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.profession_extractor",
+          module: "book_extractors.karelians.extractors.profession_extractor",
           class_name: "ProfessionExtractor",
           cursor_location_depend_on: *SpouseFormerSurname,
           options: {
@@ -146,7 +146,7 @@ pipeline:
           }
         },
         !Extractor &SpouseBirthday {
-          module: "book_extractors.karelians.extraction.extractors.birthday_extractor",
+          module: "book_extractors.karelians.extractors.birthday_extractor",
           class_name: "BirthdayExtractor",
           cursor_location_depend_on: *SpouseFormerSurname,
           options: {
@@ -154,7 +154,7 @@ pipeline:
           }
         },
         !Extractor &SpouseBirthLocation {
-          module: "book_extractors.karelians.extraction.extractors.location_extractor",
+          module: "book_extractors.karelians.extractors.location_extractor",
           class_name: "BirthdayLocationExtractor",
           cursor_location_depend_on: *SpouseBirthday,
           options: {
@@ -162,7 +162,7 @@ pipeline:
           }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.death_extractor",
+          module: "book_extractors.karelians.extractors.death_extractor",
           class_name: "DeathExtractor",
           cursor_location_depend_on: *SpouseBirthLocation,
           options: {
@@ -170,7 +170,7 @@ pipeline:
           }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.wedding_extractor",
+          module: "book_extractors.karelians.extractors.wedding_extractor",
           class_name: "WeddingExtractor",
           cursor_location_depend_on: *SpouseBirthLocation,
           options: {
@@ -178,7 +178,7 @@ pipeline:
           }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.martta_activity_flag_extractor",
+          module: "book_extractors.karelians.extractors.martta_activity_flag_extractor",
           class_name: "MarttaActivityFlagExtractor",
           depends_on: [ *PrimaryPersonName ],
           options: {
@@ -187,14 +187,14 @@ pipeline:
           }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.war_data_extractor",
+          module: "book_extractors.karelians.extractors.war_data_extractor",
           class_name: "WarDataExtractor",
           options: {
             output_path: "spouse"
           },
           pipeline: [
             !Extractor {
-              module: "book_extractors.karelians.extraction.extractors.injured_in_war_flag_extractor",
+              module: "book_extractors.karelians.extractors.injured_in_war_flag_extractor",
               class_name: "InjuredInWarFlagExtractor",
               depends_on: [ *PrimaryPersonName ],
               options: {
@@ -202,7 +202,7 @@ pipeline:
               }
             },
             !Extractor {
-              module: "book_extractors.karelians.extraction.extractors.served_during_war_flag_extractor",
+              module: "book_extractors.karelians.extractors.served_during_war_flag_extractor",
               class_name: "ServedDuringWarFlagExtractor",
               depends_on: [ *PrimaryPersonName ],
               options: {
@@ -210,7 +210,7 @@ pipeline:
               }
             },
             !Extractor {
-              module: "book_extractors.karelians.extraction.extractors.lotta_activity_flag_extractor",
+              module: "book_extractors.karelians.extractors.lotta_activity_flag_extractor",
               class_name: "LottaActivityFlagExtractor",
               depends_on: [ *PrimaryPersonName ],
               options: {
@@ -223,12 +223,12 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.child_extractor",
+      module: "book_extractors.karelians.extractors.child_extractor",
       class_name: "ChildExtractor"
     }
 
   - !Extractor {
-      module: "book_extractors.karelians.extraction.extractors.farm_extractor",
+      module: "book_extractors.karelians.extractors.farm_extractor",
       class_name: "FarmDetailsExtractor",
       pipeline: [
         !Extractor {
@@ -248,7 +248,7 @@ pipeline:
             }
         },
         !Extractor {
-          module: "book_extractors.karelians.extraction.extractors.farm_area_extractor",
+          module: "book_extractors.karelians.extractors.farm_area_extractor",
           class_name: "FarmAreaExtractor"
         }
       ]
