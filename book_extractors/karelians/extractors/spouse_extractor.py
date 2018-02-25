@@ -4,7 +4,7 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from shared import regexUtils
+from utils import regexUtils
 
 
 class SpouseExtractor(BaseExtractor):

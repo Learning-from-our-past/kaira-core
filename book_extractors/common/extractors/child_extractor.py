@@ -3,10 +3,10 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from shared import regexUtils
-from shared.gender_extract import Gender, GenderException
-from shared.geo.geocoding import GeoCoder
-from shared import text_utils
+from utils import regexUtils
+from utils.gender_extract import Gender, GenderException
+from utils.geo.geocoding import GeoCoder
+from utils import text_utils
 
 
 class CommonChildExtractor(BaseExtractor):

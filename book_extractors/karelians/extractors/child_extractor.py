@@ -3,10 +3,10 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from shared import regexUtils, text_utils
-from shared.gender_extract import Gender
-from shared.gender_extract import GenderException
-from shared.geo.geocoding import GeoCoder, LocationNotFound
+from utils import regexUtils, text_utils
+from utils.gender_extract import Gender
+from utils.gender_extract import GenderException
+from utils.geo.geocoding import GeoCoder, LocationNotFound
 from book_extractors.common.postprocessors import place_name_cleaner
 
 Gender.load_names()

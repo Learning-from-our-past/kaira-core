@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import re
 
-import shared.regexUtils as regexUtils
+import utils.regexUtils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared import text_utils
+from utils import text_utils
 
 class QuantityExtractor(BaseExtractor):
     extraction_key = KEYS["quantities"]

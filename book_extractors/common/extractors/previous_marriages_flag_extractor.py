@@ -1,6 +1,6 @@
 import re
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared import regexUtils
+from utils import regexUtils
 
 
 class PreviousMarriagesFlagExtractor(BaseExtractor):

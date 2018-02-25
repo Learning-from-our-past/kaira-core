@@ -1,6 +1,6 @@
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared.geo.geocoding import GeoCoder, LocationNotFound
+from utils.geo.geocoding import GeoCoder, LocationNotFound
 
 
 class MetadataExtractor(BaseExtractor):
