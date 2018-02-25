@@ -42,12 +42,6 @@ class ProcessData:
         self._extraction_result_map.clear()
         return person
 
-    def extract_one(self, person_input_data):
-        person_results = self.extraction_pipeline.process(person_input_data)
-        person_results["extractionResults"] = person_results['data']
-
-        return person_results
-
 
 class ExtractionException(Exception):
     message = u""
