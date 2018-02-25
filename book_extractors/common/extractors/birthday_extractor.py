@@ -2,8 +2,8 @@
 import re
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.common.extraction_keys import KEYS
-from shared import regexUtils
-from shared import text_utils
+from utils import regexUtils
+from utils import text_utils
 
 
 class CommonBirthdayExtractor(BaseExtractor):

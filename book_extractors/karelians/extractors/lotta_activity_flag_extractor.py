@@ -1,9 +1,9 @@
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.karelians.extractors.name_extractor import NameExtractor
-from shared.text_utils import remove_hyphens_from_text
-from shared.text_utils import check_string_for_substrings
-from shared.text_utils import take_sub_str_based_on_start_and_end_and_radius
-from shared.text_utils import is_first_character_lower_case
+from utils.text_utils import remove_hyphens_from_text
+from utils.text_utils import check_string_for_substrings
+from utils.text_utils import take_sub_str_based_on_start_and_end_and_radius
+from utils.text_utils import is_first_character_lower_case
 import regex
 
 

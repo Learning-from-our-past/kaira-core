@@ -2,7 +2,7 @@ import re
 
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from shared.gender_extract import Gender, GenderException
+from utils.gender_extract import Gender, GenderException
 
 
 class NameExtractor(BaseExtractor):

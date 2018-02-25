@@ -1,6 +1,6 @@
 from pipeline.processdata import ProcessData
 from book_extractors.karelians.resultjsonbuilder import ResultJsonBuilder
-from shared.gender_extract import Gender
+from utils.gender_extract import Gender
 from pipeline.yaml_parser import YamlParser
 from pipeline.dependency_resolver import ExtractorResultsMap
 

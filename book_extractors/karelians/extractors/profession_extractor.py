@@ -1,7 +1,7 @@
 import re
 
-import shared.regexUtils as regexUtils
-import shared.text_utils as text_utils
+import utils.regexUtils as regexUtils
+import utils.text_utils as text_utils
 import csv
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 
