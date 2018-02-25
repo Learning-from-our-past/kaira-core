@@ -4,7 +4,7 @@ from book_extractors.karelians.extractors.name_extractor import NameExtractor
 from book_extractors.karelians.extractors.profession_extractor import ProfessionExtractor
 from shared.exceptionlogger import ExceptionLogger
 from book_extractors.common.extraction_keys import KEYS
-from interface.valuewrapper import ValueWrapper
+from pipeline.interface import ValueWrapper
 
 class TestNameExtractor:
 

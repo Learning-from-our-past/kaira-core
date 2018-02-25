@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from book_extractors.common.extraction_keys import KEYS
-from interface.jsonbuilderinterface import ResultJsonBuilderInterface
+from pipeline.interface.jsonbuilderinterface import ResultJsonBuilderInterface
 
 class ResultJsonBuilder(ResultJsonBuilderInterface):
 

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import ntpath
 import json
-from abc import abstractmethod
-from interface.jsonbuilderinterface import ResultJsonBuilderInterface
+from pipeline.interface.jsonbuilderinterface import ResultJsonBuilderInterface
 
 
 class ResultJsonBuilder(ResultJsonBuilderInterface):
