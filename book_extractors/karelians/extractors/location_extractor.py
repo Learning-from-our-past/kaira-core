@@ -2,10 +2,11 @@
 import re
 from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
-from utils import regexUtils, text_utils
+from core.utils import text_utils
+from core.utils import regexUtils
 from book_extractors.common.postprocessors import place_name_cleaner
-from utils.text_utils import remove_hyphens_from_text
-from utils.geo.geocoding import GeoCoder, LocationNotFound
+from core.utils.text_utils import remove_hyphens_from_text
+from core.utils.geo.geocoding import GeoCoder, LocationNotFound
 
 
 class FindLocation:

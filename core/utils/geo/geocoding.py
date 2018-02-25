@@ -1,4 +1,4 @@
-from utils.geo.dbhandler import Place, Location
+from core.utils.geo.dbhandler import Place, Location
 
 
 class GeoCoder:

@@ -3,11 +3,11 @@ import pytest
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.karelians.extractors.bnf_parsers.migration_parser import parse_locations
 from book_extractors.karelians.extractors.migration_route_extractors import FinnishLocationsExtractor, \
-    KarelianLocationsExtractor, MigrationRouteExtractor
+    KarelianLocationsExtractor
 from book_extractors.karelians.extractors.tests.migrations.mock_person_data import LOCATION_TEXTS, \
     EXPECTED_RESULTS, LOCATION_HEURISTICS, LOCATION_TEXTS_WITH_ROUVA_WORD, LOCATION_TEXTS_WITH_INCORRECT_REGION
 from playhouse.test_utils import test_database
-from utils.geo.dbhandler import Place, Location
+from core.utils.geo.dbhandler import Place, Location
 
 
 class TestMigrationParser:

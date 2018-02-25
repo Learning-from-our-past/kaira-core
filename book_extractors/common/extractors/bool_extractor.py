@@ -1,5 +1,5 @@
 import re
-import utils.regexUtils as regexUtils
+import core.utils.regexUtils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
 

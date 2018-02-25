@@ -2,8 +2,7 @@
 import re
 
 from core.base_extractor import BaseExtractor
-from utils import regexUtils
-from utils import text_utils
+from core.utils import regexUtils, text_utils
 
 
 class DeathExtractor(BaseExtractor):

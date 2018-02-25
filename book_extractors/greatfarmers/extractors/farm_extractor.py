@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import re
 
-import utils.regexUtils as regexUtils
+import core.utils.regexUtils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
-from utils import text_utils
+from core.utils import text_utils
 
 class FarmExtractor(BaseExtractor):
     extraction_key = KEYS['farmDetails']

@@ -1,5 +1,5 @@
 import pytest
-from utils.gender_extract import Gender
+from core.utils.gender_extract import Gender
 
 class TestOwnerExtraction:
 

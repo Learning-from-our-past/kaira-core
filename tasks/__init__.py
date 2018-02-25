@@ -1,7 +1,7 @@
 from invoke import task
 import sys
 import os
-from utils.geo.update_geo_db import update_location_db
+from core.utils.geo.update_geo_db import update_location_db
 
 
 @task()
