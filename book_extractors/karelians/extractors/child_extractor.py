@@ -3,7 +3,7 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from book_extractors.extraction_exceptions import StopExtractionException
+from pipeline.extraction_exceptions import StopExtractionException
 from shared import regexUtils, text_utils
 from shared.gender_extract import Gender
 from shared.gender_extract import GenderException

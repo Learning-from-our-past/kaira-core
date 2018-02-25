@@ -1,5 +1,5 @@
 from book_extractors.farmers.resultjsonbuilder import ResultJsonBuilder
-from book_extractors.processdata import ProcessData
+from pipeline.processdata import ProcessData
 from pipeline.dependency_resolver import ExtractorResultsMap
 from pipeline.yaml_parser import YamlParser
 from shared.gender_extract import Gender

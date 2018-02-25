@@ -2,7 +2,7 @@
 import re
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.extraction_exceptions import *
+from pipeline.extraction_exceptions import *
 from shared import regexUtils, text_utils
 from book_extractors.common.postprocessors import place_name_cleaner
 from shared.text_utils import remove_hyphens_from_text

@@ -3,7 +3,7 @@ from peewee import *
 import shutil
 import os
 
-from book_extractors import extraction_constants
+from pipeline import extraction_constants
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from pipeline.dependency_resolver import ExtractorResultsMap
 from pipeline.yaml_parser import YamlParser
