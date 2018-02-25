@@ -23,15 +23,15 @@ class KarelianBooksExtractor:
     def save_results(self, file, file_format='json'):
         if file_format == 'json':
             writer = ResultJsonBuilder()
-            writer.openJson(file)
+            writer.open_json(file)
 
             for entry in self._results['entries']:
                 try:
-                    writer.writeEntry(entry["extractionResults"][0])    # Leave metadata objects out
+                    writer.write_entry(entry["extractionResults"][0])    # Leave metadata objects out
                 except KeyError as e:
                     raise e
 
-            writer.closeJson()
+            writer.close_json()
 
 
 def get_karelian_data_entry(name, approximated_page, text, img_path=''):
