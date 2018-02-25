@@ -1,5 +1,5 @@
-from pipeline.base_extractor import BaseExtractor
-import pipeline.extraction_constants as extraction_constants
+from core.base_extractor import BaseExtractor
+import core.extraction_constants as extraction_constants
 
 
 class KairaIdProvider:

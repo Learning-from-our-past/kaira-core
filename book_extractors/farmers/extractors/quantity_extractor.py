@@ -3,7 +3,7 @@ import re
 
 import utils.regexUtils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
-from pipeline.base_extractor import BaseExtractor
+from core.base_extractor import BaseExtractor
 from utils import text_utils
 
 

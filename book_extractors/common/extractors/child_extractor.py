@@ -1,6 +1,6 @@
 import re
 
-from pipeline.base_extractor import BaseExtractor
+from core.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from utils import regexUtils
 from utils.gender_extract import Gender, GenderException

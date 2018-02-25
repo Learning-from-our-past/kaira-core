@@ -1,8 +1,8 @@
-from pipeline.processdata import ProcessData
+from core.processdata import ProcessData
 from book_extractors.karelians.resultjsonbuilder import ResultJsonBuilder
 from utils.gender_extract import Gender
-from pipeline.yaml_parser import YamlParser
-from pipeline.dependency_resolver import ExtractorResultsMap
+from core.yaml_parser import YamlParser
+from core.dependency_resolver import ExtractorResultsMap
 
 BOOK_SERIES_ID = 'siirtokarjalaiset'    # Used to identify this book series in xml files
 
