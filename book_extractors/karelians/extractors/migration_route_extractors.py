@@ -4,8 +4,9 @@ from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
 from book_extractors.karelians.extractors.bnf_parsers import migration_parser
 from support_datasheets import location_name_white_list
-from utils import regexUtils, text_utils
-from utils.geo.geocoding import GeoCoder, LocationNotFound
+from core.utils import text_utils
+from core.utils import regexUtils
+from core.utils.geo.geocoding import GeoCoder, LocationNotFound
 from book_extractors.karelians.postprocessors.returned_to_karelia import check_if_person_returned_karelia_in_between_wars
 
 MAX_PLACE_NAME_LENGTH = 15

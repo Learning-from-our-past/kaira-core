@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import re
 
-import utils.regexUtils as regexUtils
-import utils.text_utils as text_utils
+import core.utils.regexUtils as regexUtils
+from core.utils import text_utils
 from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
-from utils.gender_extract import Gender, GenderException
+from core.utils.gender_extract import Gender, GenderException
 
 
 class CommonOwnerExtractor(BaseExtractor):

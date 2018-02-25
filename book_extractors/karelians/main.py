@@ -1,6 +1,6 @@
 from core.processdata import ProcessData
 from book_extractors.karelians.resultjsonbuilder import ResultJsonBuilder
-from utils.gender_extract import Gender
+from core.utils.gender_extract import Gender
 from core.yaml_parser import YamlParser
 from core.dependency_resolver import ExtractorResultsMap
 

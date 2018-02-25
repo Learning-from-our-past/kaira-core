@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-from utils import regexUtils
+from core.utils import regexUtils
 
 # This is a selection of unicode codes for characters that all look more or less like hyphens
 _unicode_hyphens = [0x002D, 0x007E, 0x058A, 0x05BE, 0x1400, 0x1806,

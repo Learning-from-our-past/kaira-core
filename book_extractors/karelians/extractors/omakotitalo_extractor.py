@@ -1,6 +1,6 @@
 import re
 
-import utils.regexUtils as regexUtils
+import core.utils.regexUtils as regexUtils
 from core.base_extractor import BaseExtractor
 
 

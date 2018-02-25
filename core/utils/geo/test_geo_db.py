@@ -1,5 +1,5 @@
 import pytest
-from utils.geo.geocoding import GeoCoder, LocationNotFound
+from core.utils.geo.geocoding import GeoCoder, LocationNotFound
 
 
 class TestGeoDatabase:

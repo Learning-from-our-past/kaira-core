@@ -2,7 +2,7 @@ from nose.tools import *
 import lxml.etree as etree
 from book_extractors.karelians.extractors.name_extractor import NameExtractor
 from book_extractors.karelians.extractors.profession_extractor import ProfessionExtractor
-from utils.exceptionlogger import ExceptionLogger
+from core.utils import ExceptionLogger
 from book_extractors.common.extraction_keys import KEYS
 from core.interface import ValueWrapper
 

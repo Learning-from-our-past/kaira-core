@@ -2,10 +2,9 @@ import re
 
 from core.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from utils import regexUtils
-from utils.gender_extract import Gender, GenderException
-from utils.geo.geocoding import GeoCoder
-from utils import text_utils
+from core.utils import regexUtils, text_utils
+from core.utils.gender_extract import Gender, GenderException
+from core.utils.geo.geocoding import GeoCoder
 
 
 class CommonChildExtractor(BaseExtractor):
