@@ -9,8 +9,8 @@ from shared import text_utils
 class FarmExtractor(BaseExtractor):
     extraction_key = KEYS['farmDetails']
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(FarmExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(FarmExtractor, self).__init__(cursor_location_depends_on, options)
         self.ALL_AREA_PATTERN = r"(?:(?:kok\.pinta-ala){s<=1,i<=2}|(?:kokonaispinta-ala){s<=1,i<=2}).{0,20}?(?P<area1>\d\d?\d?,?\d?\d?)\sha"
         self.FOREST_AREA_PATTERN = r"(?:metsää{s<=1}\s?(?P<area1>\d\d?\d?,?\d?\d?))|(?:(?P<area2>\d\d?\d?,?\d?\d?)\s?ha\s?metsää{s<=1})"
         self.FIELD_AREA_PATTERN = r"(?:(?:(?:salaojitettua\s){s<=1,i<=1})?peltoa{s<=1}\s?(?P<area1>\d\d?\d?,?\d?\d?))|(?:(?P<area2>\d\d?\d?,?\d?\d?)\s?ha\s?(?:salaojitettua\s{s<=1,i<=1})?peltoa{s<=1})"
@@ -19,7 +19,7 @@ class FarmExtractor(BaseExtractor):
         self.AREA_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         result = self._find_areas(entry['text'])
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata, start_position)
 

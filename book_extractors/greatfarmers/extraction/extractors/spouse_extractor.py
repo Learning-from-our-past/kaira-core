@@ -3,9 +3,6 @@ import re
 
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.greatfarmers.extraction.extractors.birthday_extractor import BirthdayExtractor
-from book_extractors.greatfarmers.extraction.extractors.original_family_extractor import FormerSurnameExtractor
 from shared import regexUtils
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 
@@ -13,23 +10,18 @@ from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 class SpouseExtractor(BaseExtractor):
     extraction_key = KEYS["spouse"]
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(SpouseExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(SpouseExtractor, self).__init__(cursor_location_depends_on, options)
         self.PATTERN = r"vmo\.?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp|suvulla|tila))"
         self.NAMEPATTERN = r"(?P<name>^[\w\s-]*)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.REQUIRES_MATCH_POSITION = False
         self.SUBSTRING_WIDTH = 100
 
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(FormerSurnameExtractor),
-            configure_extractor(BirthdayExtractor),
-        ])
-
         self.kaira_id_provider = KairaIdProvider()
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         results = self._find_spouse(entry['text'], start_position)
         return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, cursor_location=results[1])
 

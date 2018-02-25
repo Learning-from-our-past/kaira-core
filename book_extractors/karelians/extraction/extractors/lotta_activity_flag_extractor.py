@@ -10,9 +10,8 @@ import regex
 class LottaActivityFlagExtractor(BaseExtractor):
     extraction_key = 'lottaActivityFlags'
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(LottaActivityFlagExtractor, self).__init__(key_of_cursor_location_dependent, options)
-        self._set_dependencies([NameExtractor], dependencies_contexts)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(LottaActivityFlagExtractor, self).__init__(cursor_location_depends_on, options)
         self._in_spouse_extractor = options['in_spouse_extractor']
 
         lotta_org_pattern = r'(?P<lottaOrg>(?:[Ll]otta\s?(?:S|s)värd|[Ll]ottayhdis|[Ll]ottajärjes)){s<=1}'
@@ -75,6 +74,8 @@ class LottaActivityFlagExtractor(BaseExtractor):
         self._word_suffix_length = 4
         self._surroundings_radius = 15
 
+        self._declare_expected_dependency_names(['person'])
+
     def _is_person_female(self):
         """
         This function assumes only heterosexual marriages and checks that the person, whose
@@ -85,9 +86,9 @@ class LottaActivityFlagExtractor(BaseExtractor):
         """
         is_female = False
 
-        if self._in_spouse_extractor and self._deps['name']['gender'] == 'Male':
+        if self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Male':
             is_female = True
-        elif not self._in_spouse_extractor and self._deps['name']['gender'] == 'Female':
+        elif not self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Female':
             is_female = True
 
         return is_female
@@ -101,7 +102,7 @@ class LottaActivityFlagExtractor(BaseExtractor):
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         if self._is_person_female():
-            text = remove_hyphens_from_text(entry['text'])
+            text = remove_hyphens_from_text(entry['full_text'])
             lotta_activity = self._extract_lotta_flags(text)
         else:
             lotta_activity = self._NO_RESULT

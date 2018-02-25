@@ -10,8 +10,8 @@ from shared import text_utils
 class QuantityExtractor(BaseExtractor):
     extraction_key = KEYS["quantities"]
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(QuantityExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(QuantityExtractor, self).__init__(cursor_location_depends_on, options)
         self.QUANTITY_PATTERN = r"(?:(?P<range>\d\d?\d?(?:-|—)\d\d?\d?)|(?P<number>\d\d?\d?)|(?P<word>yksi|yhtä|kahta|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen))\s?"
         self.SPLIT_PATTERN1 = r"(?P<number>\d\d?)"
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
@@ -20,7 +20,7 @@ class QuantityExtractor(BaseExtractor):
                            "seitsemän" : 7, "kahdeksan" : 8, "yhdeksän" : 9, "kymmenen" : 10}
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         result = self._find_patterns(entry['text'])
         return self._add_to_extraction_results(result, extraction_results, extraction_metadata, start_position)
 

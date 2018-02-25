@@ -5,25 +5,19 @@ import shared.regexUtils as regexUtils
 import shared.text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from book_extractors.common.extractors.base_extractor import BaseExtractor
-from book_extractors.extraction_pipeline import ExtractionPipeline, configure_extractor
-from book_extractors.farmers.extraction.extractors.birthday_extractor import BirthdayExtractor
 
 
 class HostessExtractor(BaseExtractor):
     extraction_key = KEYS['hostess']
 
-    def __init__(self, key_of_cursor_location_dependent, options, dependencies_contexts=None):
-        super(HostessExtractor, self).__init__(key_of_cursor_location_dependent, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(HostessExtractor, self).__init__(cursor_location_depends_on, options)
         self.SEARCH_SPACE = 400
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+),"
         self.HOSTESS_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
-        self._sub_extraction_pipeline = ExtractionPipeline([
-            configure_extractor(BirthdayExtractor)
-        ])
-
     def _extract(self, entry, extraction_results, extraction_metadata):
-        start_position = self.get_starting_position(extraction_results, extraction_metadata)
+        start_position = self.get_starting_position(extraction_metadata)
         results = self._find_hostess(entry['text'], start_position)
         return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
 
@@ -50,7 +44,7 @@ class HostessExtractor(BaseExtractor):
 
     def _find_hostess_birthday(self, text):
         results, metadata = self._sub_extraction_pipeline.process({'text': text})
-        final_cursor_location = self.get_last_cursor_location(results, metadata)
+        final_cursor_location = self.get_last_cursor_location(metadata)
         return results['birthday'], final_cursor_location
 
     def _find_hostess_name(self, text):
