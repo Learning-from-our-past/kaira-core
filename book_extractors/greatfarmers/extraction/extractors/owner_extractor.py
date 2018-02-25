@@ -7,7 +7,7 @@ from book_extractors.common.extraction_keys import KEYS
 class OwnerExtractor(CommonOwnerExtractor):
     extraction_key = KEYS['ownerDetails']
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
+    def __init__(self, cursor_location_depends_on=None, options=None):
         if options is None:
             options = {}
 
@@ -17,4 +17,4 @@ class OwnerExtractor(CommonOwnerExtractor):
             'BIRTHDAY_EXTRACTOR': BirthdayExtractor
         })
 
-        super(OwnerExtractor, self).__init__(cursor_location_depend_on, options)
+        super(OwnerExtractor, self).__init__(cursor_location_depends_on, options)

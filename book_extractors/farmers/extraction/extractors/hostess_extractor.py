@@ -10,8 +10,8 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 class HostessExtractor(BaseExtractor):
     extraction_key = KEYS['hostess']
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(HostessExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(HostessExtractor, self).__init__(cursor_location_depends_on, options)
         self.SEARCH_SPACE = 400
         self.HOSTESS_NAME_PATTERN = r"emäntä(?:nä)?(?:\svuodesta\s\d\d\d\d)?(?P<name>[A-ZÄ-Öa-zä-ö\.\s-]+),"
         self.HOSTESS_OPTIONS = (re.UNICODE | re.IGNORECASE)

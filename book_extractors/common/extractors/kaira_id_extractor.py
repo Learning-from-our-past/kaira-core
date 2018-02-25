@@ -46,8 +46,8 @@ class KairaIdProvider:
 class KairaIdExtractor(BaseExtractor):
     extraction_key = 'kairaId'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(KairaIdExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(KairaIdExtractor, self).__init__(cursor_location_depends_on, options)
         self._provider = KairaIdProvider()
 
     def _extract(self, entry, extraction_results, extraction_metadata):

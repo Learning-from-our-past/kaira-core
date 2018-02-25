@@ -8,11 +8,11 @@ from book_extractors.extraction_pipeline import ExtractionPipeline
 class BaseExtractor:
     __metaclass__ = ABCMeta
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
+    def __init__(self, cursor_location_depends_on=None, options=None):
 
-        if cursor_location_depend_on:
+        if cursor_location_depends_on:
             # Tells key of entry in cursorLocations dict this extractor is dependent on
-            self.key_of_cursor_location_dependent = cursor_location_depend_on.extraction_key
+            self.key_of_cursor_location_dependent = cursor_location_depends_on.extraction_key
         else:
             self.key_of_cursor_location_dependent = None
 

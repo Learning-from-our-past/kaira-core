@@ -10,8 +10,8 @@ from shared import regexUtils
 class SpouseExtractor(BaseExtractor):
     extraction_key = 'spouse'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(SpouseExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(SpouseExtractor, self).__init__(cursor_location_depends_on, options)
         self.kaira_id_provider = KairaIdProvider()
 
         self.PATTERN = r'Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))'

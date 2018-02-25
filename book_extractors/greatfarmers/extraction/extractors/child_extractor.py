@@ -7,8 +7,8 @@ from book_extractors.common.extraction_keys import KEYS
 class ChildExtractor(CommonChildExtractor):
     extraction_key = KEYS['children']
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(ChildExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(ChildExtractor, self).__init__(cursor_location_depends_on, options)
         self.CHILD_PATTERN = r"(?:Lapset|tytär|poika|tyttäret|pojat)(;|:)(?P<children>.*?)(?:\.|Tilal{s<=1}|Edelli{s<=1}|hänen{s<=1}|joka{s<=1}|emännän{s<=1}|isännän{s<=1})"
         self.CHILD_OPTIONS = (re.UNICODE | re.IGNORECASE)
         self.SPLIT_PATTERN1 = r"(?P<child>[A-ZÄ-Öa-zä-ö\d\s-]{3,})"

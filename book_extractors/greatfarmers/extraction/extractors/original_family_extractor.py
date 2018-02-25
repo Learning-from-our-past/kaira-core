@@ -12,8 +12,8 @@ class FormerSurnameExtractor(BaseExtractor):
     Tries to find the possible o.s. (omaa sukua) part from entry.
     """
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(FormerSurnameExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(FormerSurnameExtractor, self).__init__(cursor_location_depends_on, options)
         self.REQUIRES_MATCH_POSITION = True
         self.SEARCH_SPACE = 40
         self.FAMILY_PATTERN = r"(?:(?:o|0)\.?\s?s\.?,?\s)(?P<family>[a-zä-ö-]*)"

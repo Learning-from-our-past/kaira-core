@@ -7,8 +7,8 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 class BoolExtractor(BaseExtractor):
     extraction_key = KEYS['flags']
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(BoolExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(BoolExtractor, self).__init__(cursor_location_depends_on, options)
         self.patterns_to_find = options['patterns']
         self.OPTIONS = (re.UNICODE | re.IGNORECASE)
 
