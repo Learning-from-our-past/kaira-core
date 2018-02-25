@@ -22,8 +22,8 @@ class FinnishLocationsExtractor(BaseExtractor):
     OTHER_REGION_ID = 'other'
     extraction_key = 'finnishLocations'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(FinnishLocationsExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(FinnishLocationsExtractor, self).__init__(cursor_location_depends_on, options)
         self.LOCATION_PATTERN = r'Muut\.?,?\s?(?:asuinp(\.|,)?){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*—)'
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
@@ -172,8 +172,8 @@ class KarelianLocationsExtractor(BaseExtractor):
 
     extraction_key = 'karelianLocations'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(KarelianLocationsExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(KarelianLocationsExtractor, self).__init__(cursor_location_depends_on, options)
         self.LOCATION_PATTERN = r'Asuinp{s<=1}\.?,?\s?(?:Karjalassa){i<=1}(?::|;)?(?P<asuinpaikat>[A-ZÄ-Öa-zä-ö\s\.,0-9——-]*)(?=\.?\s(Muut))'
         self.LOCATION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
@@ -317,8 +317,8 @@ class KarelianLocationsExtractor(BaseExtractor):
 class MigrationRouteExtractor(BaseExtractor):
     extraction_key = 'migrationHistory'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(MigrationRouteExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(MigrationRouteExtractor, self).__init__(cursor_location_depends_on, options)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         results = self._sub_extraction_pipeline.process(entry)

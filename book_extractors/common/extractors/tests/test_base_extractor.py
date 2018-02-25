@@ -145,8 +145,8 @@ class TestBaseExtractor:
 class MockExtractor(BaseExtractor):
     extraction_key = 'mock'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(MockExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(MockExtractor, self).__init__(cursor_location_depends_on, options)
         self.execution_order = []
 
     def _preprocess(self, entry, extraction_results, extraction_metadata):
@@ -171,8 +171,8 @@ class MockExtractor(BaseExtractor):
 class NoPreAndPostProcessesExtractor(BaseExtractor):
     extraction_key = 'mock2'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(NoPreAndPostProcessesExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(NoPreAndPostProcessesExtractor, self).__init__(cursor_location_depends_on, options)
         self.execution_order = []
 
     def _extract(self, entry, extraction_results, extraction_metadata):
@@ -188,8 +188,8 @@ class NoPreAndPostProcessesExtractor(BaseExtractor):
 class SimpleExtractorForDeps(BaseExtractor):
     extraction_key = 'mock2deps'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(SimpleExtractorForDeps, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(SimpleExtractorForDeps, self).__init__(cursor_location_depends_on, options)
 
         self._declare_expected_dependency_names(['standalone', 'standalone2'])
 

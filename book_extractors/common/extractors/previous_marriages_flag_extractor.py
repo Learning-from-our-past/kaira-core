@@ -6,8 +6,8 @@ from shared import regexUtils
 class PreviousMarriagesFlagExtractor(BaseExtractor):
     extraction_key = 'previousMarriagesFlag'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(PreviousMarriagesFlagExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(PreviousMarriagesFlagExtractor, self).__init__(cursor_location_depends_on, options)
         self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
 
     def _extract(self, entry, extraction_results, extraction_metadata):

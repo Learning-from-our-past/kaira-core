@@ -10,8 +10,8 @@ import regex
 class LottaActivityFlagExtractor(BaseExtractor):
     extraction_key = 'lottaActivityFlags'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(LottaActivityFlagExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(LottaActivityFlagExtractor, self).__init__(cursor_location_depends_on, options)
         self._in_spouse_extractor = options['in_spouse_extractor']
 
         lotta_org_pattern = r'(?P<lottaOrg>(?:[Ll]otta\s?(?:S|s)värd|[Ll]ottayhdis|[Ll]ottajärjes)){s<=1}'

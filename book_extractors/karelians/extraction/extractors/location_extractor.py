@@ -32,8 +32,8 @@ class FindLocation:
 class BirthdayLocationExtractor(BaseExtractor):
     extraction_key = 'birthLocation'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(BirthdayLocationExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(BirthdayLocationExtractor, self).__init__(cursor_location_depends_on, options)
 
         self.DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
         self.REQUIRES_MATCH_POSITION = True

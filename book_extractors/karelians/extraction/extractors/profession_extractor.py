@@ -10,8 +10,8 @@ class ProfessionExtractor(BaseExtractor):
     SEARCH_SPACE = 60
     extraction_key = 'profession'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(ProfessionExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(ProfessionExtractor, self).__init__(cursor_location_depends_on, options)
         self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
         self.PROFESSION_OPTIONS = (re.UNICODE | re.IGNORECASE)
 

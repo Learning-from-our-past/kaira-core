@@ -11,8 +11,8 @@ from shared.gender_extract import Gender, GenderException
 class CommonOwnerExtractor(BaseExtractor):
     extraction_key = 'owner'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(CommonOwnerExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(CommonOwnerExtractor, self).__init__(cursor_location_depends_on, options)
         self.SEARCH_SPACE = 200
         self.OWNER_YEAR_PATTERN = options['OWNER_YEAR_PATTERN']
         self.OWNER_NAME_PATTERN = options['OWNER_NAME_PATTERN']

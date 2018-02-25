@@ -8,8 +8,8 @@ from book_extractors.common.extractors.base_extractor import BaseExtractor
 class OmakotitaloExtractor(BaseExtractor):
     extraction_key = 'ownHouse'
 
-    def __init__(self, cursor_location_depend_on=None, options=None):
-        super(OmakotitaloExtractor, self).__init__(cursor_location_depend_on, options)
+    def __init__(self, cursor_location_depends_on=None, options=None):
+        super(OmakotitaloExtractor, self).__init__(cursor_location_depends_on, options)
         self.OMAKOTITALO_PATTERN = r"(?P<omakotitalo>omakotitalo)"
         self.OMAKOTITALO_OPTIONS = (re.UNICODE | re.IGNORECASE)
 
