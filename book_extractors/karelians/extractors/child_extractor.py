@@ -1,7 +1,7 @@
 import re
 
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.common.extractors.base_extractor import BaseExtractor
+from pipeline.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from utils import regexUtils, text_utils
 from utils.gender_extract import Gender

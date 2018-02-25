@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-from book_extractors.common.extraction_keys import KEYS
-from book_extractors.common.extractors.base_extractor import BaseExtractor
+from pipeline.base_extractor import BaseExtractor
 from utils import regexUtils
 from utils import text_utils
 

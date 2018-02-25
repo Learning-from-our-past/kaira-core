@@ -1,5 +1,5 @@
 import re
-from book_extractors.common.extractors.base_extractor import BaseExtractor
+from pipeline.base_extractor import BaseExtractor
 from utils import regexUtils
 
 

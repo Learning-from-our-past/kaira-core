@@ -1,6 +1,6 @@
 import pytest
 
-from book_extractors.common.extractors.base_extractor import BaseExtractor
+from pipeline.base_extractor import BaseExtractor
 from pipeline.yaml_parser import YamlParser
 from book_extractors.karelians.extractors.name_extractor import NameExtractor
 from pipeline.dependency_resolver import ExtractorResultsMap
