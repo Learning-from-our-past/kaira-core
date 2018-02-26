@@ -1,4 +1,3 @@
-book_series: "Suomen Pienviljelijät"
 pipeline:
   - !Extractor {
       module: "book_extractors.greatfarmers.extractors.metadata_extractor",
