@@ -5,7 +5,7 @@ from core.base_extractor import BaseExtractor
 from book_extractors.karelians.extractors.bnf_parsers import migration_parser
 from support_datasheets import location_name_white_list
 from core.utils import text_utils
-from core.utils import regexUtils
+from core.utils import regex_utils
 from core.utils.geo.geocoding import GeoCoder, LocationNotFound
 from book_extractors.karelians.postprocessors.returned_to_karelia import check_if_person_returned_karelia_in_between_wars
 
@@ -146,7 +146,7 @@ class FinnishLocationsExtractor(BaseExtractor):
             return location_records
 
         try:
-            found_locations = regexUtils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
+            found_locations = regex_utils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             cursor_location = found_locations.end()
             locations = found_locations.group('asuinpaikat')
             locations = clean_locations(locations)
@@ -159,7 +159,7 @@ class FinnishLocationsExtractor(BaseExtractor):
                     location_entries += _get_location_entries(loc)
             except InvalidLocationException:
                 pass
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('otherLocationNotFound', 5)
 
         return location_entries, cursor_location
@@ -296,7 +296,7 @@ class KarelianLocationsExtractor(BaseExtractor):
             return location_records
 
         try:
-            found_locations = regexUtils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
+            found_locations = regex_utils.safe_search(self.LOCATION_PATTERN, text, self.LOCATION_OPTIONS)
             cursor_location = found_locations.end()
             locations = found_locations.group('asuinpaikat')
             locations = clean_locations(locations)
@@ -309,7 +309,7 @@ class KarelianLocationsExtractor(BaseExtractor):
                     location_entries += _get_location_entries(loc)
             except InvalidLocationException:
                 pass
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('karelianLocationNotFound', 5)
 
         return location_entries, cursor_location

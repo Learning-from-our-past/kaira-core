@@ -2,7 +2,7 @@
 import re
 
 from core.base_extractor import BaseExtractor
-from core.utils import regexUtils, text_utils
+from core.utils import regex_utils, text_utils
 
 
 class DeathExtractor(BaseExtractor):
@@ -30,12 +30,12 @@ class DeathExtractor(BaseExtractor):
     def _find_date(self, text, start_position):
         cursor_location = start_position
         try:
-            death = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
+            death = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = death.end() + start_position - 4
             death_year = text_utils.int_or_none("19" + death.group("year"))
-        except regexUtils.RegexNoneMatchException as e:
+        except regex_utils.RegexNoneMatchException as e:
             death_year = None
 
         return death_year, cursor_location

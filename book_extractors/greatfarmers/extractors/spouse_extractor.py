@@ -3,7 +3,7 @@ import re
 
 from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
-from core.utils import regexUtils
+from core.utils import regex_utils
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 
 
@@ -30,19 +30,19 @@ class SpouseExtractor(BaseExtractor):
         spouse_data = None
 
         try:
-            found_spouse_match = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
+            found_spouse_match = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
             spouse_data = self._find_spouse_data(found_spouse_match.group("spousedata"))
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = found_spouse_match.end() + start_position - 4
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             pass
 
         return spouse_data, cursor_location
 
     def _find_spouse_data(self, text):
         try:
-            name = regexUtils.safe_search(self.NAMEPATTERN, text, self.OPTIONS)
+            name = regex_utils.safe_search(self.NAMEPATTERN, text, self.OPTIONS)
             spouse_name = name.group("name").strip()
             spouse_name = re.sub(r"\so$","", spouse_name)
             spouse_details, metadata = self._find_spouse_details(text[name.end() - 2:])
@@ -57,7 +57,7 @@ class SpouseExtractor(BaseExtractor):
                 KEYS["kairaId"]: self.kaira_id_provider.get_new_id('S')
             }
 
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('spouseNotFound', 7)
 
     def _find_spouse_details(self, text):

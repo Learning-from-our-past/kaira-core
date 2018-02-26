@@ -4,7 +4,7 @@ from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from core.utils import text_utils
-from core.utils import regexUtils
+from core.utils import regex_utils
 from core.utils.gender_extract import Gender
 from core.utils.gender_extract import GenderException
 from core.utils.geo.geocoding import GeoCoder, LocationNotFound
@@ -65,13 +65,13 @@ class ChildExtractor(BaseExtractor):
         children = []
         cursor_location = 0
         try:
-            found_children = regexUtils.safe_search(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
+            found_children = regex_utils.safe_search(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
             cursor_location = found_children.end()
             children_str = found_children.group("children")
             children_str = self._clean_children(children_str)
             children = self._split_children(children_str)
 
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('childrenNotFound', 5)
 
         return children, cursor_location
@@ -84,18 +84,18 @@ class ChildExtractor(BaseExtractor):
         return children_str
 
     def _split_children(self, children_str):
-        found_children = regexUtils.regex_iter(self.SPLIT_PATTERN1, children_str, self.SPLIT_OPTIONS1)
+        found_children = regex_utils.regex_iter(self.SPLIT_PATTERN1, children_str, self.SPLIT_OPTIONS1)
         children = []
         for m in found_children:
             try:
                 children.append(self._process_child(m.group("child"), children))
-            except (regexUtils.RegexNoneMatchException, StopChildExtractionException):
+            except (regex_utils.RegexNoneMatchException, StopChildExtractionException):
                 pass
 
         return children
 
     def _process_child(self, child, child_list):
-        birth_loc = regexUtils.search("syntyneet{s<=1}\s(?P<location>\w*)", child, self.CHILD_OPTIONS)
+        birth_loc = regex_utils.search("syntyneet{s<=1}\s(?P<location>\w*)", child, self.CHILD_OPTIONS)
         if birth_loc is not None:
             # found a "Syntyneet <place>" string. Set it to the previous children.
             for c in child_list:
@@ -103,7 +103,7 @@ class ChildExtractor(BaseExtractor):
                     c[KEYS["childLocationName"]] = birth_loc.group("location")
             raise StopChildExtractionException('Child extraction should be stopped here. Current child is not valid child.')
 
-        name = regexUtils.safe_search(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
+        name = regex_utils.safe_search(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
         name = name.strip()
         name = name.strip("-")
         name = name.strip(" ")
@@ -115,21 +115,21 @@ class ChildExtractor(BaseExtractor):
             gender = None
 
         try:
-            year_match = regexUtils.safe_search(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
+            year_match = regex_utils.safe_search(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
             year = year_match.group("year")
             if float(year) < 70:
                 year = "19" + year
             else:
                 year = "18" + year
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             year = ""
 
         try:
-            loc_match = regexUtils.safe_search(self.LOCATION_PATTERN, child, self.CHILD_OPTIONS)
+            loc_match = regex_utils.safe_search(self.LOCATION_PATTERN, child, self.CHILD_OPTIONS)
             location = loc_match.group("location")
             location = location.strip()
             location = location.strip("-")
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             location = ""
 
         return {KEYS["childName"]: name,
