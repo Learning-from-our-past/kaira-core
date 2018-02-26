@@ -10,7 +10,7 @@ class ImageExtractor(BaseExtractor):
         image_path = None
         page = None
         try:
-            image_path = entry["image_path"]
+            image_path = entry["img_path"]
         except KeyError:
             pass
 
