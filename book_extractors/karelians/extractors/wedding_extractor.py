@@ -2,7 +2,7 @@
 import re
 
 from core.base_extractor import BaseExtractor
-from core.utils import regexUtils, text_utils
+from core.utils import regex_utils, text_utils
 
 
 class WeddingExtractor(BaseExtractor):
@@ -30,12 +30,12 @@ class WeddingExtractor(BaseExtractor):
     def _find_date(self, text, start_position):
         cursor_location = start_position
         try:
-            wedding = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
+            wedding = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = wedding.end() + start_position - 4
             wedding_year = text_utils.int_or_none("19" + wedding.group("year"))
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             wedding_year = None
 
         return wedding_year, cursor_location

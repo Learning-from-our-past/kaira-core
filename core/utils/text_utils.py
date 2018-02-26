@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-from core.utils import regexUtils
+from core.utils import regex_utils
 
 # This is a selection of unicode codes for characters that all look more or less like hyphens
 _unicode_hyphens = [0x002D, 0x007E, 0x058A, 0x05BE, 0x1400, 0x1806,
@@ -30,7 +30,7 @@ def take_sub_str_based_on_range(text, start, end):
 
 
 def take_sub_str_based_on_first_regex_occurrence(text, pattern, options=re.UNICODE):
-    pos = regexUtils.find_first_position_with_regex_search(pattern, text, options)
+    pos = regex_utils.find_first_position_with_regex_search(pattern, text, options)
     if pos == -1:
         return text
     else:

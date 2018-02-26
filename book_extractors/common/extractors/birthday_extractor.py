@@ -2,7 +2,7 @@
 import re
 from core.base_extractor import BaseExtractor
 from book_extractors.common.extraction_keys import KEYS
-from core.utils import regexUtils, text_utils
+from core.utils import regex_utils, text_utils
 
 
 class CommonBirthdayExtractor(BaseExtractor):
@@ -35,7 +35,7 @@ class CommonBirthdayExtractor(BaseExtractor):
         if self._remove_spaces_from_text:
             t = text_utils.remove_spaces_from_text(t)
 
-        spouse_found = regexUtils.find_first_position_with_regex_search('puol', t, re.IGNORECASE | re.UNICODE)
+        spouse_found = regex_utils.find_first_position_with_regex_search('puol', t, re.IGNORECASE | re.UNICODE)
         if spouse_found != -1:
             t = t[0:spouse_found]
 
@@ -88,7 +88,7 @@ class DateFinder:
 
     def _find_date(self, text):
         try:
-            found_date_matches = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
+            found_date_matches = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
             months_and_years_from_words = self._if_written_month_names_extract_them(found_date_matches)
             cursor_location = found_date_matches.end()
             if months_and_years_from_words is None:
@@ -98,7 +98,7 @@ class DateFinder:
                 return {'day': day_and_month['day'], 'month': day_and_month['month'], 'year': year}, cursor_location
             else:
                 return {'day': '', 'month': months_and_years_from_words[0], 'year': months_and_years_from_words[1]}, cursor_location
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             raise DateException(text)
 
     @staticmethod

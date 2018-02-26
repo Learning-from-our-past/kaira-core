@@ -3,7 +3,7 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
 from core.utils import text_utils
-from core.utils import regexUtils
+from core.utils import regex_utils
 from book_extractors.common.postprocessors import place_name_cleaner
 from core.utils.text_utils import remove_hyphens_from_text
 from core.utils.geo.geocoding import GeoCoder, LocationNotFound
@@ -22,10 +22,10 @@ class FindLocation:
         :return:
         """
         try:
-            found_location_match = regexUtils.safe_search(self.PATTERN, text, self.OPTIONS)
+            found_location_match = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
             cursor_location = found_location_match.end()
             return found_location_match, cursor_location
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             raise LocationException(text)
 
 
@@ -108,16 +108,16 @@ class BirthdayLocationExtractor(BaseExtractor):
         """
         pattern = r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
         try:
-            found_location_match = regexUtils.safe_search(pattern, text, re.UNICODE)
+            found_location_match = regex_utils.safe_search(pattern, text, re.UNICODE)
             cursor_location = found_location_match.end()
             return found_location_match, cursor_location
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             raise LocationException(text)
 
     def _check_if_location_is_valid(self, text, found_location):
         # check if the string has data on death. If it is before the location, be careful to not
         # put the death location to birth location.
-        death_position = regexUtils.find_first_position_with_regex_search(self.DEATHCHECK_PATTERN, text, re.UNICODE)
+        death_position = regex_utils.find_first_position_with_regex_search(self.DEATHCHECK_PATTERN, text, re.UNICODE)
         if death_position != -1:
             if death_position < found_location.end(): # there is word kaat, or " k " before location match.
                 raise LocationException(text)

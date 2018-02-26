@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-import core.utils.regexUtils as regexUtils
+import core.utils.regex_utils as regexUtils
 from core.utils import text_utils as text_utils
 from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor

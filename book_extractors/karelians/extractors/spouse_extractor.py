@@ -4,7 +4,7 @@ import re
 from book_extractors.common.extraction_keys import KEYS
 from core.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from core.utils import regexUtils
+from core.utils import regex_utils
 
 
 class SpouseExtractor(BaseExtractor):
@@ -31,12 +31,12 @@ class SpouseExtractor(BaseExtractor):
         spouse_data = None
 
         try:
-            found_spouse_match = regexUtils.safe_search(self.PATTERN, entry['text'], self.OPTIONS)
+            found_spouse_match = regex_utils.safe_search(self.PATTERN, entry['text'], self.OPTIONS)
             spouse_data = self._find_spouse_data(found_spouse_match.group('spousedata'), entry)
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = found_spouse_match.end() + start_position - 4
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             pass
 
         return spouse_data, cursor_location
@@ -46,7 +46,7 @@ class SpouseExtractor(BaseExtractor):
         spouse_details = None
 
         try:
-            spouse_name_match = regexUtils.safe_search(self.NAMEPATTERN, sub_text, self.OPTIONS)
+            spouse_name_match = regex_utils.safe_search(self.NAMEPATTERN, sub_text, self.OPTIONS)
             spouse_name = spouse_name_match.group('name').strip()
             spouse_name = re.sub(r'\so$', '', spouse_name)
             spouse_details, metadata = self._find_spouse_details(sub_text[spouse_name_match.end() - 2:],
@@ -71,7 +71,7 @@ class SpouseExtractor(BaseExtractor):
                 'marttaActivityFlag': spouse_details['marttaActivityFlag']
             }
 
-        except regexUtils.RegexNoneMatchException:
+        except regex_utils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('spouseNotFound', 6)
 
         return spouse_name, spouse_details

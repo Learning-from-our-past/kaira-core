@@ -1,6 +1,6 @@
 import re
 from core.base_extractor import BaseExtractor
-from core.utils import regexUtils
+from core.utils import regex_utils
 
 
 class PreviousMarriagesFlagExtractor(BaseExtractor):
@@ -15,5 +15,5 @@ class PreviousMarriagesFlagExtractor(BaseExtractor):
         return self._add_to_extraction_results(many_marriages, extraction_results, extraction_metadata)
 
     def _check_many_marriages(self, text):
-        marriage = regexUtils.search(self.MANY_MARRIAGE_PATTERN, text, (re.UNICODE | re.IGNORECASE))
+        marriage = regex_utils.search(self.MANY_MARRIAGE_PATTERN, text, (re.UNICODE | re.IGNORECASE))
         return marriage is not None
