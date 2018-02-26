@@ -12,19 +12,19 @@ def find_first_position_with_regex_search(pattern, text, options=re.UNICODE):
     return pos
 
 
-def regex_iter(pattern, text, options = re.UNICODE):
+def regex_iter(pattern, text, options=re.UNICODE):
     r = re.compile(pattern, options)
     m = r.finditer(text)
     return m
 
 
-def regex_all(pattern, text, options = re.UNICODE):
+def regex_all(pattern, text, options=re.UNICODE):
     r = re.compile(pattern, options)
     m = r.findall(text)
     return m
 
 
-def safe_search(pattern, text, options = re.UNICODE):
+def safe_search(pattern, text, options=re.UNICODE):
     r = regex.compile(pattern, options)
     m = r.search(text)
     if m is None:
@@ -32,13 +32,13 @@ def safe_search(pattern, text, options = re.UNICODE):
     return m
 
 
-def search(pattern, text, options = re.UNICODE):
+def search(pattern, text, options=re.UNICODE):
     r = regex.compile(pattern, options)
     m = r.search(text)
     return m
 
 
-def safe_match(pattern, text, options = re.UNICODE):
+def safe_match(pattern, text, options=re.UNICODE):
     r = regex.compile(pattern, options)
     m = r.match(text)
     if m is None:
@@ -46,7 +46,7 @@ def safe_match(pattern, text, options = re.UNICODE):
     return m
 
 
-def match_exists(pattern, text, options = re.UNICODE):
+def match_exists(pattern, text, options=re.UNICODE):
     r = regex.compile(pattern, options)
     m = r.search(text)
     if m is None:
@@ -56,7 +56,7 @@ def match_exists(pattern, text, options = re.UNICODE):
 
 
 class RegexNoneMatchException(Exception):
-    message = u"No matches found: "
+    message = u'No matches found: '
 
     def __init__(self, details):
         self.message += details
