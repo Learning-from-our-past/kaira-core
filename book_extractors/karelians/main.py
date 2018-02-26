@@ -1,8 +1,8 @@
-from book_extractors.processdata import ProcessData
-from book_extractors.karelians.resultjsonbuilder import ResultJsonBuilder
-from shared.gender_extract import Gender
-from pipeline_creation.yaml_parser import YamlParser
-from pipeline_creation.dependency_resolver import ExtractorResultsMap
+from core.processdata import ProcessData
+from core.resultjsonbuilder import ResultJsonBuilder
+from core.utils.gender_extract import Gender
+from core.yaml_parser import YamlParser
+from core.dependency_resolver import ExtractorResultsMap
 
 BOOK_SERIES_ID = 'siirtokarjalaiset'    # Used to identify this book series in xml files
 
@@ -23,15 +23,15 @@ class KarelianBooksExtractor:
     def save_results(self, file, file_format='json'):
         if file_format == 'json':
             writer = ResultJsonBuilder()
-            writer.openJson(file)
+            writer.open_json(file)
 
             for entry in self._results['entries']:
                 try:
-                    writer.writeEntry(entry["extractionResults"][0])    # Leave metadata objects out
+                    writer.write_entry(entry["extractionResults"][0])    # Leave metadata objects out
                 except KeyError as e:
                     raise e
 
-            writer.closeJson()
+            writer.close_json()
 
 
 def get_karelian_data_entry(name, approximated_page, text, img_path=''):

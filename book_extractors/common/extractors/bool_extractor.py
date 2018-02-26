@@ -1,7 +1,7 @@
 import re
-import shared.regexUtils as regexUtils
+import core.utils.regex_utils as regexUtils
 from book_extractors.common.extraction_keys import KEYS
-from book_extractors.common.extractors.base_extractor import BaseExtractor
+from core.base_extractor import BaseExtractor
 
 
 class BoolExtractor(BaseExtractor):

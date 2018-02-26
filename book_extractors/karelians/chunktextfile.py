@@ -4,7 +4,7 @@ from lxml import html
 import re
 import os, nturl2path
 import shutil
-from interface.chunktextinterface import ChunkTextInterface
+from core.interface.chunktextinterface import ChunkTextInterface
 from book_extractors.karelians.main import BOOK_SERIES_ID
 from book_extractors.karelians.duplicate_deleter import DuplicateDeleter
 

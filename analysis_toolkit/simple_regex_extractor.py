@@ -3,8 +3,7 @@ import regex
 import argparse
 import shutil
 import sys
-from shared.text_utils import remove_hyphens_from_text
-from shared.text_utils import remove_spaces_from_text
+from core.utils.text_utils import remove_hyphens_from_text, remove_spaces_from_text
 
 """
 Run an "extraction" test using regex and get information about what kind of
