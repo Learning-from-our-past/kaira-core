@@ -1,39 +1,39 @@
 book_series: "Suomen Pienviljelijät"
 pipeline:
   - !Extractor {
-      module: "book_extractors.farmers.extraction.extractors.metadata_extractor",
+      module: "book_extractors.farmers.extractors.metadata_extractor",
       class_name: "MetadataExtractor"
     }
 
   - !Extractor {
-      module: "book_extractors.farmers.extraction.extractors.owner_extractor",
+      module: "book_extractors.farmers.extractors.owner_extractor",
       class_name: "OwnerExtractor",
       pipeline: [
        !Extractor {
-          module: "book_extractors.farmers.extraction.extractors.birthday_extractor",
+          module: "book_extractors.farmers.extractors.birthday_extractor",
           class_name: "BirthdayExtractor"
         }
       ]
     }
 
   - !Extractor {
-      module: "book_extractors.farmers.extraction.extractors.hostess_extractor",
+      module: "book_extractors.farmers.extractors.hostess_extractor",
       class_name: "HostessExtractor",
       pipeline: [
        !Extractor {
-          module: "book_extractors.farmers.extraction.extractors.birthday_extractor",
+          module: "book_extractors.farmers.extractors.birthday_extractor",
           class_name: "BirthdayExtractor"
         }
       ]
     }
 
   - !Extractor {
-      module: "book_extractors.farmers.extraction.extractors.farm_extractor",
+      module: "book_extractors.farmers.extractors.farm_extractor",
       class_name: "FarmExtractor"
     }
 
   - !Extractor &Birthday {
-      module: "book_extractors.farmers.extraction.extractors.child_extractor",
+      module: "book_extractors.farmers.extractors.child_extractor",
       class_name: "ChildExtractor"
     }
 
@@ -82,7 +82,7 @@ pipeline:
     }
 
   - !Extractor {
-      module: "book_extractors.farmers.extraction.extractors.quantity_extractor",
+      module: "book_extractors.farmers.extractors.quantity_extractor",
       class_name: "QuantityExtractor",
       options: {
         patterns: {

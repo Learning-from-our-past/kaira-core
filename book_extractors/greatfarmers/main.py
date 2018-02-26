@@ -1,8 +1,8 @@
-from book_extractors.processdata import ProcessData
-from book_extractors.greatfarmers.resultjsonbuilder import ResultJsonBuilder
-from pipeline_creation.dependency_resolver import ExtractorResultsMap
-from pipeline_creation.yaml_parser import YamlParser
-from shared.gender_extract import Gender
+from core.processdata import ProcessData
+from core.resultjsonbuilder import ResultJsonBuilder
+from core.dependency_resolver import ExtractorResultsMap
+from core.yaml_parser import YamlParser
+from core.utils.gender_extract import Gender
 
 BOOK_SERIES_ID = 'suuretmaatilat'    # Used to identify this book series in xml files
 
@@ -23,15 +23,15 @@ class GreatFarmersBooksExtractor:
     def save_results(self, file, file_format='json'):
         if file_format == 'json':
             writer = ResultJsonBuilder()
-            writer.openJson(file)
+            writer.open_json(file)
 
             for entry in self._results['entries']:
                 try:
-                    writer.writeEntry(entry["extractionResults"][0])
+                    writer.write_entry(entry["extractionResults"][0])
                 except KeyError as e:
                     raise e
 
-            writer.closeJson()
+            writer.close_json()
 
 
 def get_great_farmers_data_entry(name, location, approximated_page, text):

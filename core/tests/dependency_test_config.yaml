@@ -1,0 +1,17 @@
+# A test configuration for dependency declarations and resolving.
+
+book_series: Siirtokarjalaisten tie
+pipeline:
+  - !Extractor &Standalone {
+      module: "core.tests.test_yaml_parser",
+      class_name: "OuterExtractor",
+      options: {
+        message: "Standalone extractor"
+      }
+    }
+
+  - !Extractor {
+      module: "core.tests.test_yaml_parser",
+      class_name: "DependentExtractor",
+      depends_on: [*Standalone]
+    }
