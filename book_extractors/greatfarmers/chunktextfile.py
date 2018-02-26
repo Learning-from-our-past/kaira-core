@@ -3,7 +3,6 @@ from lxml import etree
 from lxml import html
 import re
 from core.interface.chunktextinterface import ChunkTextInterface
-from book_extractors.greatfarmers.main import BOOK_SERIES_ID
 
 def read_html_file(path):
     return parse(path)
@@ -21,7 +20,7 @@ class PersonPreprocessor(ChunkTextInterface):
 
     def process(self, tree):
         self.persons_document = etree.Element("DATA")
-        self.persons_document.attrib["bookseries"] = BOOK_SERIES_ID
+        self.persons_document.attrib["bookseries"] = self._bookseries_id
         self.persons_document.attrib["book_number"] = str(self.book_number)
         self.map_name_to_person = {}
         self.current_person = None
@@ -94,9 +93,9 @@ class PersonPreprocessor(ChunkTextInterface):
             return True
 
 
-def convert_html_file_to_xml(input_file, output_file, book_number, filter_duplicates=False, callback=None):
+def convert_html_file_to_xml(bookseries_id, input_file, output_file, book_number, filter_duplicates=False, callback=None):
     text = input_file[0].read()
-    p = PersonPreprocessor()
+    p = PersonPreprocessor(bookseries_id)
     persons = p.chunk_text(text, output_file[0].name, book_number[0])
     output_file[0].write(persons)
     output_file[0].close()

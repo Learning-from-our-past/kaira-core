@@ -1,4 +1,5 @@
 import os
+from importlib import util as import_util
 
 from core.resultjsonbuilder import ResultJsonBuilder
 from core.utils.gender_extract import Gender
@@ -45,6 +46,25 @@ class BookSeries:
                     raise e
 
             writer.close_json()
+
+    def chunk(self, input_files, output_files, book_numbers, filter_duplicates=False, callback=None):
+        # Import the chunking implementation from the plugin directory
+        chunking_spec = import_util.spec_from_file_location('chunktextfile',
+                                                            os.path.join(
+                                                                self._manifest['path'],
+                                                                self._manifest['chunker']))
+        chunking_module = import_util.module_from_spec(chunking_spec)
+        chunking_spec.loader.exec_module(chunking_module)
+
+        # And then call the actual implementation in the imported module
+        chunking_module.convert_html_file_to_xml(
+            self._manifest['book_series_id'],
+            input_files,
+            output_files,
+            book_numbers,
+            filter_duplicates,
+            callback
+        )
 
     def _xml_to_extractor_format(self, xml_document):
         """

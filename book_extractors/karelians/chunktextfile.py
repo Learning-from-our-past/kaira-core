@@ -5,7 +5,6 @@ import re
 import os, nturl2path
 import shutil
 from core.interface.chunktextinterface import ChunkTextInterface
-from book_extractors.karelians.main import BOOK_SERIES_ID
 from book_extractors.karelians.duplicate_deleter import DuplicateDeleter
 
 
@@ -15,7 +14,8 @@ def read_html_file(path):
 
 class PersonPreprocessor(ChunkTextInterface):
 
-    def __init__(self):
+    def __init__(self, bookseries_id):
+        super(PersonPreprocessor, self).__init__(bookseries_id)
         self._save_path = None
         self._book_number = None
         self._persons_document = None
@@ -49,7 +49,7 @@ class PersonPreprocessor(ChunkTextInterface):
 
     def _process(self, tree):
         self._persons_document = etree.Element('DATA')
-        self._persons_document.attrib['bookseries'] = BOOK_SERIES_ID
+        self._persons_document.attrib['bookseries'] = self._bookseries_id
         self._persons_document.attrib['book_number'] = str(self._book_number)
         self._map_name_to_person = {}
         self._current_person = None
@@ -199,12 +199,12 @@ class PersonPreprocessor(ChunkTextInterface):
             self._persons_document.append(person)
 
 
-def convert_html_file_to_xml(input_files, output_files, book_numbers, filter_duplicates=False, callback=None):
+def convert_html_file_to_xml(bookseries_id, input_files, output_files, book_numbers, filter_duplicates=False, callback=None):
     books = []
     
     for input_file, output_file, book_number in zip(input_files, output_files, book_numbers):
         text = input_file.read()
-        p = PersonPreprocessor()
+        p = PersonPreprocessor(bookseries_id)
         persons = p.chunk_text(text, output_file.name, book_number)
         books.append(persons)
     
