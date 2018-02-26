@@ -2,22 +2,14 @@ import sys
 import argparse
 import shutil
 from lxml import etree
-from book_extractors.karelians.main import KarelianBooksExtractor, BOOK_SERIES_ID as KARELIAN_BOOK_ID
-import book_extractors.karelians.chunktextfile as karelian_converter
-from book_extractors.farmers.main import SmallFarmersBooksExtractor, BOOK_SERIES_ID as SMALL_FARMERS_BOOK_ID
-import book_extractors.farmers.chunktextfile as small_farmers_converter
-from book_extractors.greatfarmers.main import GreatFarmersBooksExtractor, BOOK_SERIES_ID as GREAT_FARMERS_BOOK_ID
-import book_extractors.greatfarmers.chunktextfile as great_farmers_converter
 import core.extraction_constants as extraction_constants
 from core import bootstrap
 
-supported_bookseries = {
-    KARELIAN_BOOK_ID: {'extractor': KarelianBooksExtractor, 'converter': karelian_converter.convert_html_file_to_xml},
-    SMALL_FARMERS_BOOK_ID: {'extractor': SmallFarmersBooksExtractor, 'converter': small_farmers_converter.convert_html_file_to_xml},
-    GREAT_FARMERS_BOOK_ID: {'extractor': GreatFarmersBooksExtractor, 'converter': great_farmers_converter.convert_html_file_to_xml}
-}
+PLUGIN_DIRECTORY = './book_extractors'
+AVAILABLE_BOOKSERIES = tuple(series['book_series_id'] for series in bootstrap.find_available_bookseries_from_directory(PLUGIN_DIRECTORY))
 
-help_str = 'Bookseries where data is from: {}'.format(', '.join(list(supported_bookseries.keys())))
+
+help_str = 'Bookseries where data is from: {}'.format(', '.join(AVAILABLE_BOOKSERIES))
 progress_str = 'Progress:{:>4}% - {:>5}/{:>5}'
 progress_bar_str = '{} [{}{}] \r'
 
@@ -66,17 +58,14 @@ def extract(args):
 
 
 def chunk(args):
-    book_series = args['b']
+    bookseries_id = args['b']
     input_files = args['c']
     output_files = args['o']
     book_numbers = args['n']
 
-    if book_series is None or book_numbers is None:
-        print('Error: Both book series argument and book number in series should be provided when starting conversion process. Example: -b siirtokarjalaiset -n 1')
-        raise CommandLineParameterException()
-
-    if book_series not in supported_bookseries:
-        print('Error: Provided book series is not supported. Try one from', ', '.join(list(supported_bookseries.keys())))
+    if bookseries_id is None or book_numbers is None:
+        print('Error: Both book series argument and book number in series should be provided when starting '
+              'conversion process. Example: -b siirtokarjalaiset -n 1')
         raise CommandLineParameterException()
 
     if output_files is None:
@@ -84,17 +73,25 @@ def chunk(args):
         raise CommandLineParameterException()
 
     if len(output_files) != len(input_files) or len(output_files) != len(book_numbers):
-        print('Error: The number of files to chunk should match the number of output files and the number of book numbers.')
+        print('Error: The number of files to chunk should match the number of output '
+              'files and the number of book numbers.')
+        raise CommandLineParameterException()
+
+    try:
+        bookseries = bootstrap.setup_extraction_framework_for_bookseries(bookseries_id,
+                                                                            './book_extractors',
+                                                                            callback)
+    except bootstrap.BookSeriesNotSupportedException:
+        print('Error: Provided book series is not supported. Try one from',
+              ', '.join(AVAILABLE_BOOKSERIES))
         raise CommandLineParameterException()
 
     print('Converting...')
-    supported_bookseries[book_series]['converter'](
-        input_files,
-        output_files,
-        book_numbers,
-        filter_duplicates=args['filter'],
-        callback=callback
-    )
+    bookseries.chunk(input_files,
+                     output_files,
+                     book_numbers,
+                     filter_duplicates=args['filter'],
+                     callback=callback)
 
 
 def main():

@@ -10,7 +10,7 @@ from book_extractors.karelians.tests.chunking import expected_xml_data
 class TestHtmlChunking:
     @pytest.fixture(autouse=True)
     def person_preprocessor(self):
-        return PersonPreprocessor()
+        return PersonPreprocessor('siirtokarjalaiset')
 
     @pytest.fixture()
     def image_test_paths(self):
