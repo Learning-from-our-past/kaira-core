@@ -1,4 +1,3 @@
-book_series: Siirtokarjalaisten tie
 pipeline:
   - !Extractor &PrimaryPersonName {
       module: "extractors.karelians.extractors.name_extractor",
