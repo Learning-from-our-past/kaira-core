@@ -3,6 +3,10 @@ import regex
 import argparse
 import shutil
 import sys
+import os, inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
 from core.utils.text_utils import remove_hyphens_from_text, remove_spaces_from_text
 
 """
