@@ -3,8 +3,8 @@ from importlib import util as import_util
 
 from core.resultjsonbuilder import ResultJsonBuilder
 from core.utils.gender_extract import Gender
-from core.dependency_resolver import ExtractorResultsMap
-from core.yaml_parser import YamlParser
+from core.pipeline_construction.dependency_resolver import ExtractorResultsMap
+from core.pipeline_construction.yaml_parser import YamlParser
 from core.processdata import ProcessData
 
 

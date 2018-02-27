@@ -1,9 +1,9 @@
 import pytest
 
-from core.base_extractor import BaseExtractor
-from core.yaml_parser import YamlParser
+from core.pipeline_construction.base_extractor import BaseExtractor
+from core.pipeline_construction.yaml_parser import YamlParser
 from book_extractors.karelians.extractors.name_extractor import NameExtractor
-from core.dependency_resolver import ExtractorResultsMap
+from core.pipeline_construction.dependency_resolver import ExtractorResultsMap
 
 test_data = {
     'name': 'TESTINEN. VÄINÖ',
@@ -22,14 +22,14 @@ def parser():
 
 
 def should_load_yaml(parser):
-    result = parser._parse_config('core/tests/test_config.yaml')
+    result = parser._parse_config('core/pipeline_construction/tests/test_config.yaml')
     assert result['book_series'] == 'Siirtokarjalaisten tie'
     assert len(result['pipeline']) == 15
     assert type(result['pipeline'][0]) is NameExtractor
 
 
 def should_build_and_run_pipeline(parser):
-    pipeline = parser.build_pipeline_from_yaml('core/tests/test_config.yaml')
+    pipeline = parser.build_pipeline_from_yaml('core/pipeline_construction/tests/test_config.yaml')
 
     results = pipeline.process(test_data)
 
@@ -39,7 +39,7 @@ def should_build_and_run_pipeline(parser):
 
 class TestDependencyConfiguration:
     def should_resolve_dependencies_and_produce_correct_results(self, parser):
-        pipeline = parser.build_pipeline_from_yaml('core/tests/dependency_test_config.yaml')
+        pipeline = parser.build_pipeline_from_yaml('core/pipeline_construction/tests/dependency_test_config.yaml')
         results = pipeline.process(test_data)
 
         assert results[0]['dependent'] == 'This is from standalone extractor: Standalone extractor'
@@ -48,14 +48,14 @@ class TestDependencyConfiguration:
 class TestSubPipelineCreation:
 
     def should_build_subpipeline_correctly_and_extract_data_using_given_configuration(self, parser):
-        pipeline = parser.build_pipeline_from_yaml('core/tests/subpipeline_config.yaml')
+        pipeline = parser.build_pipeline_from_yaml('core/pipeline_construction/tests/subpipeline_config.yaml')
         results = pipeline.process(test_data)
 
         assert results[0]['farmDetails']['farmTotalArea'] == 15.5
         assert results[0]['farmDetails']['animalHusbandry'] is True
 
     def should_build_pipelines_of_arbitrary_depth(self, parser):
-        pipeline = parser.build_pipeline_from_yaml('core/tests/deep_subpipeline_config.yaml')
+        pipeline = parser.build_pipeline_from_yaml('core/pipeline_construction/tests/deep_subpipeline_config.yaml')
         results, metadata = pipeline.process(test_data)
 
         assert results['outerExtractor']['message'] == 'Level 1'

@@ -1,4 +1,4 @@
-from core.base_extractor import BaseExtractor
+from core.pipeline_construction.base_extractor import BaseExtractor
 
 
 class FarmDetailsExtractor(BaseExtractor):

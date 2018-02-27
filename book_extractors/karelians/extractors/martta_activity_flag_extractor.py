@@ -1,4 +1,4 @@
-from core.base_extractor import BaseExtractor
+from core.pipeline_construction.base_extractor import BaseExtractor
 from core.utils.text_utils import remove_hyphens_from_text
 import regex
 

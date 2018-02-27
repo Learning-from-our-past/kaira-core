@@ -1,4 +1,4 @@
-from core.base_extractor import BaseExtractor
+from core.pipeline_construction.base_extractor import BaseExtractor
 import core.extraction_constants as extraction_constants
 
 
