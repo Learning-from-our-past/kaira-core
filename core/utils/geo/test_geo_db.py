@@ -11,8 +11,8 @@ class TestGeoDatabase:
     def should_get_coordinates_by_name(self, geocoder):
         result = geocoder.get_coordinates('Kemijärvi')
         assert result == {
-            'latitude': '66.73',
-            'longitude': '27.39',
+            'latitude': '66.71',
+            'longitude': '27.43',
             'region': 'other'
         }
 
