@@ -156,5 +156,4 @@ def regex_test(ctx, regex=None, books=None, hyphens=False, spaces=False, display
 
     flags = ' '.join(flag_list)
     regex_ext_cmd = regex_ext_cmd.format(regex, books, flags)
-    print('cmd: {}'.format(regex_ext_cmd))
     ctx.run('python analysis_toolkit/simple_regex_extractor.py {}'.format(regex_ext_cmd))
