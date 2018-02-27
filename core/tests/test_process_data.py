@@ -1,6 +1,6 @@
 import pytest
 from core.processdata import ProcessData
-from core.dependency_resolver import ExtractorResultsMap
+from core.pipeline_construction.dependency_resolver import ExtractorResultsMap
 
 
 def should_clear_result_map_after_extracting_one_entry():

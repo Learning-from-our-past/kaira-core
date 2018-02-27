@@ -1,5 +1,5 @@
 from book_extractors.common.extraction_keys import KEYS
-from core.base_extractor import BaseExtractor
+from core.pipeline_construction.base_extractor import BaseExtractor
 from core.utils.geo.geocoding import GeoCoder, LocationNotFound
 
 

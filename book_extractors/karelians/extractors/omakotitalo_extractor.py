@@ -1,7 +1,7 @@
 import re
 
 import core.utils.regex_utils as regexUtils
-from core.base_extractor import BaseExtractor
+from core.pipeline_construction.base_extractor import BaseExtractor
 
 
 class OmakotitaloExtractor(BaseExtractor):

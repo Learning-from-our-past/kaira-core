@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from book_extractors.common.extraction_keys import KEYS
-from core.base_extractor import BaseExtractor
+from core.pipeline_construction.base_extractor import BaseExtractor
 from core.utils import text_utils
 from core.utils import regex_utils
 from book_extractors.common.postprocessors import place_name_cleaner

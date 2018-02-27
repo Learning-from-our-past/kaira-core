@@ -3,7 +3,7 @@ import re
 import core.utils.regex_utils as regexUtils
 from core.utils import text_utils
 from book_extractors.common.extraction_keys import KEYS
-from core.base_extractor import BaseExtractor
+from core.pipeline_construction.base_extractor import BaseExtractor
 
 
 class FormerSurnameExtractor(BaseExtractor):

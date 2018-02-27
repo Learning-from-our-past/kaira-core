@@ -1,7 +1,7 @@
 import re
 
 from book_extractors.common.extraction_keys import KEYS
-from core.base_extractor import BaseExtractor
+from core.pipeline_construction.base_extractor import BaseExtractor
 from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from core.utils import text_utils
 from core.utils import regex_utils

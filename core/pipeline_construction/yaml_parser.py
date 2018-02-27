@@ -1,6 +1,6 @@
 import yaml
 import importlib
-from core.extraction_pipeline import ExtractionPipeline
+from core.pipeline_construction.extraction_pipeline import ExtractionPipeline
 
 
 class YamlParser:
