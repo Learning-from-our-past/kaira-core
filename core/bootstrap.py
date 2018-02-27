@@ -15,7 +15,7 @@ def setup_extraction_framework_for_bookseries(bookseries_id, plugin_directory, u
 
 def find_available_bookseries_from_directory(directory_path):
     """
-    Find available bookseries by scanning book_extractors directory for manifest files.
+    Find available bookseries by scanning extractors directory for manifest files.
     :return:
     """
     manifest_glob_pattern = os.path.join('.', directory_path, '*', 'manifest.yaml')

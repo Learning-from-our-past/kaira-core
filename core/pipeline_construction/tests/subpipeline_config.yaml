@@ -1,11 +1,11 @@
 book_series: Siirtokarjalaisten tie
 pipeline:
   - !Extractor {
-      module: "book_extractors.karelians.extractors.farm_extractor",
+      module: "extractors.karelians.extractors.farm_extractor",
       class_name: "FarmDetailsExtractor",
       pipeline: [
         !Extractor {
-            module: "book_extractors.common.extractors.bool_extractor",
+            module: "extractors.common.extractors.bool_extractor",
             class_name: "BoolExtractor",
             options: {
               # Regex patterns for different farm flags. Take care to use single quotes ' so that
@@ -21,7 +21,7 @@ pipeline:
             }
         },
         !Extractor {
-          module: "book_extractors.karelians.extractors.farm_area_extractor",
+          module: "extractors.karelians.extractors.farm_area_extractor",
           class_name: "FarmAreaExtractor"
         }
       ]
