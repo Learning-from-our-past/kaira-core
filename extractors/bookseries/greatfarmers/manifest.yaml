@@ -1,0 +1,4 @@
+# The identifier of the book series found from the <DATA> tag of the XML-files.
+book_series_id: suuretmaatilat
+# Path inside the plugin directory to the module which contains the HTML -> XML conversion code
+chunker: chunktextfile.py
