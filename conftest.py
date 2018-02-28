@@ -4,9 +4,9 @@ import shutil
 import os
 
 from core import extraction_constants
-from book_extractors.common.extractors.kaira_id_extractor import KairaIdProvider
-from core.dependency_resolver import ExtractorResultsMap
-from core.yaml_parser import YamlParser
+from extractors.common.extractors.kaira_id_extractor import KairaIdProvider
+from core.pipeline_construction.dependency_resolver import ExtractorResultsMap
+from core.pipeline_construction.yaml_parser import YamlParser
 
 
 def pytest_collection_modifyitems(session, config, items):
