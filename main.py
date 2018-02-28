@@ -5,7 +5,7 @@ from lxml import etree
 import core.extraction_constants as extraction_constants
 from core import bootstrap
 
-PLUGIN_DIRECTORY = './extractors'
+PLUGIN_DIRECTORY = './extractors/bookseries'
 AVAILABLE_BOOKSERIES = tuple(series['book_series_id'] for series in bootstrap.find_available_bookseries_from_directory(PLUGIN_DIRECTORY))
 
 help_str = 'Bookseries where data is from: {}'.format(', '.join(AVAILABLE_BOOKSERIES))
@@ -41,7 +41,7 @@ def extract(args):
 
     try:
         bookseries = bootstrap.setup_extraction_framework_for_bookseries(bookseries_id,
-                                                                            './extractors',
+                                                                            PLUGIN_DIRECTORY,
                                                                             callback)
     except bootstrap.BookSeriesNotSupportedException as err:
         print(err)
@@ -78,7 +78,7 @@ def chunk(args):
 
     try:
         bookseries = bootstrap.setup_extraction_framework_for_bookseries(bookseries_id,
-                                                                            './extractors',
+                                                                            PLUGIN_DIRECTORY,
                                                                             callback)
     except bootstrap.BookSeriesNotSupportedException:
         print('Error: Provided book series is not supported. Try one from',
