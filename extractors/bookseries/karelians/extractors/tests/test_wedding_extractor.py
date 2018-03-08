@@ -9,7 +9,7 @@ class TestWeddingExtraction:
         return th.setup_extractor(WeddingExtractor(None, None))
 
     def _verify_years(self, expected_texts_and_years, extractor):
-        flag = 'wedding'
+        flag = 'weddingYear'
 
         for text, year in expected_texts_and_years:
             results, metadata = extractor.extract({'text': text}, {}, {})
