@@ -25,18 +25,18 @@ class TestSpouseExtraction:
             'formerSurname': 'Testaaja',
             'firstNames': 'Maija Nyymi',
             'hasSpouse': True,
-            'deathYear': None,
+            'death': None,
             'weddingYear': 1944,
             'birthData': {
                 'birthDay': 30,
                 'birthMonth': 6,
-                'birthYear': 1919,
-                'birthLocation': {
-                    'locationName': 'Testilässä',
-                    'region': None,
-                    'latitude': None,
-                    'longitude': None
-                }
+                'birthYear': 1919
+            },
+            'birthLocation': {
+                'locationName': 'Testilässä',
+                'region': None,
+                'latitude': None,
+                'longitude': None
             },
             'profession': {
                 'professionName': 'emäntä',

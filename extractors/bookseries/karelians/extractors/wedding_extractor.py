@@ -6,7 +6,7 @@ from core.utils import regex_utils, text_utils
 
 
 class WeddingExtractor(BaseExtractor):
-    extraction_key = 'wedding'
+    extraction_key = 'weddingYear'
 
     def __init__(self, cursor_location_depends_on=None, options=None):
         super(WeddingExtractor, self).__init__(cursor_location_depends_on, options)

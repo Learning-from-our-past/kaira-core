@@ -53,24 +53,12 @@ class SpouseExtractor(BaseExtractor):
                                                                  entry['full_text'])
             spouse_details = spouse_details['spouse']
 
-            # FIXME: This will break when adding new extractors to YAML configuration
-            # Map data to spouse object
             return {
-                KEYS['birthData']: {
-                    **spouse_details[KEYS['birthData']],
-                    KEYS['birthLocation']: spouse_details['birthLocation']
-                },
-                KEYS['spouseDeathYear']: spouse_details['death'],
-                KEYS['formerSurname']: spouse_details['formerSurname'],
-                KEYS['spouseProfession']: spouse_details['profession'],
-                KEYS['weddingYear']: spouse_details['wedding'],
+                **spouse_details,
                 KEYS['spouseName']: spouse_name,
                 KEYS['hasSpouse']: True,
                 KEYS['kairaId']: self.kaira_id_provider.get_new_id('S'),
-                'warData': spouse_details['warData'],
-                'marttaActivityFlag': spouse_details['marttaActivityFlag']
             }
-
         except regex_utils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('spouseNotFound', 6)
 
