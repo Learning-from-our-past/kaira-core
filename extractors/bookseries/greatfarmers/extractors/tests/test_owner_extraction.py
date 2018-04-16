@@ -1,11 +1,11 @@
 import pytest
-from core.utils.gender_extract import Gender
+from core.utils.sex_extract import Sex
 
 class TestOwnerExtraction:
 
     @pytest.yield_fixture(autouse=True)
     def owner_extractor(self, th):
-        Gender.load_names()
+        Sex.load_names()
         return th.build_pipeline_from_yaml(OWNER_EXTRACTOR_CONFIG)
 
     def should_extract_owner_correctly_from_short_entry(self, owner_extractor):

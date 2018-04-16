@@ -2,7 +2,7 @@ import os
 from importlib import util as import_util
 
 from core.resultjsonbuilder import ResultJsonBuilder
-from core.utils.gender_extract import Gender
+from core.utils.sex_extract import Sex
 from core.pipeline_construction.dependency_resolver import ExtractorResultsMap
 from core.pipeline_construction.yaml_parser import YamlParser
 from core.processdata import ProcessData
@@ -16,7 +16,7 @@ class BookSeries:
     """
 
     def __init__(self, manifest, update_callback):
-        Gender.load_names()
+        Sex.load_names()
         self._manifest = manifest
         self._extraction_result_map = ExtractorResultsMap()
         self._parser = YamlParser(self._extraction_result_map)

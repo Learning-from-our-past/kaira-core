@@ -1,39 +1,39 @@
-class Gender:
+class Sex:
     male_names = set()
     female_names = set()
 
     @staticmethod
     def load_names():
-        if len(Gender.male_names) == 0:
+        if len(Sex.male_names) == 0:
             f = open('./support_datasheets/men.names', 'r', encoding='utf8')
             for row in f:
                 row = row.strip('\n')
                 row = row.lower()
-                Gender.male_names.add(row)
+                Sex.male_names.add(row)
 
-        if len(Gender.female_names) == 0:
+        if len(Sex.female_names) == 0:
             f = open('./support_datasheets/women.names', 'r', encoding='utf8')
             for row in f:
                 row = row.strip('\n')
                 row = row.lower()
-                Gender.female_names.add(row)
+                Sex.female_names.add(row)
 
     @staticmethod
-    def find_gender(name_string):
+    def find_sex(name_string):
         """
         Tries to determine sex from a string of name(s).
         :param name_string: A string containing one or more names.
         :return: 'Male', 'Female' or None
         """
         names = tuple(word.casefold() for word in name_string.split(' ') if word)
-        num_male_names, num_female_names = Gender._count_sex_specific_names(names)
+        num_male_names, num_female_names = Sex._count_sex_specific_names(names)
         sex = None
         if num_male_names > num_female_names:
             sex = 'Male'
         elif num_female_names > num_male_names:
             sex = 'Female'
         elif num_male_names == 0 and num_female_names == 0 and len(names) >= 1:
-            raise GenderException()
+            raise SexException()
 
         return sex
 
@@ -43,17 +43,17 @@ class Gender:
         num_female_names = 0
 
         for name in names:
-            if name in Gender.male_names:
+            if name in Sex.male_names:
                 num_male_names += 1
-            elif name in Gender.female_names:
+            elif name in Sex.female_names:
                 num_female_names += 1
 
         return num_male_names, num_female_names
 
 
-class GenderException(Exception):
-    message = u'Gender not found!'
-    eType = 'GENDER WAS NOT FOUND'
+class SexException(Exception):
+    message = u'Sex not found!'
+    eType = 'Sex WAS NOT FOUND'
 
     def __init__(self):
         pass
