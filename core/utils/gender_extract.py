@@ -1,24 +1,22 @@
-class Gender():
-    male_names = []
-    female_names = []
+class Gender:
+    male_names = set()
+    female_names = set()
 
     @staticmethod
     def load_names():
         if len(Gender.male_names) == 0:
-            f = open("./support_datasheets/men.names", "r", encoding="utf8")
+            f = open('./support_datasheets/men.names', 'r', encoding='utf8')
             for row in f:
-                row = row.strip("\n")
+                row = row.strip('\n')
                 row = row.lower()
-                Gender.male_names.append(row)
-            Gender.male_names = set(Gender.male_names)
+                Gender.male_names.add(row)
 
         if len(Gender.female_names) == 0:
-            f = open("./support_datasheets/women.names", "r", encoding="utf8")
+            f = open('./support_datasheets/women.names', 'r', encoding='utf8')
             for row in f:
-                row = row.strip("\n")
+                row = row.strip('\n')
                 row = row.lower()
-                Gender.female_names.append(row)
-            Gender.female_names = set(Gender.female_names)
+                Gender.female_names.add(row)
 
     @staticmethod
     def find_gender(name_string):
@@ -54,11 +52,11 @@ class Gender():
 
 
 class GenderException(Exception):
-    message = u"Gender not found!"
-    eType = "GENDER WAS NOT FOUND"
+    message = u'Gender not found!'
+    eType = 'GENDER WAS NOT FOUND'
 
     def __init__(self):
-       pass
+        pass
 
     def __unicode__(self):
         return self.message
