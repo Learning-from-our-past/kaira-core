@@ -5,7 +5,7 @@ import core.utils.regex_utils as regexUtils
 from core.utils import text_utils
 from extractors.common.extraction_keys import KEYS
 from core.pipeline_construction.base_extractor import BaseExtractor
-from core.utils.gender_extract import Gender, GenderException
+from core.utils.sex_extract import Sex, SexException
 
 
 class CommonOwnerExtractor(BaseExtractor):
@@ -74,9 +74,9 @@ class CommonOwnerExtractor(BaseExtractor):
         for n in names:
             try:
                 if len(n) > 2:
-                    owner_gender = Gender.find_gender(n)
+                    owner_gender = Sex.find_sex(n)
                     break
-            except GenderException:
+            except SexException:
                 pass
 
         return owner_gender
