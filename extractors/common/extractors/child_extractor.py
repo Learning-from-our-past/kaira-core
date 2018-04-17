@@ -3,7 +3,7 @@ import re
 from core.pipeline_construction.base_extractor import BaseExtractor
 from extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from core.utils import regex_utils, text_utils
-from core.utils.gender_extract import Gender, GenderException
+from core.utils.sex_extract import Sex, SexException
 from core.utils.geo.geocoding import GeoCoder
 
 
@@ -86,8 +86,8 @@ class CommonChildExtractor(BaseExtractor):
             name = name.strip("-")
             name = name.strip(" ")
             try:
-                gender = Gender.find_gender(name)
-            except GenderException:
+                gender = Sex.find_sex(name)
+            except SexException:
                 self.metadata_collector.add_error_record('genderNotFound', 2)
                 gender = None
 

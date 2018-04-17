@@ -5,12 +5,12 @@ from core.pipeline_construction.base_extractor import BaseExtractor
 from extractors.common.extractors.kaira_id_extractor import KairaIdProvider
 from core.utils import text_utils
 from core.utils import regex_utils
-from core.utils.gender_extract import Gender
-from core.utils.gender_extract import GenderException
+from core.utils.sex_extract import Sex
+from core.utils.sex_extract import SexException
 from core.utils.geo.geocoding import GeoCoder, LocationNotFound
 from extractors.common.postprocessors import place_name_cleaner
 
-Gender.load_names()
+Sex.load_names()
 
 
 class ChildExtractor(BaseExtractor):
@@ -109,8 +109,8 @@ class ChildExtractor(BaseExtractor):
         name = name.strip(" ")
 
         try:
-            gender = Gender.find_gender(name)
-        except GenderException:
+            gender = Sex.find_sex(name)
+        except SexException:
             self.metadata_collector.add_error_record('genderNotFound', 2)
             gender = None
 
