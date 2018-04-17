@@ -2,7 +2,7 @@ import re
 
 from extractors.common.extraction_keys import KEYS
 from core.pipeline_construction.base_extractor import BaseExtractor
-from core.utils.gender_extract import Gender, GenderException
+from core.utils.sex_extract import Sex, SexException
 
 
 class NameExtractor(BaseExtractor):
@@ -23,8 +23,8 @@ class NameExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('nameNotFound', 10)
 
         try:
-            result[KEYS['gender']] = Gender.find_gender(result[KEYS['firstnames']])
-        except GenderException:
+            result[KEYS['gender']] = Sex.find_sex(result[KEYS['firstnames']])
+        except SexException:
             self.metadata_collector.add_error_record('genderNotFound', 8)
             result[KEYS['gender']] = ""
 
