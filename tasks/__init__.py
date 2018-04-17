@@ -160,3 +160,21 @@ def regex_test(ctx, regex=None, books=None, hyphens=False, spaces=False, display
     flags = ' '.join(flag_list)
     regex_ext_cmd = regex_ext_cmd.format(regex, books, flags)
     ctx.run('python analysis_toolkit/simple_regex_extractor.py {}'.format(regex_ext_cmd))
+
+
+@task()
+def nlp_setup(ctx):
+    """
+    Downloads and installs the Finnish Dependency Parser.
+    The base repository URL is https://github.com/TurkuNLP/Finnish-dep-parser
+    We are using our own repository which contains fixes to make FDP work on Mac OS X.
+    """
+    branch_name = 'turkunlp-updates'
+    repository_url = 'https://github.com/Learning-from-our-past/Finnish-dep-parser.git'
+    fdp_dir = 'dependencies/fin-dep-parser'
+    ctx.run('git clone -b {} --depth=1 {} {}'.format(branch_name, repository_url, fdp_dir))
+    ctx.run('rm -rf {}/.git'.format(fdp_dir))
+    ctx.run('rm -rf {}/.gitignore'.format(fdp_dir))
+    ctx.run('cd {}; ./install.sh'.format(fdp_dir))
+    print('Please specify the Python 2 interpreter in {}/init.sh '
+          'if it is not "python2".'.format(fdp_dir))
