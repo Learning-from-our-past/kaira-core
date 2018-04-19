@@ -1,5 +1,7 @@
 from core.utils.text_utils import remove_hyphens_from_text
 from core.utils.text_utils import remove_spaces_from_text
+from core.utils.text_utils import RegexListReplacer
+import regex
 
 
 class TestTextUtils:
@@ -42,3 +44,20 @@ class TestTextUtils:
                       'um en er gy. “Qua nt um” m eans an inv oc at​io n of th᠎e un​ ifi e᠎d.'
 
         assert remove_spaces_from_text(spaced_text) == expected_text
+
+    def should_correctly_perform_arbitrary_list_of_replacements_on_string(self):
+        replacements = [
+            (r'[kh](iss)[ae]', r'kissa', (regex.IGNORECASE | regex.UNICODE)),
+            (r'\b(?:lääkintäluutnantti){s<=2}\b', r'lääkintäluutnantti', None),
+            (r'(?:(\d),(\d))', r'\1.\2', None)
+        ]
+        r = RegexListReplacer(replacements)
+
+        input_text = ('Testinen oli 1ääkintäluutnentti sodassa. Vapaa-ajallaan hän '
+                      'on hyödyntänyt taitojaan pelastamalla hissan, jonka pH-arvo '
+                      'oli 11,5. Tämän jälkeen kisse oli melko tyytyväinen.')
+        expected_text = ('Testinen oli lääkintäluutnantti sodassa. Vapaa-ajallaan hän '
+                         'on hyödyntänyt taitojaan pelastamalla kissan, jonka pH-arvo '
+                         'oli 11.5. Tämän jälkeen kissa oli melko tyytyväinen.')
+
+        assert r.run_replacements(input_text) == expected_text
