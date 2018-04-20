@@ -134,8 +134,9 @@ def kairaid2xml(ctx, input_file=None, output_file=None, books=None):
             'books': 'Paths to the books. Default: siirtokarjalaiset_I-IV.xml in material/',
             'hyphens': 'Whether to remove hyphens from text before checking for regex matches.',
             'spaces': 'Whether to remove spaces from text before checking for regex matches.',
+            'ignore-case': 'Whether to ignore case when checking for regex matches.',
             'display-text': 'Whether to display the person entries that had regex matches after regex test.'})
-def regex_test(ctx, regex=None, books=None, hyphens=False, spaces=False, display_text=False):
+def regex_test(ctx, regex=None, books=None, hyphens=False, spaces=False, display_text=False, ignore_case=True):
     """
     Run an "extraction" test using regex and get information about what kind of strings the regex matched and the frequency of each match.
     """
@@ -153,6 +154,8 @@ def regex_test(ctx, regex=None, books=None, hyphens=False, spaces=False, display
         flag_list.append('--spaces')
     if display_text:
         flag_list.append('--display-text')
+    if ignore_case:
+        flag_list.append('--ignore-case')
 
     flags = ' '.join(flag_list)
     regex_ext_cmd = regex_ext_cmd.format(regex, books, flags)
