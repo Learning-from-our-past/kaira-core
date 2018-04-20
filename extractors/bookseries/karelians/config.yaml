@@ -96,6 +96,14 @@ pipeline:
             in_spouse_extractor: false
           }
         },
+        !Extractor {
+          module: "extractors.bookseries.karelians.extractors.military_rank_extractor",
+          class_name: "MilitaryRankExtractor",
+          depends_on: [ *PrimaryPersonName ],
+          options: {
+            in_spouse_extractor: false
+          }
+        }
       ]
     }
 
@@ -211,6 +219,14 @@ pipeline:
             !Extractor {
               module: "extractors.bookseries.karelians.extractors.lotta_activity_flag_extractor",
               class_name: "LottaActivityFlagExtractor",
+              depends_on: [ *PrimaryPersonName ],
+              options: {
+                in_spouse_extractor: true
+              }
+            },
+            !Extractor {
+              module: "extractors.bookseries.karelians.extractors.military_rank_extractor",
+              class_name: "MilitaryRankExtractor",
               depends_on: [ *PrimaryPersonName ],
               options: {
                 in_spouse_extractor: true
