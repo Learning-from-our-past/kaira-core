@@ -20,17 +20,23 @@ class NameExtractor(BaseExtractor):
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         results, cursor_location = self._find_names(entry)
+        results['sex'] = 'Male'  # All soldiers were men
+
         return self._add_to_extraction_results(results, extraction_results, extraction_metadata, cursor_location)
 
     def _find_names(self, entry):
         match = self._LAST_NAME_REGEX.search(entry['text'])
+        result = {
+            'firstNames': None,
+            'lastName': None
+        }
+
         if match is not None:
-            return self._trim_names({
-                'firstNames': match.group('first_names'),
-                'lastName': match.group('last_name')
-            }), match.endpos
+            result['firstNames'] = match.group('first_names')
+            result['lastName'] = match.group('last_name')
+            return self._trim_names(result), match.endpos
         else:
-            return None, 0
+            return result, 0
 
     def _trim_names(self, names):
         names['firstNames'] = names['firstNames'].strip()

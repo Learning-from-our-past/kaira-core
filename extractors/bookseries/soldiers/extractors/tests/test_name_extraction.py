@@ -41,3 +41,15 @@ class TestSoldierNameExtraction:
             results, metadata = name_extractor.extract({'text': text}, {}, {})
             assert results['name']['firstNames'] == first_name
             assert results['name']['lastName'] == last_name
+
+    def should_mark_person_as_male_since_all_soldiers_were_males(self, name_extractor):
+        text = 'TESTINEN-TESTAAJA, Aapo Ilmari, s 14.12.12 Sysmä, mv. Pso vsta 46 Hanna Vaimokas s 17 Savitaipale, emäntä.'
+        results, metadata = name_extractor.extract({'text': text}, {}, {})
+
+        assert results['name']['sex'] == 'Male'
+
+    def should_mark_sex_even_when_name_was_not_found(self, name_extractor):
+        results, metadata = name_extractor.extract({'text': ''}, {}, {})
+        assert results['name']['firstNames'] is None
+        assert results['name']['lastName'] is None
+        assert results['name']['sex'] == 'Male'
