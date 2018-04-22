@@ -1,1 +1,5 @@
-pipeline: []
+pipeline:
+ - !Extractor {
+      module: "extractors.bookseries.soldiers.extractors.name_extractor",
+      class_name: "NameExtractor"
+    }
