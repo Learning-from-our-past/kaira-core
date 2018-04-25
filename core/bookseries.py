@@ -34,7 +34,7 @@ class BookSeries:
 
     def extract_data(self, xml_stream):
         self._extractor_pipeline = self._parser.build_pipeline_from_yaml(os.path.join(self._manifest['path'],
-                                                                                      'config.yaml'))
+                                                                                      'pipeline_config.yaml'))
         self._extractor = ProcessData(self._extractor_pipeline, self._extraction_result_map, self._update_callback)
 
         self._results = self._extractor.run_extraction(xml_stream)
