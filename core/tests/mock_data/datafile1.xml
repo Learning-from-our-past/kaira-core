@@ -1,3 +1,5 @@
 <DATA bookseries="siirtokarjalaiset" book_number="1">
-    <PERSON name="TESTINEN, TESTI" approximated_page="0-2" img_path="images/testinenImage.jpg">lorem ipsum dolor</PERSON>
+    <PERSON name="TESTINEN, TESTI" approximated_page="0-2" img_path="images/testinenImage.jpg">
+        <RAW>lorem ipsum dolor</RAW>
+    </PERSON>
 </DATA>

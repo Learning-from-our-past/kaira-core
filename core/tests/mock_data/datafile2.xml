@@ -1,0 +1,6 @@
+<DATA bookseries="book_with_custom_xml_conversion" book_number="1">
+    <PERSON name="TESTINEN, TESTI" approximated_page="0-2" img_path="images/testinenImage.jpg">
+        <RAW>lorem ipsum dolor</RAW>
+        <OTHERDATA>The eigenstates of a measurement are not disturbed by the observation.</OTHERDATA>
+    </PERSON>
+</DATA>

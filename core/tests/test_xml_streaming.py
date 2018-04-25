@@ -8,7 +8,7 @@ def basic_xml_to_extractor(person_element):
 
 class TestStreamingXMLReader:
     def should_stream_basic_xml_with_one_element_correctly(self):
-        reader = StreamingXMLReader(mock_file(XML_WITH_SINGULAR_PERSON_ENTRIES),
+        reader = StreamingXMLReader(mock_file(XML_WITH_SIMPLE_PERSON_ENTRIES),
                                     basic_xml_to_extractor, chunk_size=2)
         entries = [entry for entry in reader.read_entry_from_xml()]
 
@@ -37,22 +37,22 @@ class TestStreamingXMLReader:
             assert entry['conllu'] == conllu
 
     def should_correctly_stream_data_when_number_of_entries_is_greater_than_chunk_size(self):
-        reader = StreamingXMLReader(mock_file(XML_WITH_SINGULAR_PERSON_ENTRIES),
+        reader = StreamingXMLReader(mock_file(XML_WITH_SIMPLE_PERSON_ENTRIES),
                                     basic_xml_to_extractor, chunk_size=1)
         entries = [entry for entry in reader.read_entry_from_xml()]
-        expected_len = XML_WITH_SINGULAR_PERSON_ENTRIES.count('<PERSON')
+        expected_len = XML_WITH_SIMPLE_PERSON_ENTRIES.count('<PERSON')
         assert len(entries) == expected_len
 
     def should_correctly_stream_data_when_number_of_entries_is_lesser_thank_chunk_size(self):
-        reader = StreamingXMLReader(mock_file(XML_WITH_SINGULAR_PERSON_ENTRIES),
+        reader = StreamingXMLReader(mock_file(XML_WITH_SIMPLE_PERSON_ENTRIES),
                                     basic_xml_to_extractor, chunk_size=100)
         entries = [entry for entry in reader.read_entry_from_xml()]
-        expected_len = XML_WITH_SINGULAR_PERSON_ENTRIES.count('<PERSON')
+        expected_len = XML_WITH_SIMPLE_PERSON_ENTRIES.count('<PERSON')
         assert len(entries) == expected_len
 
     def should_correctly_stream_data_when_chunk_size_is_not_a_multiple_of_number_of_entries(self):
-        reader = StreamingXMLReader(mock_file(XML_WITH_MANY_SINGULAR_PERSON_ENTRIES),
+        reader = StreamingXMLReader(mock_file(XML_WITH_MANY_SIMPLE_PERSON_ENTRIES),
                                     basic_xml_to_extractor, chunk_size=3)
         entries = [entry for entry in reader.read_entry_from_xml()]
-        expected_len = XML_WITH_MANY_SINGULAR_PERSON_ENTRIES.count('<PERSON')
+        expected_len = XML_WITH_MANY_SIMPLE_PERSON_ENTRIES.count('<PERSON')
         assert len(entries) == expected_len

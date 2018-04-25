@@ -9,6 +9,7 @@ from core.processdata import ProcessData
 from core.nlp.parsing.transform_xml import run_xml_data_transformation
 from core.nlp.parsing.parse_with_fdp import parse_through_fdp_and_output_file
 from core.nlp.parsing.join_nlp_data_to_xml import add_conllu_data_to_xml
+from conllu import parser
 
 
 class BookSeries:
@@ -29,14 +30,14 @@ class BookSeries:
         self._results = None
         self._update_callback = update_callback
         self._bookseries_clean_up_entry_fn = self._load_clean_up_function()
+        self._custom_convert_xml_to_dict = self._load_custom_xml_conversion_function()
 
-    def extract_data(self, data_xml):
+    def extract_data(self, xml_stream):
         self._extractor_pipeline = self._parser.build_pipeline_from_yaml(os.path.join(self._manifest['path'],
                                                                                       'config.yaml'))
         self._extractor = ProcessData(self._extractor_pipeline, self._extraction_result_map, self._update_callback)
 
-        person_data = self._xml_to_extractor_format(data_xml)
-        self._results = self._extractor.run_extraction(person_data)
+        self._results = self._extractor.run_extraction(xml_stream)
 
     def save_results(self, file, file_format='json'):
         if file_format == 'json':
@@ -53,12 +54,7 @@ class BookSeries:
 
     def chunk(self, input_files, output_files, book_numbers, filter_duplicates=False, callback=None):
         # Import the chunking implementation from the plugin directory
-        chunking_spec = import_util.spec_from_file_location('chunktextfile',
-                                                            os.path.join(
-                                                                self._manifest['path'],
-                                                                self._manifest['chunker']))
-        chunking_module = import_util.module_from_spec(chunking_spec)
-        chunking_spec.loader.exec_module(chunking_module)
+        chunking_module = self._load_plugin_module('chunktextfile', self._manifest['chunker'])
 
         # And then call the actual implementation in the imported module
         chunking_module.convert_html_file_to_xml(
@@ -113,6 +109,33 @@ class BookSeries:
 
         return transformed_data
 
+    def convert_xml_to_dict(self, person_element):
+        """
+        Transform xml person element to dict format. Pick all attributes available in the
+        entry and add text properties from <RAW> and <CONLLU> if it is available.
+
+        This can be overridden for specific bookseries with a customized xml conversion
+        function by setting up the key "xml_to_dict" in the manifest file of a bookseries
+        and setting the value of that key to the path to a file which contains a function
+        with the name "convert_xml_to_dict".
+
+        :param person_element: A <PERSON>...</PERSON> element from the XML
+        :return: dict with data from XML mapped
+        """
+        if self._custom_convert_xml_to_dict is not None:
+            return self._custom_convert_xml_to_dict(person_element)
+
+        person_entry = {**person_element.attrib,
+                        'text': person_element.find('RAW').text}
+
+        conllu_data = BookSeries._get_conllu_data_from_xml(person_element)
+        if conllu_data is not None:
+            person_entry['conllu'] = conllu_data
+
+        person_entry['full_text'] = person_entry['text']
+
+        return person_entry
+
     def _clean_up_entry_for_nlp(self, entry):
         """
         Cleans up an entry from a book in a bookseries. Default implementation in the
@@ -153,12 +176,24 @@ class BookSeries:
         module_spec.loader.exec_module(module)
         return module
 
-    def _xml_to_extractor_format(self, xml_document):
-        """
-        Transform xml file to dict format. Pick all attributes available in the entry and add text
-        properties.
-        :param xml_document:
-        :return:
-        """
+    @staticmethod
+    def _get_conllu_data_from_xml(element):
+        conllu = element.find('CONLLU')
+        if conllu is not None:
+            conllu = parser.parse(conllu.text)
 
-        return [{**child.attrib, 'text': child.text, 'full_text': child.text} for child in xml_document]
+        return conllu
+
+    def _load_custom_xml_conversion_function(self):
+        """
+        Loads a customized function for converting XML person entries to extractor dict
+        format.
+        :param xml_to_dict: Path to file containing convert_xml_to_dict function, relative
+        to the location of the manifest file
+        :return: convert_xml_to_dict function from file specified by xml_to_dict
+        """
+        xml_to_dict_module_path = self._manifest.get('xml_to_dict', None)
+        if xml_to_dict_module_path is None:
+            return None
+        xml_conversion_module = self._load_plugin_module('xml_to_dict', xml_to_dict_module_path)
+        return xml_conversion_module.convert_xml_to_dict
