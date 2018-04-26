@@ -4,6 +4,7 @@ import shutil
 from lxml import etree
 import core.extraction_constants as extraction_constants
 from core import bootstrap
+from core.nlp.parsing.run_nlp_parsing import run_nlp_parsing
 
 PLUGIN_DIRECTORY = './extractors/bookseries'
 AVAILABLE_BOOKSERIES = tuple(series['book_series_id'] for series in bootstrap.find_available_bookseries_from_directory(PLUGIN_DIRECTORY))
@@ -16,9 +17,11 @@ parser = argparse.ArgumentParser(description='Extract information from matrikel 
 parser.add_argument('-i', nargs='?', type=argparse.FileType('r', encoding='utf8'), help='Input file to extract data from. Should be XML.', default=None)
 parser.add_argument('-o', nargs='*', type=argparse.FileType('w', encoding='utf8'), help='Output file to save data to.', default=None, )
 parser.add_argument('-c', nargs='*', type=argparse.FileType('r', encoding='utf8'), help='Input file to transform into analyzable XML file.', default=None)
+parser.add_argument('-t', nargs='?', type=str, help='Input file to tag with NLP data.', default=None)
 parser.add_argument('-b', nargs='?', type=str, help=help_str, default=None)
 parser.add_argument('-n', nargs='*', type=int, help='Number of book in series', default=None)
 parser.add_argument('--filter', action='store_true', help='Whether to delete duplicates.')
+parser.add_argument('--no-clean-up', action='store_true', help='Do not clean up files after NLP tagging', default=False)
 
 
 def callback(current, max):
@@ -101,6 +104,8 @@ def main():
             chunk(args)
         except CommandLineParameterException:
             sys.exit(1)
+    elif args['t'] is not None:
+        run_nlp_parsing(args, PLUGIN_DIRECTORY)
     else:
         extract(args)
 

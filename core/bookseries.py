@@ -6,6 +6,9 @@ from core.utils.sex_extract import Sex
 from core.pipeline_construction.dependency_resolver import ExtractorResultsMap
 from core.pipeline_construction.yaml_parser import YamlParser
 from core.processdata import ProcessData
+from core.nlp.parsing.transform_xml import run_xml_data_transformation
+from core.nlp.parsing.parse_with_fdp import parse_through_fdp_and_output_file
+from core.nlp.parsing.join_nlp_data_to_xml import add_conllu_data_to_xml
 
 
 class BookSeries:
@@ -66,6 +69,22 @@ class BookSeries:
             filter_duplicates,
             callback
         )
+
+    def parse_with_nlp(self, xml_doc, base_path, output_file, clean_up):
+        print('Transforming data...')
+        transformed_file_path = run_xml_data_transformation(self, xml_doc, base_path)
+
+        print('Running transformed data through fin-dep-parser...')
+        nlp_data_file = parse_through_fdp_and_output_file(transformed_file_path, base_path)
+        if clean_up:
+            os.remove(transformed_file_path)
+
+        print('Joining NLP data to XML file with the original data...')
+        output_path = add_conllu_data_to_xml(xml_doc, nlp_data_file, output_file)
+        if clean_up:
+            os.remove(nlp_data_file)
+
+        print('Done! XML file with NLP data created: {}'.format(output_path))
 
     def transform_xml_data_for_fdp(self, xml_doc):
         """

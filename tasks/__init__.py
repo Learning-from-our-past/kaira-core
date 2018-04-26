@@ -178,3 +178,51 @@ def nlp_setup(ctx):
     ctx.run('cd {}; ./install.sh'.format(fdp_dir))
     print('Please specify the Python 2 interpreter in {}/init.sh '
           'if it is not "python2".'.format(fdp_dir))
+
+
+@task(optional=['output_file', 'bookseries'],
+      help={'input-file': 'The XML file to run through fin-dep-parser.',
+            'output-file': 'The path and filename to output NLP-tagged data in.',
+            'no-clean-up': 'Do not remove temporary intermediary files.',
+            'bookseries': 'Run books of a specific series through NLP-tagging with default settings. '
+                          'If specified, input-file is ignored.'})
+def generate_nlp_xmls(ctx, input_file=None, output_file=None, no_clean_up=False, bookseries=None):
+    """
+    Runs the an XML file through the Finnish Dependency Parser and outputs XML file with
+    NLP-tagged, CoNLLU-formatted data within.
+    """
+    if bookseries is not None and input_file is not None:
+        print('Error: Please do not specify both bookseries and input-file. Specifying '
+              'bookseries means we load the default settings for that bookseries, '
+              'including input-file(s).')
+        sys.exit(1)
+
+    kaira_cmd_fmt = 'python main.py -t {} -o {}'
+    input_files = []
+    if bookseries:
+        default_settings = {
+            'siirtokarjalaiset': {
+                'filename_template': 'material/siirtokarjalaiset_{}.{}',
+                'book_numerals': ['I', 'II', 'III', 'IV']
+            }
+        }
+
+        if bookseries not in default_settings:
+            print('Error: No default settings for the specified bookseries. Try one of:'
+                  '\n\t{}'.format(default_settings.keys()))
+            sys.exit(1)
+
+        series_settings = default_settings[bookseries]
+        input_files += [series_settings['filename_template'].format(book_num, 'xml')
+                        for book_num in series_settings['book_numerals']]
+    else:
+        input_files.append(input_file)
+
+    for in_file in input_files:
+        out_file = output_file
+        if out_file is None:
+            out_file = '{}_with_conllu.xml'.format(os.path.splitext(in_file)[0])
+        kaira_cmd = kaira_cmd_fmt.format(in_file, out_file)
+        if no_clean_up:
+            kaira_cmd = '{} {}'.format(kaira_cmd, '--no-clean-up')
+        ctx.run(kaira_cmd)
