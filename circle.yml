@@ -5,6 +5,8 @@ machine:
 dependencies:
   pre:
     - sudo apt-get install libfuzzy-dev ssdeep
+    - pyenv local 2.7.12 3.5.3
+    - invoke nlp-setup
 
 test:
   override:
