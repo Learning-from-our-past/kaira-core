@@ -104,6 +104,7 @@ def update_locationdb(ctx, datasheet=None):
     """
     update_location_db(datasheet)
 
+
 @task(optional=['input', 'output', 'books'],
       help={'input': 'Input file with KairaIDs, one per row. Default: ids.txt',
             'output': 'Output file to place all the generated XML in. Default: ids.xml',
