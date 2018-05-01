@@ -25,6 +25,7 @@ class PersonPreprocessor(ChunkTextInterface):
         self.persons_document.attrib["book_number"] = str(self.book_number)
         self.map_name_to_person = {}
         self.current_person = None
+        self.current_person_raw = None
         self.page_number = 1
         self.location = ""
         self.images = []
@@ -42,6 +43,7 @@ class PersonPreprocessor(ChunkTextInterface):
                     if len(e.text) > 25 and name is not None:
                         self._add_person(self.current_person)
                         self.current_person = self._create_person(name=name.group(0).strip(" "), entry=e.text[name.end():])
+                        self.current_person_raw = self.current_person.find('RAW')
                     elif self.current_person is not None:
                         if name is not None:
                             self._save_location(name.group(0).strip(" "))
@@ -68,23 +70,25 @@ class PersonPreprocessor(ChunkTextInterface):
             #TODO: Karkea. Pitäisi muuttaa rekursiiviseksi, jotta jos samassa entryssä on > 2
             #TODO: ihmistä, heidät eroteltaisiin myös.
             if uppercase is not None:
-                self.current_person.text += e.text[0:uppercase.start()]
+                self.current_person_raw.text += e.text[0:uppercase.start()]
                 self._add_person(self.current_person)
                 self.current_person =  self._create_person(name=uppercase.group(0).strip(" "), entry=e.text[uppercase.end():])
             else:
-                self.current_person.text += e.text
+                self.current_person_raw.text += e.text
 
     def _create_person(self, name, entry):
         person = etree.Element("PERSON")
         person.attrib["name"] = re.sub(r"\s", "", name)
         person.attrib["location"] = self.location
         person.attrib["approximated_page"] = str(self.page_number-1) + "-" + str(self.page_number+1)
-        person.text = entry
+        raw = etree.Element('RAW')
+        raw.text = entry
+        person.append(raw)
         self.map_name_to_person[name] = person
         return person
 
     def _add_person(self, person):
-        if person is not None and len(person.text) > 4:
+        if person is not None and len(person.find('RAW').text) > 4:
             self.persons_document.append(person)
 
 

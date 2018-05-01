@@ -21,6 +21,7 @@ class PersonPreprocessor(ChunkTextInterface):
         self._persons_document = None
         self._map_name_to_person = None
         self._current_person = None
+        self._current_person_raw = None
         self._page_number = None
         self._images = None
 
@@ -53,6 +54,7 @@ class PersonPreprocessor(ChunkTextInterface):
         self._persons_document.attrib['book_number'] = str(self._book_number)
         self._map_name_to_person = {}
         self._current_person = None
+        self._current_person_raw = None
         self._page_number = 1
         self._images = []
         person_document = self._walk_tree(tree)
@@ -71,6 +73,7 @@ class PersonPreprocessor(ChunkTextInterface):
                     if e.text[0:100].isupper() and self._ENTRY_NAME_REGEX.search(e.text) is not None:
                         self._add_person(self._current_person)
                         self._current_person = self._create_person(name=e.text, entry='')
+                        self._current_person_raw = self._current_person.find('RAW')
                     elif self._current_person is not None:
                         self._process_element(e)
 
@@ -85,15 +88,15 @@ class PersonPreprocessor(ChunkTextInterface):
             # TODO: Rough. Should be made recursive, so that if there are more than two people
             # TODO: in the same entry, they get separated as well.
             if mid_entry_person is not None:
-                self._current_person.text += e.text[0:mid_entry_person.start()]
+                self._current_person_raw.text += e.text[0:mid_entry_person.start()]
                 self._add_person(self._current_person)
                 new_person_name = mid_entry_person.group(0).strip(' ').strip('\xa0')
                 self._current_person = self._create_person(name=new_person_name, entry=e.text[mid_entry_person.end():])
             else:
-                self._current_person.text += e.text
+                self._current_person_raw.text += e.text
 
-            self._current_person.text = re.sub('\n', ' ', self._current_person.text)
-            self._current_person.text = re.sub('\s{2,4}', ' ', self._current_person.text)
+            self._current_person_raw.text = re.sub('\n', ' ', self._current_person_raw.text)
+            self._current_person_raw.text = re.sub('\s{2,4}', ' ', self._current_person_raw.text)
 
     def _parse_image(self, element):
         image_path = element.attrib['src']
@@ -190,12 +193,14 @@ class PersonPreprocessor(ChunkTextInterface):
         person = etree.Element('PERSON')
         person.attrib['name'] = name
         person.attrib['approximated_page'] = '{}-{}'.format(self._page_number - 1, self._page_number + 1)
-        person.text = entry
+        raw = etree.Element('RAW')
+        raw.text = entry
+        person.append(raw)
         self._map_name_to_person[name] = person
         return person
 
     def _add_person(self, person):
-        if person is not None and len(person.text) > 4:
+        if person is not None and len(person.find('RAW').text) > 4:
             self._persons_document.append(person)
 
 
