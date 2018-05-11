@@ -1,5 +1,380 @@
-<DATA bookseries="siirtokarjalaiset" book_number="1">
-  <PERSON name="HENKILO, TESTI" approximated_page="0-2">maanviljelijä, synt. 22. 9. -09 Hiitolassa. Puol. Vaimo Vaimonen o.s. Vaimo, emäntä, synt. 30. 6. -19 Hiitolassa. Avioit. -42. Poika: Lapsi Lapsi -46 Munsala. Asuinp. Karjalassa: Hiitola, Kilpola -40, 42—44. Muut asuinp.: Parkano 40—42, Munsala 44—47, Ahlainen 47— Henkilot asuvat 42 ha:n suuruisella tilalla, josta on viljeltyä 13,5 ha, Tilalla pidetään karjaa. Testi Henkilo on sotilasarvoltaan korpraali. Hän palveli pst-miehe-nä ja merivartioasemalla vartiomiehenä talvisodan aikana. Hän harrastaa kalastusta ja vesillä liikkumista. Vaimo Henkilo harrastaa käsitöitä. Testi Henkilon äiti, Muori o.s. Testinen, synt. v. -89 Hiitolassa, asuu poikansa luona</PERSON>
-  <PERSON name="HENKILOINEN, TESTI" approximated_page="0-2">maanviljelijä, synt. 1. 5. -94 Hiitolassa. Puol. Vaimo o.s. Vaimo, emäntä, synt. 25. 1. -02 Hiitolassa Poika. Lapsi -31 Hiitola. Asuinp. Karjalassa: Hiitola, Kilpola 40, 42—44. Muut asuinp.: Parkano -42, Sääminki 44—47, Ahlainen 47—. Henkiloisen perhe asuu ostamallaan maatilalla, joka käsittää metsää 15 ha ja viljeltyä 10 ha. Tilalla harjoitetaan maanviljelystä ja karjanhoitoa. Testi Henkiloinen palveli talvi- ja jatkosodassa Is-miehenä. Karjalassa ollessaan hän toimi kansakoulun johtokunnassa Hän on ollut Ahlaisten Keskustapuolueen puheenjohtajana 15 vuoden ajan, mistä toiminnasta hän on saanut kultaisen ansiomerkin. Hän on kuulunut myös verolautakuntaan. Maanvilj. Henkiloinen on hyvin kiinnostunut raviurheilusta. Karjalassa ollessaan emäntä toimi Marttayhdistyksen puheenjohtajana. Hänen harrastuksenaan ovat käsityöt</PERSON>
-  <PERSON name="TESTIKÄINEN, TESTI" approximated_page="0-2" img_path="images/IidaAjoviita.jpg">o.s. Testilainen, rouva, synt. 19. 7. -18 Hiitolassa. Puol. Testimies Testinen, ahtaaja, synt. 12. 2.    16Ahlaisissa. Avioit. -44. Lapset: Lapsi Lapsekas -45, Lapsikaks Lapsinen -47, Lapsikas Lapsinen -53. Syntyneet Ahlaisissa. Asuinp. Karjalassa: Hiitola. Päijälä 40. 43—44. Muut asuinp.: Kankaanpää. Korvaluoma, Jämijärvi, Vfhu, Pori. Säkylä. Jämijärvi, Vihu, Kortesjärvi. Fröntilä, Pori. Mustasaari, Helsingby. Ahlainen. Rankkuu 44— testikäiset asuvat tilalla, jonka pinta-ala on 9 ha ja viljelyksiä on 1,8 ha. He ovat itse tehneet tilan rakennukset ja harjoittavat tilalla myös karjanhoitoa.</PERSON>
+<DATA book_number="1" bookseries="siirtokarjalaiset">
+  <PERSON approximated_page="0-2" name="HENKILO, TESTI"><RAW>maanviljelijä, synt. 22. 9. -09 Hiitolassa. Puol. Vaimo Vaimonen o.s. Vaimo, emäntä, synt. 30. 6. -19 Hiitolassa. Avioit. -42. Poika: Lapsi Lapsi -46 Munsala. Asuinp. Karjalassa: Hiitola, Kilpola -40, 42—44. Muut asuinp.: Parkano 40—42, Munsala 44—47, Ahlainen 47— Henkilot asuvat 42 ha:n suuruisella tilalla, josta on viljeltyä 13,5 ha, Tilalla pidetään karjaa. Testi Henkilo on sotilasarvoltaan korpraali. Hän palveli pst-miehe-nä ja merivartioasemalla vartiomiehenä talvisodan aikana. Hän harrastaa kalastusta ja vesillä liikkumista. Vaimo Henkilo harrastaa käsitöitä. Testi Henkilon äiti, Muori o.s. Testinen, synt. v. -89 Hiitolassa, asuu poikansa luona</RAW><CONLLU>###C: {'entry_num': 0}
+1	maanviljelijä	maan#viljelijä	NOUN	_	Case=Nom|Number=Sing	3	nsubj	_	_
+2	,	,	PUNCT	_	_	1	punct	_	_
+3	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+4	22.9.1909	22.9.1909	NUM	_	_	3	nmod	_	_
+5	Hiitolassa	Hiitola	PROPN	_	Case=Ine|Number=Sing	3	nmod	_	_
+6	.	.	PUNCT	_	_	3	punct	_	_
+
+1	Puoliso	puoliso	NOUN	_	Case=Nom|Number=Sing	3	compound:nn	_	_
+2	Vaimo	vaimo	NOUN	_	Case=Nom|Number=Sing	3	compound:nn	_	_
+3	Vaimonen	Vaimonen	PROPN	_	Case=Nom|Number=Sing	10	nsubj	_	_
+4	omaa	oma	ADJ	_	Case=Par|Degree=Pos|Number=Sing	5	amod	_	_
+5	sukuaan	suku	NOUN	_	Case=Par|Number=Sing|Person[psor]=3	6	nmod	_	_
+6	Vaimo	vaimo	NOUN	_	Case=Nom|Number=Sing	3	appos	_	_
+7	,	,	PUNCT	_	_	6	punct	_	_
+8	emäntä	emäntä	NOUN	_	Case=Nom|Number=Sing	6	conj	_	_
+9	,	,	PUNCT	_	_	6	punct	_	_
+10	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+11	30.6.1919	30.6.1919	NUM	_	_	10	nmod	_	_
+12	Hiitolassa	Hiitola	PROPN	_	Case=Ine|Number=Sing	10	nmod	_	_
+13	.	.	PUNCT	_	_	10	punct	_	_
+
+1	Avioitunut	avioitua	VERB	_	Case=Nom|Degree=Pos|Number=Sing|PartForm=Past|VerbForm=Part|Voice=Act	0	root	_	_
+2	-42	-42	NUM	_	NumType=Card	1	nmod	_	_
+3	.	.	PUNCT	_	_	2	punct	_	_
+4	Poika	poika	NOUN	_	Case=Nom|Number=Sing	1	dobj	_	_
+5	:	:	PUNCT	_	_	4	punct	_	_
+6	Lapsi	lapsi	NOUN	_	Case=Nom|Number=Sing	9	compound:nn	_	_
+7	Lapsi	lapsi	NOUN	_	Case=Nom|Number=Sing	9	compound:nn	_	_
+8	-46	-46	NUM	_	NumType=Card	7	nummod	_	_
+9	Munsala	Munsala	PROPN	_	Case=Nom|Number=Sing	4	parataxis	_	_
+10	.	.	PUNCT	_	_	1	punct	_	_
+
+1	Asuinpaikat	asuin#paikka	NOUN	_	Case=Nom|Number=Plur	0	root	_	_
+2	Karjalassa	Karjala	PROPN	_	Case=Ine|Number=Sing	1	nmod	_	_
+3	:	:	PUNCT	_	_	2	punct	_	_
+4	Hiitola	Hiitola	PROPN	_	Case=Nom|Number=Sing	2	conj	_	_
+5	,	,	PUNCT	_	_	2	punct	_	_
+6	Kilpola	Kilpola	PROPN	_	Case=Nom|Number=Sing	2	conj	_	_
+7	-40	-40	NUM	_	NumType=Card	6	nummod	_	_
+8	,	,	PUNCT	_	_	2	punct	_	_
+9	42-44	42-44	NUM	_	NumType=Card	2	conj	_	_
+10	.	.	PUNCT	_	_	1	punct	_	_
+
+1	Muut	muu	PRON	_	Case=Nom|Degree=Pos|Number=Plur|PronType=Ind	2	det	_	_
+2	asuinpaikat	asuin#paikka	NOUN	_	Case=Nom|Number=Plur	13	nsubj	_	_
+3	:	:	PUNCT	_	_	2	punct	_	_
+4	Parkano	Parkano	PROPN	_	Case=Nom|Number=Sing	2	parataxis	_	_
+5	40-42	40-42	NUM	_	NumType=Card	4	nummod	_	_
+6	,	,	PUNCT	_	_	2	punct	_	_
+7	Munsala	Munsala	PROPN	_	Case=Nom|Number=Sing	2	conj	_	_
+8	44-47	44-47	NUM	_	NumType=Card	7	nummod	_	_
+9	,	,	PUNCT	_	_	2	punct	_	_
+10	Ahlainen	Ahlainen	PROPN	_	Case=Nom|Number=Sing	2	conj	_	_
+11	47-	47-	NUM	_	_	13	nmod	_	_
+12	Henkilot	Henkilot	PROPN	_	Case=Nom|Number=Plur	13	nsubj	_	_
+13	asuvat	asua	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+14	42	42	NUM	_	NumType=Card	15	nummod	_	_
+15	ha:n	ha:n	NOUN	_	Case=Gen|Number=Sing	16	nmod:poss	_	_
+16	suuruisella	suuruinen	ADJ	_	Case=Ade|Degree=Pos|Number=Sing	17	amod	_	_
+17	tilalla	tila	NOUN	_	Case=Ade|Number=Sing	13	nmod	_	_
+18	,	,	PUNCT	_	_	20	punct	_	_
+19	josta	joka	PRON	_	Case=Ela|Number=Sing|PronType=Rel	20	nmod	_	_
+20	on	olla	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	17	acl:relcl	_	_
+21	viljeltyä	viljeltyä	VERB	_	InfForm=1|Number=Sing|VerbForm=Inf|Voice=Act	20	csubj	_	_
+22	13.5	13.5	NUM	_	NumType=Card	23	nummod	_	_
+23	ha	ha	NOUN	_	Case=Nom|Number=Sing	21	dobj	_	_
+24	,	,	PUNCT	_	_	13	punct	_	_
+25	Tilalla	tila	PROPN	_	Case=Ade|Number=Sing	26	nmod	_	_
+26	pidetään	pitää	VERB	_	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Pass	13	conj	_	_
+27	karjaa	karja	NOUN	_	Case=Par|Number=Sing	26	dobj	_	_
+28	.	.	PUNCT	_	_	13	punct	_	_
+
+1	Testi	testi	ADV	_	_	5	advmod	_	_
+2	Henkilo	Henkilo	PROPN	_	Case=Nom|Number=Sing	5	nsubj:cop	_	_
+3	on	olla	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	5	cop	_	_
+4	sotilasarvoltaan	sotilas#arvo	NOUN	_	Case=Abl|Number=Sing|Person[psor]=3	5	nmod	_	_
+5	korpraali	korpraali	NOUN	_	Case=Nom|Number=Sing	0	root	_	_
+6	.	.	PUNCT	_	_	5	punct	_	_
+
+1	Hän	hän	PRON	_	Case=Nom|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
+2	palveli	palvella	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+3	pst-miehe-nä	pst-miehe-nä	NOUN	_	Case=Ess|Number=Sing	2	nmod	_	_
+4	ja	ja	CONJ	_	_	3	cc	_	_
+5	merivartioasemalla	meri#vartio#asema	NOUN	_	Case=Ade|Number=Sing	3	conj	_	_
+6	vartiomiehenä	vartio#mies	NOUN	_	Case=Ess|Number=Sing	2	nmod	_	_
+7	talvisodan	talvisota	NOUN	_	Case=Gen|Number=Sing	8	nmod:poss	_	_
+8	aikana	aika	NOUN	_	Case=Ess|Number=Sing	2	nmod	_	_
+9	.	.	PUNCT	_	_	2	punct	_	_
+
+1	Hän	hän	PRON	_	Case=Nom|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
+2	harrastaa	harrastaa	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+3	kalastusta	kalastus	NOUN	_	Case=Par|Number=Sing	2	dobj	_	_
+4	ja	ja	CONJ	_	_	3	cc	_	_
+5	vesillä	vesi	NOUN	_	Case=Ade|Number=Plur	6	nmod	_	_
+6	liikkumista	liikkua	NOUN	_	Case=Par|Derivation=Minen|Number=Sing	3	conj	_	_
+7	.	.	PUNCT	_	_	2	punct	_	_
+
+1	Vaimo	vaimo	NOUN	_	Case=Nom|Number=Sing	2	compound:nn	_	_
+2	Henkilo	Henkilo	PROPN	_	Case=Nom|Number=Sing	3	nsubj	_	_
+3	harrastaa	harrastaa	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+4	käsitöitä	käsi#työ	NOUN	_	Case=Par|Number=Plur	3	dobj	_	_
+5	.	.	PUNCT	_	_	3	punct	_	_
+
+1	Testi	testi	ADV	_	_	8	advmod	_	_
+2	Henkilon	Henkilon	PROPN	_	Case=Gen|Number=Sing	3	nmod:poss	_	_
+3	äiti	äiti	NOUN	_	Case=Nom|Number=Sing	8	nsubj:cop	_	_
+4	,	,	PUNCT	_	_	3	punct	_	_
+5	Muori	muori	NOUN	_	Case=Nom|Number=Sing	3	conj	_	_
+6	omaa	oma	ADJ	_	Case=Par|Degree=Pos|Number=Sing	7	amod	_	_
+7	sukuaan	suku	NOUN	_	Case=Par|Number=Sing|Person[psor]=3	5	nmod	_	_
+8	Testinen	testi	ADJ	_	Case=Nom|Degree=Pos|Derivation=Inen|Number=Sing	0	root	_	_
+9	,	,	PUNCT	_	_	8	punct	_	_
+10	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	8	parataxis	_	_
+11	vuonna	vuosi	NOUN	_	Case=Ess|Number=Sing	10	nmod	_	_
+12	-89	-89	NUM	_	NumType=Card	11	nummod	_	_
+13	Hiitolassa	Hiitola	PROPN	_	Case=Ine|Number=Sing	10	nmod	_	_
+14	,	,	PUNCT	_	_	10	punct	_	_
+15	asuu	asua	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	10	conj	_	_
+16	poikansa	poika	NOUN	_	Case=Gen|Number=Sing|Person[psor]=3	15	nmod	_	_
+17	luona	luona	ADP	_	AdpType=Post	16	case	_	_</CONLLU></PERSON>
+  <PERSON approximated_page="0-2" name="HENKILOINEN, TESTI"><RAW>maanviljelijä, synt. 1. 5. -94 Hiitolassa. Puol. Vaimo o.s. Vaimo, emäntä, synt. 25. 1. -02 Hiitolassa Poika. Lapsi -31 Hiitola. Asuinp. Karjalassa: Hiitola, Kilpola 40, 42—44. Muut asuinp.: Parkano -42, Sääminki 44—47, Ahlainen 47—. Henkiloisen perhe asuu ostamallaan maatilalla, joka käsittää metsää 15 ha ja viljeltyä 10 ha. Tilalla harjoitetaan maanviljelystä ja karjanhoitoa. Testi Henkiloinen palveli talvi- ja jatkosodassa Is-miehenä. Karjalassa ollessaan hän toimi kansakoulun johtokunnassa Hän on ollut Ahlaisten Keskustapuolueen puheenjohtajana 15 vuoden ajan, mistä toiminnasta hän on saanut kultaisen ansiomerkin. Hän on kuulunut myös verolautakuntaan. Maanvilj. Henkiloinen on hyvin kiinnostunut raviurheilusta. Karjalassa ollessaan emäntä toimi Marttayhdistyksen puheenjohtajana. Hänen harrastuksenaan ovat käsityöt</RAW><CONLLU>##C: {'entry_num': 1}
+1	maanviljelijä	maan#viljelijä	NOUN	_	Case=Nom|Number=Sing	3	nsubj	_	_
+2	,	,	PUNCT	_	_	1	punct	_	_
+3	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+4	1.5.1894	1.5.1894	NUM	_	_	3	nmod	_	_
+5	Hiitolassa	Hiitola	PROPN	_	Case=Ine|Number=Sing	3	nmod	_	_
+6	.	.	PUNCT	_	_	3	punct	_	_
+
+1	Puoliso	puoliso	NOUN	_	Case=Nom|Number=Sing	2	compound:nn	_	_
+2	Vaimo	vaimo	NOUN	_	Case=Nom|Number=Sing	9	nsubj	_	_
+3	omaa	oma	ADJ	_	Case=Par|Degree=Pos|Number=Sing	4	amod	_	_
+4	sukuaan	suku	NOUN	_	Case=Par|Number=Sing|Person[psor]=3	2	nmod	_	_
+5	Vaimo	vaimo	NOUN	_	Case=Nom|Number=Sing	4	appos	_	_
+6	,	,	PUNCT	_	_	5	punct	_	_
+7	emäntä	emäntä	NOUN	_	Case=Nom|Number=Sing	5	conj	_	_
+8	,	,	PUNCT	_	_	5	punct	_	_
+9	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+10	25.1.1902	25.1.1902	NUM	_	_	9	nmod	_	_
+11	Hiitolassa	Hiitola	PROPN	_	Case=Ine|Number=Sing	9	nmod	_	_
+12	Poika	poika	NOUN	_	Case=Nom|Number=Sing	9	nsubj	_	_
+13	.	.	PUNCT	_	_	9	punct	_	_
+
+1	Lapsi	lapsi	NOUN	_	Case=Nom|Number=Sing	3	compound:nn	_	_
+2	-31	-31	NUM	_	NumType=Card	1	nummod	_	_
+3	Hiitola	Hiitola	PROPN	_	Case=Nom|Number=Sing	0	root	_	_
+4	.	.	PUNCT	_	_	3	punct	_	_
+
+1	Asuinpaikat	asuin#paikka	NOUN	_	Case=Nom|Number=Plur	0	root	_	_
+2	Karjalassa	Karjala	PROPN	_	Case=Ine|Number=Sing	1	nmod	_	_
+3	:	:	PUNCT	_	_	2	punct	_	_
+4	Hiitola	Hiitola	PROPN	_	Case=Nom|Number=Sing	2	conj	_	_
+5	,	,	PUNCT	_	_	2	punct	_	_
+6	Kilpola	Kilpola	PROPN	_	Case=Nom|Number=Sing	2	conj	_	_
+7	40	40	NUM	_	NumType=Card	6	nummod	_	_
+8	,	,	PUNCT	_	_	2	punct	_	_
+9	42-44	42-44	NUM	_	NumType=Card	2	conj	_	_
+10	.	.	PUNCT	_	_	1	punct	_	_
+
+1	Muut	muu	PRON	_	Case=Nom|Degree=Pos|Number=Plur|PronType=Ind	2	det	_	_
+2	asuinpaikat	asuin#paikka	NOUN	_	Case=Nom|Number=Plur	0	root	_	_
+3	:	:	PUNCT	_	_	2	punct	_	_
+4	Parkano	Parkano	PROPN	_	Case=Nom|Number=Sing	15	appos	_	_
+5	-42	-42	NUM	_	NumType=Card	4	nummod	_	_
+6	,	,	PUNCT	_	_	4	punct	_	_
+7	Sääminki	Sääminki	PROPN	_	Case=Nom|Number=Sing	4	conj	_	_
+8	44-47	44-47	NUM	_	NumType=Card	7	nummod	_	_
+9	,	,	PUNCT	_	_	4	punct	_	_
+10	Ahlainen	Ahlainen	PROPN	_	Case=Nom|Number=Sing	4	conj	_	_
+11	47-	47-	NUM	_	_	10	nummod	_	_
+12	.	.	PUNCT	_	_	4	punct	_	_
+13	Henkiloisen	henki#loinen	PROPN	_	Case=Gen|Number=Sing	14	nmod:poss	_	_
+14	perhe	perhe	NOUN	_	Case=Nom|Number=Sing	15	nsubj	_	_
+15	asuu	asua	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	2	parataxis	_	_
+16	ostamallaan	ostaa	VERB	_	Case=Ade|Degree=Pos|Number=Sing|PartForm=Agt|Person[psor]=3|VerbForm=Part|Voice=Act	17	acl	_	_
+17	maatilalla	maa#tila	NOUN	_	Case=Ade|Number=Sing	15	nmod	_	_
+18	,	,	PUNCT	_	_	20	punct	_	_
+19	joka	joka	PRON	_	Case=Nom|Number=Sing|PronType=Rel	20	nsubj	_	_
+20	käsittää	käsittää	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	15	acl:relcl	_	_
+21	metsää	metsä	NOUN	_	Case=Par|Number=Sing	20	dobj	_	_
+22	15	15	NUM	_	NumType=Card	23	nummod	_	_
+23	ha	ha	NOUN	_	Case=Nom|Number=Sing	20	nmod	_	_
+24	ja	ja	CONJ	_	_	20	cc	_	_
+25	viljeltyä	viljeltyä	VERB	_	InfForm=1|Number=Sing|VerbForm=Inf|Voice=Act	20	conj	_	_
+26	10	10	NUM	_	NumType=Card	27	nummod	_	_
+27	ha	ha	NOUN	_	Case=Nom|Number=Sing	25	dobj	_	_
+28	.	.	PUNCT	_	_	20	punct	_	_
+29	Tilalla	tila	NOUN	_	Case=Ade|Number=Sing	30	nmod	_	_
+30	harjoitetaan	harjoittaa	VERB	_	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Pass	20	conj	_	_
+31	maanviljelystä	maan#viljelys	NOUN	_	Case=Par|Number=Sing	30	dobj	_	_
+32	ja	ja	CONJ	_	_	31	cc	_	_
+33	karjanhoitoa	karjan#hoito	NOUN	_	Case=Par|Number=Sing	31	conj	_	_
+34	.	.	PUNCT	_	_	2	punct	_	_
+
+1	Testi	testi	ADV	_	_	3	advmod	_	_
+2	Henkiloinen	henki#loinen	PROPN	_	Case=Nom|Number=Sing	3	nsubj	_	_
+3	palveli	palvella	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+4	talvi-	talvi	NOUN	_	Case=Nom|Number=Sing	7	nmod:poss	_	_
+5	ja	ja	CONJ	_	_	4	cc	_	_
+6	jatkosodassa	jatkos#ota	NOUN	_	Case=Ine|Number=Sing	4	conj	_	_
+7	Is-miehenä	Is-miehenä	NOUN	_	Case=Ess|Number=Sing	3	nmod	_	_
+8	.	.	PUNCT	_	_	3	punct	_	_
+
+1	Karjalassa	Karjala	PROPN	_	Case=Ine|Number=Sing	4	nmod	_	_
+2	ollessaan	olla	VERB	_	Case=Ine|InfForm=2|Number=Sing|Person[psor]=3|VerbForm=Inf|Voice=Act	4	advcl	_	_
+3	hän	hän	PRON	_	Case=Nom|Number=Sing|Person=3|PronType=Prs	4	nsubj	_	_
+4	toimi	toimia	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+5	kansakoulun	kansa#koulu	NOUN	_	Case=Gen|Number=Sing	6	nmod:poss	_	_
+6	johtokunnassa	johto#kunta	NOUN	_	Case=Ine|Number=Sing	4	nmod	_	_
+7	Hän	hän	PRON	_	Case=Nom|Number=Sing|Person=3|PronType=Prs	9	nsubj	_	_
+8	on	olla	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	9	aux	_	_
+9	ollut	olla	VERB	_	Case=Nom|Degree=Pos|Number=Sing|PartForm=Past|VerbForm=Part|Voice=Act	4	advcl	_	_
+10	Ahlaisten	Ahlaisten	NOUN	_	Case=Gen|Number=Plur	11	nmod:poss	_	_
+11	Keskustapuolueen	keskusta#puolue	NOUN	_	Case=Gen|Number=Sing	12	nmod:poss	_	_
+12	puheenjohtajana	puheen#johtaja	NOUN	_	Case=Ess|Number=Sing	9	nmod	_	_
+13	15	15	NUM	_	NumType=Card	14	nummod	_	_
+14	vuoden	vuosi	NOUN	_	Case=Gen|Number=Sing	15	nmod:poss	_	_
+15	ajan	aika	NOUN	_	Case=Gen|Number=Sing	9	nmod	_	_
+16	,	,	PUNCT	_	_	21	punct	_	_
+17	mistä	mikä	PRON	_	Case=Ela|Number=Sing|PronType=Int	18	det	_	_
+18	toiminnasta	toiminta	NOUN	_	Case=Ela|Number=Sing	21	nmod	_	_
+19	hän	hän	PRON	_	Case=Nom|Number=Sing|Person=3|PronType=Prs	21	nsubj	_	_
+20	on	olla	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	21	aux	_	_
+21	saanut	saada	VERB	_	Case=Nom|Degree=Pos|Number=Sing|PartForm=Past|VerbForm=Part|Voice=Act	15	acl:relcl	_	_
+22	kultaisen	kultainen	ADJ	_	Case=Gen|Degree=Pos|Number=Sing	23	amod	_	_
+23	ansiomerkin	ansio#merkki	NOUN	_	Case=Gen|Number=Sing	21	dobj	_	_
+24	.	.	PUNCT	_	_	4	punct	_	_
+
+1	Hän	hän	PRON	_	Case=Nom|Number=Sing|Person=3|PronType=Prs	3	nsubj	_	_
+2	on	olla	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	3	aux	_	_
+3	kuulunut	kuulua	VERB	_	Case=Nom|Degree=Pos|Number=Sing|PartForm=Past|VerbForm=Part|Voice=Act	0	root	_	_
+4	myös	myös	ADV	_	_	5	advmod	_	_
+5	verolautakuntaan	vero#lauta#kunta	NOUN	_	Case=Ill|Number=Sing	3	nmod	_	_
+6	.	.	PUNCT	_	_	3	punct	_	_
+
+1	Maanvilj.	Maanvilj.	NOUN	_	Case=Nom|Number=Sing	0	root	_	_
+
+1	Henkiloinen	henki#loinen	NOUN	_	Case=Nom|Number=Sing	4	nsubj:cop	_	_
+2	on	olla	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	4	cop	_	_
+3	hyvin	hyvin	ADV	_	_	4	advmod	_	_
+4	kiinnostunut	kiinnostua	ADJ	_	Case=Nom|Degree=Pos|Number=Sing	0	root	_	_
+5	raviurheilusta	ravi#urheilu	NOUN	_	Case=Ela|Number=Sing	4	nmod	_	_
+6	.	.	PUNCT	_	_	4	punct	_	_
+
+1	Karjalassa	Karjala	PROPN	_	Case=Ine|Number=Sing	4	nmod	_	_
+2	ollessaan	olla	VERB	_	Case=Ine|InfForm=2|Number=Sing|Person[psor]=3|VerbForm=Inf|Voice=Act	3	cop	_	_
+3	emäntä	emäntä	NOUN	_	Case=Nom|Number=Sing	4	nsubj	_	_
+4	toimi	toimia	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+5	Marttayhdistyksen	martta#yhdistys	NOUN	_	Case=Gen|Number=Sing	6	nmod:poss	_	_
+6	puheenjohtajana	puheen#johtaja	NOUN	_	Case=Ess|Number=Sing	4	nmod	_	_
+7	.	.	PUNCT	_	_	4	punct	_	_
+
+1	Hänen	hän	PRON	_	Case=Gen|Number=Sing|Person=3|PronType=Prs	2	nmod:poss	_	_
+2	harrastuksenaan	harrastus	NOUN	_	Case=Ess|Number=Sing|Person[psor]=3	3	nmod	_	_
+3	ovat	olla	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+4	käsityöt	käsi#työ	NOUN	_	Case=Nom|Number=Plur	3	nsubj	_	_</CONLLU></PERSON>
+  <PERSON approximated_page="0-2" img_path="images/IidaAjoviita.jpg" name="TESTIKÄINEN, TESTI"><RAW>o.s. Testilainen, rouva, synt. 19. 7. -18 Hiitolassa. Puol. Testimies Testinen, ahtaaja, synt. 12. 2.    16Ahlaisissa. Avioit. -44. Lapset: Lapsi Lapsekas -45, Lapsikaks Lapsinen -47, Lapsikas Lapsinen -53. Syntyneet Ahlaisissa. Asuinp. Karjalassa: Hiitola. Päijälä 40. 43—44. Muut asuinp.: Kankaanpää. Korvaluoma, Jämijärvi, Vfhu, Pori. Säkylä. Jämijärvi, Vihu, Kortesjärvi. Fröntilä, Pori. Mustasaari, Helsingby. Ahlainen. Rankkuu 44— testikäiset asuvat tilalla, jonka pinta-ala on 9 ha ja viljelyksiä on 1,8 ha. He ovat itse tehneet tilan rakennukset ja harjoittavat tilalla myös karjanhoitoa.</RAW><CONLLU>##C: {'entry_num': 2}
+1	omaa	oma	ADJ	_	Case=Par|Degree=Pos|Number=Sing	2	amod	_	_
+2	sukuaan	suku	NOUN	_	Case=Par|Number=Sing|Person[psor]=3	7	dobj	_	_
+3	Testilainen	testi#lainen	PROPN	_	Case=Nom|Number=Sing	2	appos	_	_
+4	,	,	PUNCT	_	_	5	punct	_	_
+5	rouva	rouva	NOUN	_	Case=Nom|Number=Sing	3	appos	_	_
+6	,	,	PUNCT	_	_	5	punct	_	_
+7	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+8	19.7.1918	19.7.1918	NUM	_	_	7	nmod	_	_
+9	Hiitolassa	Hiitola	PROPN	_	Case=Ine|Number=Sing	7	nmod	_	_
+10	.	.	PUNCT	_	_	7	punct	_	_
+
+1	Puoliso	puoliso	NOUN	_	Case=Nom|Number=Sing	3	compound:nn	_	_
+2	Testimies	testi#mies	PROPN	_	Case=Nom|Number=Sing	3	name	_	_
+3	Testinen	testi	PROPN	_	Case=Nom|Number=Sing	7	nsubj	_	_
+4	,	,	PUNCT	_	_	5	punct	_	_
+5	ahtaaja	ahtaaja	NOUN	_	Case=Nom|Number=Sing	3	appos	_	_
+6	,	,	PUNCT	_	_	5	punct	_	_
+7	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+8	12.2.1916Ahlaisissa	12.2.1916Ahlaisissa	ADJ	_	Case=Ine|Degree=Pos|Number=Plur	7	nmod	_	_
+9	.	.	PUNCT	_	_	7	punct	_	_
+
+1	Avioitunut	avioitua	VERB	_	Case=Nom|Degree=Pos|Number=Sing|PartForm=Past|VerbForm=Part|Voice=Act	4	acl	_	_
+2	-44	-44	NUM	_	NumType=Card	1	nmod	_	_
+3	.	.	PUNCT	_	_	1	punct	_	_
+4	Lapset	lapsi	NOUN	_	Case=Nom|Number=Plur	18	nsubj	_	_
+5	:	:	PUNCT	_	_	4	punct	_	_
+6	Lapsi	lapsi	NOUN	_	Case=Nom|Number=Sing	4	parataxis	_	_
+7	Lapsekas	lapsekas	NOUN	_	Case=Nom|Number=Sing	6	nmod	_	_
+8	-45	-45	NUM	_	NumType=Card	7	nummod	_	_
+9	,	,	PUNCT	_	_	4	punct	_	_
+10	Lapsikaks	Lapsikaks	PROPN	_	_	11	name	_	_
+11	Lapsinen	lapsi	PROPN	_	Case=Nom|Number=Sing	4	parataxis	_	_
+12	-47	-47	NUM	_	NumType=Card	11	nummod	_	_
+13	,	,	PUNCT	_	_	11	punct	_	_
+14	Lapsikas	Lapsikas	PROPN	_	_	15	name	_	_
+15	Lapsinen	lapsi	PROPN	_	Case=Nom|Number=Sing	11	conj	_	_
+16	-53	-53	NUM	_	NumType=Card	15	nummod	_	_
+17	.	.	PUNCT	_	_	11	punct	_	_
+18	Syntyneet	syntyä	VERB	_	Case=Nom|Degree=Pos|Number=Plur|PartForm=Past|VerbForm=Part|Voice=Act	0	root	_	_
+19	Ahlaisissa	Ahlaisissa	PROPN	_	Case=Ine|Number=Sing	18	nmod	_	_
+20	.	.	PUNCT	_	_	18	punct	_	_
+
+1	Asuinpaikat	asuin#paikka	NOUN	_	Case=Nom|Number=Plur	0	root	_	_
+2	Karjalassa	Karjala	PROPN	_	Case=Ine|Number=Sing	1	nmod	_	_
+3	:	:	PUNCT	_	_	2	punct	_	_
+4	Hiitola	Hiitola	PROPN	_	Case=Nom|Number=Sing	2	conj	_	_
+5	.	.	PUNCT	_	_	1	punct	_	_
+
+1	Päijälä	Päijälä	NOUN	_	Case=Nom|Number=Sing	2	compound	_	_
+2	40	40	NUM	_	NumType=Card	3	compound	_	_
+3	.	.	PUNCT	_	_	4	compound	_	_
+4	43-44	43-44	NUM	_	NumType=Card	0	root	_	_
+5	.	.	PUNCT	_	_	4	punct	_	_
+
+1	Muut	muu	PRON	_	Case=Nom|Degree=Pos|Number=Plur|PronType=Ind	2	det	_	_
+2	asuinpaikat	asuin#paikka	NOUN	_	Case=Nom|Number=Plur	0	root	_	_
+3	:	:	PUNCT	_	_	4	punct	_	_
+4	Kankaanpää	Kankaanpää	PROPN	_	Case=Nom|Number=Sing	2	appos	_	_
+5	.	.	PUNCT	_	_	2	punct	_	_
+
+1	Korvaluoma	korva#luoma	NOUN	_	Case=Nom|Number=Sing	0	root	_	_
+2	,	,	PUNCT	_	_	3	punct	_	_
+3	Jämijärvi	Jämijärvi	PROPN	_	Case=Nom|Number=Sing	1	appos	_	_
+4	,	,	PUNCT	_	_	3	punct	_	_
+5	Vfhu	Vfhu	PROPN	_	Case=Nom|Number=Sing	3	conj	_	_
+6	,	,	PUNCT	_	_	3	punct	_	_
+7	Pori	Pori	PROPN	_	Case=Nom|Number=Sing	3	conj	_	_
+8	.	.	PUNCT	_	_	3	punct	_	_
+9	Säkylä	Säkylä	PROPN	_	Case=Nom|Number=Sing	3	conj	_	_
+10	.	.	PUNCT	_	_	1	punct	_	_
+
+1	Jämijärvi	Jämijärvi	PROPN	_	Case=Nom|Number=Sing	0	root	_	_
+2	,	,	PUNCT	_	_	1	punct	_	_
+3	Vihu	Vihu	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+4	,	,	PUNCT	_	_	1	punct	_	_
+5	Kortesjärvi	Kortesjärvi	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+6	.	.	PUNCT	_	_	1	punct	_	_
+
+1	Fröntilä	Fröntilä	PROPN	_	Case=Nom|Number=Sing	0	root	_	_
+2	,	,	PUNCT	_	_	1	punct	_	_
+3	Pori	Pori	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+4	.	.	PUNCT	_	_	1	punct	_	_
+5	Mustasaari	Mustasaari	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+6	,	,	PUNCT	_	_	1	punct	_	_
+7	Helsingby	Helsingby	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+8	.	.	PUNCT	_	_	1	punct	_	_
+
+1	Ahlainen	Ahlainen	ADJ	_	Case=Nom|Degree=Pos|Number=Sing	0	root	_	_
+2	.	.	PUNCT	_	_	1	punct	_	_
+
+1	Rankkuu	Rankkuu	NOUN	_	Case=Nom|Number=Sing	3	compound:nn	_	_
+2	44-	44-	NUM	_	_	1	nummod	_	_
+3	testikäiset	testikäiset	NOUN	_	Case=Nom|Number=Plur	4	nsubj	_	_
+4	asuvat	asua	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+5	tilalla	tila	NOUN	_	Case=Ade|Number=Sing	4	nmod	_	_
+6	,	,	PUNCT	_	_	4	punct	_	_
+7	jonka	joka	PRON	_	Case=Gen|Number=Sing|PronType=Rel	8	nmod:poss	_	_
+8	pinta-ala	pinta-ala	NOUN	_	Case=Nom|Number=Sing	11	nsubj:cop	_	_
+9	on	olla	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	11	cop	_	_
+10	9	9	NUM	_	NumType=Card	11	nummod	_	_
+11	ha	ha	NOUN	_	Case=Nom|Number=Sing	16	nsubj:cop	_	_
+12	ja	ja	CONJ	_	_	11	cc	_	_
+13	viljelyksiä	viljelys	NOUN	_	Case=Par|Number=Plur	11	conj	_	_
+14	on	olla	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	16	cop	_	_
+15	1.8	1.8	NUM	_	NumType=Card	16	nummod	_	_
+16	ha	ha	NOUN	_	Case=Nom|Number=Sing	4	conj	_	_
+17	.	.	PUNCT	_	_	16	punct	_	_
+18	He	hän	PRON	_	Case=Nom|Number=Plur|Person=3|PronType=Prs	21	nsubj	_	_
+19	ovat	olla	AUX	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	21	aux	_	_
+20	itse	itse	ADV	_	_	21	advmod	_	_
+21	tehneet	tehdä	VERB	_	Case=Nom|Degree=Pos|Number=Plur|PartForm=Past|VerbForm=Part|Voice=Act	16	parataxis	_	_
+22	tilan	tila	NOUN	_	Case=Gen|Number=Sing	23	nmod:poss	_	_
+23	rakennukset	rakennus	NOUN	_	Case=Nom|Number=Plur	21	dobj	_	_
+24	ja	ja	CONJ	_	_	21	cc	_	_
+25	harjoittavat	harjoittaa	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	21	conj	_	_
+26	tilalla	tila	NOUN	_	Case=Ade|Number=Sing	25	nmod	_	_
+27	myös	myös	ADV	_	_	28	advmod	_	_
+28	karjanhoitoa	karjan#hoito	NOUN	_	Case=Par|Number=Sing	25	dobj	_	_
+29	.	.	PUNCT	_	_	4	punct	_	_
+
+</CONLLU></PERSON>
 </DATA>

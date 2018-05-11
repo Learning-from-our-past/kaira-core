@@ -1,0 +1,2 @@
+book_series_id: book_with_custom_xml_conversion
+xml_to_dict: convert_xml_to_dict.py

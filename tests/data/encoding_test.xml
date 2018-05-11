@@ -1,4 +1,85 @@
-<DATA bookseries="siirtokarjalaiset" book_number="1">
-  <PERSON name="TESTIKÄS, TESTI" approximated_page="0-2">o.s. Testiläinen, emäntä, synt. 20. 10. -21 Kuolema-järvellä. Puol Miehikäs, maanviljelijä, synt. 8, 5. -21 Ahlaisissa. Lapset: Annikki -44, Hilkka -48. Asuinp. Karjalassa:    Kuolemajärvi -39. Muutasuinp.: Ylivieska, Koijärvi, Hyvinkää, Otava, Ahlainen 41—. Testikkäillä on maanviljelystila, jossa on maata 12 ha ja metsää 27 ha. Tilalla on sekä nauta että siipikarjaa Testi Testikäs kuuluu Maata-lousnaisiin ja tekee kotitöiden ohella käsitöitä.
-  </PERSON>
+<DATA book_number="1" bookseries="siirtokarjalaiset">
+  <PERSON approximated_page="0-2" name="TESTIKÄS, TESTI"><RAW>o.s. Testiläinen, emäntä, synt. 20. 10. -21 Kuolema-järvellä. Puol Miehikäs, maanviljelijä, synt. 8, 5. -21 Ahlaisissa. Lapset: Annikki -44, Hilkka -48. Asuinp. Karjalassa:    Kuolemajärvi -39. Muutasuinp.: Ylivieska, Koijärvi, Hyvinkää, Otava, Ahlainen 41—. Testikkäillä on maanviljelystila, jossa on maata 12 ha ja metsää 27 ha. Tilalla on sekä nauta että siipikarjaa Testi Testikäs kuuluu Maata-lousnaisiin ja tekee kotitöiden ohella käsitöitä.
+  </RAW><CONLLU>###C: {'entry_num': 0}
+1	omaa	oma	ADJ	_	Case=Par|Degree=Pos|Number=Sing	2	amod	_	_
+2	sukuaan	suku	NOUN	_	Case=Par|Number=Sing|Person[psor]=3	7	dobj	_	_
+3	Testiläinen	testi	ADJ	_	Case=Nom|Degree=Pos|Derivation=Lainen|Number=Sing	5	amod	_	_
+4	,	,	PUNCT	_	_	5	punct	_	_
+5	emäntä	emäntä	NOUN	_	Case=Nom|Number=Sing	7	nsubj	_	_
+6	,	,	PUNCT	_	_	5	punct	_	_
+7	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+8	20.10.1921	20.10.1921	NUM	_	_	7	nmod	_	_
+9	Kuolema-järvellä	kuolema#järvi	NOUN	_	Case=Ade|Number=Sing	7	nmod	_	_
+10	.	.	PUNCT	_	_	7	punct	_	_
+
+1	Puoliso	puoliso	NOUN	_	Case=Nom|Number=Sing	2	compound:nn	_	_
+2	Miehikäs	Miehikäs	PROPN	_	Case=Nom|Number=Sing	6	nsubj	_	_
+3	,	,	PUNCT	_	_	4	punct	_	_
+4	maanviljelijä	maan#viljelijä	NOUN	_	Case=Nom|Number=Sing	2	appos	_	_
+5	,	,	PUNCT	_	_	4	punct	_	_
+6	syntyi	syntyä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	_
+7	8.5.1921	8.5.1921	NUM	_	_	6	nmod	_	_
+8	Ahlaisissa	Ahlaisissa	PROPN	_	Case=Ine|Number=Sing	6	nmod	_	_
+9	.	.	PUNCT	_	_	6	punct	_	_
+
+1	Lapset	lapsi	NOUN	_	Case=Nom|Number=Plur	31	nsubj:cop	_	_
+2	:	:	PUNCT	_	_	9	punct	_	_
+3	Annikki	Annikki	PROPN	_	Case=Nom|Number=Sing	9	nmod:gsubj	_	_
+4	-44	-44	NUM	_	NumType=Card	3	nummod	_	_
+5	,	,	PUNCT	_	_	3	punct	_	_
+6	Hilkka	hilkka	PROPN	_	Case=Nom|Number=Sing	3	remnant	_	_
+7	-48	-48	NUM	_	NumType=Card	6	nummod	_	_
+8	.	.	PUNCT	_	_	3	punct	_	_
+9	Asuinpaikat	asuin#paikka	NOUN	_	Case=Nom|Number=Plur	1	appos	_	_
+10	Karjalassa	Karjala	PROPN	_	Case=Ine|Number=Sing	9	nmod	_	_
+11	:	:	PUNCT	_	_	9	punct	_	_
+12	Kuolemajärvi	kuolema#järvi	NOUN	_	Case=Nom|Number=Sing	9	nmod	_	_
+13	-39	-39	NUM	_	NumType=Card	12	nummod	_	_
+14	.	.	PUNCT	_	_	9	punct	_	_
+15	Muut	muu	PRON	_	Case=Nom|Degree=Pos|Number=Plur|PronType=Ind	16	det	_	_
+16	asuinpaikat	asuin#paikka	NOUN	_	Case=Nom|Number=Plur	9	conj	_	_
+17	:	:	PUNCT	_	_	9	punct	_	_
+18	Ylivieska	Ylivieska	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+19	,	,	PUNCT	_	_	1	punct	_	_
+20	Koijärvi	koi#järvi	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+21	,	,	PUNCT	_	_	1	punct	_	_
+22	Hyvinkää	Hyvinkää	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+23	,	,	PUNCT	_	_	1	punct	_	_
+24	Otava	Otava	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+25	,	,	PUNCT	_	_	1	punct	_	_
+26	Ahlainen	Ahlainen	PROPN	_	Case=Nom|Number=Sing	1	conj	_	_
+27	41-	41-	NUM	_	_	26	nummod	_	_
+28	.	.	PUNCT	_	_	1	punct	_	_
+29	Testikkäillä	Testikkäillä	PROPN	_	Case=Ade|Number=Sing	1	conj	_	_
+30	on	olla	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	31	cop	_	_
+31	maanviljelystila	maan#viljelys#tila	NOUN	_	Case=Nom|Number=Sing	37	nsubj:cop	_	_
+32	,	,	PUNCT	_	_	34	punct	_	_
+33	jossa	joka	PRON	_	Case=Ine|Number=Sing|PronType=Rel	34	nmod	_	_
+34	on	olla	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	31	acl:relcl	_	_
+35	maata	maa	NOUN	_	Case=Par|Number=Sing	34	nsubj	_	_
+36	12	12	NUM	_	NumType=Card	37	nummod	_	_
+37	ha	ha	NOUN	_	Case=Nom|Number=Sing	0	root	_	_
+38	ja	ja	CONJ	_	_	37	cc	_	_
+39	metsää	metsä	NOUN	_	Case=Par|Number=Sing	35	remnant	_	_
+40	27	27	NUM	_	NumType=Card	41	nummod	_	_
+41	ha	ha	NOUN	_	Case=Nom|Number=Sing	37	conj	_	_
+42	.	.	PUNCT	_	_	37	punct	_	_
+43	Tilalla	tila	NOUN	_	Case=Ade|Number=Sing	44	nmod	_	_
+44	on	olla	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	51	nmod	_	_
+45	sekä	sekä	CONJ	_	_	46	cc:preconj	_	_
+46	nauta	nauta	NOUN	_	Case=Nom|Number=Sing	44	nsubj	_	_
+47	että	että	CONJ	_	_	46	cc	_	_
+48	siipikarjaa	siipi#karja	NOUN	_	Case=Par|Number=Sing	46	conj	_	_
+49	Testi	testi	PROPN	_	Case=Nom|Number=Sing	50	name	_	_
+50	Testikäs	Testikäs	PROPN	_	Case=Nom|Number=Sing	51	nsubj	_	_
+51	kuuluu	kuulua	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	37	parataxis	_	_
+52	Maata-lousnaisiin	Maata-lousnaisiin	NOUN	_	Case=Ill|Number=Plur	51	nmod	_	_
+53	ja	ja	CONJ	_	_	51	cc	_	_
+54	tekee	tehdä	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin|Voice=Act	51	conj	_	_
+55	kotitöiden	koti#työ	NOUN	_	Case=Gen|Number=Plur	54	nmod	_	_
+56	ohella	ohella	ADP	_	AdpType=Post	55	case	_	_
+57	käsitöitä	käsi#työ	NOUN	_	Case=Par|Number=Plur	54	dobj	_	_
+58	.	.	PUNCT	_	_	37	punct	_	_
+
+</CONLLU></PERSON>
 </DATA>

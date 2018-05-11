@@ -19,6 +19,11 @@ sudo apt-get install ssdeep libfuzzy-dev
 ```
 More on ssdeep installation can be found [here](http://python-ssdeep.readthedocs.io/en/latest/installation.html)
 
+If you need to generate the XML files with the CoNLLU/NLP data, you will need to perform the nlp-setup step:
+```
+inv nlp-setup
+```
+
 Note that ssdeep pip-package seems to be difficult to install on MacOS since it was tested
 only on Linux systems according to their documentation. Ignore the dependency on MacOS 
 and install other packages from `requirements.txt`. Everything else than chunking and
