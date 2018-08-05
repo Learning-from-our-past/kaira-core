@@ -1,5 +1,12 @@
 pipeline:
- - !Extractor {
+  - !Extractor {
       module: "extractors.bookseries.soldiers.extractors.name_extractor",
       class_name: "NameExtractor"
     }
+  - !Extractor {
+      module: "extractors.bookseries.soldiers.extractors.birthday_extractor",
+      class_name: "BirthdayExtractor",
+      options: {
+        remove_spaces: false
+      }
+  }
