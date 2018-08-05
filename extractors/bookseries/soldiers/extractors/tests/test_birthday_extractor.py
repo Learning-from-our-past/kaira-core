@@ -23,3 +23,19 @@ class TestSoldierBirthdayExtraction:
         assert results['birthday']['birthDay'] is None
         assert results['birthday']['birthMonth'] == 11
         assert results['birthday']['birthYear'] == 1913
+
+    def should_not_extract_date_which_comes_after_pso_keyword(self, birthday_extractor):
+        text = 'Testinen, Viljami testeri, mv. Pso vsta 42 Vaimo Vaimonen, s 10.2.18 Savitaipale'
+        results, metadata = birthday_extractor.extract({'text': text}, {}, {})
+
+        assert results['birthday']['birthDay'] is None
+        assert results['birthday']['birthMonth'] is None
+        assert results['birthday']['birthYear'] is None
+
+    def should_not_extract_date_which_comes_after_pso_keyword_ignoring_case(self, birthday_extractor):
+        text = 'Testinen, Viljami testeri, mv. pso vsta 42 Vaimo Vaimonen, s 10.2.18 Savitaipale'
+        results, metadata = birthday_extractor.extract({'text': text}, {}, {})
+
+        assert results['birthday']['birthDay'] is None
+        assert results['birthday']['birthMonth'] is None
+        assert results['birthday']['birthYear'] is None
