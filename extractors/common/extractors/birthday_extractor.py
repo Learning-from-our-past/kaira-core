@@ -84,6 +84,10 @@ class DateFinder:
 
     @staticmethod
     def _prepare_text_for_extraction(text):
+        # FIXME: This should probably be conditional based on the remove_spaces option set in CommonBirthDayExtractor.
+        # Atm the resulting cursor_locations will be incorrect since the CBDE reports the end of match which will be incorrect
+        # since its taken from a string with spaces removed! Note that fixing this will involve testing possible changes in outputs of
+        # all existing book series which use this extractor.
         return text_utils.remove_spaces_from_text(text)
 
     def _find_date(self, text):

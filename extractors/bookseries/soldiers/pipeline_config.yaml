@@ -3,10 +3,15 @@ pipeline:
       module: "extractors.bookseries.soldiers.extractors.name_extractor",
       class_name: "NameExtractor"
     }
-  - !Extractor {
+  - !Extractor &Birthday {
       module: "extractors.bookseries.soldiers.extractors.birthday_extractor",
       class_name: "BirthdayExtractor",
       options: {
         remove_spaces: false
       }
   }
+  - !Extractor {
+      module: "extractors.bookseries.soldiers.extractors.birthlocation_extractor",
+      class_name: "BirthLocationExtractor",
+      cursor_location_depend_on: *Birthday
+    }
