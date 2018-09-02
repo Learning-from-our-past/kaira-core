@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ElementTree
 
 
 def add_conllu_data_to_xml(xml_doc, nlp_file, output_file):
-    with open(nlp_file, 'r') as file:
+    with open(nlp_file, 'r', encoding='utf-8') as file:
         conllu_data = file.read().split('\n\n#')
 
     xml_root = xml_doc.getroot()
