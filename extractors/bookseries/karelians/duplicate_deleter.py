@@ -82,18 +82,19 @@ class DuplicateDeleter:
             book_length = len(book)
 
             for entry_id, child in enumerate(files_without_duplicates[book_id]):
-                if self._update_callback_function is not None:
-                    self._update_callback_function(entry_id, book_length)
+                #if self._update_callback_function is not None:
+                    #self._update_callback_function(entry_id, book_length)
 
                 current_entry = self._get_current_entry(child, unique_entry_id, book_id)
                 unique_entry_match = self._try_to_find_matching_entry(current_entry)
 
                 if unique_entry_match:
                     duplicates_count += 1
+                    raw = child.find('RAW')
 
-                    if len(unique_entry_match['text']) < len(child.text):
+                    if len(unique_entry_match['text']) < len(raw.text):
                         book_of_unique_entry = files_without_duplicates[unique_entry_match['book']]
-                        book_of_unique_entry[unique_entry_match['entry_index']].text = child.text
+                        book_of_unique_entry[unique_entry_match['entry_index']].text = raw.text
 
                     files_without_duplicates[book_id].remove(child)
                 else:
@@ -232,12 +233,13 @@ class DuplicateDeleter:
         'unique_key', 'entry_index', 'book'.
         """
         name_processed = child.attrib['name'].replace('.', ',')
-        birthday = self._get_date_of_birth(child.text)
+        raw = child.find('RAW')
+        birthday = self._get_date_of_birth(raw.text)
         current_entry = {
             'name': name_processed,
             'birthday': birthday,
-            'text': child.text,
-            'hash': ssdeep.hash(child.text),
+            'text': raw.text,
+            'hash': ssdeep.hash(raw.text),
             'unique_key': '{}{}'.format(name_processed, birthday),
             'entry_index': entry_id,
             'book': book_number
