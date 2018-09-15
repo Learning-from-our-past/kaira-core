@@ -35,7 +35,7 @@ class YamlParser:
         return extractor
 
     def _parse_config(self, path):
-        file = open(path)
+        file = open(path, encoding='utf8')
         loaded = yaml.load(file)
         return loaded
 

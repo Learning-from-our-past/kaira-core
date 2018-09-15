@@ -19,7 +19,7 @@ def find_available_bookseries_from_directory(directory_path):
     :return:
     """
     manifest_glob_pattern = os.path.join('.', directory_path, '*', 'manifest.yaml')
-    manifest_files = [open(file) for file in glob.iglob(manifest_glob_pattern)]
+    manifest_files = [open(file, encoding='utf8') for file in glob.iglob(manifest_glob_pattern)]
     manifests = [yaml.load(file) for file in manifest_files]
 
     # Store path to the extractor plugin directory to the manifest object
