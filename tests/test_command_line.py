@@ -114,6 +114,23 @@ class TestCommandLineSmoke:
 
             assert book_series == 'siirtokarjalaiset'
             assert book_number == '1'
+            assert len(xml_document) == 4
+
+        def should_convert_karelian_html_to_xml_and_delete_duplicates(self):
+            file_path = 'temp/xml_export_tests/results_no_duplicates.xml'
+            results = run([
+                'python', 'main.py', '-c', 'tests/data/karelian_convert_smoke_test.html',
+                '-o', file_path, '-b', 'siirtokarjalaiset', '-n', '1', '--filter'
+            ])
+
+            assert results.returncode == 0
+            xml_parser = etree.XMLParser(encoding='utf8')
+            xml_document = etree.parse(file_path, parser=xml_parser).getroot()
+            book_series = xml_document.attrib['bookseries']
+            book_number = xml_document.attrib['book_number']
+
+            assert book_series == 'siirtokarjalaiset'
+            assert book_number == '1'
             assert len(xml_document) == 3
 
         def should_convert_great_farmers_html_to_xml(self):
