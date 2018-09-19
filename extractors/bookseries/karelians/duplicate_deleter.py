@@ -79,11 +79,10 @@ class DuplicateDeleter:
             print('Filtering duplicates in file number {}.'.format(book_id+1))
             unique_entry_id = 0
             files_without_duplicates.append(book)
-            book_length = len(book)
 
             for entry_id, child in enumerate(files_without_duplicates[book_id]):
-                #if self._update_callback_function is not None:
-                    #self._update_callback_function(entry_id, book_length)
+                if self._update_callback_function is not None:
+                    self._update_callback_function(entry_id)
 
                 current_entry = self._get_current_entry(child, unique_entry_id, book_id)
                 unique_entry_match = self._try_to_find_matching_entry(current_entry)
