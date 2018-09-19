@@ -107,10 +107,10 @@ class TestCommandLineSmoke:
             results = run(['python', 'main.py', '-c', 'tests/data/karelian_convert_smoke_test.html', '-o', file_path, '-b', 'siirtokarjalaiset', '-n', '1'])
 
             assert results.returncode == 0
-            xml_parser = etree.XMLParser(encoding="utf8")
+            xml_parser = etree.XMLParser(encoding='utf8')
             xml_document = etree.parse(file_path, parser=xml_parser).getroot()
-            book_series = xml_document.attrib["bookseries"]
-            book_number = xml_document.attrib["book_number"]
+            book_series = xml_document.attrib['bookseries']
+            book_number = xml_document.attrib['book_number']
 
             assert book_series == 'siirtokarjalaiset'
             assert book_number == '1'
@@ -140,10 +140,10 @@ class TestCommandLineSmoke:
                  'suuretmaatilat', '-n', '1'])
 
             assert results.returncode == 0
-            xml_parser = etree.XMLParser(encoding="utf8")
+            xml_parser = etree.XMLParser(encoding='utf8')
             xml_document = etree.parse(file_path, parser=xml_parser).getroot()
-            book_series = xml_document.attrib["bookseries"]
-            book_number = xml_document.attrib["book_number"]
+            book_series = xml_document.attrib['bookseries']
+            book_number = xml_document.attrib['book_number']
 
             assert book_series == 'suuretmaatilat'
             assert book_number == '1'
@@ -156,10 +156,10 @@ class TestCommandLineSmoke:
                  'pienviljelijat', '-n', '1'])
 
             assert results.returncode == 0
-            xml_parser = etree.XMLParser(encoding="utf8")
+            xml_parser = etree.XMLParser(encoding='utf8')
             xml_document = etree.parse(file_path, parser=xml_parser).getroot()
-            book_series = xml_document.attrib["bookseries"]
-            book_number = xml_document.attrib["book_number"]
+            book_series = xml_document.attrib['bookseries']
+            book_number = xml_document.attrib['book_number']
 
             assert book_series == 'pienviljelijat'
             assert book_number == '1'
