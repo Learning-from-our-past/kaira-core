@@ -15,13 +15,13 @@ pip install -r requirements.txt
 If you wish to chunk the html files with duplicate filtering, you will also need ssdeep. Installation of ssdeep is 
 done through pip, but you also need to install ssdeep on your system, which can be done with apt:
 ```
-sudo apt-get install ssdeep libfuzzy-dev 
+sudo apt-get install ssdeep libfuzzy-dev libffi-dev python3-dev
 ```
 More on ssdeep installation can be found [here](http://python-ssdeep.readthedocs.io/en/latest/installation.html)
 
 If you need to generate the XML files with the CoNLLU/NLP data, you will need to perform the nlp-setup step:
 ```
-inv nlp-setup
+inv nlp-setup  # NOTE: you need to have Java (eg. openjdk) installed for this to work
 ```
 
 Note that ssdeep pip-package seems to be difficult to install on MacOS since it was tested

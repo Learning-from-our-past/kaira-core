@@ -107,10 +107,27 @@ class TestCommandLineSmoke:
             results = run(['python', 'main.py', '-c', 'tests/data/karelian_convert_smoke_test.html', '-o', file_path, '-b', 'siirtokarjalaiset', '-n', '1'])
 
             assert results.returncode == 0
-            xml_parser = etree.XMLParser(encoding="utf8")
+            xml_parser = etree.XMLParser(encoding='utf8')
             xml_document = etree.parse(file_path, parser=xml_parser).getroot()
-            book_series = xml_document.attrib["bookseries"]
-            book_number = xml_document.attrib["book_number"]
+            book_series = xml_document.attrib['bookseries']
+            book_number = xml_document.attrib['book_number']
+
+            assert book_series == 'siirtokarjalaiset'
+            assert book_number == '1'
+            assert len(xml_document) == 4
+
+        def should_convert_karelian_html_to_xml_and_delete_duplicates(self):
+            file_path = 'temp/xml_export_tests/results_no_duplicates.xml'
+            results = run([
+                'python', 'main.py', '-c', 'tests/data/karelian_convert_smoke_test.html',
+                '-o', file_path, '-b', 'siirtokarjalaiset', '-n', '1', '--filter'
+            ])
+
+            assert results.returncode == 0
+            xml_parser = etree.XMLParser(encoding='utf8')
+            xml_document = etree.parse(file_path, parser=xml_parser).getroot()
+            book_series = xml_document.attrib['bookseries']
+            book_number = xml_document.attrib['book_number']
 
             assert book_series == 'siirtokarjalaiset'
             assert book_number == '1'
@@ -123,10 +140,10 @@ class TestCommandLineSmoke:
                  'suuretmaatilat', '-n', '1'])
 
             assert results.returncode == 0
-            xml_parser = etree.XMLParser(encoding="utf8")
+            xml_parser = etree.XMLParser(encoding='utf8')
             xml_document = etree.parse(file_path, parser=xml_parser).getroot()
-            book_series = xml_document.attrib["bookseries"]
-            book_number = xml_document.attrib["book_number"]
+            book_series = xml_document.attrib['bookseries']
+            book_number = xml_document.attrib['book_number']
 
             assert book_series == 'suuretmaatilat'
             assert book_number == '1'
@@ -139,11 +156,37 @@ class TestCommandLineSmoke:
                  'pienviljelijat', '-n', '1'])
 
             assert results.returncode == 0
-            xml_parser = etree.XMLParser(encoding="utf8")
+            xml_parser = etree.XMLParser(encoding='utf8')
             xml_document = etree.parse(file_path, parser=xml_parser).getroot()
-            book_series = xml_document.attrib["bookseries"]
-            book_number = xml_document.attrib["book_number"]
+            book_series = xml_document.attrib['bookseries']
+            book_number = xml_document.attrib['book_number']
 
             assert book_series == 'pienviljelijat'
             assert book_number == '1'
             assert len(xml_document) == 2
+
+    class TestNLPTagging:
+        @pytest.yield_fixture(autouse=True)
+        def xml_test_dir(self):
+            path = './temp/nlp_tagging_tests'
+            if not os.path.exists(path):
+                os.makedirs(path)
+            yield path
+
+            if os.path.exists(path):
+                shutil.rmtree(path)
+
+        def should_tag_karelian_xml_with_conllu(self):
+            file_path = 'temp/nlp_tagging_tests/results.xml'
+            results = run(['python', 'main.py', '-t', 'tests/data/karelian_nlp_smoke_test.xml', '-o', file_path])
+
+            assert results.returncode == 0
+            xml_parser = etree.XMLParser(encoding='utf8')
+            xml_document = etree.parse(file_path, parser=xml_parser).getroot()
+
+            conllu_lengths = [len(conllu.text) for raw, conllu in xml_document]
+            # Each time this test is run on CI, nlp-setup is run as well. If the NLP people of
+            # University of Turku have retrained their machine learning models (which are
+            # downloaded as part of nlp-setup), the lengths of these strings may be slightly
+            # than before, so we can't check for exact lengths.
+            assert all(length > 3000 for length in conllu_lengths)

@@ -2,3 +2,4 @@
 book_series_id: siirtokarjalaiset
 # Path inside the plugin directory to the module which contains the HTML -> XML conversion code
 chunker: chunktextfile.py
+nlp_clean_up: nlp/clean_up.py
