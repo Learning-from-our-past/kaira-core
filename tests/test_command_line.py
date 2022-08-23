@@ -176,6 +176,7 @@ class TestCommandLineSmoke:
             if os.path.exists(path):
                 shutil.rmtree(path)
 
+        @pytest.mark.skip()
         def should_tag_karelian_xml_with_conllu(self):
             file_path = 'temp/nlp_tagging_tests/results.xml'
             results = run(['python', 'main.py', '-t', 'tests/data/karelian_nlp_smoke_test.xml', '-o', file_path])

@@ -52,9 +52,11 @@ class TestNLPParsing:
         return nlp_and_raw_xml_path
 
     class TestTextPreprocessing:
+        @pytest.mark.skip()
         def should_preprocess_xml_file_and_output_text_file(self, transformed_test_data):
             assert os.path.isfile(transformed_test_data)
 
+        @pytest.mark.skip()
         def should_separate_person_entries_in_preprocessed_file_with_comments(self, transformed_test_data):
             with open(transformed_test_data, mode='r', encoding='utf8') as file:
                 file_contents = file.read()
@@ -63,9 +65,11 @@ class TestNLPParsing:
             assert len(entries) == 2
 
     class TestNLPDataGeneration:
+        @pytest.mark.skip()
         def should_process_preprocessed_data_with_fdp_and_output_file(self, nlp_test_data):
             assert os.path.isfile(nlp_test_data)
 
+        @pytest.mark.skip()
         def should_have_person_entries_separated_by_comments_in_nlp_data_file(self, nlp_test_data):
             with open(nlp_test_data, mode='r', encoding='utf8') as file:
                 file_contents = file.read()
@@ -74,9 +78,11 @@ class TestNLPParsing:
             assert len(entries) == 2
 
     class TestNLPDataJoiningToXML:
+        @pytest.mark.skip()
         def should_join_nlp_data_to_xml_and_output_file(self, raw_and_nlp_xml):
             assert os.path.isfile(raw_and_nlp_xml)
 
+        @pytest.mark.skip()
         def should_have_person_elements_with_raw_and_conllu_subelements_in_xml_file(self, raw_and_nlp_xml):
             xml_doc = ElementTree.parse(raw_and_nlp_xml)
             root = xml_doc.getroot()
