@@ -8,6 +8,12 @@ Main module containing logic for data extraction and command line interface.
 
 ## Setup
 
+### Nix
+
+If you use Nix, then you can install most dependencies easily with [`nix-direnv`](https://github.com/nix-community/nix-direnv). Then you just need to do the `venv`/`pip` installation steps below.
+
+### No Nix
+
 ```
 python3 -m venv .venv
 source .venv/bin/activate

@@ -9,7 +9,7 @@ def test(ctx):
     """
     Run tests
     """
-    ctx.run('python -m pytest')
+    ctx.run('python -m pytest --ignore .direnv')
 
 
 @task(help={
