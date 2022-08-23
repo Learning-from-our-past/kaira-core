@@ -43,4 +43,5 @@ class StreamingXMLReader:
                 yield current_chunk
                 current_chunk.clear()
         yield current_chunk
-        raise StopIteration
+        return
+
