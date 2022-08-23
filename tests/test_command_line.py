@@ -25,7 +25,7 @@ class TestCommandLineSmoke:
             assert results.returncode == 0
 
             with open(file_path, encoding='utf8') as data_file:
-                result_data = json.load(data_file, encoding='utf8')
+                result_data = json.load(data_file)
 
             assert len(result_data) == 3
 
@@ -46,7 +46,7 @@ class TestCommandLineSmoke:
             assert results.returncode == 0
 
             with open(file_path, encoding='utf8') as data_file:
-                result_data = json.load(data_file, encoding='utf8')
+                result_data = json.load(data_file)
 
             assert result_data[0]['primaryPerson']['birthLocation']['locationName'] == 'Kuolemajärvi'
 
@@ -57,7 +57,7 @@ class TestCommandLineSmoke:
             assert results.returncode == 0
 
             with open(file_path, encoding='utf8') as data_file:
-                result_data = json.load(data_file, encoding='utf8')
+                result_data = json.load(data_file)
 
             assert len(result_data) == 3
 
@@ -73,7 +73,7 @@ class TestCommandLineSmoke:
             assert results.returncode == 0
 
             with open(file_path, encoding='utf8') as data_file:
-                result_data = json.load(data_file, encoding='utf8')
+                result_data = json.load(data_file)
 
             assert len(result_data) == 3
 
