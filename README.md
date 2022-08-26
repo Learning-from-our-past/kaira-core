@@ -18,6 +18,7 @@ If you use Nix, then you can install most dependencies easily with [`nix-direnv`
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+cp scripts/pre-commit .git/hooks
 ```
 
 If you wish to chunk the html files with duplicate filtering, you will also need ssdeep. Installation of ssdeep is

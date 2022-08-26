@@ -4,6 +4,25 @@ import os
 from core.utils.geo.update_geo_db import update_location_db
 
 
+options_black_formatting = '--skip-string-normalization'
+
+
+@task()
+def code_check(ctx):
+    """
+    Run code formatting
+    """
+    ctx.run('black . --check {}'.format(options_black_formatting))
+
+
+@task()
+def code_format(ctx):
+    """
+    Run code formatting
+    """
+    ctx.run('black . {}'.format(options_black_formatting))
+
+
 @task()
 def test(ctx):
     """
