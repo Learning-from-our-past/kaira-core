@@ -24,6 +24,7 @@ sudo apt-get install ssdeep libfuzzy-dev libffi-dev python3-dev
 More on ssdeep installation can be found [here](http://python-ssdeep.readthedocs.io/en/latest/installation.html)
 
 If you need to generate the XML files with the CoNLLU/NLP data, you will need to perform the nlp-setup step:
+**NB:** NLP setup is very outdated as of 2022-08. It is due to be redone/updated. This notice will be removed when it is.
 
 ```
 inv nlp-setup  # NOTE: you need to have Java (eg. openjdk) installed for this to work
