@@ -14,3 +14,7 @@ temp/
 # just ignore the dependencies directory in its entirety as, for now, we don't want fin-dep-parser
 # to be included in the repository and there are no other dependencies
 dependencies/
+
+# nix
+.direnv
+

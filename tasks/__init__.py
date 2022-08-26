@@ -9,7 +9,7 @@ def test(ctx):
     """
     Run tests
     """
-    ctx.run('python -m pytest')
+    ctx.run('python -m pytest --ignore .direnv')
 
 
 @task(help={
@@ -105,9 +105,9 @@ def update_locationdb(ctx, datasheet=None):
     update_location_db(datasheet)
 
 
-@task(optional=['input', 'output', 'books'],
-      help={'input': 'Input file with KairaIDs, one per row. Default: ids.txt',
-            'output': 'Output file to place all the generated XML in. Default: ids.xml',
+@task(optional=['input_file', 'output_file', 'books'],
+      help={'input_file': 'Input file with KairaIDs, one per row. Default: ids.txt',
+            'output_file': 'Output file to place all the generated XML in. Default: ids.xml',
             'books': 'Paths to the books where the person entries corresponding to the KairaIDs can be found from. Default: siirtokarjalaiset_I-IV.xml in material/'})
 def kairaid2xml(ctx, input_file=None, output_file=None, books=None):
     """
