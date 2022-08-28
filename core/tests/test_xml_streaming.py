@@ -1,5 +1,10 @@
 from core.streaming_xml_reader import StreamingXMLReader
-from core.tests.mock_data.mock_streaming_xml import *
+from core.tests.mock_data.mock_streaming_xml import (
+    mock_file,
+    XML_WITH_COMPLEX_PERSON_ENTRIES,
+    XML_WITH_SIMPLE_PERSON_ENTRIES,
+    XML_WITH_MANY_SIMPLE_PERSON_ENTRIES,
+)
 
 
 def basic_xml_to_extractor(person_element):

@@ -4,7 +4,8 @@ from importlib import util as import_util
 from jellyfish import levenshtein_distance as distance
 
 if import_util.find_spec('ssdeep'):
-    # This package is difficult to install on MacOS so to keep tests etc. from breaking, import it conditionally
+    # This package is difficult to install on MacOS so to keep tests
+    # etc. from breaking, import it conditionally
     import ssdeep
 
 """
@@ -64,7 +65,12 @@ class DuplicateDeleter:
         self._potential_matches = []
         self._update_callback_function = update_callback
 
-        birthday_regex_pattern = r'(?:synt)\.?,?(?:\s+)?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|\s+|s)\s?(?P<month>\d{1,2})(?:\.|,|:|\s+|s)?(?:\s+)?-?(?P<year>\d{2,4}))|\s?-(?P<yearOnly>\d{2,4})(?!\.|,|\s|\d)(?=\D\D\D\D\D))'
+        birthday_regex_pattern = (
+            r'(?:synt)\.?,?(?:\s+)?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|\s+|s)\s?'
+            r'(?P<month>\d{1,2})(?:\.|,|:|\s+|s)?(?:\s+)?-?'
+            r'(?P<year>\d{2,4}))'
+            r'|\s?-(?P<yearOnly>\d{2,4})(?!\.|,|\s|\d)(?=\D\D\D\D\D))'
+        )
         self._BIRTHDAY_REGEX = regex.compile(
             birthday_regex_pattern, regex.UNICODE | regex.IGNORECASE
         )

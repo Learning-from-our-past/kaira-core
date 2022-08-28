@@ -1,8 +1,9 @@
-from lxml.html import *
+from lxml.html import parse
 from lxml import etree
 from lxml import html
 import re
-import os, nturl2path
+import os
+import nturl2path
 import shutil
 from core.interface.chunktextinterface import ChunkTextInterface
 from extractors.bookseries.karelians.duplicate_deleter import DuplicateDeleter
@@ -24,19 +25,26 @@ class PersonPreprocessor(ChunkTextInterface):
         self._page_number = None
         self._images = None
 
-        # This regular expression tries to match a name by the following pattern:
-        # First there should be a name containing your typical alphabet and a hyphen, and it can be in
-        # two parts, separated by a space. After that, there can be a space or a hyphen, followed by
-        # a dot or a comma, followed by another possible space or hyphen. Then there can be up to three
-        # words (names) after that, each at least one character long.
+        # This regular expression tries to match a name by the
+        # following pattern:
+        # First there should be a name containing your typical
+        # alphabet and a hyphen, and it can be in two parts,
+        # separated by a space. After that, there can be a space or
+        # a hyphen, followed by a dot or a comma, followed by
+        # another possible space or hyphen. Then there can be up
+        # to three words (names) after that, each at least one
+        # character long.
         self._ENTRY_NAME_REGEX = re.compile(
             r'(?:[A-ZÄÖ-]+\s?){1,2}[\s-]?[.,][\s-]?(?:\w+[\s-]?){1,3}', re.UNICODE
         )
 
-        # This regular expression is used to detect when a person's entry in the .html file begins from
-        # within another person's entry. This regex is quite a bit more refined than the original one and
-        # does not pick up non-names, like military unit/regiment abbreviations. It also has a better rate
-        # of getting both the first and surnames of a person, instead of just one of them.
+        # This regular expression is used to detect when a person's
+        # entry in the .html file begins from
+        # within another person's entry. This regex is quite a bit
+        # more refined than the original one and
+        # does not pick up non-names, like military unit/regiment
+        # abbreviations. It also has a better rate of getting both the
+        # first and surnames of a person, instead of just one of them.
         self._MID_ENTRY_NAME_REGEX = re.compile(
             r'(?:[A-ZÄ-Ö0-9!^%#]{4,}\s?){1,3}\s?[.,]\s?(?:[A-ZÄ-Ö0-9!^%#]{4,}\s?){1,3}',
             re.UNICODE,
@@ -92,7 +100,8 @@ class PersonPreprocessor(ChunkTextInterface):
             # Attempt to detect people, whose entries start from within other people
             mid_entry_person = self._MID_ENTRY_NAME_REGEX.search(e.text)
 
-            # TODO: Rough. Should be made recursive, so that if there are more than two people
+            # TODO: Rough. Should be made recursive, so that if there
+            # are more than two people
             # TODO: in the same entry, they get separated as well.
             if mid_entry_person is not None:
                 self._current_person_raw.text += e.text[0 : mid_entry_person.start()]
@@ -108,7 +117,7 @@ class PersonPreprocessor(ChunkTextInterface):
                 '\n', ' ', self._current_person_raw.text
             )
             self._current_person_raw.text = re.sub(
-                '\s{2,4}', ' ', self._current_person_raw.text
+                r'\s{2,4}', ' ', self._current_person_raw.text
             )
 
     def _parse_image(self, element):
@@ -183,7 +192,8 @@ class PersonPreprocessor(ChunkTextInterface):
         return {'next': next_element, 'found': found_next}
 
     def _copy_rename_image_files(self, new_path, image_path):
-        # TODO: It would be nice to provide error message to user rather than fail silently
+        # TODO: It would be nice to provide error message to user
+        # rather than fail silently
         try:
             # copy the image files and rename them according to person's name
             file_prefix = os.path.basename(os.path.splitext(self._save_path)[0])

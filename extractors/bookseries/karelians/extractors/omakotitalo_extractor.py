@@ -9,7 +9,7 @@ class OmakotitaloExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depends_on=None, options=None):
         super(OmakotitaloExtractor, self).__init__(cursor_location_depends_on, options)
-        self.OMAKOTITALO_PATTERN = r"(?P<omakotitalo>omakotitalo)"
+        self.OMAKOTITALO_PATTERN = r'(?P<omakotitalo>omakotitalo)'
         self.OMAKOTITALO_OPTIONS = re.UNICODE | re.IGNORECASE
 
     def _extract(self, entry, extraction_results, extraction_metadata):

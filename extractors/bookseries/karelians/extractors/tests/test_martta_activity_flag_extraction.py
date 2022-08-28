@@ -13,10 +13,6 @@ class TestMarttaActivityFlagExtraction:
         self, expected_flags_and_texts, result_map, in_spouse=False, sex='Female'
     ):
         flag = MarttaActivityFlagExtractor.extraction_key
-        parent_data = {
-            'extraction_results': {'name': {'gender': sex}},
-            'parent_data': None,
-        }
 
         result_map.add_results('mockPrimaryPerson', {'name': {'gender': sex}})
 

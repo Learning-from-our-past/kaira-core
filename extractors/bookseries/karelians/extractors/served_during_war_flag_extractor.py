@@ -22,10 +22,11 @@ class ServedDuringWarFlagExtractor(BaseExtractor):
 
     def _is_person_male(self):
         """
-        This function assumes only heterosexual marriages and checks that the person, whose
-        data we are looking at, is male. If we are in the spouse extractor and primary person
-        is female, then the spouse is male. If we are in the primary person and person is
-        male, then the person is male.
+        This function assumes only heterosexual marriages and checks
+        that the person, whose data we are looking at, is male. If
+        we are in the spouse extractor and primary person is female,
+        then the spouse is male. If we are in the primary person and
+        person is male, then the person is male.
         :return: Boolean, True or False.
         """
         should_extract = False

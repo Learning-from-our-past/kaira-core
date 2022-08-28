@@ -3,7 +3,8 @@ import regex
 import argparse
 import shutil
 import sys
-import os, inspect
+import os
+import inspect
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
@@ -13,7 +14,7 @@ from core.utils.text_utils import remove_hyphens_from_text, remove_spaces_from_t
 """
 Run an "extraction" test using regex and get information about what kind of
 strings the regex matched and the frequency of each match. This should be used
-from a CLI, and if you are doing that, you can run the file with the --help 
+from a CLI, and if you are doing that, you can run the file with the --help
 option to get instructions on usage.
 """
 

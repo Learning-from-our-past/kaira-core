@@ -14,7 +14,10 @@ class SpouseExtractor(BaseExtractor):
         super(SpouseExtractor, self).__init__(cursor_location_depends_on, options)
         self.kaira_id_provider = KairaIdProvider()
 
-        self.PATTERN = r'Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))'
+        self.PATTERN = (
+            r'Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)'
+            r'(?=(Lapset|poika|tytär|asuinp))'
+        )
         self.NAMEPATTERN = r'(?P<name>^[\w\s-]*)'
         self.OPTIONS = re.UNICODE | re.IGNORECASE
         self.REQUIRES_MATCH_POSITION = False
@@ -43,7 +46,8 @@ class SpouseExtractor(BaseExtractor):
                 found_spouse_match.group('spousedata'), entry
             )
 
-            # Dirty fix for inaccuracy in positions which would screw the Location extraction
+            # Dirty fix for inaccuracy in positions which would
+            # screw the Location extraction
             cursor_location = found_spouse_match.end() + start_position - 4
         except regex_utils.RegexNoneMatchException:
             pass

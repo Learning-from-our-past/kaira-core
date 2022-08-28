@@ -7,9 +7,9 @@ from core import bootstrap
 def run_nlp_parsing(args, plugin_dir):
     """
     Generates XML file with NLP data added to it based on existing XML file.
-    :param args: Args from argparse. Expects at least 't' (input file to use for NLP tagging),
-    'o' (list of output files, though we only use one). 'no_clean_up' (boolean) can also be
-    specified.
+    :param args: Args from argparse. Expects at least 't' (input
+    file to use for NLP tagging), 'o' (list of output files, though
+    we only use one). 'no_clean_up' (boolean) can also be specified.
     :param plugin_dir: Path where bookseries plugins can be found
     """
     file_path = args['t']

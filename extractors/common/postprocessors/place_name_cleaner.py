@@ -6,15 +6,20 @@ import jellyfish
 from extractors.common.extraction_keys import KEYS
 
 """
-Post processor function which tries to find given place name from list of manually fixed place names so that
-Finnish difficult conjugations or typos can be resolved to a correct Place name. As a bonus fills in region when
-it is recorded in the Place name list. List itself was generated from csv with karelian-db repository's 
-fix_place_names script. 
+Post processor function which tries to find given place name from
+list of manually fixed place names so that Finnish difficult
+conjugations or typos can be resolved to a correct Place name.
+As a bonus fills in region when it is recorded in the Place name
+list. List itself was generated from csv with karelian-db
+repository's fix_place_names script.
 
-This processor should be run for Place names which are in conjugated format, for example birth places, which in karelian
-books are usually written in form of "Ahlaisissa". Some conjugations are difficult to deal with naive Snowball stemmer 
-and many OCR typos also seem to trip stemmer. Therefore a list of around 2500 place names were corrected by hand and rest
-should be possible to merge with stemmer and string distance metric such as Jaro-Winkler.  
+This processor should be run for Place names which are in conjugated
+format, for example birth places, which in karelian books are
+usually written in form of "Ahlaisissa". Some conjugations are
+difficult to deal with naive Snowball stemmer and many OCR typos
+also seem to trip stemmer. Therefore a list of around 2500 place
+names were corrected by hand and rest should be possible to merge
+with stemmer and string distance metric such as Jaro-Winkler.
 """
 manually_fixed_place_names_file = open(
     'support_datasheets/place_names_with_alternative_forms.json', encoding='utf8'
@@ -24,9 +29,11 @@ stemmer = snowball.SnowballStemmer('finnish')
 manual_place_name_index = {}
 
 """
-Every place name should be found from existing list of place names when searched by conservative Jaro-Winkler distance
-of stemmed form of the name. This should minimize the problem of creating useless unique place names to the result set just
-because same place name has slight difference in the end of the word such as conjugation.
+Every place name should be found from existing list of place names
+when searched by conservative Jaro-Winkler distance of stemmed form
+of the name. This should minimize the problem of creating useless
+unique place names to the result set just because same place name
+has slight difference in the end of the word such as conjugation.
 """
 list_of_known_places_file = open(
     'support_datasheets/place_name_list.csv', encoding='utf8'
@@ -52,13 +59,17 @@ list_of_known_places_file.close()
 
 def try_to_normalize_place_name_with_known_aliases(location_name, return_region=False):
     """
-    Try to normalize the name by using a list of known typos and aliases for the given place.
-    place_names_with_alternative_forms.json contains list of place names and common typos and aliases for them. Using
-    this manually created list we can normalize some of the most common typos in the data.
+    Try to normalize the name by using a list of known typos and
+    aliases for the given place.
+    place_names_with_alternative_forms.json contains list of place
+    names and common typos and aliases for them. Using this manually
+    created list we can normalize some of the most common typos in
+    the data.
 
     If normalized name is not found, just return the name unchanged.
 
-    If return_region is set true, this function returns possible region info too.
+    If return_region is set true, this function returns possible
+    region info too.
 
     :param location_name:
     :param return_region:
@@ -83,9 +94,11 @@ def normalize_place_name_with_known_list_of_places(
     location_entry, metadata_collector=None
 ):
     """
-    Try to normalize name to known places in the database. We have a list of place names from
-    database. Try to avoid creating completely new place names because of some minor typo differences
-    by finding closest match from existing place names with Jaro-Winkler distance.
+    Try to normalize name to known places in the database. We have a
+    list of place names from database. Try to avoid creating
+    completely new place names because of some minor typo differences
+    by finding closest match from existing place names with
+    Jaro-Winkler distance.
 
     :param location_entry:
     :param metadata_collector:
@@ -154,9 +167,10 @@ def normalize_place_name_with_known_list_of_places(
 
 def normalize_place(location_entry, metadata_collector=None):
     """
-    Run both normalization processes for location_entry. This is utility function for cases when both
-    normalizations can be run sequentially. If fix from manual json list is found, we do not need to run the
-    known places list check.
+    Run both normalization processes for location_entry. This is
+    utility function for cases when both normalizations can be run
+    sequentially. If fix from manual json list is found, we do not
+    need to run the known places list check.
 
     :param location_entry:
     :param metadata_collector:
@@ -180,8 +194,8 @@ def normalize_place(location_entry, metadata_collector=None):
 
 def clean_place_name(location_entry):
     """
-    Utility function to clean up the locationName and stemmedName if one is available from useless
-    characters.
+    Utility function to clean up the locationName and stemmedName if
+    one is available from useless characters.
     :param location_entry:
     :return:
     """

@@ -39,11 +39,11 @@ class CommonOwnerExtractor(BaseExtractor):
             self.get_last_cursor_location(metadata),
         )
         result = {
-            KEYS["ownerFrom"]: owner_year_result[0],
-            KEYS["firstnames"]: owner_name_details_result[0][0],
-            KEYS["surname"]: owner_name_details_result[0][1],
-            KEYS["gender"]: owner_name_details_result[0][2],
-            KEYS["ownerBirthData"]: owner_birthday_result['birthday'],
+            KEYS['ownerFrom']: owner_year_result[0],
+            KEYS['firstnames']: owner_name_details_result[0][0],
+            KEYS['surname']: owner_name_details_result[0][1],
+            KEYS['gender']: owner_name_details_result[0][2],
+            KEYS['ownerBirthData']: owner_birthday_result['birthday'],
         }
 
         return result, cursor_location
@@ -56,7 +56,7 @@ class CommonOwnerExtractor(BaseExtractor):
                 self.OWNER_YEAR_PATTERN, text, self.OWNER_OPTIONS
             )
             cursor_location = start_position + owner_year.end()
-            owner_year = text_utils.int_or_none(owner_year.group("year"))
+            owner_year = text_utils.int_or_none(owner_year.group('year'))
         except regexUtils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('ownerYearNotFound', 2)
 
@@ -70,7 +70,7 @@ class CommonOwnerExtractor(BaseExtractor):
                 self.OWNER_NAME_PATTERN, text, self.OWNER_OPTIONS
             )
             cursor_location = start_position + owner_name_match.end()
-            owner_name_data = self._split_names(owner_name_match.group("name"))
+            owner_name_data = self._split_names(owner_name_match.group('name'))
         except regexUtils.RegexNoneMatchException:
             self.metadata_collector.add_error_record('ownerNameNotFound', 7)
 
@@ -95,15 +95,15 @@ class CommonOwnerExtractor(BaseExtractor):
     def _split_names(self, name):
         first_names = ''
         owner_gender = ''
-        name = re.sub(r"(?:<|>|&|')", r"", name)
-        names = re.split(" ", name)
+        name = re.sub(r"(?:<|>|&|')", r'', name)
+        names = re.split(' ', name)
 
-        surname = names[len(names) - 1].strip(" ")
+        surname = names[len(names) - 1].strip(' ')
         if len(names) > 1:
             for i in range(0, len(names) - 1):
-                if names[i].strip(" ") != "o.s.":
-                    first_names += names[i].strip(" ") + " "
-            first_names = first_names.strip(" ")
+                if names[i].strip(' ') != 'o.s.':
+                    first_names += names[i].strip(' ') + ' '
+            first_names = first_names.strip(' ')
             owner_gender = self._find_owner_gender(names)
 
         return first_names, surname, owner_gender

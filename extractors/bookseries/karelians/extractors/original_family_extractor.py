@@ -17,7 +17,11 @@ class FormerSurnameExtractor(BaseExtractor):
         super(FormerSurnameExtractor, self).__init__(
             cursor_location_depends_on, options
         )
-        self.FAMILY_PATTERN = r"(((?:o|0)\.? ?s\.?,? )(?P<family>([a-zä-ö-]*)(, ent\.?,? \w*)?)(?:,|\.))|(?P<family>ent\.?,? \w*)"
+        self.FAMILY_PATTERN = (
+            r'(((?:o|0)\.? ?s\.?,? )(?P<family>([a-zä-ö-]*)'
+            r'(, ent\.?,? \w*)?)(?:,|\.))|'
+            r'(?P<family>ent\.?,? \w*)'
+        )
         self.FAMILY_OPTIONS = re.UNICODE | re.IGNORECASE
 
     def _extract(self, entry, extraction_results, extraction_metadata):
@@ -43,8 +47,8 @@ class FormerSurnameExtractor(BaseExtractor):
                 self.FAMILY_PATTERN, text, self.FAMILY_OPTIONS
             )
             cursor_location = found_family_match.end()
-            own_family = found_family_match.group("family")
-        except regexUtils.RegexNoneMatchException as e:
+            own_family = found_family_match.group('family')
+        except regexUtils.RegexNoneMatchException:
             pass
 
         return own_family, cursor_location

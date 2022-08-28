@@ -47,14 +47,14 @@ def main(argv):
 
         long = False
         short = False
-        for l in person['locations']:
-            if not long and len(l['locationName']) >= long_place_name:
+        for location in person['locations']:
+            if not long and len(location['locationName']) >= long_place_name:
                 persons_with_long_place_name += 1
                 long = True
 
-            if not short and len(l['locationName']) <= short_place_name:
+            if not short and len(location['locationName']) <= short_place_name:
                 persons_with_short_place_name += 1
-                persons_with_short_place_names.append(l['locationName'])
+                persons_with_short_place_names.append(location['locationName'])
 
     print('Persons:', person_count)
     print('Persons location avg:', location_over_all_count / person_count)
@@ -92,7 +92,7 @@ def main(argv):
     if print_list:
         for p in persons_with_many_locations:
             print(p['surname'], p['firstNames'])
-            print(', '.join([l['locationName'] for l in p['locations']]))
+            print(', '.join([location['locationName'] for location in p['locations']]))
 
         # for p in list(set(persons_with_short_place_names)):
         #     print(p)

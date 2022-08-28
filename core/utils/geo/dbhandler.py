@@ -1,4 +1,4 @@
-from peewee import *
+from peewee import SqliteDatabase, TextField, Model, ForeignKeyField
 
 database_connection = SqliteDatabase(
     'support_datasheets/location.db', threadlocals=True

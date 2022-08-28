@@ -43,8 +43,9 @@ class BirthdayLocationExtractor(BaseExtractor):
 
         self.DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
         self.REQUIRES_MATCH_POSITION = True
-        # FIXME: This might need some adjusting still. 32 -> 42 improved results quite a bit though lowered
-        # the DeathYear extraction results a bit.
+        # FIXME: This might need some adjusting still. 32 -> 42
+        # improved results quite a bit though lowered the DeathYear
+        # extraction results a bit.
         self.SUBSTRING_WIDTH = 42
 
     def _extract(self, entry, extraction_results, extraction_metadata):
@@ -109,9 +110,10 @@ class BirthdayLocationExtractor(BaseExtractor):
             self._check_if_location_is_valid(text, location_match)
             location = location_match.group('location')
             location = remove_hyphens_from_text(location)
-            location = location.replace('\s', '')
+            location = location.replace(r'\s', '')
 
-            # FIXME: Why there is a magic number "4" here...? What is the point of it? See also text preparation function.
+            # FIXME: Why there is a magic number "4" here...? What
+            # is the point of it? See also text preparation function.
             cursor_location = match_end + start_position - 4
         except LocationException:
             self.metadata_collector.add_error_record('birthLocationNotFound', 2)
@@ -125,7 +127,10 @@ class BirthdayLocationExtractor(BaseExtractor):
         :param text:
         :return:
         """
-        pattern = r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
+        pattern = (
+            r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}'
+            r'[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
+        )
         try:
             found_location_match = regex_utils.safe_search(pattern, text, re.UNICODE)
             cursor_location = found_location_match.end()
@@ -134,8 +139,9 @@ class BirthdayLocationExtractor(BaseExtractor):
             raise LocationException(text)
 
     def _check_if_location_is_valid(self, text, found_location):
-        # check if the string has data on death. If it is before the location, be careful to not
-        # put the death location to birth location.
+        # check if the string has data on death. If it is before the
+        # location, be careful to not put the death location to
+        # birth location.
         death_position = regex_utils.find_first_position_with_regex_search(
             self.DEATHCHECK_PATTERN, text, re.UNICODE
         )
@@ -147,9 +153,9 @@ class BirthdayLocationExtractor(BaseExtractor):
 
 
 class LocationException(Exception):
-    eType = "LOCATION"
-    message = "ERROR in location extraction: "
-    details = u""
+    eType = 'LOCATION'
+    message = 'ERROR in location extraction: '
+    details = u''
 
     def __init__(self, text):
         self.details = text

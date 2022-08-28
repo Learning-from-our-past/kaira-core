@@ -10,7 +10,7 @@ with the person entries corresponding to those KairaIDs. This tool is meant
 to be used directly from a CLI. It is possible to utilize this class in your
 code, but it will just take the input in the form of a text file and place the
 output in an .xml file. The constructor contains all the interesting settings
-that need to be configured, after that it's just a call to the function 
+that need to be configured, after that it's just a call to the function
 make_xml_file_from_kairaids.
 
 This script will get both primary people and spouses, as in the case of spouses

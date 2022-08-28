@@ -8,9 +8,10 @@ Format of the csv should be following:
 
 Name1, Name2, ... , region<karelia|other>, latitude, longitude
 
-Basically all columns before column with content "karelia" or "other" are considered as alternative names
-for the place. Empty columns as names are ignored. Latitude and longitude follow region data and should
-be defined. Note that file should not have header row.
+Basically all columns before column with content "karelia" or "other"
+are considered as alternative names for the place. Empty columns as
+names are ignored. Latitude and longitude follow region data and
+should be defined. Note that file should not have header row.
 
 Database can be created with SQL:
 

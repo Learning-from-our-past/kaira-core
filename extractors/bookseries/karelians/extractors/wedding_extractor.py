@@ -36,9 +36,10 @@ class WeddingExtractor(BaseExtractor):
         try:
             wedding = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
 
-            # Dirty fix for inaccuracy in positions which would screw the Location extraction
+            # Dirty fix for inaccuracy in positions which would
+            # screw the Location extraction
             cursor_location = wedding.end() + start_position - 4
-            wedding_year = text_utils.int_or_none("19" + wedding.group("year"))
+            wedding_year = text_utils.int_or_none('19' + wedding.group('year'))
         except regex_utils.RegexNoneMatchException:
             wedding_year = None
 

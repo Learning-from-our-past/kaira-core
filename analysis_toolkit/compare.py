@@ -28,7 +28,7 @@ def main(argv):
 
         percentage = round((idx / total) * 100)
 
-        sys.stdout.write("Progress: %d%%  \r" % (percentage))
+        sys.stdout.write('Progress: %d%%  \r' % (percentage))
         sys.stdout.flush()
 
         if bool(diff):

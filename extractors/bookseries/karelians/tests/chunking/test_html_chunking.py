@@ -97,7 +97,7 @@ class TestHtmlChunking:
             )
         )
         data_for_test = mock_html_data.HTML_CONTAINER.format(img_test_html)
-        persons = person_preprocessor.chunk_text(data_for_test, test_path, 1)
+        person_preprocessor.chunk_text(data_for_test, test_path, 1)
 
         assert (
             os.path.isfile(

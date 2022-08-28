@@ -108,7 +108,7 @@ def chunk(
 @task(
     help={
         'bookpath': 'A path to the data xml-file which should be extracted.',
-        'testset': 'If set, extract the testset_I.json file in material directory. Overrides -b.',
+        'testset': 'Extract the testset_I.json file material directory. Overrides -b.',
     }
 )
 def extract(ctx, bookpath=None, testset=False):
@@ -123,9 +123,7 @@ def extract(ctx, bookpath=None, testset=False):
         file_name = os.path.splitext(os.path.basename(bookpath))[0]
         ctx.run('python main.py -i {} -o material/{}.json'.format(bookpath, file_name))
     else:
-        print(
-            'Error: either valid book path should be provided with option -b or run the test set with -t option.'
-        )
+        print('Error: provide a valid book path using -b or extract testset with -t.')
         sys.exit(1)
 
 
@@ -134,7 +132,8 @@ def extract(ctx, bookpath=None, testset=False):
 )
 def extract_parallel(ctx, parallel=2):
     """
-    Extracts concurrently in 2 or 4 processes the siirtokarjalaisten_tie books in material/ directory.
+    Extracts concurrently in 2 or 4 processes the
+    siirtokarjalaisten_tie books in material/ directory.
     """
     if parallel == 2 or parallel == 4:
         ctx.run('tasks/multi_process_extractor.sh -p {}'.format(parallel))
@@ -146,8 +145,9 @@ def extract_parallel(ctx, parallel=2):
 @task(help={'datasheet': 'Path to the datasheet containing location data.'})
 def update_locationdb(ctx, datasheet=None):
     """
-    Update location data in the Kaira's location.db which is used to add GPS-coordinates to the
-    extraction results. Datasheet format specification can be found from shared/geo/update_geo_db.py
+    Update location data in the Kaira's location.db which is used to
+    add GPS-coordinates to the extraction results. Datasheet format
+    specification can be found from shared/geo/update_geo_db.py
     """
     update_location_db(datasheet)
 
@@ -157,12 +157,17 @@ def update_locationdb(ctx, datasheet=None):
     help={
         'input_file': 'Input file with KairaIDs, one per row. Default: ids.txt',
         'output_file': 'Output file to place all the generated XML in. Default: ids.xml',
-        'books': 'Paths to the books where the person entries corresponding to the KairaIDs can be found from. Default: siirtokarjalaiset_I-IV.xml in material/',
+        'books': (
+            'Paths to the books where the person entries corresponding to the '
+            'KairaIDs can be found from. Default: siirtokarjalaiset_I-IV.xml in '
+            'material/'
+        ),
     },
 )
 def kairaid2xml(ctx, input_file=None, output_file=None, books=None):
     """
-    Use a file that contains newline separated KairaIDs to generate an XML file with the person entries corresponding to those KairaIDs.
+    Use a file that contains newline separated KairaIDs to generate
+    an XML file with the person entries corresponding to the KairaIDs.
     """
     kairaid2xml_cmd = '-input {} -output {} -books {}'
 
@@ -186,10 +191,10 @@ def kairaid2xml(ctx, input_file=None, output_file=None, books=None):
     help={
         'regex': 'The regular expression to use for testing.',
         'books': 'Paths to the books. Default: siirtokarjalaiset_I-IV.xml in material/',
-        'hyphens': 'Whether to remove hyphens from text before checking for regex matches.',
-        'spaces': 'Whether to remove spaces from text before checking for regex matches.',
-        'ignore-case': 'Whether to ignore case when checking for regex matches.',
-        'display-text': 'Whether to display the person entries that had regex matches after regex test.',
+        'hyphens': 'Remove hyphens from text before checking for regex matches.',
+        'spaces': 'Remove spaces from text before checking for regex matches.',
+        'ignore-case': 'Ignore case when checking for regex matches.',
+        'display-text': 'Display the person entries that had matches after test.',
     },
 )
 def regex_test(
@@ -202,7 +207,9 @@ def regex_test(
     ignore_case=True,
 ):
     """
-    Run an "extraction" test using regex and get information about what kind of strings the regex matched and the frequency of each match.
+    Run an "extraction" test using regex and get information about
+    what kind of strings the regex matched and the frequency of each
+    match.
     """
     regex_ext_cmd = '"{}" -books {} {}'
 
@@ -256,16 +263,18 @@ def nlp_setup(ctx):
         'input-file': 'The XML file to run through fin-dep-parser.',
         'output-file': 'The path and filename to output NLP-tagged data in.',
         'no-clean-up': 'Do not remove temporary intermediary files.',
-        'bookseries': 'Run books of a specific series through NLP-tagging with default settings. '
-        'If specified, input-file is ignored.',
+        'bookseries': (
+            'Run books of a specific series through NLP-tagging with'
+            'default settings. If specified, input-file is ignored.'
+        ),
     },
 )
 def generate_nlp_xmls(
     ctx, input_file=None, output_file=None, no_clean_up=False, bookseries=None
 ):
     """
-    Runs the an XML file through the Finnish Dependency Parser and outputs XML file with
-    NLP-tagged, CoNLLU-formatted data within.
+    Runs the an XML file through the Finnish Dependency Parser and
+    outputs XML file with NLP-tagged, CoNLLU-formatted data within.
     """
     if bookseries is not None and input_file is not None:
         print(

@@ -3,7 +3,8 @@ import re
 import regex
 from core.utils import regex_utils
 
-# This is a selection of unicode codes for characters that all look more or less like hyphens
+# This is a selection of unicode codes for characters that all look
+# more or less like hyphens
 unicode_hyphens = [
     0x002D,
     0x007E,
@@ -100,7 +101,7 @@ def int_or_none(value):
 
 def float_or_none(value):
     try:
-        value = value.replace('\w', '')
+        value = value.replace(r'\w', '')
         return float(value.replace(',', '.'))
     except (TypeError, ValueError, AttributeError):
         return None

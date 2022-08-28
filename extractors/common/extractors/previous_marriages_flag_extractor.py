@@ -10,7 +10,10 @@ class PreviousMarriagesFlagExtractor(BaseExtractor):
         super(PreviousMarriagesFlagExtractor, self).__init__(
             cursor_location_depends_on, options
         )
-        self.MANY_MARRIAGE_PATTERN = r"(toisesta|ensimmäisestä|aikaisemmasta|edellisestä|nykyisestä|avioliitosta)"
+        self.MANY_MARRIAGE_PATTERN = (
+            r'toisesta|ensimmäisestä|aikaisemmasta|'
+            r'edellisestä|nykyisestä|avioliitosta'
+        )
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         many_marriages = self._check_many_marriages(entry['text'])

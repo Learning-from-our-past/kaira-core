@@ -1,15 +1,17 @@
 from pyparsing import Word, alphas, Literal, nums, Or, Optional, Group, ZeroOrMore
 
 """
- Pyparsing BNF definition for parsing strings of migration data. Parses string producing data
- structure containing places, municipalities and migration years of the Person.
+ Pyparsing BNF definition for parsing strings of migration data.
+ Parses string producing data structure containing places,
+ municipalities and migration years of the Person.
 """
 # Useful generic tokens
 scandinavian_letters = 'ÄÖÅäöå-'
 hyphens = '—--'
 punctuation = Optional(Word(',.').suppress())
 
-# Grammar for extracting years and year ranges in form of <-39>, <39-49>, <-39, 43-45> etc.
+# Grammar for extracting years and year ranges in form of <-39>,
+# <39-49>, <-39, 43-45> etc.
 # <39> without hyphen in either side is interpreted as moved_out
 _year = Or(
     [
@@ -48,7 +50,8 @@ locations_extraction_grammar = ZeroOrMore(Group(_place_or_place_and_municipality
 def parse_locations(text):
     result = locations_extraction_grammar.parseString(text)
 
-    # Concatenate municipality and place names in case they are multipart eg. "Viipurin mlk"
+    # Concatenate municipality and place names in case they are
+    # multipart eg. 'Viipurin mlk'
     for x in result:
         x['place'] = ' '.join(x['place'])
         if 'municipality' in x:

@@ -5,7 +5,7 @@ from core.utils.text_utils import RegexListReplacer
 """
 This file contains all the patterns that are used to clean up the Siirtokarja-
 laisten tie person entry texts. The NLP parser is sensitive to mistakes, and
-even simple mistakes in the text entries can change how the NLP parser 
+even simple mistakes in the text entries can change how the NLP parser
 interprets the entire phrase that contains those mistakes.
 
 Note that when adding new patterns, the order of these patterns matters! If you
@@ -13,7 +13,7 @@ are writing new patterns based file output by text preprocessing, then you will
 want to add your patterns to the end of the list. If you are writing new
 patterns based on the raw person entry texts, then you will want to place your
 patterns at the beginning of the list. This may, however, impact how the patterns
-which come after the new pattern function. 
+which come after the new pattern function.
 """
 
 

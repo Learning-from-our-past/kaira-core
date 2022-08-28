@@ -65,7 +65,7 @@ class TestMigrationParser:
 
     def should_parse_locations_with_varying_amount_of_year_data(self):
         s1 = (
-            "Laasola -39. 42—44",
+            'Laasola -39. 42—44',
             [
                 {
                     'place': 'Laasola',
@@ -77,7 +77,7 @@ class TestMigrationParser:
             ],
         )
         s2 = (
-            "Laasola -39. 42—",
+            'Laasola -39. 42—',
             [
                 {
                     'place': 'Laasola',
@@ -86,7 +86,7 @@ class TestMigrationParser:
             ],
         )
         s3 = (
-            "Laasola -39. —44",
+            'Laasola -39. —44',
             [
                 {
                     'place': 'Laasola',
@@ -94,13 +94,13 @@ class TestMigrationParser:
                 }
             ],
         )
-        s4 = ("Laasola.", [{'place': 'Laasola'}])
+        s4 = ('Laasola.', [{'place': 'Laasola'}])
         s5 = (
-            "Laasola -39.",
+            'Laasola -39.',
             [{'place': 'Laasola', 'year_information': [{'moved_out': '39'}]}],
         )
         s6 = (
-            "Laasola 29-39. 42—44",
+            'Laasola 29-39. 42—44',
             [
                 {
                     'place': 'Laasola',
@@ -120,7 +120,7 @@ class TestMigrationParser:
         self.assert_locations(parse_locations(s6[0]), s6[1])
 
     def should_parse_multiple_locations_correctly(self):
-        s1 = "Viipurin mlk. -27, Pohjois-Karjala 31—32, Viipuri 32—. "
+        s1 = 'Viipurin mlk. -27, Pohjois-Karjala 31—32, Viipuri 32—. '
         results = parse_locations(s1)
 
         expected = [
@@ -144,7 +144,7 @@ class TestFinnishLocationExtraction:
         results, metadata = finnish_extractor.extract(
             {'text': LOCATION_TEXTS[0]}, {}, {}
         )
-        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        locations = results['finnishLocations'][KEYS['otherlocations']]
         th.omit_property(locations, 'coordinates')
         assert len(locations) == 4
 
@@ -155,14 +155,14 @@ class TestFinnishLocationExtraction:
 
     def should_return_empty_if_no_finnish_locations_listed(self, finnish_extractor):
         results, metadata = finnish_extractor.extract({'text': ''}, {}, {})
-        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        locations = results['finnishLocations'][KEYS['otherlocations']]
         assert len(locations) == 0
 
     def should_leave_out_too_long_place_names(self, finnish_extractor, th):
         results, metadata = finnish_extractor.extract(
             {'text': LOCATION_HEURISTICS['long_place_name']['text']}, {}, {}
         )
-        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        locations = results['finnishLocations'][KEYS['otherlocations']]
 
         th.omit_property(locations, 'coordinates')
         assert len(locations) == 4
@@ -172,7 +172,7 @@ class TestFinnishLocationExtraction:
         results, metadata = finnish_extractor.extract(
             {'text': LOCATION_HEURISTICS['short_place_name']['text']}, {}, {}
         )
-        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        locations = results['finnishLocations'][KEYS['otherlocations']]
 
         th.omit_property(locations, 'coordinates')
         assert len(locations) == 4
@@ -184,7 +184,7 @@ class TestFinnishLocationExtraction:
         results, metadata = finnish_extractor.extract(
             {'text': LOCATION_HEURISTICS['short_white_listed_name']['text']}, {}, {}
         )
-        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        locations = results['finnishLocations'][KEYS['otherlocations']]
 
         assert len(locations) == 5
         assert locations[4]['locationName'] == 'Utö'
@@ -197,7 +197,7 @@ class TestFinnishLocationExtraction:
             {},
             {},
         )
-        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        locations = results['finnishLocations'][KEYS['otherlocations']]
 
         assert len(locations) == 5
         assert locations[4]['locationName'] == 'Ii'
@@ -206,7 +206,7 @@ class TestFinnishLocationExtraction:
         results, metadata = finnish_extractor.extract(
             {'text': LOCATION_HEURISTICS['long_name_with_mlk']['text']}, {}, {}
         )
-        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        locations = results['finnishLocations'][KEYS['otherlocations']]
 
         assert len(locations) == 5
         assert locations[4]['locationName'] == 'Kristiinankaupungin mlk'
@@ -215,7 +215,7 @@ class TestFinnishLocationExtraction:
         results, metadata = finnish_extractor.extract(
             {'text': LOCATION_HEURISTICS['name_with_extra_hyphens']['text']}, {}, {}
         )
-        locations = results['finnishLocations'][KEYS["otherlocations"]]
+        locations = results['finnishLocations'][KEYS['otherlocations']]
 
         assert len(locations) == 5
         assert locations[3]['locationName'] == 'Ähtäri'  # Hyphen from beginning removed
@@ -361,7 +361,7 @@ class TestMigrationRouteExtractor:
     def should_run_post_process_to_mark_if_person_returned_to_karelia(
         self, migration_pipeline, th
     ):
-        text = re.sub(r"\s", r" ", LOCATION_TEXTS[0])
+        text = re.sub(r'\s', r' ', LOCATION_TEXTS[0])
 
         results, metadata = migration_pipeline.process({'text': text})
         th.omit_property(results, 'coordinates')
@@ -373,13 +373,13 @@ class TestMigrationRouteExtractor:
     ):
         # TODO: Here both karelian and finnish location extraction breaks weirdly. Only Ypäjä is recognized as finnish location and
         # others will be classified as karelian locations. Something strange is going on.
-        text = re.sub(r"\s", r" ", LOCATION_TEXTS[5])
+        text = re.sub(r'\s', r' ', LOCATION_TEXTS[5])
 
         results, metadata = migration_pipeline.extract({'text': text}, {}, {})
         th.omit_property(results, 'coordinates')
 
     def should_fix_helsinkis_region_from_karelia_to_other(self, migration_pipeline, th):
-        text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[0]['text'])
+        text = re.sub(r'\s', r' ', LOCATION_TEXTS_WITH_INCORRECT_REGION[0]['text'])
 
         results, metadata = migration_pipeline.process({'text': text})
         th.omit_property(results, 'coordinates')
@@ -393,7 +393,7 @@ class TestMigrationRouteExtractor:
     def should_fix_kanneljärvi_region_from_other_to_karelia(
         self, migration_pipeline, th
     ):
-        text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['text'])
+        text = re.sub(r'\s', r' ', LOCATION_TEXTS_WITH_INCORRECT_REGION[1]['text'])
 
         results, metadata = migration_pipeline.process({'text': text})
         th.omit_property(results, 'coordinates')
@@ -418,7 +418,7 @@ class TestMigrationRouteExtractor:
             mock_karelia_place = Place(name='Lothlorien', location=karelian_location.id)
             mock_karelia_place.save()
 
-            text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
+            text = re.sub(r'\s', r' ', LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
 
             results, metadata = migration_pipeline.process({'text': text})
             th.omit_property(results, 'coordinates')
@@ -434,7 +434,7 @@ class TestMigrationRouteExtractor:
     def should_leave_region_as_is_if_it_is_not_found_from_db(
         self, migration_pipeline, th
     ):
-        text = re.sub(r"\s", r" ", LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
+        text = re.sub(r'\s', r' ', LOCATION_TEXTS_WITH_INCORRECT_REGION[2]['text'])
 
         results, metadata = migration_pipeline.process({'text': text})
         th.omit_property(results, 'coordinates')
@@ -449,7 +449,7 @@ class TestMigrationRouteExtractor:
 
     class TestExcludingIncorrectWords:
         def extract_and_assert(self, person_data, migration_pipeline, th):
-            text = re.sub(r"\s", r" ", person_data['text'])
+            text = re.sub(r'\s', r' ', person_data['text'])
             results, metadata = migration_pipeline.process({'text': text})
             th.omit_property(results, 'coordinates')
             th.omit_property(results, 'village')

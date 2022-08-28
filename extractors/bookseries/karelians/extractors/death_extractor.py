@@ -10,7 +10,7 @@ class DeathExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depends_on=None, options=None):
         super(DeathExtractor, self).__init__(cursor_location_depends_on, options)
-        self.PATTERN = r"(?:kuoli)\.?\s?-(?P<year>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D)"
+        self.PATTERN = r'(?:kuoli)\.?\s?-(?P<year>\d{2,4})(?!\.|,|\d)(?=\D\D\D\D\D)'
         self.OPTIONS = re.UNICODE | re.IGNORECASE
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
@@ -36,10 +36,11 @@ class DeathExtractor(BaseExtractor):
         try:
             death = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
 
-            # Dirty fix for inaccuracy in positions which would screw the Location extraction
+            # Dirty fix for inaccuracy in positions which would
+            # screw the Location extraction
             cursor_location = death.end() + start_position - 4
-            death_year = text_utils.int_or_none("19" + death.group("year"))
-        except regex_utils.RegexNoneMatchException as e:
+            death_year = text_utils.int_or_none('19' + death.group('year'))
+        except regex_utils.RegexNoneMatchException:
             death_year = None
 
         return death_year, cursor_location

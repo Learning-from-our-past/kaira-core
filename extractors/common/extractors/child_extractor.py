@@ -28,7 +28,7 @@ class CommonChildExtractor(BaseExtractor):
 
     def _find_children(self, text, start_position):
         cursor_location = start_position
-        text = re.sub(r"sekä", ",", text)
+        text = re.sub(r'sekä', ',', text)
         children_entries = []
 
         try:
@@ -36,7 +36,7 @@ class CommonChildExtractor(BaseExtractor):
                 self.CHILD_PATTERN, text, self.CHILD_OPTIONS
             )
             cursor_location = found_children_match.end()
-            children_str = found_children_match.group("children")
+            children_str = found_children_match.group('children')
             cleaned_children = self._clean_children(children_str)
             children_entries = self._split_children(cleaned_children)
 
@@ -47,8 +47,8 @@ class CommonChildExtractor(BaseExtractor):
 
     @staticmethod
     def _clean_children(children_str):
-        children_str = children_str.strip(",")
-        children_str = children_str.strip(".")
+        children_str = children_str.strip(',')
+        children_str = children_str.strip('.')
         children_str = children_str.strip()
         return children_str
 
@@ -59,10 +59,10 @@ class CommonChildExtractor(BaseExtractor):
         children_entries = []
         for m in found_children_matches:
             # check if there is "ja" word as separator such as "Seppo -41 ja Jaakko -32.
-            ja_word = regex_utils.search(r"\sja\s", m.group("child"))
+            ja_word = regex_utils.search(r'\sja\s', m.group('child'))
             if ja_word is not None:
-                first_child = self._process_child(m.group("child")[0 : ja_word.start()])
-                second_child = self._process_child(m.group("child")[ja_word.end() :])
+                first_child = self._process_child(m.group('child')[0 : ja_word.start()])
+                second_child = self._process_child(m.group('child')[ja_word.end() :])
 
                 if first_child is not None and second_child is not None:
                     self._twins_year_handler(first_child, second_child)
@@ -74,7 +74,7 @@ class CommonChildExtractor(BaseExtractor):
                     children_entries.append(second_child)
 
             else:
-                child = self._process_child(m.group("child"))
+                child = self._process_child(m.group('child'))
                 if child is not None:
                     children_entries.append(child)
 
@@ -85,17 +85,17 @@ class CommonChildExtractor(BaseExtractor):
         # if there is twins, the book doesn't explicitly define birthyear for first one.
         # therefore copy second child's value to first one
         if first is not None and second is not None:
-            if first["birthYear"] is None and second["birthYear"] is not None:
-                first["birthYear"] = second["birthYear"]
+            if first['birthYear'] is None and second['birthYear'] is not None:
+                first['birthYear'] = second['birthYear']
 
     def _process_child(self, child):
         try:
             name = regex_utils.safe_search(
                 self.NAME_PATTERN, child, self.CHILD_OPTIONS
-            ).group("name")
+            ).group('name')
             name = name.strip()
-            name = name.strip("-")
-            name = name.strip(" ")
+            name = name.strip('-')
+            name = name.strip(' ')
             try:
                 gender = Sex.find_sex(name)
             except SexException:
@@ -106,19 +106,19 @@ class CommonChildExtractor(BaseExtractor):
                 year_match = regex_utils.safe_search(
                     self.YEAR_PATTERN, child, self.CHILD_OPTIONS
                 )
-                year = year_match.group("year")
+                year = year_match.group('year')
                 if float(year) < 70:
-                    year = text_utils.int_or_none("19" + year)
+                    year = text_utils.int_or_none('19' + year)
                 else:
-                    year = text_utils.int_or_none("18" + year)
+                    year = text_utils.int_or_none('18' + year)
             except regex_utils.RegexNoneMatchException:
                 year = None
 
             return {
-                "name": name,
-                "gender": gender,
-                "birthYear": year,
-                "kairaId": self._kaira_id_provider.get_new_id('C'),
+                'name': name,
+                'gender': gender,
+                'birthYear': year,
+                'kairaId': self._kaira_id_provider.get_new_id('C'),
             }
         except regex_utils.RegexNoneMatchException:
             pass

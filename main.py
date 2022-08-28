@@ -67,7 +67,7 @@ def read_bookseries_header(file):
         r'bookseries="(?P<bookseries_id>\w+)"[\s>]', first_line, flags=regex.UNICODE
     )
     booknumber_match = regex.search(
-        'book_number="(?P<book_number>\w+)"[\s>]', first_line, flags=regex.UNICODE
+        r'book_number="(?P<book_number>\w+)"[\s>]', first_line, flags=regex.UNICODE
     )
     return bookseries_match.group('bookseries_id'), booknumber_match.group(
         'book_number'
@@ -105,8 +105,9 @@ def chunk(args):
 
     if bookseries_id is None or book_numbers is None:
         print(
-            'Error: Both book series argument and book number in series should be provided when starting '
-            'conversion process. Example: -b siirtokarjalaiset -n 1'
+            'Error: Both book series argument and book number in '
+            'series should be provided when starting conversion '
+            'process. Example: -b siirtokarjalaiset -n 1'
         )
         raise CommandLineParameterException()
 

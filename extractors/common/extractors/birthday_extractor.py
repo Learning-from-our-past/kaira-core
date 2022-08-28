@@ -111,10 +111,13 @@ class DateFinder:
 
     @staticmethod
     def _prepare_text_for_extraction(text):
-        # FIXME: This should probably be conditional based on the remove_spaces option set in CommonBirthDayExtractor.
-        # Atm the resulting cursor_locations will be incorrect since the CBDE reports the end of match which will be incorrect
-        # since its taken from a string with spaces removed! Note that fixing this will involve testing possible changes in outputs of
-        # all existing book series which use this extractor.
+        # FIXME: This should probably be conditional based on the remove_spaces option
+        # set in CommonBirthDayExtractor.
+        # Atm the resulting cursor_locations will be incorrect since the CBDE
+        # reports the end of match which will be incorrect since its taken from
+        # a string with spaces removed! Note that fixing this will involve
+        # testing possible changes in outputs of all existing book series
+        # which use this extractor.
         return text_utils.remove_spaces_from_text(text)
 
     def _find_date(self, text):
@@ -160,7 +163,9 @@ class DateFinder:
             year = self._transform_year(year)
             return month, year
         except (IndexError, TypeError):
-            return None  # there is no monthYear or monthName, so use other extraction method
+            return None
+            # there is no monthYear or monthName, so use other
+            # extraction method
 
     def _map_month_name_to_number(self, name):
         if name in self.MONTH_NAME_NUMBER_MAPPING:
@@ -195,9 +200,9 @@ class DateFinder:
 
 
 class DateException(Exception):
-    eType = "DATE"
-    message = "ERROR in date extraction: "
-    details = u""
+    eType = 'DATE'
+    message = 'ERROR in date extraction: '
+    details = u''
 
     def __init__(self, text):
         self.details = text

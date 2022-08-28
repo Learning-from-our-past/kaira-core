@@ -15,7 +15,10 @@ class LottaActivityFlagExtractor(BaseExtractor):
         )
         self._in_spouse_extractor = options['in_spouse_extractor']
 
-        lotta_org_pattern = r'(?P<lottaOrg>(?:[Ll]otta\s?(?:S|s)värd|[Ll]ottayhdis|[Ll]ottajärjes)){s<=1}'
+        lotta_org_pattern = (
+            r'(?P<lottaOrg>(?:[Ll]otta\s?(?:S|s)värd|'
+            r'[Ll]ottayhdis|[Ll]ottajärjes)){s<=1}'
+        )
 
         """
         The pattern below finds words with the base pattern "lotta", "lottiin"
@@ -49,10 +52,20 @@ class LottaActivityFlagExtractor(BaseExtractor):
 
         lotta_word_pattern = r'(?<=[\s.,])\w{0,12}(lotta){s<=1}\w{0,12}(?=[\s.,])'
 
-        food_lotta_pattern = r'(?:(?:uonituslott)|(?:anttiinilott)){s<=2}|(?:(?:uonitustehtä)|(?:anttiinitehtä)){s<=2}'
-        office_lotta_pattern = r'(?:(?:anslialott)|(?:oimistolott)|(?:eskuslott)|(?:uhelinlott)|(?:iesti(?:tys|ntä)?lott)){s<=1}'
+        food_lotta_pattern = (
+            r'(?:(?:uonituslott)|(?:anttiinilott)){s<=2}|'
+            r'(?:(?:uonitustehtä)|(?:anttiinitehtä)){s<=2}'
+        )
+        office_lotta_pattern = (
+            r'(?:(?:anslialott)|(?:oimistolott)|(?:eskuslott)|'
+            r'(?:uhelinlott)|(?:iesti(?:tys|ntä)?lott)){s<=1}'
+        )
         nurse_lotta_pattern = r'(?:lääkintälott[ai]){s<=2}'
-        antiair_lotta_pattern = r'[\s.,](?:[ij!1][vts](?:lotta){s<=1})|(?:lmavalvontalott){s<=2}|(?:ilmavalvontatehtäv){s<=2}'
+        antiair_lotta_pattern = (
+            r'[\s.,](?:[ij!1][vts](?:lotta){s<=1})|'
+            r'(?:lmavalvontalott){s<=2}|'
+            r'(?:ilmavalvontatehtäv){s<=2}'
+        )
         pikkulotta_pattern = r'(?:pikkulott){s<=1}'
 
         regex_options = regex.UNICODE
@@ -91,10 +104,11 @@ class LottaActivityFlagExtractor(BaseExtractor):
 
     def _is_person_female(self):
         """
-        This function assumes only heterosexual marriages and checks that the person, whose
-        data we are looking at, is female. If we are in the spouse extractor and primary person
-        is male, then the spouse is female. If we are in the primary person and person is
-        female, then the person is female.
+        This function assumes only heterosexual marriages and checks
+        that the person, whose data we are looking at, is female. If
+        we are in the spouse extractor and primary person is male,
+        then the spouse is female. If we are in the primary person
+        and person is female, then the person is female.
         :return: Boolean
         """
         is_female = False
@@ -231,12 +245,12 @@ class LottaActivityFlagExtractor(BaseExtractor):
         forbidden_patterns_in_match = ('uotta', 'dotta', 'lohta')
 
         """
-        Words ending with the suffices -sta (e.g. "omakotitalosta") and -ja 
+        Words ending with the suffices -sta (e.g. "omakotitalosta") and -ja
         (e.g. "kiillottaja") are false positives. Thus, any matches showing
         these patterns have to be discarded.
-        
-        If, in the overall match, the substrings "uotta", "dotta" or "lohta" 
-        are present, they are likely to be false positives. (e.g. "vuotta", 
+
+        If, in the overall match, the substrings "uotta", "dotta" or "lohta"
+        are present, they are likely to be false positives. (e.g. "vuotta",
         "kalastaa lohta")
         """
         if not check_string_for_substrings(
@@ -252,8 +266,8 @@ class LottaActivityFlagExtractor(BaseExtractor):
                 permitted_patterns = ('Pikku', 'IV')
                 """
                 Only accept matches with lower case first character to omit people
-                whose name is "Lotta". But to capture some pikkulottas and air 
-                surveillance lottas, we have to allow upper case first characters in 
+                whose name is "Lotta". But to capture some pikkulottas and air
+                surveillance lottas, we have to allow upper case first characters in
                 some cases. (e.g. "Pikkulotta", "Iv-lotta")
                 """
                 if is_first_character_lower_case(

@@ -3,10 +3,13 @@ from core.pipeline_construction.base_extractor import BaseExtractor
 
 class FarmDetailsExtractor(BaseExtractor):
     """
-    Extract information about the farm if there is any information available. Extracted information
-    concerns more about the farm rather than any single Persons, but of course persons are related to their farm.
+    Extract information about the farm if there is any information
+    available. Extracted information concerns more about the farm
+    rather than any single Persons, but of course persons are
+    related to their farm.
 
-    If all farm details are falsy, return None to denote that no farm details were found.
+    If all farm details are falsy, return None to denote that no
+    farm details were found.
     """
 
     extraction_key = 'farmDetails'

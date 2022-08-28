@@ -31,10 +31,11 @@ class MarttaActivityFlagExtractor(BaseExtractor):
 
     def _is_person_female(self):
         """
-        This function assumes only heterosexual marriages and checks that the person, whose
-        data we are looking at, is female. If we are in the spouse extractor and primary person
-        is male, then the spouse is female. If we are in the primary person and person is
-        female, then the person is female.
+        This function assumes only heterosexual marriages and checks
+        that the person, whose data we are looking at, is female. If
+        we are in the spouse extractor and primary person is male,
+        then the spouse is female. If we are in the primary person
+        and person is female, then the person is female.
         :return: Boolean
         """
         is_female = False

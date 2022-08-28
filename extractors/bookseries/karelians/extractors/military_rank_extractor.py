@@ -16,17 +16,17 @@ class MilitaryRankExtractor(BaseExtractor):
         the navy. The ranks are included together on this list, and the equivalent
         ranks are always with the ground/air force rank first, then the navy rank
         right under that.
-        
+
         The format of the list is:
         (<rank>, <regular expression>, <forbidden prefixes>)
-        
+
         The need for forbidden prefixes comes from not wanting, for example, the
         rank "kapteeniluutnantti" to be extracted as the rank "luutnantti".
         "luutnantti" is a lower rank but its regular expression would also find a
         match on "kapteeniluutnantti". On the other hand we also do not want to
         completely discard all prefixes, for example, we still want to find ranks
         like "lääkintäluutnantti".
-        
+
         NOTE: These are in ascending order and must remain so in order for this to
         work correctly. This is because in most cases we want to pick the lowest
         rank found in the entry.
@@ -123,7 +123,6 @@ class MilitaryRankExtractor(BaseExtractor):
         """
         if prefixes is None:
             return False
-        prefix_found = False
         for prefix in prefixes:
             rank_start = match.start()
             rank_word_start = rank_start - len(prefix)
@@ -133,10 +132,11 @@ class MilitaryRankExtractor(BaseExtractor):
 
     def _is_person_male(self):
         """
-        This function assumes only heterosexual marriages and checks that the person, whose
-        data we are looking at, is male. If we are in the spouse extractor and primary person
-        is female, then the spouse is male. If we are in the primary person and person is
-        male, then the person is male.
+        This function assumes only heterosexual marriages and checks
+        that the person, whose data we are looking at, is male. If
+        we are in the spouse extractor and primary person is female,
+        then the spouse is male. If we are in the primary person and
+        person is male, then the person is male.
         :return: Boolean, True or False.
         """
         is_male = False

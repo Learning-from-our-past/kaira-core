@@ -35,10 +35,12 @@ class StreamingXMLReader:
             if element.tag.casefold() == 'person':
                 entry_data = self._convert_xml_to_dict(element)
                 current_chunk.append(entry_data)
-                # Clears the contents of element. This is needed because while etree.iterparse does
-                # essentially stream elements from the XML one by one, it still builds the element
-                # tree in memory as it does its thing. If we clear the elements in memory after they
-                # are no longer needed, we save that memory.
+                # Clears the contents of element. This is needed
+                # because while etree.iterparse does essentially
+                # stream elements from the XML one by one, it still
+                # builds the element tree in memory as it does its
+                # thing. If we clear the elements in memory after
+                # they are no longer needed, we save that memory.
                 element.clear()
 
             if len(current_chunk) == self._chunk_size:

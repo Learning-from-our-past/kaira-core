@@ -36,7 +36,8 @@ class BaseExtractor:
 
     def set_subpipeline(self, extractors):
         """
-        Defines the sub pipeline for the extractor. Called during YAML-parsing process.
+        Defines the sub pipeline for the extractor. Called during
+        YAML-parsing process.
         :param extractors:
         :return:
         """
@@ -44,8 +45,10 @@ class BaseExtractor:
 
     def set_extraction_results_map(self, results_map):
         """
-        Pass the result map to extractor. It contains the pure unmodified extraction results of the previous
-        extractors in a map which can be used to resolve those results as a dependencies to this extractor.
+        Pass the result map to extractor. It contains the pure
+        unmodified extraction results of the previous extractors in
+        a map which can be used to resolve those results as a
+        dependencies to this extractor.
         :param results_map:
         :return:
         """
@@ -53,11 +56,14 @@ class BaseExtractor:
 
     def _declare_expected_dependency_names(self, dependency_names):
         """
-        If extractor has dependencies, declare their names here in constructor. The provided names
-        are just names which can later be used to fetch resolved results during extraction. However, the amount
-        of the names is verified when required dependencies are set, so that no less nor no more dependencies
-        are injected to the extractor than is expected.
-        The names should be defined in the same order as dependencies are listed in the yaml-configuration.
+        If extractor has dependencies, declare their names here in
+        constructor. The provided names are just names which can
+        later be used to fetch resolved results during extraction.
+        However, the amount of the names is verified when required
+        dependencies are set, so that no less nor no more dependencies
+        are injected to the extractor than is expected. The names
+        should be defined in the same order as dependencies are
+        listed in the yaml-configuration.
         :param dependency_names: list of strings
         :return:
         """
@@ -65,12 +71,17 @@ class BaseExtractor:
 
     def set_required_dependencies(self, extractor_dependencies):
         """
-        Set possible required dependencies based on YAML config. A list of extractors or their ids/names so that the
-        dependencies can be resolved from the extraction_results_map during the extraction.
+        Set possible required dependencies based on YAML config.
+        A list of extractors or their ids/names so that the
+        dependencies can be resolved from the extraction_results_map
+        during the extraction.
 
-        Usually one should provide extractor objects like YamlParser does when config-file uses PyYaml anchors. However,
-        it is also possible to just pass a strings which will then act as keys in the extraction results map instead
-        of object ids. This is recommended approach when mocking dependencies in unit tests.
+        Usually one should provide extractor objects like YamlParser
+        does when config-file uses PyYaml anchors. However, it is
+        also possible to just pass a strings which will then act as
+        keys in the extraction results map instead of object ids.
+        This is recommended approach when mocking dependencies in
+        unit tests.
 
         :param extractor_dependencies: Extractor object or string.
         :return:
@@ -114,14 +125,16 @@ class BaseExtractor:
             entry, extraction_results, extraction_metadata
         )
 
-        # Add finally the metadata after post process has been run since it might add metadata
+        # Add finally the metadata after post process has been run
+        # since it might add metadata
         self._get_output_path(extraction_metadata)[
             self.extraction_key
         ] = self.metadata_collector.get_metadata()
         self.metadata_collector.clear()
 
-        # Store this extractor's results to the map so that it can be used later for dependency resolving
-        # Strip the output path, since we don't want to store it to the result map
+        # Store this extractor's results to the map so that it can
+        # be used later for dependency resolving. Strip the output
+        # path, since we don't want to store it to the result map.
         extraction_results_without_output_path = extraction_results
         if self.output_path:
             extraction_results_without_output_path = extraction_results[
@@ -135,7 +148,8 @@ class BaseExtractor:
 
     def _preprocess(self, entry, extraction_results, extraction_metadata):
         """
-        Optional implementable method for child classes. Run before _extract method.
+        Optional implementable method for child classes. Run before
+        _extract method.
         Lets to manipulate input data for extraction logic.
         :param entry:
         :param extraction_results:
@@ -146,7 +160,8 @@ class BaseExtractor:
     @abstractmethod
     def _extract(self, entry, extraction_results, extraction_metadata):
         """
-        Required method for child classes. Should contain main data extraction logic.
+        Required method for child classes. Should contain main data
+        extraction logic.
         :param entry:
         :param extraction_results:
         :return extraction_results:
@@ -155,7 +170,8 @@ class BaseExtractor:
 
     def _postprocess(self, entry, extraction_results, extraction_metadata):
         """
-        Optional implementable method for child classes. Run after _extract method.
+        Optional implementable method for child classes. Run after
+        _extract method.
         Lets to manipulate results of the extractor.
         :param entry:
         :param extraction_results:
@@ -185,9 +201,9 @@ class BaseExtractor:
             if self.output_path not in root_collection:
                 root_collection[self.output_path] = {}
 
-            return root_collection[
-                self.output_path
-            ]  # TODO: Support arbitrary deep paths with syntax like "primaryPerson.extraStuff.importantStuff"
+            return root_collection[self.output_path]
+            # TODO: Support arbitrary deep paths with syntax like
+            # "primaryPerson.extraStuff.importantStuff"
 
     def _add_to_extraction_results(
         self, data, extraction_results, extraction_metadata, cursor_location=0

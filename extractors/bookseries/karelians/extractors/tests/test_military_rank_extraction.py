@@ -1,4 +1,3 @@
-import pytest
 from extractors.bookseries.karelians.extractors.military_rank_extractor import (
     MilitaryRankExtractor,
 )

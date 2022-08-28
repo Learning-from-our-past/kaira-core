@@ -1,4 +1,3 @@
-import pytest
 from extractors.bookseries.karelians.extractors.injured_in_war_flag_extractor import (
     InjuredInWarFlagExtractor,
 )
@@ -410,18 +409,9 @@ def verify_flags(
 
 
 class TestLottaActivityFlagExtraction:
-    def should_return_true_if_text_contains_mention_of_lotta_activity(self, result_map):
-        verify_flags(
-            [
-                (
-                    'Emäntä oli sota-aikana mukana lottatoiminnas-sa ja hän on saanut talvisodan muistomitalin.',
-                    True,
-                )
-            ],
-            result_map,
-        )
-
-    def should_return_true_if_text_contains_mention_of_lotta_activity(self, result_map):
+    def should_return_false_if_text_contains_mention_of_lotta_activity_and_sex_is_male(
+        self, result_map
+    ):
         verify_flags(
             [
                 (
@@ -460,21 +450,6 @@ class TestLottaActivityFlagExtraction:
             result_map,
             in_spouse=False,
             sex='Female',
-        )
-
-    def should_return_false_if_text_does_not_contain_mention_of_lotta_activity(
-        self, result_map
-    ):
-        verify_flags(
-            [
-                (
-                    'Emäntä oli sota-aikana tanssilattioiden partaveitsi eikä piitannut sotatoiminnasta.',
-                    False,
-                )
-            ],
-            result_map,
-            in_spouse=True,
-            sex='Male',
         )
 
     def should_return_false_if_text_contains_lotta_name(self, result_map):

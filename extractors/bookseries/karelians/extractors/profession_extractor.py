@@ -12,7 +12,7 @@ class ProfessionExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depends_on=None, options=None):
         super(ProfessionExtractor, self).__init__(cursor_location_depends_on, options)
-        self.PROFESSION_PATTERN = r"(?<profession>[a-zä-ö,\. ]*) synt"
+        self.PROFESSION_PATTERN = r'(?<profession>[a-zä-ö,\. ]*) synt'
         self.PROFESSION_OPTIONS = re.UNICODE | re.IGNORECASE
 
         def cast_int(value):
@@ -76,12 +76,12 @@ class ProfessionExtractor(BaseExtractor):
             # limit the search range if there is spouse keyword:
             try:
                 found_spouse_word = regexUtils.safe_search(
-                    r"Puol", text, self.PROFESSION_OPTIONS
+                    r'Puol', text, self.PROFESSION_OPTIONS
                 )
                 text = text_utils.take_sub_str_based_on_range(
                     text, 0, found_spouse_word.start()
                 )
-            except regexUtils.RegexNoneMatchException as e:
+            except regexUtils.RegexNoneMatchException:
                 pass
 
             found_profession_match = regexUtils.safe_search(
@@ -89,8 +89,8 @@ class ProfessionExtractor(BaseExtractor):
             )
 
             cursor_location = found_profession_match.end()
-            profession = found_profession_match.group("profession")
-        except regexUtils.RegexNoneMatchException as e:
+            profession = found_profession_match.group('profession')
+        except regexUtils.RegexNoneMatchException:
             pass
 
         result_profession = self._clean_professions(profession)
@@ -104,22 +104,22 @@ class ProfessionExtractor(BaseExtractor):
         if profession is None:
             return profession
 
-        profession = profession.strip(",")
+        profession = profession.strip(',')
         profession = profession.strip()
         profession = profession.lstrip()
 
-        uppercase = re.match(r"[A-ZÄ-Ö]", profession)
+        uppercase = re.match(r'[A-ZÄ-Ö]', profession)
         if uppercase is not None:
-            comma = profession.find(",")
+            comma = profession.find(',')
             if comma != -1:
                 profession = profession[comma:]
 
-        profession = profession.strip(",")
-        profession = profession.strip(".")
+        profession = profession.strip(',')
+        profession = profession.strip('.')
         profession = profession.strip()
         profession = profession.lstrip()
         profession = re.sub(
-            r"[a-zä-ö]{1,3}(?:,|\.)\s", "", profession, self.PROFESSION_OPTIONS
+            r'[a-zä-ö]{1,3}(?:,|\.)\s', '', profession, self.PROFESSION_OPTIONS
         )
 
         if len(profession) < 3:
