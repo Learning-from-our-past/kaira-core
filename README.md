@@ -14,7 +14,7 @@ If you use Nix, then you can install most dependencies easily with [`nix-direnv`
 
 ### No Nix
 
-The codebase has been formatted with `black`. The reformatting resulted in a commit that changed a lot of lines, which in turn can make it unnecessarily challenging to use `git blame` (and `blame` integration in IDEs) to peek into the history of the project. However, there is a way around this challenge: the hash of the reformatting commit is in `.git-blame-ignore-revs`. To configure `git` to use that file when using `git blame`: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
+The codebase has been formatted with `black` and reformatted for compliance with PEP8. The reformattings resulted in two commits that changed a lot of lines, which in turn can make it unnecessarily challenging to use `git blame` (and `blame` integration in IDEs) to peek into the history of the project. However, there is a way around this challenge: the hashes of the reformatting commits are in `.git-blame-ignore-revs`. To configure `git` to use that file when using `git blame`: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
 
 ```
 python3 -m venv .venv
