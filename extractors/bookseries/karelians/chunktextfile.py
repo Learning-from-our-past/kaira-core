@@ -13,7 +13,6 @@ def read_html_file(path):
 
 
 class PersonPreprocessor(ChunkTextInterface):
-
     def __init__(self, bookseries_id):
         super(PersonPreprocessor, self).__init__(bookseries_id)
         self._save_path = None
@@ -30,15 +29,18 @@ class PersonPreprocessor(ChunkTextInterface):
         # two parts, separated by a space. After that, there can be a space or a hyphen, followed by
         # a dot or a comma, followed by another possible space or hyphen. Then there can be up to three
         # words (names) after that, each at least one character long.
-        self._ENTRY_NAME_REGEX = re.compile(r'(?:[A-ZÄÖ-]+\s?){1,2}[\s-]?[.,][\s-]?(?:\w+[\s-]?){1,3}',
-                                            re.UNICODE)
-        
+        self._ENTRY_NAME_REGEX = re.compile(
+            r'(?:[A-ZÄÖ-]+\s?){1,2}[\s-]?[.,][\s-]?(?:\w+[\s-]?){1,3}', re.UNICODE
+        )
+
         # This regular expression is used to detect when a person's entry in the .html file begins from
         # within another person's entry. This regex is quite a bit more refined than the original one and
         # does not pick up non-names, like military unit/regiment abbreviations. It also has a better rate
         # of getting both the first and surnames of a person, instead of just one of them.
-        self._MID_ENTRY_NAME_REGEX = re.compile(r'(?:[A-ZÄ-Ö0-9!^%#]{4,}\s?){1,3}\s?[.,]\s?(?:[A-ZÄ-Ö0-9!^%#]{4,}\s?){1,3}',
-                                                re.UNICODE)
+        self._MID_ENTRY_NAME_REGEX = re.compile(
+            r'(?:[A-ZÄ-Ö0-9!^%#]{4,}\s?){1,3}\s?[.,]\s?(?:[A-ZÄ-Ö0-9!^%#]{4,}\s?){1,3}',
+            re.UNICODE,
+        )
 
     def chunk_text(self, text, destination_path, book_number):
         self._save_path = destination_path
@@ -70,9 +72,14 @@ class PersonPreprocessor(ChunkTextInterface):
                 try:
                     self._page_number = int(e.text)
                 except ValueError:
-                    if e.text[0:100].isupper() and self._ENTRY_NAME_REGEX.search(e.text) is not None:
+                    if (
+                        e.text[0:100].isupper()
+                        and self._ENTRY_NAME_REGEX.search(e.text) is not None
+                    ):
                         self._add_person(self._current_person)
-                        self._current_person = self._create_person(name=e.text, entry='')
+                        self._current_person = self._create_person(
+                            name=e.text, entry=''
+                        )
                         self._current_person_raw = self._current_person.find('RAW')
                     elif self._current_person is not None:
                         self._process_element(e)
@@ -88,15 +95,21 @@ class PersonPreprocessor(ChunkTextInterface):
             # TODO: Rough. Should be made recursive, so that if there are more than two people
             # TODO: in the same entry, they get separated as well.
             if mid_entry_person is not None:
-                self._current_person_raw.text += e.text[0:mid_entry_person.start()]
+                self._current_person_raw.text += e.text[0 : mid_entry_person.start()]
                 self._add_person(self._current_person)
                 new_person_name = mid_entry_person.group(0).strip(' ').strip('\xa0')
-                self._current_person = self._create_person(name=new_person_name, entry=e.text[mid_entry_person.end():])
+                self._current_person = self._create_person(
+                    name=new_person_name, entry=e.text[mid_entry_person.end() :]
+                )
             else:
                 self._current_person_raw.text += e.text
 
-            self._current_person_raw.text = re.sub('\n', ' ', self._current_person_raw.text)
-            self._current_person_raw.text = re.sub('\s{2,4}', ' ', self._current_person_raw.text)
+            self._current_person_raw.text = re.sub(
+                '\n', ' ', self._current_person_raw.text
+            )
+            self._current_person_raw.text = re.sub(
+                '\s{2,4}', ' ', self._current_person_raw.text
+            )
 
     def _parse_image(self, element):
         image_path = element.attrib['src']
@@ -114,11 +127,15 @@ class PersonPreprocessor(ChunkTextInterface):
                 name = found_next['next'].text
 
         if name != '':
-            new_path = '{}.jpg'.format(re.sub(r'(?:[^a-zä-ö0-9]|(?<=[\'"])s)', r'', name, flags=re.IGNORECASE))
+            new_path = '{}.jpg'.format(
+                re.sub(r'(?:[^a-zä-ö0-9]|(?<=[\'"])s)', r'', name, flags=re.IGNORECASE)
+            )
             file_prefix = os.path.basename(os.path.splitext(self._save_path)[0])
             new_path = os.path.join('{}_images'.format(file_prefix), new_path)
             self._copy_rename_image_files(new_path, image_path)
-            self._images.append({'name': self._convert_image_name(name), 'image': new_path})
+            self._images.append(
+                {'name': self._convert_image_name(name), 'image': new_path}
+            )
 
     def _find_prev_caption_text(self, element):
         prev_element = element.getprevious()
@@ -126,9 +143,12 @@ class PersonPreprocessor(ChunkTextInterface):
         counter = 1
         while not found_prev:
             try:
-                if (prev_element is not None and prev_element.text is not None
-                        and re.search('[A-ZÄ-Ö][a-zä-ö]+', prev_element.text) is not None
-                        and len(prev_element.text) < 30):
+                if (
+                    prev_element is not None
+                    and prev_element.text is not None
+                    and re.search('[A-ZÄ-Ö][a-zä-ö]+', prev_element.text) is not None
+                    and len(prev_element.text) < 30
+                ):
                     found_prev = True
                 else:
                     prev_element = prev_element.getprevious()
@@ -146,9 +166,12 @@ class PersonPreprocessor(ChunkTextInterface):
         counter = 1
         while not found_next:
             try:
-                if (next_element is not None and next_element.text is not None
-                        and re.search('[A-ZÄ-Ö][a-zä-ö]+', next_element.text) is not None
-                        and len(next_element.text) < 30):
+                if (
+                    next_element is not None
+                    and next_element.text is not None
+                    and re.search('[A-ZÄ-Ö][a-zä-ö]+', next_element.text) is not None
+                    and len(next_element.text) < 30
+                ):
                     found_next = True
                 else:
                     next_element = next_element.getnext()
@@ -165,9 +188,14 @@ class PersonPreprocessor(ChunkTextInterface):
             # copy the image files and rename them according to person's name
             file_prefix = os.path.basename(os.path.splitext(self._save_path)[0])
             new_path = os.path.join(os.path.dirname(self._save_path), new_path)
-            os.makedirs('{}/{}_images'.format(os.path.dirname(self._save_path), file_prefix), exist_ok=True)
+            os.makedirs(
+                '{}/{}_images'.format(os.path.dirname(self._save_path), file_prefix),
+                exist_ok=True,
+            )
             if not os.path.isfile(os.path.join(new_path)):
-                old_image_path = os.path.join(os.getcwd(), os.path.join(*image_path.split('\\')))
+                old_image_path = os.path.join(
+                    os.getcwd(), os.path.join(*image_path.split('\\'))
+                )
                 shutil.copy(old_image_path, new_path)
         except Exception:
             pass
@@ -187,12 +215,16 @@ class PersonPreprocessor(ChunkTextInterface):
     def _join_images_to_persons(self):
         for image in self._images:
             if image['name'] in self._map_name_to_person:
-                self._map_name_to_person[image['name']].attrib['img_path'] = image['image']
+                self._map_name_to_person[image['name']].attrib['img_path'] = image[
+                    'image'
+                ]
 
     def _create_person(self, name, entry):
         person = etree.Element('PERSON')
         person.attrib['name'] = name
-        person.attrib['approximated_page'] = '{}-{}'.format(self._page_number - 1, self._page_number + 1)
+        person.attrib['approximated_page'] = '{}-{}'.format(
+            self._page_number - 1, self._page_number + 1
+        )
         raw = etree.Element('RAW')
         raw.text = entry
         person.append(raw)
@@ -204,15 +236,24 @@ class PersonPreprocessor(ChunkTextInterface):
             self._persons_document.append(person)
 
 
-def convert_html_file_to_xml(bookseries_id, input_files, output_files, book_numbers, filter_duplicates=False, callback=None):
+def convert_html_file_to_xml(
+    bookseries_id,
+    input_files,
+    output_files,
+    book_numbers,
+    filter_duplicates=False,
+    callback=None,
+):
     books = []
-    
-    for input_file, output_file, book_number in zip(input_files, output_files, book_numbers):
+
+    for input_file, output_file, book_number in zip(
+        input_files, output_files, book_numbers
+    ):
         text = input_file.read()
         p = PersonPreprocessor(bookseries_id)
         persons = p.chunk_text(text, output_file.name, book_number)
         books.append(persons)
-    
+
     if filter_duplicates:
         deleter = DuplicateDeleter(update_callback=callback)
         books = deleter.delete_duplicate_persons(books)

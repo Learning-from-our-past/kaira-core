@@ -25,12 +25,20 @@ clean_up_patterns = [
     # Change "n." to "noin"
     (r'(?:\sn\.\s)', r' noin ', None),
     # Change variants of "muut asuinp." to "muut asuinpaikat:"
-    (r'(m)(?:uut){s<=1}\s?(?:asuinp){s<=1}[.,\s]?', r'\1uut asuinpaikat', regex.IGNORECASE),
+    (
+        r'(m)(?:uut){s<=1}\s?(?:asuinp){s<=1}[.,\s]?',
+        r'\1uut asuinpaikat',
+        regex.IGNORECASE,
+    ),
     (r'(?:(m)uut\s?[B-Öb-ö]{0,3}sui.{0,3}:)', r'\1uut asuinpaikat:', regex.IGNORECASE),
     # Change just "asuinp." to "asuinpaikat"
     (r'(a)(?:suinp)[.,;]?(?!aikat)', r'\1suinpaikat', regex.IGNORECASE),
     # Change "puol." to "puoliso"
-    (r'(?<![a-zöä])\s?(p)(?:uol)\s*[.,;]?\s*(?=[^a-zöä])', r' \1uoliso', regex.IGNORECASE),
+    (
+        r'(?<![a-zöä])\s?(p)(?:uol)\s*[.,;]?\s*(?=[^a-zöä])',
+        r' \1uoliso',
+        regex.IGNORECASE,
+    ),
     (r'(?<![a-zöä])(?:(p)uol){s<=1}[^a-zöä]', r'\1uoliso', regex.IGNORECASE),
     # Change "synt." to "syntyi"
     (r'\s?(?:synt\.){s<=1}\s?', r' syntyi ', None),
@@ -61,8 +69,12 @@ clean_up_patterns = [
     # Fix mentions of medals to have a space inbetween if they don't
     (r'(js|ts|vs)(mm[,.\s\-*/!;:])', r'\1 \2', regex.IGNORECASE),
     # Fix incorrect ";" characters to ":"
-    (r'(karjalassa|lapset|tytär|vaimo|poika|asuinpaikat|reitti|avioliitosta'
-     r'|isä|äiti|lapsensa|vanhemmat|sisarukset|kunniamerkit){s<=1};', r'\1:', regex.IGNORECASE),
+    (
+        r'(karjalassa|lapset|tytär|vaimo|poika|asuinpaikat|reitti|avioliitosta'
+        r'|isä|äiti|lapsensa|vanhemmat|sisarukset|kunniamerkit){s<=1};',
+        r'\1:',
+        regex.IGNORECASE,
+    ),
     # Trim whitespace between "asuinpaikat" and ":"
     (r'(asuinpaikat)\s+:', r'\1:', regex.IGNORECASE),
     # Expand variants of "ent" to "entinen"

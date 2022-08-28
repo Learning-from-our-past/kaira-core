@@ -6,6 +6,7 @@ from extractors.common.extraction_keys import KEYS
 from core.pipeline_construction.base_extractor import BaseExtractor
 from core.utils import text_utils
 
+
 class QuantityExtractor(BaseExtractor):
     extraction_key = KEYS["quantities"]
 
@@ -14,14 +15,28 @@ class QuantityExtractor(BaseExtractor):
         self.QUANTITY_PATTERN = r"(?:(?P<range>\d\d?\d?(?:-|—)\d\d?\d?)|(?P<number>\d\d?\d?)|(?P<word>yksi|yhtä|kahta|kaksi|kolme|neljä|viisi|kuusi|seitsemän|kahdeksan|yhdeksän|kymmenen))\s?"
         self.SPLIT_PATTERN1 = r"(?P<number>\d\d?)"
         self.patterns_to_find = options['patterns']
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
-        self.NUMBER_MAP = {"yksi": 1, "yhtä": 1, "kahta": 2, "kaksi": 2, "kolme": 3, "neljä": 4, "viisi": 5, "kuusi": 6,
-                           "seitsemän": 7, "kahdeksan": 8, "yhdeksän": 9, "kymmenen": 10}
+        self.OPTIONS = re.UNICODE | re.IGNORECASE
+        self.NUMBER_MAP = {
+            "yksi": 1,
+            "yhtä": 1,
+            "kahta": 2,
+            "kaksi": 2,
+            "kolme": 3,
+            "neljä": 4,
+            "viisi": 5,
+            "kuusi": 6,
+            "seitsemän": 7,
+            "kahdeksan": 8,
+            "yhdeksän": 9,
+            "kymmenen": 10,
+        }
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_metadata)
         results = self._find_patterns(entry['text'])
-        return self._add_to_extraction_results(results, extraction_results, extraction_metadata, start_position)
+        return self._add_to_extraction_results(
+            results, extraction_results, extraction_metadata, start_position
+        )
 
     def _find_patterns(self, text):
         results = {}
@@ -60,7 +75,7 @@ class QuantityExtractor(BaseExtractor):
                 num_sum += float(m.group("number"))
 
             if len(numbers) > 0:
-                return float(num_sum/len(numbers))
+                return float(num_sum / len(numbers))
             else:
                 return None
         except ValueError:

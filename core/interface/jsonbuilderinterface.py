@@ -3,7 +3,6 @@ from abc import abstractmethod
 
 
 class ResultJsonBuilderInterface:
-
     def __init__(self):
         pass
 

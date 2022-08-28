@@ -28,8 +28,10 @@ class ExtractorResultsMap:
         if extractor_id in self._extractor_results:
             return copy.deepcopy(self._extractor_results[extractor_id])
         else:
-            raise Exception('No extraction results could be found for the extractor. '
-                            'Likely it was not executed before trying to access its results for dependency.')
+            raise Exception(
+                'No extraction results could be found for the extractor. '
+                'Likely it was not executed before trying to access its results for dependency.'
+            )
 
     def clear(self):
         """

@@ -10,7 +10,9 @@ from core.utils.geo.geocoding import GeoCoder, LocationNotFound
 
 
 class FindLocation:
-    PATTERN = r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
+    PATTERN = (
+        r'(?:\d+| s)(?:\s|,|\.)(?P<location>[A-ZÄ-Ö]{1,1}[A-ZÄ-Öa-zä-ö-]{1,}(?: mlk)?)'
+    )
     OPTIONS = re.UNICODE
     matchFinalPosition = 0
     foundLocation = None
@@ -22,7 +24,9 @@ class FindLocation:
         :return:
         """
         try:
-            found_location_match = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
+            found_location_match = regex_utils.safe_search(
+                self.PATTERN, text, self.OPTIONS
+            )
             cursor_location = found_location_match.end()
             return found_location_match, cursor_location
         except regex_utils.RegexNoneMatchException:
@@ -33,7 +37,9 @@ class BirthdayLocationExtractor(BaseExtractor):
     extraction_key = 'birthLocation'
 
     def __init__(self, cursor_location_depends_on=None, options=None):
-        super(BirthdayLocationExtractor, self).__init__(cursor_location_depends_on, options)
+        super(BirthdayLocationExtractor, self).__init__(
+            cursor_location_depends_on, options
+        )
 
         self.DEATHCHECK_PATTERN = r'(\bk\b|\bkaat\b)'
         self.REQUIRES_MATCH_POSITION = True
@@ -46,16 +52,25 @@ class BirthdayLocationExtractor(BaseExtractor):
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
         location_result = self._find_location(prepared_text, start_position)
-        return self._add_to_extraction_results(location_result[0], extraction_results, extraction_metadata, location_result[1])
+        return self._add_to_extraction_results(
+            location_result[0],
+            extraction_results,
+            extraction_metadata,
+            location_result[1],
+        )
 
     def _postprocess(self, entry, extraction_results, extraction_metadata):
         """
         After extraction, run a postprocess cleaning and name fixing for the location.
-        :param entry: 
-        :param extraction_results: 
-        :return: 
+        :param entry:
+        :param extraction_results:
+        :return:
         """
-        self._get_output_path(extraction_results)[self.extraction_key] = self._augment_location_data(self._get_output_path(extraction_results)[self.extraction_key])
+        self._get_output_path(extraction_results)[
+            self.extraction_key
+        ] = self._augment_location_data(
+            self._get_output_path(extraction_results)[self.extraction_key]
+        )
         return extraction_results, extraction_metadata
 
     def _augment_location_data(self, location_name):
@@ -63,7 +78,7 @@ class BirthdayLocationExtractor(BaseExtractor):
             KEYS['locationName']: location_name,
             KEYS['region']: None,
             KEYS['latitude']: None,
-            KEYS['longitude']: None
+            KEYS['longitude']: None,
         }
 
         location_entry = place_name_cleaner.clean_place_name(location_entry)
@@ -72,7 +87,9 @@ class BirthdayLocationExtractor(BaseExtractor):
         # Try to find coordinates and region of the place from our geo database
         # If coordinates were found, merge them to the location entry dict.
         try:
-            region_and_coordinates = GeoCoder.get_coordinates(location_entry[KEYS['locationName']])
+            region_and_coordinates = GeoCoder.get_coordinates(
+                location_entry[KEYS['locationName']]
+            )
             location_entry = {**location_entry, **region_and_coordinates}
         except LocationNotFound:
             pass
@@ -80,7 +97,9 @@ class BirthdayLocationExtractor(BaseExtractor):
         return location_entry
 
     def _prepare_text_for_extraction(self, text, start_position):
-        return text_utils.take_sub_str_based_on_pos(text, start_position - 4, self.SUBSTRING_WIDTH)   # Dirty -4 offset
+        return text_utils.take_sub_str_based_on_pos(
+            text, start_position - 4, self.SUBSTRING_WIDTH
+        )  # Dirty -4 offset
 
     def _find_location(self, text, start_position):
         cursor_location = start_position
@@ -117,9 +136,13 @@ class BirthdayLocationExtractor(BaseExtractor):
     def _check_if_location_is_valid(self, text, found_location):
         # check if the string has data on death. If it is before the location, be careful to not
         # put the death location to birth location.
-        death_position = regex_utils.find_first_position_with_regex_search(self.DEATHCHECK_PATTERN, text, re.UNICODE)
+        death_position = regex_utils.find_first_position_with_regex_search(
+            self.DEATHCHECK_PATTERN, text, re.UNICODE
+        )
         if death_position != -1:
-            if death_position < found_location.end(): # there is word kaat, or " k " before location match.
+            if (
+                death_position < found_location.end()
+            ):  # there is word kaat, or " k " before location match.
                 raise LocationException(text)
 
 

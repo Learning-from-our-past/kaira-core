@@ -19,8 +19,12 @@ class ImageExtractor(BaseExtractor):
         except KeyError:
             pass
 
-        return self._add_to_extraction_results({
-            KEYS["imagepath"]: image_path,
-            KEYS["approximatePage"]: page,
-            KEYS["originalText"]: entry['text']
-        }, extraction_results, extraction_metadata)
+        return self._add_to_extraction_results(
+            {
+                KEYS["imagepath"]: image_path,
+                KEYS["approximatePage"]: page,
+                KEYS["originalText"]: entry['text'],
+            },
+            extraction_results,
+            extraction_metadata,
+        )

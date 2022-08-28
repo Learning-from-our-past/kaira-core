@@ -19,7 +19,12 @@ class CommonChildExtractor(BaseExtractor):
         start_position = self.get_starting_position(extraction_metadata)
 
         children_results = self._find_children(entry['text'], start_position)
-        return self._add_to_extraction_results(children_results[0], extraction_results, extraction_metadata, children_results[1])
+        return self._add_to_extraction_results(
+            children_results[0],
+            extraction_results,
+            extraction_metadata,
+            children_results[1],
+        )
 
     def _find_children(self, text, start_position):
         cursor_location = start_position
@@ -27,7 +32,9 @@ class CommonChildExtractor(BaseExtractor):
         children_entries = []
 
         try:
-            found_children_match = regex_utils.safe_search(self.CHILD_PATTERN, text, self.CHILD_OPTIONS)
+            found_children_match = regex_utils.safe_search(
+                self.CHILD_PATTERN, text, self.CHILD_OPTIONS
+            )
             cursor_location = found_children_match.end()
             children_str = found_children_match.group("children")
             cleaned_children = self._clean_children(children_str)
@@ -46,14 +53,16 @@ class CommonChildExtractor(BaseExtractor):
         return children_str
 
     def _split_children(self, children_str):
-        found_children_matches = regex_utils.regex_iter(self.SPLIT_PATTERN1, children_str, self.SPLIT_OPTIONS1)
+        found_children_matches = regex_utils.regex_iter(
+            self.SPLIT_PATTERN1, children_str, self.SPLIT_OPTIONS1
+        )
         children_entries = []
         for m in found_children_matches:
             # check if there is "ja" word as separator such as "Seppo -41 ja Jaakko -32.
             ja_word = regex_utils.search(r"\sja\s", m.group("child"))
             if ja_word is not None:
-                first_child = self._process_child(m.group("child")[0:ja_word.start()])
-                second_child = self._process_child(m.group("child")[ja_word.end():])
+                first_child = self._process_child(m.group("child")[0 : ja_word.start()])
+                second_child = self._process_child(m.group("child")[ja_word.end() :])
 
                 if first_child is not None and second_child is not None:
                     self._twins_year_handler(first_child, second_child)
@@ -81,7 +90,9 @@ class CommonChildExtractor(BaseExtractor):
 
     def _process_child(self, child):
         try:
-            name = regex_utils.safe_search(self.NAME_PATTERN, child, self.CHILD_OPTIONS).group("name")
+            name = regex_utils.safe_search(
+                self.NAME_PATTERN, child, self.CHILD_OPTIONS
+            ).group("name")
             name = name.strip()
             name = name.strip("-")
             name = name.strip(" ")
@@ -92,7 +103,9 @@ class CommonChildExtractor(BaseExtractor):
                 gender = None
 
             try:
-                year_match = regex_utils.safe_search(self.YEAR_PATTERN, child, self.CHILD_OPTIONS)
+                year_match = regex_utils.safe_search(
+                    self.YEAR_PATTERN, child, self.CHILD_OPTIONS
+                )
                 year = year_match.group("year")
                 if float(year) < 70:
                     year = text_utils.int_or_none("19" + year)
@@ -101,6 +114,11 @@ class CommonChildExtractor(BaseExtractor):
             except regex_utils.RegexNoneMatchException:
                 year = None
 
-            return {"name": name, "gender": gender, "birthYear": year, "kairaId": self._kaira_id_provider.get_new_id('C')}
+            return {
+                "name": name,
+                "gender": gender,
+                "birthYear": year,
+                "kairaId": self._kaira_id_provider.get_new_id('C'),
+            }
         except regex_utils.RegexNoneMatchException:
             pass

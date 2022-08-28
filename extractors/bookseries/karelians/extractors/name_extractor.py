@@ -6,16 +6,14 @@ from core.utils.sex_extract import Sex, SexException
 
 
 class NameExtractor(BaseExtractor):
-    """ Tries to extract the name of the person in this entry. Assumed that it can be found from
+    """Tries to extract the name of the person in this entry. Assumed that it can be found from
     name attribute from person entry.
     """
+
     extraction_key = 'name'
 
     def _extract(self, entry, extraction_results, extraction_metadata):
-        result = {
-            KEYS["surname"]: '',
-            KEYS['firstnames']: ''
-        }
+        result = {KEYS["surname"]: '', KEYS['firstnames']: ''}
 
         try:
             result = self._split_names(entry["name"])
@@ -28,7 +26,9 @@ class NameExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('genderNotFound', 8)
             result[KEYS['gender']] = ""
 
-        return self._add_to_extraction_results(result, extraction_results, extraction_metadata)
+        return self._add_to_extraction_results(
+            result, extraction_results, extraction_metadata
+        )
 
     def _split_names(self, name):
         name = re.sub(r"(?:<|>|&|')", r"", name)

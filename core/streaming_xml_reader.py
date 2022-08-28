@@ -2,7 +2,9 @@ from lxml import etree
 
 
 class StreamingXMLReader:
-    def __init__(self, input_file, convert_xml_to_dict, chunk_size=100, encoding='utf8'):
+    def __init__(
+        self, input_file, convert_xml_to_dict, chunk_size=100, encoding='utf8'
+    ):
         """
         A class for streaming person entries from an XML file.
         :param input_file: String, path to file to stream person entries from
@@ -44,4 +46,3 @@ class StreamingXMLReader:
                 current_chunk.clear()
         yield current_chunk
         return
-

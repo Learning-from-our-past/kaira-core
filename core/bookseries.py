@@ -33,9 +33,12 @@ class BookSeries:
         self._custom_convert_xml_to_dict = self._load_custom_xml_conversion_function()
 
     def extract_data(self, xml_stream):
-        self._extractor_pipeline = self._parser.build_pipeline_from_yaml(os.path.join(self._manifest['path'],
-                                                                                      'pipeline_config.yaml'))
-        self._extractor = ProcessData(self._extractor_pipeline, self._extraction_result_map, self._update_callback)
+        self._extractor_pipeline = self._parser.build_pipeline_from_yaml(
+            os.path.join(self._manifest['path'], 'pipeline_config.yaml')
+        )
+        self._extractor = ProcessData(
+            self._extractor_pipeline, self._extraction_result_map, self._update_callback
+        )
 
         self._results = self._extractor.run_extraction(xml_stream)
 
@@ -46,15 +49,26 @@ class BookSeries:
 
             for entry in self._results['entries']:
                 try:
-                    writer.write_entry(entry['extractionResults'][0])    # Leave metadata objects out
+                    writer.write_entry(
+                        entry['extractionResults'][0]
+                    )  # Leave metadata objects out
                 except KeyError as e:
                     raise e
 
             writer.close_json()
 
-    def chunk(self, input_files, output_files, book_numbers, filter_duplicates=False, callback=None):
+    def chunk(
+        self,
+        input_files,
+        output_files,
+        book_numbers,
+        filter_duplicates=False,
+        callback=None,
+    ):
         # Import the chunking implementation from the plugin directory
-        chunking_module = self._load_plugin_module('chunktextfile', self._manifest['chunker'])
+        chunking_module = self._load_plugin_module(
+            'chunktextfile', self._manifest['chunker']
+        )
 
         # And then call the actual implementation in the imported module
         chunking_module.convert_html_file_to_xml(
@@ -63,7 +77,7 @@ class BookSeries:
             output_files,
             book_numbers,
             filter_duplicates,
-            callback
+            callback,
         )
 
     def parse_with_nlp(self, xml_doc, base_path, output_file, clean_up):
@@ -71,7 +85,9 @@ class BookSeries:
         transformed_file_path = run_xml_data_transformation(self, xml_doc, base_path)
 
         print('Running transformed data through fin-dep-parser...')
-        nlp_data_file = parse_through_fdp_and_output_file(transformed_file_path, base_path)
+        nlp_data_file = parse_through_fdp_and_output_file(
+            transformed_file_path, base_path
+        )
         if clean_up:
             os.remove(transformed_file_path)
 
@@ -125,8 +141,10 @@ class BookSeries:
         if self._custom_convert_xml_to_dict is not None:
             return self._custom_convert_xml_to_dict(person_element)
 
-        person_entry = {**person_element.attrib,
-                        'text': person_element.find('RAW').text}
+        person_entry = {
+            **person_element.attrib,
+            'text': person_element.find('RAW').text,
+        }
 
         conllu_data = BookSeries._get_conllu_data_from_xml(person_element)
         if conllu_data is not None:
@@ -164,14 +182,15 @@ class BookSeries:
     def _load_clean_up_function(self):
         clean_up_module_path = self._manifest.get('nlp_clean_up', None)
         if clean_up_module_path is not None:
-            return self._load_plugin_module('clean_up', clean_up_module_path).clean_up_entry
+            return self._load_plugin_module(
+                'clean_up', clean_up_module_path
+            ).clean_up_entry
         return None
 
     def _load_plugin_module(self, module_name, file):
-        module_spec = import_util.spec_from_file_location(module_name,
-                                                          os.path.join(
-                                                              self._manifest['path'],
-                                                              file))
+        module_spec = import_util.spec_from_file_location(
+            module_name, os.path.join(self._manifest['path'], file)
+        )
         module = import_util.module_from_spec(module_spec)
         module_spec.loader.exec_module(module)
         return module
@@ -195,5 +214,7 @@ class BookSeries:
         xml_to_dict_module_path = self._manifest.get('xml_to_dict', None)
         if xml_to_dict_module_path is None:
             return None
-        xml_conversion_module = self._load_plugin_module('xml_to_dict', xml_to_dict_module_path)
+        xml_conversion_module = self._load_plugin_module(
+            'xml_to_dict', xml_to_dict_module_path
+        )
         return xml_conversion_module.convert_xml_to_dict

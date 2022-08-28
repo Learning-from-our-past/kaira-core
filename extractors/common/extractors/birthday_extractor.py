@@ -9,9 +9,11 @@ class CommonBirthdayExtractor(BaseExtractor):
     extraction_key = KEYS['birthData']
 
     def __init__(self, cursor_location_depends_on=None, options=None):
-        super(CommonBirthdayExtractor, self).__init__(cursor_location_depends_on, options)
+        super(CommonBirthdayExtractor, self).__init__(
+            cursor_location_depends_on, options
+        )
         self.PATTERN = options['PATTERN']
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
+        self.OPTIONS = re.UNICODE | re.IGNORECASE
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
 
@@ -25,17 +27,25 @@ class CommonBirthdayExtractor(BaseExtractor):
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_metadata)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
-        found_birth_date, cursor_location = self._find_date(prepared_text, start_position)
+        found_birth_date, cursor_location = self._find_date(
+            prepared_text, start_position
+        )
 
-        return self._add_to_extraction_results(found_birth_date, extraction_results, extraction_metadata, cursor_location)
+        return self._add_to_extraction_results(
+            found_birth_date, extraction_results, extraction_metadata, cursor_location
+        )
 
     def _prepare_text_for_extraction(self, text, start_position):
-        t = text_utils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
+        t = text_utils.take_sub_str_based_on_pos(
+            text, start_position, self.SUBSTRING_WIDTH
+        )
 
         if self._remove_spaces_from_text:
             t = text_utils.remove_spaces_from_text(t)
 
-        spouse_found = regex_utils.find_first_position_with_regex_search('puol', t, re.IGNORECASE | re.UNICODE)
+        spouse_found = regex_utils.find_first_position_with_regex_search(
+            'puol', t, re.IGNORECASE | re.UNICODE
+        )
         if spouse_found != -1:
             t = t[0:spouse_found]
 
@@ -53,9 +63,11 @@ class CommonBirthdayExtractor(BaseExtractor):
             found_date = {'day': None, 'month': None, 'year': None}
 
         # Map date to birthDate
-        birth_date = {KEYS['birthDay']: text_utils.int_or_none(found_date['day']),
-                      KEYS['birthMonth']: text_utils.int_or_none(found_date['month']),
-                      KEYS['birthYear']: text_utils.int_or_none(found_date['year'])}
+        birth_date = {
+            KEYS['birthDay']: text_utils.int_or_none(found_date['day']),
+            KEYS['birthMonth']: text_utils.int_or_none(found_date['month']),
+            KEYS['birthYear']: text_utils.int_or_none(found_date['year']),
+        }
 
         return birth_date, cursor_location
 
@@ -64,12 +76,27 @@ class DateFinder:
     """
     An utility class for date finding purposes. Not an extractor itself though.
     """
+
     def __init__(self, pattern, options):
         self.PATTERN = pattern
         self.OPTIONS = options
-        self.MONTH_NAME_NUMBER_MAPPING = {'syks': 9, 'marrask': 11, 'eiok': 8, 'elok': 8, 'heinäk': 7, 'helmik': 2,
-                                          'huhtik': 4,'jouluk': 12, 'kesäk': 6, 'lokak': 10, 'maalisk': 3, 'maallsk': 3,
-                                          'syysk': 9, 'tammik': 1, 'toukok': 5}
+        self.MONTH_NAME_NUMBER_MAPPING = {
+            'syks': 9,
+            'marrask': 11,
+            'eiok': 8,
+            'elok': 8,
+            'heinäk': 7,
+            'helmik': 2,
+            'huhtik': 4,
+            'jouluk': 12,
+            'kesäk': 6,
+            'lokak': 10,
+            'maalisk': 3,
+            'maallsk': 3,
+            'syysk': 9,
+            'tammik': 1,
+            'toukok': 5,
+        }
 
     def find_date(self, text):
         prepared_text = self._prepare_text_for_extraction(text)
@@ -92,16 +119,28 @@ class DateFinder:
 
     def _find_date(self, text):
         try:
-            found_date_matches = regex_utils.safe_search(self.PATTERN, text, self.OPTIONS)
-            months_and_years_from_words = self._if_written_month_names_extract_them(found_date_matches)
+            found_date_matches = regex_utils.safe_search(
+                self.PATTERN, text, self.OPTIONS
+            )
+            months_and_years_from_words = self._if_written_month_names_extract_them(
+                found_date_matches
+            )
             cursor_location = found_date_matches.end()
             if months_and_years_from_words is None:
                 year = self._get_year_from_match(found_date_matches)
                 day_and_month = self._get_month_and_day_from_match(found_date_matches)
 
-                return {'day': day_and_month['day'], 'month': day_and_month['month'], 'year': year}, cursor_location
+                return {
+                    'day': day_and_month['day'],
+                    'month': day_and_month['month'],
+                    'year': year,
+                }, cursor_location
             else:
-                return {'day': '', 'month': months_and_years_from_words[0], 'year': months_and_years_from_words[1]}, cursor_location
+                return {
+                    'day': '',
+                    'month': months_and_years_from_words[0],
+                    'year': months_and_years_from_words[1],
+                }, cursor_location
         except regex_utils.RegexNoneMatchException:
             raise DateException(text)
 
@@ -109,7 +148,7 @@ class DateFinder:
     def _get_month_and_day_from_match(date_match):
         return {
             'day': text_utils.int_or_none(date_match.group('day')),
-            'month': text_utils.int_or_none(date_match.group('month'))
+            'month': text_utils.int_or_none(date_match.group('month')),
         }
 
     def _if_written_month_names_extract_them(self, date_match):
@@ -117,11 +156,11 @@ class DateFinder:
             # year and month available
             month_match = date_match.group('monthName')
             month = self._map_month_name_to_number(month_match)
-            year = date_match.group('monthYear')    # special capture group.
+            year = date_match.group('monthYear')  # special capture group.
             year = self._transform_year(year)
             return month, year
         except (IndexError, TypeError):
-            return None    # there is no monthYear or monthName, so use other extraction method
+            return None  # there is no monthYear or monthName, so use other extraction method
 
     def _map_month_name_to_number(self, name):
         if name in self.MONTH_NAME_NUMBER_MAPPING:

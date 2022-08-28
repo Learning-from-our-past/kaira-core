@@ -10,12 +10,11 @@ def read_html_file(path):
 
 
 class PersonPreprocessor(ChunkTextInterface):
-
     def chunk_text(self, text, destination_path, book_number):
         self.save_path = destination_path
         self.book_number = book_number
-        text = re.sub(r"(\<sup\>)|\<\/sup\>", "", text) #remove sup tags
-        parsed = html.document_fromstring( text)
+        text = re.sub(r"(\<sup\>)|\<\/sup\>", "", text)  # remove sup tags
+        parsed = html.document_fromstring(text)
         persons = self.process(parsed)
         return etree.tostring(persons, pretty_print=True, encoding='unicode')
 
@@ -42,7 +41,9 @@ class PersonPreprocessor(ChunkTextInterface):
                     name = re.search("^[A-ZÄ-Ö -]{4,}", e.text)
                     if len(e.text) > 25 and name is not None:
                         self._add_person(self.current_person)
-                        self.current_person = self._create_person(name=name.group(0).strip(" "), entry=e.text[name.end():])
+                        self.current_person = self._create_person(
+                            name=name.group(0).strip(" "), entry=e.text[name.end() :]
+                        )
                         self.current_person_raw = self.current_person.find('RAW')
                     elif self.current_person is not None:
                         if name is not None:
@@ -54,25 +55,25 @@ class PersonPreprocessor(ChunkTextInterface):
                         if name is not None:
                             self._save_location(name.group(0).strip(" "))
 
-
         self._add_person(self.current_person)
         return self.persons_document
 
     def _save_location(self, name):
         self.location = re.sub(r"\s", "", name)
 
-
     def _process_element(self, e):
         if len(e.text) > 40:
             # try to notice people who start within other people
             uppercase = re.search("[A-ZÄ-Ö, ]{8,}", e.text)
 
-            #TODO: Karkea. Pitäisi muuttaa rekursiiviseksi, jotta jos samassa entryssä on > 2
-            #TODO: ihmistä, heidät eroteltaisiin myös.
+            # TODO: Karkea. Pitäisi muuttaa rekursiiviseksi, jotta jos samassa entryssä on > 2
+            # TODO: ihmistä, heidät eroteltaisiin myös.
             if uppercase is not None:
-                self.current_person_raw.text += e.text[0:uppercase.start()]
+                self.current_person_raw.text += e.text[0 : uppercase.start()]
                 self._add_person(self.current_person)
-                self.current_person =  self._create_person(name=uppercase.group(0).strip(" "), entry=e.text[uppercase.end():])
+                self.current_person = self._create_person(
+                    name=uppercase.group(0).strip(" "), entry=e.text[uppercase.end() :]
+                )
             else:
                 self.current_person_raw.text += e.text
 
@@ -80,7 +81,9 @@ class PersonPreprocessor(ChunkTextInterface):
         person = etree.Element("PERSON")
         person.attrib["name"] = re.sub(r"\s", "", name)
         person.attrib["location"] = self.location
-        person.attrib["approximated_page"] = str(self.page_number-1) + "-" + str(self.page_number+1)
+        person.attrib["approximated_page"] = (
+            str(self.page_number - 1) + "-" + str(self.page_number + 1)
+        )
         raw = etree.Element('RAW')
         raw.text = entry
         person.append(raw)
@@ -92,7 +95,14 @@ class PersonPreprocessor(ChunkTextInterface):
             self.persons_document.append(person)
 
 
-def convert_html_file_to_xml(bookseries_id, input_file, output_file, book_number, filter_duplicates=False, callback=None):
+def convert_html_file_to_xml(
+    bookseries_id,
+    input_file,
+    output_file,
+    book_number,
+    filter_duplicates=False,
+    callback=None,
+):
     text = input_file[0].read()
     p = PersonPreprocessor(bookseries_id)
     persons = p.chunk_text(text, output_file[0].name, book_number[0])

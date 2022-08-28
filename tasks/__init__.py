@@ -31,13 +31,17 @@ def test(ctx):
     ctx.run('python -m pytest --ignore .direnv')
 
 
-@task(help={
-    'input-files': 'List of input files, space separated, inside quotation marks.',
-    'filter-duplicates': 'Whether to filter duplicates out while chunking.',
-    'bookseries': 'Name of the bookseries we are going to be chunking.',
-    'defaults': 'Whether to use default settings for the bookseries provided with -b'
-})
-def chunk(ctx, bookseries=None, input_files=None, filter_duplicates=False, defaults=False):
+@task(
+    help={
+        'input-files': 'List of input files, space separated, inside quotation marks.',
+        'filter-duplicates': 'Whether to filter duplicates out while chunking.',
+        'bookseries': 'Name of the bookseries we are going to be chunking.',
+        'defaults': 'Whether to use default settings for the bookseries provided with -b',
+    }
+)
+def chunk(
+    ctx, bookseries=None, input_files=None, filter_duplicates=False, defaults=False
+):
     """
     Run chunking on specified files or with default settings.
     Provide files to be chunked with -i. Files are assumed to be in the correct
@@ -61,32 +65,36 @@ def chunk(ctx, bookseries=None, input_files=None, filter_duplicates=False, defau
         default_settings = {
             'siirtokarjalaiset': {
                 'filename_template': 'material/siirtokarjalaiset_{}.{}',
-                'book_numerals': ['I', 'II', 'III', 'IV']
+                'book_numerals': ['I', 'II', 'III', 'IV'],
             }
         }
 
         series_defaults = default_settings[bookseries]
-        inputs = [series_defaults['filename_template'].format(x, 'html')
-                  for x in series_defaults['book_numerals']]
+        inputs = [
+            series_defaults['filename_template'].format(x, 'html')
+            for x in series_defaults['book_numerals']
+        ]
     else:
         inputs = input_files.split(' ')
 
-    output_files = ['{}.xml'.format(x[:x.index('.')]) for x in inputs]
+    output_files = ['{}.xml'.format(x[: x.index('.')]) for x in inputs]
 
     kaira_cmd = '{} -c {} -o {} -n {}'.format(
         kaira_cmd,
         ' '.join(inputs),
         ' '.join(output_files),
-        ' '.join([str(x) for x in range(1, len(inputs) + 1)])
+        ' '.join([str(x) for x in range(1, len(inputs) + 1)]),
     )
 
     ctx.run(kaira_cmd)
 
 
-@task(help={
-    'bookpath': 'A path to the data xml-file which should be extracted.',
-    'testset': 'If set, extract the testset_I.json file in material directory. Overrides -b.'
-})
+@task(
+    help={
+        'bookpath': 'A path to the data xml-file which should be extracted.',
+        'testset': 'If set, extract the testset_I.json file in material directory. Overrides -b.',
+    }
+)
 def extract(ctx, bookpath=None, testset=False):
     """
     Extract data from xml-file and save it to json-format.
@@ -99,11 +107,15 @@ def extract(ctx, bookpath=None, testset=False):
         file_name = os.path.splitext(os.path.basename(bookpath))[0]
         ctx.run('python main.py -i {} -o material/{}.json'.format(bookpath, file_name))
     else:
-        print('Error: either valid book path should be provided with option -b or run the test set with -t option.')
+        print(
+            'Error: either valid book path should be provided with option -b or run the test set with -t option.'
+        )
         sys.exit(1)
 
 
-@task(help={'parallel': 'How many books to extract concurrently. Value should be 2 or 4.'})
+@task(
+    help={'parallel': 'How many books to extract concurrently. Value should be 2 or 4.'}
+)
 def extract_parallel(ctx, parallel=2):
     """
     Extracts concurrently in 2 or 4 processes the siirtokarjalaisten_tie books in material/ directory.
@@ -124,10 +136,14 @@ def update_locationdb(ctx, datasheet=None):
     update_location_db(datasheet)
 
 
-@task(optional=['input_file', 'output_file', 'books'],
-      help={'input_file': 'Input file with KairaIDs, one per row. Default: ids.txt',
-            'output_file': 'Output file to place all the generated XML in. Default: ids.xml',
-            'books': 'Paths to the books where the person entries corresponding to the KairaIDs can be found from. Default: siirtokarjalaiset_I-IV.xml in material/'})
+@task(
+    optional=['input_file', 'output_file', 'books'],
+    help={
+        'input_file': 'Input file with KairaIDs, one per row. Default: ids.txt',
+        'output_file': 'Output file to place all the generated XML in. Default: ids.xml',
+        'books': 'Paths to the books where the person entries corresponding to the KairaIDs can be found from. Default: siirtokarjalaiset_I-IV.xml in material/',
+    },
+)
 def kairaid2xml(ctx, input_file=None, output_file=None, books=None):
     """
     Use a file that contains newline separated KairaIDs to generate an XML file with the person entries corresponding to those KairaIDs.
@@ -149,14 +165,26 @@ def kairaid2xml(ctx, input_file=None, output_file=None, books=None):
     ctx.run('python analysis_toolkit/kairaid2xml.py {}'.format(kairaid2xml_cmd))
 
 
-@task(optional=['books'],
-      help={'regex': 'The regular expression to use for testing.',
-            'books': 'Paths to the books. Default: siirtokarjalaiset_I-IV.xml in material/',
-            'hyphens': 'Whether to remove hyphens from text before checking for regex matches.',
-            'spaces': 'Whether to remove spaces from text before checking for regex matches.',
-            'ignore-case': 'Whether to ignore case when checking for regex matches.',
-            'display-text': 'Whether to display the person entries that had regex matches after regex test.'})
-def regex_test(ctx, regex=None, books=None, hyphens=False, spaces=False, display_text=False, ignore_case=True):
+@task(
+    optional=['books'],
+    help={
+        'regex': 'The regular expression to use for testing.',
+        'books': 'Paths to the books. Default: siirtokarjalaiset_I-IV.xml in material/',
+        'hyphens': 'Whether to remove hyphens from text before checking for regex matches.',
+        'spaces': 'Whether to remove spaces from text before checking for regex matches.',
+        'ignore-case': 'Whether to ignore case when checking for regex matches.',
+        'display-text': 'Whether to display the person entries that had regex matches after regex test.',
+    },
+)
+def regex_test(
+    ctx,
+    regex=None,
+    books=None,
+    hyphens=False,
+    spaces=False,
+    display_text=False,
+    ignore_case=True,
+):
     """
     Run an "extraction" test using regex and get information about what kind of strings the regex matched and the frequency of each match.
     """
@@ -179,7 +207,9 @@ def regex_test(ctx, regex=None, books=None, hyphens=False, spaces=False, display
 
     flags = ' '.join(flag_list)
     regex_ext_cmd = regex_ext_cmd.format(regex, books, flags)
-    ctx.run('python analysis_toolkit/simple_regex_extractor.py {}'.format(regex_ext_cmd))
+    ctx.run(
+        'python analysis_toolkit/simple_regex_extractor.py {}'.format(regex_ext_cmd)
+    )
 
 
 @task()
@@ -192,29 +222,41 @@ def nlp_setup(ctx):
     branch_name = 'turkunlp-updates'
     repository_url = 'https://github.com/Learning-from-our-past/Finnish-dep-parser.git'
     fdp_dir = 'dependencies/fin-dep-parser'
-    ctx.run('git clone -b {} --depth=1 {} {}'.format(branch_name, repository_url, fdp_dir))
+    ctx.run(
+        'git clone -b {} --depth=1 {} {}'.format(branch_name, repository_url, fdp_dir)
+    )
     ctx.run('rm -rf {}/.git'.format(fdp_dir))
     ctx.run('rm -rf {}/.gitignore'.format(fdp_dir))
     ctx.run('cd {}; ./install.sh'.format(fdp_dir))
-    print('Please specify the Python 2 interpreter in {}/init.sh '
-          'if it is not "python2".'.format(fdp_dir))
+    print(
+        'Please specify the Python 2 interpreter in {}/init.sh '
+        'if it is not "python2".'.format(fdp_dir)
+    )
 
 
-@task(optional=['output_file', 'bookseries'],
-      help={'input-file': 'The XML file to run through fin-dep-parser.',
-            'output-file': 'The path and filename to output NLP-tagged data in.',
-            'no-clean-up': 'Do not remove temporary intermediary files.',
-            'bookseries': 'Run books of a specific series through NLP-tagging with default settings. '
-                          'If specified, input-file is ignored.'})
-def generate_nlp_xmls(ctx, input_file=None, output_file=None, no_clean_up=False, bookseries=None):
+@task(
+    optional=['output_file', 'bookseries'],
+    help={
+        'input-file': 'The XML file to run through fin-dep-parser.',
+        'output-file': 'The path and filename to output NLP-tagged data in.',
+        'no-clean-up': 'Do not remove temporary intermediary files.',
+        'bookseries': 'Run books of a specific series through NLP-tagging with default settings. '
+        'If specified, input-file is ignored.',
+    },
+)
+def generate_nlp_xmls(
+    ctx, input_file=None, output_file=None, no_clean_up=False, bookseries=None
+):
     """
     Runs the an XML file through the Finnish Dependency Parser and outputs XML file with
     NLP-tagged, CoNLLU-formatted data within.
     """
     if bookseries is not None and input_file is not None:
-        print('Error: Please do not specify both bookseries and input-file. Specifying '
-              'bookseries means we load the default settings for that bookseries, '
-              'including input-file(s).')
+        print(
+            'Error: Please do not specify both bookseries and input-file. Specifying '
+            'bookseries means we load the default settings for that bookseries, '
+            'including input-file(s).'
+        )
         sys.exit(1)
 
     kaira_cmd_fmt = 'python main.py -t {} -o {}'
@@ -223,18 +265,22 @@ def generate_nlp_xmls(ctx, input_file=None, output_file=None, no_clean_up=False,
         default_settings = {
             'siirtokarjalaiset': {
                 'filename_template': 'material/siirtokarjalaiset_{}.{}',
-                'book_numerals': ['I', 'II', 'III', 'IV']
+                'book_numerals': ['I', 'II', 'III', 'IV'],
             }
         }
 
         if bookseries not in default_settings:
-            print('Error: No default settings for the specified bookseries. Try one of:'
-                  '\n\t{}'.format(default_settings.keys()))
+            print(
+                'Error: No default settings for the specified bookseries. Try one of:'
+                '\n\t{}'.format(default_settings.keys())
+            )
             sys.exit(1)
 
         series_settings = default_settings[bookseries]
-        input_files += [series_settings['filename_template'].format(book_num, 'xml')
-                        for book_num in series_settings['book_numerals']]
+        input_files += [
+            series_settings['filename_template'].format(book_num, 'xml')
+            for book_num in series_settings['book_numerals']
+        ]
     else:
         input_files.append(input_file)
 

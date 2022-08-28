@@ -1,8 +1,8 @@
 import pytest
 from core.utils.sex_extract import Sex
 
-class TestOwnerExtraction:
 
+class TestOwnerExtraction:
     @pytest.yield_fixture(autouse=True)
     def owner_extractor(self, th):
         Sex.load_names()

@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from abc import ABCMeta, abstractmethod
 from extractors.common.metadata_helper import MetadataCollector
-from core.pipeline_construction.configuration_exceptions import RequiredDependenciesAreMissing
+from core.pipeline_construction.configuration_exceptions import (
+    RequiredDependenciesAreMissing,
+)
 from core.pipeline_construction.extraction_pipeline import ExtractionPipeline
 
 
@@ -12,7 +14,9 @@ class BaseExtractor:
 
         if cursor_location_depends_on:
             # Tells key of entry in cursorLocations dict this extractor is dependent on
-            self.key_of_cursor_location_dependent = cursor_location_depends_on.extraction_key
+            self.key_of_cursor_location_dependent = (
+                cursor_location_depends_on.extraction_key
+            )
         else:
             self.key_of_cursor_location_dependent = None
 
@@ -78,43 +82,63 @@ class BaseExtractor:
             else:
                 return id(dep)
 
-        self._required_dependencies = list(map(map_dependencies, extractor_dependencies))
+        self._required_dependencies = list(
+            map(map_dependencies, extractor_dependencies)
+        )
 
         if len(self._required_dependencies) != len(self._expected_dependencies_names):
             raise RequiredDependenciesAreMissing()
 
     def _resolve_dependencies(self):
 
-        result_data = [self._extraction_results_map.get_results(dep_id) for dep_id in self._required_dependencies]
+        result_data = [
+            self._extraction_results_map.get_results(dep_id)
+            for dep_id in self._required_dependencies
+        ]
 
-        self._deps = {key: data for (key, data) in zip(self._expected_dependencies_names, result_data)}
+        self._deps = {
+            key: data
+            for (key, data) in zip(self._expected_dependencies_names, result_data)
+        }
 
     def extract(self, entry, extraction_results, extraction_metadata):
         self._resolve_dependencies()
 
-        extraction_results, extraction_metadata = self._preprocess(entry, extraction_results, extraction_metadata)
-        extraction_results, extraction_metadata = self._extract(entry, extraction_results, extraction_metadata)
-        extraction_results, extraction_metadata = self._postprocess(entry, extraction_results, extraction_metadata)
+        extraction_results, extraction_metadata = self._preprocess(
+            entry, extraction_results, extraction_metadata
+        )
+        extraction_results, extraction_metadata = self._extract(
+            entry, extraction_results, extraction_metadata
+        )
+        extraction_results, extraction_metadata = self._postprocess(
+            entry, extraction_results, extraction_metadata
+        )
 
         # Add finally the metadata after post process has been run since it might add metadata
-        self._get_output_path(extraction_metadata)[self.extraction_key] = self.metadata_collector.get_metadata()
+        self._get_output_path(extraction_metadata)[
+            self.extraction_key
+        ] = self.metadata_collector.get_metadata()
         self.metadata_collector.clear()
 
         # Store this extractor's results to the map so that it can be used later for dependency resolving
         # Strip the output path, since we don't want to store it to the result map
         extraction_results_without_output_path = extraction_results
         if self.output_path:
-            extraction_results_without_output_path = extraction_results[self.output_path]
-        self._extraction_results_map.add_results(id(self), extraction_results_without_output_path)
+            extraction_results_without_output_path = extraction_results[
+                self.output_path
+            ]
+        self._extraction_results_map.add_results(
+            id(self), extraction_results_without_output_path
+        )
 
         return extraction_results, extraction_metadata
 
     def _preprocess(self, entry, extraction_results, extraction_metadata):
         """
-        Optional implementable method for child classes. Run before _extract method. 
+        Optional implementable method for child classes. Run before _extract method.
         Lets to manipulate input data for extraction logic.
-        :param entry: 
-        :param extraction_results: 
+        :param entry:
+        :param extraction_results:
         :return extraction_results:
         """
         return extraction_results, extraction_metadata
@@ -123,9 +147,9 @@ class BaseExtractor:
     def _extract(self, entry, extraction_results, extraction_metadata):
         """
         Required method for child classes. Should contain main data extraction logic.
-        :param entry: 
-        :param extraction_results: 
-        :return extraction_results: 
+        :param entry:
+        :param extraction_results:
+        :return extraction_results:
         """
         pass
 
@@ -133,20 +157,24 @@ class BaseExtractor:
         """
         Optional implementable method for child classes. Run after _extract method.
         Lets to manipulate results of the extractor.
-        :param entry: 
-        :param extraction_results: 
+        :param entry:
+        :param extraction_results:
         :return extraction_results:
         """
         return extraction_results, extraction_metadata
 
     def get_starting_position(self, extraction_metadata):
         if self.key_of_cursor_location_dependent is not None:
-            return self._get_output_path(extraction_metadata)[self.key_of_cursor_location_dependent]['cursorLocation']
+            return self._get_output_path(extraction_metadata)[
+                self.key_of_cursor_location_dependent
+            ]['cursorLocation']
         else:
             return 0
 
     def get_last_cursor_location(self, extraction_metadata):
-        cursor_locations_in_result_metadatas = [x['cursorLocation'] for x in extraction_metadata.values()]
+        cursor_locations_in_result_metadatas = [
+            x['cursorLocation'] for x in extraction_metadata.values()
+        ]
         return max(cursor_locations_in_result_metadatas)
 
     def _get_output_path(self, root_collection):
@@ -157,11 +185,17 @@ class BaseExtractor:
             if self.output_path not in root_collection:
                 root_collection[self.output_path] = {}
 
-            return root_collection[self.output_path]    # TODO: Support arbitrary deep paths with syntax like "primaryPerson.extraStuff.importantStuff"
+            return root_collection[
+                self.output_path
+            ]  # TODO: Support arbitrary deep paths with syntax like "primaryPerson.extraStuff.importantStuff"
 
-    def _add_to_extraction_results(self, data, extraction_results, extraction_metadata, cursor_location=0):
+    def _add_to_extraction_results(
+        self, data, extraction_results, extraction_metadata, cursor_location=0
+    ):
         self.metadata_collector.set_metadata_property('cursorLocation', cursor_location)
         self._get_output_path(extraction_results)[self.extraction_key] = data
-        self._get_output_path(extraction_metadata)[self.extraction_key] = None  # This will be filled in by metadata collector
+        self._get_output_path(extraction_metadata)[
+            self.extraction_key
+        ] = None  # This will be filled in by metadata collector
 
         return extraction_results, extraction_metadata

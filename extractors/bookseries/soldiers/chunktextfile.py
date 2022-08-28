@@ -15,6 +15,7 @@ class PersonPreprocessor(ChunkTextInterface):
     will appear in ABBYY html-files such as cases where another person entry begins "inside" previous
     person's entry.
     """
+
     def __init__(self, bookseries_id):
         super(PersonPreprocessor, self).__init__(bookseries_id)
         self._save_path = None
@@ -75,12 +76,18 @@ class PersonPreprocessor(ChunkTextInterface):
 
             # For now just concatenate the element's text to the current person
             self._current_person_raw.text += e.text
-            self._current_person_raw.text = re.sub('\n', ' ', self._current_person_raw.text)
-            self._current_person_raw.text = re.sub('\s{2,4}', ' ', self._current_person_raw.text)
+            self._current_person_raw.text = re.sub(
+                '\n', ' ', self._current_person_raw.text
+            )
+            self._current_person_raw.text = re.sub(
+                '\s{2,4}', ' ', self._current_person_raw.text
+            )
 
     def _create_person(self, entry):
         person = etree.Element('PERSON')
-        person.attrib['approximated_page'] = '{}-{}'.format(self._page_number - 1, self._page_number + 1)
+        person.attrib['approximated_page'] = '{}-{}'.format(
+            self._page_number - 1, self._page_number + 1
+        )
         raw = etree.Element('RAW')
         raw.text = entry
         person.append(raw)
@@ -91,7 +98,14 @@ class PersonPreprocessor(ChunkTextInterface):
             self._persons_document.append(person)
 
 
-def convert_html_file_to_xml(bookseries_id, input_file, output_file, book_number, filter_duplicates=False, callback=None):
+def convert_html_file_to_xml(
+    bookseries_id,
+    input_file,
+    output_file,
+    book_number,
+    filter_duplicates=False,
+    callback=None,
+):
     text = input_file[0].read()
     p = PersonPreprocessor(bookseries_id)
     persons = p.chunk_text(text, output_file[0].name, book_number[0])

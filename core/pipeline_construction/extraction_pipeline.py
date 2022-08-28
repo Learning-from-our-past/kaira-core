@@ -2,7 +2,6 @@ import re
 
 
 class ExtractionPipeline:
-
     def __init__(self, extractors):
         """
         Build the pipeline from either extractor configuration objects or from already
@@ -30,8 +29,8 @@ class ExtractionPipeline:
             entry['full_text'] = entry['text']
 
         for ext in self._extractors:
-            extraction_output, extraction_metadata = ext.extract(entry,
-                                                                 extraction_output,
-                                                                 extraction_metadata)
+            extraction_output, extraction_metadata = ext.extract(
+                entry, extraction_output, extraction_metadata
+            )
 
         return extraction_output, extraction_metadata

@@ -16,7 +16,9 @@ books are usually written in form of "Ahlaisissa". Some conjugations are difficu
 and many OCR typos also seem to trip stemmer. Therefore a list of around 2500 place names were corrected by hand and rest
 should be possible to merge with stemmer and string distance metric such as Jaro-Winkler.  
 """
-manually_fixed_place_names_file = open('support_datasheets/place_names_with_alternative_forms.json', encoding='utf8')
+manually_fixed_place_names_file = open(
+    'support_datasheets/place_names_with_alternative_forms.json', encoding='utf8'
+)
 manually_fixed_place_names = json.load(manually_fixed_place_names_file)
 stemmer = snowball.SnowballStemmer('finnish')
 manual_place_name_index = {}
@@ -26,7 +28,9 @@ Every place name should be found from existing list of place names when searched
 of stemmed form of the name. This should minimize the problem of creating useless unique place names to the result set just
 because same place name has slight difference in the end of the word such as conjugation.
 """
-list_of_known_places_file = open('support_datasheets/place_name_list.csv', encoding='utf8')
+list_of_known_places_file = open(
+    'support_datasheets/place_name_list.csv', encoding='utf8'
+)
 list_of_known_places = list(csv.DictReader(list_of_known_places_file))
 place_list_index = collections.OrderedDict()
 
@@ -75,12 +79,14 @@ def try_to_normalize_place_name_with_known_aliases(location_name, return_region=
         return fixed_name
 
 
-def normalize_place_name_with_known_list_of_places(location_entry, metadata_collector=None):
+def normalize_place_name_with_known_list_of_places(
+    location_entry, metadata_collector=None
+):
     """
     Try to normalize name to known places in the database. We have a list of place names from
     database. Try to avoid creating completely new place names because of some minor typo differences
     by finding closest match from existing place names with Jaro-Winkler distance.
-    
+
     :param location_entry:
     :param metadata_collector:
     :return:
@@ -98,8 +104,13 @@ def normalize_place_name_with_known_list_of_places(location_entry, metadata_coll
         location_entry[KEYS['locationName']] = place_list_index[search_key]['name']
 
         # If found name was cached by Kaira, mark it to the metadata
-        if place_list_index[search_key]['addedByKaira'] is True and metadata_collector is not None:
-            metadata_collector.set_metadata_property('jaroWinklerFuzzyLocationNameFixFrom', old_name)
+        if (
+            place_list_index[search_key]['addedByKaira'] is True
+            and metadata_collector is not None
+        ):
+            metadata_collector.set_metadata_property(
+                'jaroWinklerFuzzyLocationNameFixFrom', old_name
+            )
 
         return location_entry
     else:
@@ -118,7 +129,9 @@ def normalize_place_name_with_known_list_of_places(location_entry, metadata_coll
             location_entry[KEYS['locationName']] = best_match['name']
 
             if metadata_collector is not None:
-                metadata_collector.set_metadata_property('jaroWinklerFuzzyLocationNameFixFrom', old_name)
+                metadata_collector.set_metadata_property(
+                    'jaroWinklerFuzzyLocationNameFixFrom', old_name
+                )
 
             # Cache this result for faster lookup in following persons:
             place_list_index[search_key] = {
@@ -128,7 +141,7 @@ def normalize_place_name_with_known_list_of_places(location_entry, metadata_coll
                 'extractedName': old_name,
                 'latitude': '',
                 'longitude': '',
-                'addedByKaira': True
+                'addedByKaira': True,
             }
 
             return location_entry
@@ -150,13 +163,17 @@ def normalize_place(location_entry, metadata_collector=None):
     :return:
     """
 
-    fixed_name, region = try_to_normalize_place_name_with_known_aliases(location_entry[KEYS['locationName']], True)
+    fixed_name, region = try_to_normalize_place_name_with_known_aliases(
+        location_entry[KEYS['locationName']], True
+    )
 
     if location_entry[KEYS['locationName']] != fixed_name:
         location_entry[KEYS['locationName']] = fixed_name
         location_entry[KEYS['region']] = region
     else:
-        location_entry = normalize_place_name_with_known_list_of_places(location_entry, metadata_collector)
+        location_entry = normalize_place_name_with_known_list_of_places(
+            location_entry, metadata_collector
+        )
 
     return location_entry
 
@@ -165,12 +182,16 @@ def clean_place_name(location_entry):
     """
     Utility function to clean up the locationName and stemmedName if one is available from useless
     characters.
-    :param location_entry: 
-    :return: 
+    :param location_entry:
+    :return:
     """
-    location_entry[KEYS['locationName']] = location_entry[KEYS['locationName']].strip('-')
+    location_entry[KEYS['locationName']] = location_entry[KEYS['locationName']].strip(
+        '-'
+    )
 
     if KEYS['stemmedName'] in location_entry:
-        location_entry[KEYS['stemmedName']] = location_entry[KEYS['stemmedName']].strip('-')
+        location_entry[KEYS['stemmedName']] = location_entry[KEYS['stemmedName']].strip(
+            '-'
+        )
 
     return location_entry

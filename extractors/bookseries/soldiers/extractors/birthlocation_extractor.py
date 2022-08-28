@@ -14,17 +14,23 @@ class BirthLocationExtractor(BaseExtractor):
         super().__init__(cursor_location_depends_on, options)
         self._SUBSTRING_WIDTH = 32
         self._PATTERN = r'\d\s(?P<placeName>[\w-]+(?:\smlk)?)(?:[,.])'
-        self._OPTIONS = (regex.UNICODE | regex.IGNORECASE)
+        self._OPTIONS = regex.UNICODE | regex.IGNORECASE
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_metadata)
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
-        location_entry, cursor_location = self._get_location_data(prepared_text, start_position)
-        return self._add_to_extraction_results(location_entry, extraction_results, extraction_metadata, cursor_location)
+        location_entry, cursor_location = self._get_location_data(
+            prepared_text, start_position
+        )
+        return self._add_to_extraction_results(
+            location_entry, extraction_results, extraction_metadata, cursor_location
+        )
 
     def _prepare_text_for_extraction(self, text, start_position):
-        return text_utils.take_sub_str_based_on_pos(text, start_position, self._SUBSTRING_WIDTH)
+        return text_utils.take_sub_str_based_on_pos(
+            text, start_position, self._SUBSTRING_WIDTH
+        )
 
     def _get_location_data(self, text, start_position):
         place_name, cursor_location = self._find_place_name(text, start_position)
@@ -56,7 +62,7 @@ class BirthLocationExtractor(BaseExtractor):
         location_entry = {
             'locationName': place_name,
             'latitude': None,
-            'longitude': None
+            'longitude': None,
         }
 
         location_entry = place_name_cleaner.clean_place_name(location_entry)
@@ -65,7 +71,9 @@ class BirthLocationExtractor(BaseExtractor):
         # Try to find coordinates and region of the place from our geo database
         # If coordinates were found, merge them to the location entry dict.
         try:
-            region_and_coordinates = GeoCoder.get_coordinates(location_entry['locationName'])
+            region_and_coordinates = GeoCoder.get_coordinates(
+                location_entry['locationName']
+            )
             location_entry = {**location_entry, **region_and_coordinates}
         except LocationNotFound:
             pass

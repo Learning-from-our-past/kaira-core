@@ -1,14 +1,17 @@
 import pytest
-from extractors.bookseries.karelians.extractors.profession_extractor import ProfessionExtractor
+from extractors.bookseries.karelians.extractors.profession_extractor import (
+    ProfessionExtractor,
+)
 
 
 class TestProfessionExtraction:
-
     @pytest.yield_fixture(autouse=True)
     def profession_extractor(self, th):
         return th.setup_extractor(ProfessionExtractor(None, None))
 
-    def should_add_extra_info_to_profession_if_it_is_available(self, profession_extractor):
+    def should_add_extra_info_to_profession_if_it_is_available(
+        self, profession_extractor
+    ):
         text = 'maanviljelijä, synt. 18. 6. -29 Hiitolassa. Puol. Vaimo Vaimokas'
 
         results, metadata = profession_extractor.extract({'text': text}, {}, {})
@@ -23,12 +26,15 @@ class TestProfessionExtraction:
             'SESgroup1989': 1,
             'agricultureOrForestryRelated': True,
             'occupationCategory': 3,
-            'socialClassRank': 5
-
+            'socialClassRank': 5,
         }
 
-    def should_set_extra_info_null_if_no_extra_data_is_available(self, profession_extractor):
-        text = 'koirankynnenleikkaaja, synt. 18. 6. -29 Hiitolassa. Puol. Vaimo Vaimokas'
+    def should_set_extra_info_null_if_no_extra_data_is_available(
+        self, profession_extractor
+    ):
+        text = (
+            'koirankynnenleikkaaja, synt. 18. 6. -29 Hiitolassa. Puol. Vaimo Vaimokas'
+        )
 
         results, metadata = profession_extractor.extract({'text': text}, {}, {})
         assert results['profession']['extraInfo'] is None

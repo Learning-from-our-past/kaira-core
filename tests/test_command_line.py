@@ -20,7 +20,16 @@ class TestCommandLineSmoke:
 
         def should_process_karelian_xml_and_save_to_json(self):
             file_path = 'temp/json_export_tests/results.json'
-            results = run(['python', 'main.py', '-i', 'tests/data/karelian_smoke_test.xml', '-o', file_path])
+            results = run(
+                [
+                    'python',
+                    'main.py',
+                    '-i',
+                    'tests/data/karelian_smoke_test.xml',
+                    '-o',
+                    file_path,
+                ]
+            )
 
             assert results.returncode == 0
 
@@ -30,29 +39,56 @@ class TestCommandLineSmoke:
             assert len(result_data) == 3
 
             # Check that each person has unique id
-            assert result_data[0]['primaryPerson']['kairaId'] == 'siirtokarjalaiset_1_1P'
+            assert (
+                result_data[0]['primaryPerson']['kairaId'] == 'siirtokarjalaiset_1_1P'
+            )
             assert result_data[0]['spouse']['kairaId'] == 'siirtokarjalaiset_1_1S_1'
-            assert result_data[1]['primaryPerson']['kairaId'] == 'siirtokarjalaiset_1_2P'
+            assert (
+                result_data[1]['primaryPerson']['kairaId'] == 'siirtokarjalaiset_1_2P'
+            )
             assert result_data[1]['spouse']['kairaId'] == 'siirtokarjalaiset_1_2S_1'
-            assert result_data[2]['primaryPerson']['kairaId'] == 'siirtokarjalaiset_1_3P'
+            assert (
+                result_data[2]['primaryPerson']['kairaId'] == 'siirtokarjalaiset_1_3P'
+            )
             assert result_data[2]['spouse']['kairaId'] == 'siirtokarjalaiset_1_3S_1'
 
         def should_return_correct_birthlocation_without_control_characters(self):
             # FIXME: Move this test to some kind of preprocessor class when relevant implementation code is moved from
             # ExtractionPipeline to elsewhere
             file_path = 'temp/json_export_tests/results.json'
-            results = run(['python', 'main.py', '-i', 'tests/data/encoding_test.xml', '-o', file_path])
+            results = run(
+                [
+                    'python',
+                    'main.py',
+                    '-i',
+                    'tests/data/encoding_test.xml',
+                    '-o',
+                    file_path,
+                ]
+            )
 
             assert results.returncode == 0
 
             with open(file_path, encoding='utf8') as data_file:
                 result_data = json.load(data_file)
 
-            assert result_data[0]['primaryPerson']['birthLocation']['locationName'] == 'Kuolemajärvi'
+            assert (
+                result_data[0]['primaryPerson']['birthLocation']['locationName']
+                == 'Kuolemajärvi'
+            )
 
         def should_process_small_farmers_xml_and_save_to_json(self):
             file_path = 'temp/json_export_tests/results.json'
-            results = run(['python', 'main.py', '-i', 'tests/data/small_farmers_smoke_test.xml', '-o', file_path])
+            results = run(
+                [
+                    'python',
+                    'main.py',
+                    '-i',
+                    'tests/data/small_farmers_smoke_test.xml',
+                    '-o',
+                    file_path,
+                ]
+            )
 
             assert results.returncode == 0
 
@@ -68,7 +104,16 @@ class TestCommandLineSmoke:
 
         def should_process_great_farmers_xml_and_save_to_json(self):
             file_path = 'temp/json_export_tests/results.json'
-            results = run(['python', 'main.py', '-i', 'tests/data/great_farmers_smoke_test.xml', '-o', file_path])
+            results = run(
+                [
+                    'python',
+                    'main.py',
+                    '-i',
+                    'tests/data/great_farmers_smoke_test.xml',
+                    '-o',
+                    file_path,
+                ]
+            )
 
             assert results.returncode == 0
 
@@ -87,7 +132,16 @@ class TestCommandLineSmoke:
 
         def should_error_if_unsupported_xml_is_read(self):
             file_path = 'temp/json_export_tests/results.json'
-            results = run(['python', 'main.py', '-i', 'tests/data/unsupported_file_smoke_test.xml', '-o', file_path])
+            results = run(
+                [
+                    'python',
+                    'main.py',
+                    '-i',
+                    'tests/data/unsupported_file_smoke_test.xml',
+                    '-o',
+                    file_path,
+                ]
+            )
 
             assert results.returncode == 1
 
@@ -104,7 +158,20 @@ class TestCommandLineSmoke:
 
         def should_convert_karelian_html_to_xml(self):
             file_path = 'temp/xml_export_tests/results.xml'
-            results = run(['python', 'main.py', '-c', 'tests/data/karelian_convert_smoke_test.html', '-o', file_path, '-b', 'siirtokarjalaiset', '-n', '1'])
+            results = run(
+                [
+                    'python',
+                    'main.py',
+                    '-c',
+                    'tests/data/karelian_convert_smoke_test.html',
+                    '-o',
+                    file_path,
+                    '-b',
+                    'siirtokarjalaiset',
+                    '-n',
+                    '1',
+                ]
+            )
 
             assert results.returncode == 0
             xml_parser = etree.XMLParser(encoding='utf8')
@@ -118,10 +185,21 @@ class TestCommandLineSmoke:
 
         def should_convert_karelian_html_to_xml_and_delete_duplicates(self):
             file_path = 'temp/xml_export_tests/results_no_duplicates.xml'
-            results = run([
-                'python', 'main.py', '-c', 'tests/data/karelian_convert_smoke_test.html',
-                '-o', file_path, '-b', 'siirtokarjalaiset', '-n', '1', '--filter'
-            ])
+            results = run(
+                [
+                    'python',
+                    'main.py',
+                    '-c',
+                    'tests/data/karelian_convert_smoke_test.html',
+                    '-o',
+                    file_path,
+                    '-b',
+                    'siirtokarjalaiset',
+                    '-n',
+                    '1',
+                    '--filter',
+                ]
+            )
 
             assert results.returncode == 0
             xml_parser = etree.XMLParser(encoding='utf8')
@@ -136,8 +214,19 @@ class TestCommandLineSmoke:
         def should_convert_great_farmers_html_to_xml(self):
             file_path = 'temp/xml_export_tests/results.xml'
             results = run(
-                ['python', 'main.py', '-c', 'tests/data/greatfarmers_convert_smoke_test.html', '-o', file_path, '-b',
-                 'suuretmaatilat', '-n', '1'])
+                [
+                    'python',
+                    'main.py',
+                    '-c',
+                    'tests/data/greatfarmers_convert_smoke_test.html',
+                    '-o',
+                    file_path,
+                    '-b',
+                    'suuretmaatilat',
+                    '-n',
+                    '1',
+                ]
+            )
 
             assert results.returncode == 0
             xml_parser = etree.XMLParser(encoding='utf8')
@@ -152,8 +241,19 @@ class TestCommandLineSmoke:
         def should_convert_small_farmers_html_to_xml(self):
             file_path = 'temp/xml_export_tests/results.xml'
             results = run(
-                ['python', 'main.py', '-c', 'tests/data/smallfarmers_convert_smoke_test.html', '-o', file_path, '-b',
-                 'pienviljelijat', '-n', '1'])
+                [
+                    'python',
+                    'main.py',
+                    '-c',
+                    'tests/data/smallfarmers_convert_smoke_test.html',
+                    '-o',
+                    file_path,
+                    '-b',
+                    'pienviljelijat',
+                    '-n',
+                    '1',
+                ]
+            )
 
             assert results.returncode == 0
             xml_parser = etree.XMLParser(encoding='utf8')
@@ -179,7 +279,16 @@ class TestCommandLineSmoke:
         @pytest.mark.skip()
         def should_tag_karelian_xml_with_conllu(self):
             file_path = 'temp/nlp_tagging_tests/results.xml'
-            results = run(['python', 'main.py', '-t', 'tests/data/karelian_nlp_smoke_test.xml', '-o', file_path])
+            results = run(
+                [
+                    'python',
+                    'main.py',
+                    '-t',
+                    'tests/data/karelian_nlp_smoke_test.xml',
+                    '-o',
+                    file_path,
+                ]
+            )
 
             assert results.returncode == 0
             xml_parser = etree.XMLParser(encoding='utf8')

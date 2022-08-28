@@ -7,12 +7,18 @@ class InjuredInWarFlagExtractor(BaseExtractor):
     extraction_key = 'injuredInWarFlag'
 
     def __init__(self, cursor_location_depends_on=None, options=None):
-        super(InjuredInWarFlagExtractor, self).__init__(cursor_location_depends_on, options)
+        super(InjuredInWarFlagExtractor, self).__init__(
+            cursor_location_depends_on, options
+        )
         self._in_spouse_extractor = options['in_spouse_extractor']
-        
+
         self.OPTIONS = regex.UNICODE
-        self.INJURED_IN_WAR_PATTERN = r'(?:haavoi){s<=1}|(?<!S)(otainvalidi){s<=1}(?:\s|,|\.)'
-        self.REGEX_INJURED_IN_WAR = regex.compile(self.INJURED_IN_WAR_PATTERN, self.OPTIONS)
+        self.INJURED_IN_WAR_PATTERN = (
+            r'(?:haavoi){s<=1}|(?<!S)(otainvalidi){s<=1}(?:\s|,|\.)'
+        )
+        self.REGEX_INJURED_IN_WAR = regex.compile(
+            self.INJURED_IN_WAR_PATTERN, self.OPTIONS
+        )
 
         self._declare_expected_dependency_names(['person'])
 
@@ -26,9 +32,15 @@ class InjuredInWarFlagExtractor(BaseExtractor):
         """
         should_extract = False
 
-        if self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Female':
+        if (
+            self._in_spouse_extractor
+            and self._deps['person']['name']['gender'] == 'Female'
+        ):
             should_extract = True
-        elif not self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Male':
+        elif (
+            not self._in_spouse_extractor
+            and self._deps['person']['name']['gender'] == 'Male'
+        ):
             should_extract = True
 
         return should_extract
@@ -38,7 +50,9 @@ class InjuredInWarFlagExtractor(BaseExtractor):
         if self._is_person_male():
             injured_in_war = self._check_injured_in_war(entry['full_text'])
 
-        return self._add_to_extraction_results(injured_in_war, extraction_results, extraction_metadata)
+        return self._add_to_extraction_results(
+            injured_in_war, extraction_results, extraction_metadata
+        )
 
     def _check_injured_in_war(self, text):
         text = remove_hyphens_from_text(text)

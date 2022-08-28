@@ -28,9 +28,9 @@ _REGEX_PATTERNS = [
     r'\s(?P<day>\d{1,2})\s{1,6}(?P<month>\d{1,2})[.,]\s{1,6}-?(?P<year>\d{2,4})',
     # same as above two but there is a dot or comma separating both day and month and month and
     # year
-    r'\s(?P<day>\d{1,2})[,.]\s{1,6}(?P<month>\d{1,2})[.,]\s{1,6}-?(?P<year>\d{2,4})'
+    r'\s(?P<day>\d{1,2})[,.]\s{1,6}(?P<month>\d{1,2})[.,]\s{1,6}-?(?P<year>\d{2,4})',
 ]
-_REGEX_FLAGS = (regex.UNICODE | regex.IGNORECASE)
+_REGEX_FLAGS = regex.UNICODE | regex.IGNORECASE
 
 
 def fix_dates(string):
@@ -41,8 +41,9 @@ def fix_dates(string):
     """
     text = string
     for pattern in _REGEX_PATTERNS:
-        text = regex.sub(pattern, _create_date_string_from_regex_match,
-                         text, flags=_REGEX_FLAGS)
+        text = regex.sub(
+            pattern, _create_date_string_from_regex_match, text, flags=_REGEX_FLAGS
+        )
     return text
 
 

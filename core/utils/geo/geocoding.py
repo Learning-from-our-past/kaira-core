@@ -2,7 +2,6 @@ from core.utils.geo.dbhandler import Place, Location
 
 
 class GeoCoder:
-
     @staticmethod
     def get_coordinates(location_name):
         try:
@@ -10,7 +9,7 @@ class GeoCoder:
             return {
                 'latitude': place.location.latitude,
                 'longitude': place.location.longitude,
-                'region': place.location.region
+                'region': place.location.region,
             }
         except (Place.DoesNotExist, Location.DoesNotExist):
             raise LocationNotFound()

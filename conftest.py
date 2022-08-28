@@ -28,6 +28,7 @@ class Th:
     """
     Test helper class which is importable as fixture to all tests.
     """
+
     @staticmethod
     def omit_property(target, property_name):
         if type(target) is list:
@@ -55,19 +56,23 @@ class Th:
 def th():
     return Th
 
+
 @pytest.fixture()
 def result_map():
     return ExtractorResultsMap()
+
 
 @pytest.fixture(scope='session', autouse=True)
 def constants():
     extraction_constants.BOOK_NUMBER = '1'
     extraction_constants.BOOK_SERIES = 'testbook'
 
+
 @pytest.fixture(scope='function', autouse=True)
 def reset_kaira_id():
     p = KairaIdProvider()
     p.reset()
+
 
 @pytest.fixture(scope='session', autouse=True)
 def test_geo_db():

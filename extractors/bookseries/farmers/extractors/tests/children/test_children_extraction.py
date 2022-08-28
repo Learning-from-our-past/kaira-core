@@ -1,10 +1,12 @@
 import pytest
 from extractors.bookseries.farmers.extractors.child_extractor import ChildExtractor
-from extractors.bookseries.farmers.extractors.tests.children.mock_person_data import EXPECTED_CHILDREN, CHILDREN_TEXTS
+from extractors.bookseries.farmers.extractors.tests.children.mock_person_data import (
+    EXPECTED_CHILDREN,
+    CHILDREN_TEXTS,
+)
 
 
 class TestChildrenExtraction:
-
     @pytest.yield_fixture(autouse=True)
     def child_extractor(self, th):
         return th.setup_extractor(ChildExtractor(None, None))
@@ -29,5 +31,3 @@ class TestChildrenExtraction:
         assert children[0] == EXPECTED_CHILDREN[0]
         assert children[1] == EXPECTED_CHILDREN[1]
         assert children[2] == EXPECTED_CHILDREN[2]
-
-

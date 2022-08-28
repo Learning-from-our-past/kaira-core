@@ -3,7 +3,6 @@ from core.pipeline_construction.yaml_parser import YamlParser
 
 
 class TestSpouseExtraction:
-
     @pytest.fixture(autouse=True)
     def spouse_extractor(self, result_map):
         parser = YamlParser(result_map)
@@ -19,19 +18,10 @@ class TestSpouseExtraction:
         assert spouse_details == {
             'formerSurname': 'Testilä',
             'firstNames': 'Anna-Liisa',
-            'birthData': {
-                'birthDay': 19,
-                'birthMonth': 4,
-                'birthYear': 1921
-            }
+            'birthData': {'birthDay': 19, 'birthMonth': 4, 'birthYear': 1921},
         }
 
-        assert metadata == {
-            'spouse': {
-                'cursorLocation': 83,
-                'errors': {}
-            }
-        }
+        assert metadata == {'spouse': {'cursorLocation': 83, 'errors': {}}}
 
     def should_return_none_if_spouse_not_available(self, spouse_extractor):
         spouse_text = "om. Testi Testisen perikunta. Viljelijä Mies Testinen. Tila sijaitsee Antooran kylässä. Kokonaispinta-ala on 80,67 ha."

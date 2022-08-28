@@ -23,9 +23,9 @@ def run_nlp_parsing(args, plugin_dir):
     bookseries_id = xml_root.attrib['bookseries']
 
     try:
-        bookseries = bootstrap.setup_extraction_framework_for_bookseries(bookseries_id,
-                                                                         plugin_dir,
-                                                                         None)
+        bookseries = bootstrap.setup_extraction_framework_for_bookseries(
+            bookseries_id, plugin_dir, None
+        )
     except bootstrap.BookSeriesNotSupportedException as err:
         print(err)
         sys.exit(1)

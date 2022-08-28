@@ -1,7 +1,4 @@
-
-
 class ProcessData:
-
     def __init__(self, extraction_pipeline, extraction_result_map, callback=None):
         self.extraction_pipeline = extraction_pipeline
         self._extraction_result_map = extraction_result_map
@@ -48,7 +45,7 @@ class ExtractionException(Exception):
     eType = "OTHER"
 
     def __init__(self):
-       pass
+        pass
 
     def __unicode__(self):
         return self.message

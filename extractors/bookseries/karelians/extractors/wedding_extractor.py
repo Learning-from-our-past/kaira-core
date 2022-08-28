@@ -11,7 +11,7 @@ class WeddingExtractor(BaseExtractor):
     def __init__(self, cursor_location_depends_on=None, options=None):
         super(WeddingExtractor, self).__init__(cursor_location_depends_on, options)
         self.PATTERN = r'(?:avioit){s<=1}(?:[,.\s\-*:!;]?\s?-)?(?P<year>\d{2,4})'
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
+        self.OPTIONS = re.UNICODE | re.IGNORECASE
         self.REQUIRES_MATCH_POSITION = True
         self.SUBSTRING_WIDTH = 100
 
@@ -20,10 +20,14 @@ class WeddingExtractor(BaseExtractor):
         prepared_text = self._prepare_text_for_extraction(entry['text'], start_position)
 
         results = self._find_date(prepared_text, start_position)
-        return self._add_to_extraction_results(results[0], extraction_results, extraction_metadata, results[1])
+        return self._add_to_extraction_results(
+            results[0], extraction_results, extraction_metadata, results[1]
+        )
 
     def _prepare_text_for_extraction(self, text, start_position):
-        t = text_utils.take_sub_str_based_on_pos(text, start_position, self.SUBSTRING_WIDTH)
+        t = text_utils.take_sub_str_based_on_pos(
+            text, start_position, self.SUBSTRING_WIDTH
+        )
         t = text_utils.remove_spaces_from_text(t)
         return t
 

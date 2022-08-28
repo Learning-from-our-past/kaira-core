@@ -12,26 +12,33 @@ HTML_CONTAINER = """
 </html>
 """
 
-TWO_PEOPLE = HTML_CONTAINER.format("""
+TWO_PEOPLE = HTML_CONTAINER.format(
+    """
 <p>NYYMINEN, IHMINEN</p>
 <p>puutarhatyöntekijä, synt. 13. 4. -04 Kuolemajärvellä. Asuinp. Karjalassa: Kuolemajärvi, Taatila -39, 42—44. Muut asuinp.: Urjala, Menonen</p>
 <p>39-40, Helsinki 40-42, Halikko -44, Kuusjoki. Kanunki 44—49, Rusko, Hujala 49—55, Raisio,&nbsp;Pasala 55— Ihminen Nyyminen osti omakotitalon,&nbsp;jonka hän on kuitenkin myynyt veljensä pojalle.&nbsp;Itse hän asuu talon yläkerrassa. Ihminen Nyyminen on&nbsp;aikaisemmin toiminut puutarhatöissä ja hoitanut&nbsp;lapsia. Nykyisin hän on sairauden takia eläkkeellä. Karjalassa ollessaan hän kuului Marttoihin ja&nbsp;nykyisin Karjalaseuraan. Hän on innokas käsi-työihminen ja harrastuksena on myös puutarhanhoito.</p>
 <p>SALAINEN. AGENTTI</p>
 <p>o.s. Makeinen, emäntä, synt. 20. 5. -18 Kurkijoella. Puol. Agentti Raketti, synt. 26. 8. -21 Ilmajoella. Lapset: Pagentti -49 Turku, Magentti -51 Turku, Lagentti -53 Turku, Sagentti -54 Raisio. Asuinp.&nbsp;Karjalassa:&nbsp;&nbsp;&nbsp;&nbsp;Kurkijoki, Aromäki -40,&nbsp;&nbsp;&nbsp;&nbsp;41—44.</p>
 <p>Muut asuinp.: Loimaa -41, Ilmajoki, Loimaa 45— 47, Naantali 47—49, Turku, Raisio 50—. Salainenn&nbsp;perheellä on omakotitalo, jossa he ovat asuneet&nbsp;vuodesta -55 lähtien. Agentti Salainen on palvellut&nbsp;tykkimiehenä. Hän haavoittui Sallassa ja hänellä&nbsp;on vieläkin luoti päässä. Rouva on Suomen Punaisen Ristin jäsen ja kuuluu Raision Karjalaisiin.&nbsp;Hänen harrastuksinaan ovat käsityöt ja kirjallisuus.</p>
-""")
+"""
+)
 
-MILITARY_UNIT_IN_ENTRY = HTML_CONTAINER.format("""
+MILITARY_UNIT_IN_ENTRY = HTML_CONTAINER.format(
+    """
 <p>PIMEÄ, RUHTINAS MATTI</p>
 <p>ylivääpeli evp., synt. 4. 12. -15 Sortavalan mlk:ssa. Puol. Valoinen Taistelija o.s. Gehrman, rouva,&nbsp;synt. 31.7 -22 Sortavalan mlk:ssa. Avioit. -44.&nbsp;Lapset: Lapsekas Lapsi -45 Pori, Joku Toinen -47&nbsp;Turku, Kolmaskin Lapsi -48 Turku, Ja Neljäs -53&nbsp;Rauma, Sekä Viides -54 Korppoo. Asuinp. Karjalassa: Sortavalan mlk., Sinilä -39, -44. Muut&nbsp;asuinp.: Turku 44—51, Hanko, Rauma 52—54,&nbsp;Korppoo 54—56, Turku 56—. Ruhtinas Pimeä on palvellut talvi- ja jatkosodissa ja sen jälkeen seuraa-vissa yksiköissä: LaatRPr, RTR 13, TRT, TurRtR.&nbsp;Hän on sotilasarvoltaan ylivääpeli. Hän on harrastanut valokuvausta ja kalastusta. Rouvan harrastuksena ovat käsityöt.</p>
-""")
+"""
+)
 
-LOWER_CASE_NAME = HTML_CONTAINER.format("""
+LOWER_CASE_NAME = HTML_CONTAINER.format(
+    """
 <p>Jokunen, Joku</p>
 <p>o.s. Nyyminen. rouva. synt. 11. 5. -20 Hiitolassa. Puol. Mies Miesläinen, vääpeli evp.. synt. 5. 5. -14&nbsp;Kankaanpäässä. Avioit. -42. Lapset: Lapsi Lapsinaattori -40. Kissa Kaasu -43 Ruokolahti. Koira Moira *46 Pori. Kettu Lettu -53 Pori. Asuinp. Karjalassa: Hiitola. Mustola 20-40. Muut asuinp.:&nbsp;Ruokolahti. Immola 42—44. Kankaanpää 40-42, Pori 44—. Leppihalmeet asuvat omakotita-</p>
-""")
+"""
+)
 
-MID_ENTRY_PEOPLE = HTML_CONTAINER.format("""
+MID_ENTRY_PEOPLE = HTML_CONTAINER.format(
+    """
 <p>NYYMI. NYYMI</p>
 <p>synt, 10. 10. -19 Pyhäjärvellä. Puol. MYYMI MYYMI</p>
 <p>o.s. Lyymi. synt. 10. 1. -26 Mouhijärvellä. Avioit. 46. Lapset: Pyymi Ayymi -47. Mayymi&nbsp;Maryymi -47. Leyymi Hyymi Kyymi -52. Eeyymi Enyymi -54. Layymi Kryymi -60. Jiyymi Tuyym Olyymi&nbsp;-62. Syntyneet Mouhijärvellä. Asuinp. Karjaise-Nyymi Nyymi</p><img src="Siirtokarjalaisten tie I whole book_kuvat_files/Siirtokarjalaisten tie I whole book_kuvat-2527.jpg" style="width:159pt;height:106pt;"/>
@@ -53,9 +60,11 @@ MID_ENTRY_PEOPLE = HTML_CONTAINER.format("""
 <p>Animetön o.s. Punimetön, synt. 20. 9. -15 Pyhäjärvellä. &nbsp;&nbsp;&nbsp;93, k. -59.&nbsp;&nbsp;&nbsp;&nbsp;kunnan tilalla.</p>
 <p>Avioit. -49. Lapset: Inimetön Kanimetön Hanimetön -37</p>
 <p>Pyhäjärvi. Rouvan ensimmäisestä avioliitosta.</p>
-""")
+"""
+)
 
-ENTRIES_ACROSS_PAGES = HTML_CONTAINER.format("""
+ENTRIES_ACROSS_PAGES = HTML_CONTAINER.format(
+    """
 <p>NIMETÖN, MANIMETÖN MENIMETÖN</p>
 <p>diakoni, synt. 15. 5. -29 Sortavalan mlk:ssa. Asuinp. Karjalassa: Sortavalan mlk. -39, 42—44.&nbsp;Muut asuinp.; Kalajoki 39—42. Virrat 44—45,&nbsp;Lohtaja, Marinkainen 45—55, Perniö. Vihiniemi</p>
 <p>55—56, Tampere 56—59, Perniö, Vihiniemi 59— 61, Turku 61—, Neiti Konimetön on käynyt kansanopiston 46—47, kansankorkeakoulun 50—51,&nbsp;seurakuntaopiston 54—55 ja valmistunut diakoniksi Järvenpäässä v. -61. Hän toimii partionjoh-tajana ja harrastaa lisäksi musiikkia, ulkoilua ja&nbsp;posliininmaalausta.</p>
@@ -75,4 +84,5 @@ ENTRIES_ACROSS_PAGES = HTML_CONTAINER.format("""
 <p>MYSTEERI, NAINEN ROBOTTI</p>
 <p>o.s. Arvoitus, leskirouva, synt. 18. 4 -96 Rus-kealassa. Puol. Tietämys, synt. 20. 7. -87 Ruskea-lassa. Avioit. -45. Kuoli. Iisalmella. Lapset: Tieto -13 Ruskeala, Taito -27 Ruskeala, Kissa Henrikki&nbsp;-28 Ruskeala. Asuinp. Karjalassa: Ruskeala,&nbsp;Kirkkolahden kylä -39, 42—44. Muut asuinp.:&nbsp;Kangaslampi, Hurenlahti 39—40, Hartola 40—&nbsp;41, Iisalmi, Koukunjoki 41—42, 44—47, Liperi,&nbsp;Mattisenlahti 47—49, Kuopio 49—56, Turku</p>
 <p>56—. Arvoitus Mysteeri asuu Kissa-poikansa omakotitalossa. Rouva Mysteeri hoitaa päivisin poikansa taloutta sekä lapsia. Hänen vapaa-aikansa kuluvat käsitöiden parissa.</p>
-""")
+"""
+)

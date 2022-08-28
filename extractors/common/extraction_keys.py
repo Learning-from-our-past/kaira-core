@@ -32,22 +32,19 @@ KEYS = {
     "village": "village",
     "originalText": "sourceText",
     "birthData": "birthData",
-    "birthDay":  "birthDay",
+    "birthDay": "birthDay",
     "birthMonth": "birthMonth",
     "birthYear": "birthYear",
     "birthLocation": "birthLocation",
-
     "locationName": "locationName",
     "stemmedName": "stemmedName",
     "personMetadata": "personMetadata",
-
     "animalHusbandry": "animalHusbandry",
     "dairyFarm": "dairyFarm",
     "farmObtainedThroughGovermentPrograms": "farmObtainedThroughGovermentPrograms",
     "asutustila": "asutustila",
     "maanhankintalaki": "maanhankintalaki",
     "coldFarm": "coldFarm",
-
     "address": "address",
     "deathDay": "deathDay",
     "deathMonth": "deathMonth",
@@ -67,7 +64,6 @@ KEYS = {
     "hobbies": "hobbies",
     "hasSpouse": "hasSpouse",
     "weddingYear": "weddingYear",
-
     "spouse": "spouse",
     "spouseName": "firstNames",
     "spouseProfession": "profession",
@@ -78,7 +74,6 @@ KEYS = {
     "gender": "gender",
     "girlCount": "girlCount",
     "boyCount": "boyCount",
-
     "separated": "separated",
     "miehEd": "manPreviousMarriage",
     "nyk": "manCurrentMarriage",
@@ -89,7 +84,6 @@ KEYS = {
     "childCount": "childCount",
     "spouseBirthLocation": "spouseBirthLocation",
     "regiments": "regiments",
-
     # Small farmers and Great farmers keys
     "name": "name",
     "farmLocation": "farmLocation",
@@ -100,14 +94,12 @@ KEYS = {
     "hostessBirthData": "birthData",
     "hostess": "hostess",
     "ownerDetails": "ownerDetails",
-
     "farmDetails": "farmDetails",
     "wholeArea": "wholeArea",
     "forestArea": "forestArea",
     "fieldArea": "fieldArea",
     "wasteArea": "wasteArea",
     "meadowArea": "meadowArea",
-
     "flags": "flags",
     "oat": "oat",
     "barley": "barley",
@@ -137,14 +129,12 @@ KEYS = {
     "ay-karja": "aykarja",
     "sk-karja": "skkarja",
     "someonedead": "someoneDead",
-
     "moreeni": "Moreeni",
     "hieta": "Hieta",
     "hiesu": "Hiesu",
     "muta": "Muta",
     "savi": "Savi",
     "multa": "Multa",
-
     "rooms": "rooms",
     "lypsylehma": "dairyCow",
     "teuras": "slaughterAnimal",
@@ -153,7 +143,6 @@ KEYS = {
     "emakko": "emakko",
     "nuori": "nuori",
     "kanoja": "chicken",
-
     "quantities": "quantities",
     "shortentry": "shortEntry",
 }

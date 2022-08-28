@@ -1,8 +1,7 @@
 from abc import abstractmethod
 
 
-class ChunkTextInterface():
-
+class ChunkTextInterface:
     def __init__(self, bookseries_id):
         self._bookseries_id = bookseries_id
 

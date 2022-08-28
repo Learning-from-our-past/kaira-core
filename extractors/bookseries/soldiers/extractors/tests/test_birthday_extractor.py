@@ -1,9 +1,10 @@
 import pytest
-from extractors.bookseries.soldiers.extractors.birthday_extractor import BirthdayExtractor
+from extractors.bookseries.soldiers.extractors.birthday_extractor import (
+    BirthdayExtractor,
+)
 
 
 class TestSoldierBirthdayExtraction:
-
     @pytest.yield_fixture(autouse=True)
     def birthday_extractor(self, th):
         return th.setup_extractor(BirthdayExtractor(None, {'remove_spaces': False}))
@@ -32,7 +33,9 @@ class TestSoldierBirthdayExtraction:
         assert results['birthday']['birthMonth'] is None
         assert results['birthday']['birthYear'] is None
 
-    def should_not_extract_date_which_comes_after_pso_keyword_ignoring_case(self, birthday_extractor):
+    def should_not_extract_date_which_comes_after_pso_keyword_ignoring_case(
+        self, birthday_extractor
+    ):
         text = 'Testinen, Viljami testeri, mv. pso vsta 42 Vaimo Vaimonen, s 10.2.18 Savitaipale'
         results, metadata = birthday_extractor.extract({'text': text}, {}, {})
 

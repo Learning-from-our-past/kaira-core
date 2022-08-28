@@ -58,18 +58,45 @@ def main(argv):
 
     print('Persons:', person_count)
     print('Persons location avg:', location_over_all_count / person_count)
-    print('Persons with over', locations_threshold, 'locations:', many_locations_count, '---', '{0:.2f}'.format(many_locations_count / person_count * 100), '%')
-    print('Persons with 0 locations', persons_with_no_locations, '---', '{0:.2f}'.format(persons_with_no_locations / person_count * 100), '%')
-    print('Persons with long place name', persons_with_long_place_name, '---', '{0:.2f}'.format(persons_with_long_place_name / person_count * 100), '%')
-    print('Persons with short place name', persons_with_short_place_name, '---', '{0:.2f}'.format(persons_with_short_place_name / person_count * 100), '%')
+    print(
+        'Persons with over',
+        locations_threshold,
+        'locations:',
+        many_locations_count,
+        '---',
+        '{0:.2f}'.format(many_locations_count / person_count * 100),
+        '%',
+    )
+    print(
+        'Persons with 0 locations',
+        persons_with_no_locations,
+        '---',
+        '{0:.2f}'.format(persons_with_no_locations / person_count * 100),
+        '%',
+    )
+    print(
+        'Persons with long place name',
+        persons_with_long_place_name,
+        '---',
+        '{0:.2f}'.format(persons_with_long_place_name / person_count * 100),
+        '%',
+    )
+    print(
+        'Persons with short place name',
+        persons_with_short_place_name,
+        '---',
+        '{0:.2f}'.format(persons_with_short_place_name / person_count * 100),
+        '%',
+    )
 
     if print_list:
         for p in persons_with_many_locations:
-           print(p['surname'], p['firstNames'])
-           print(', '.join([l['locationName'] for l in p['locations']]))
+            print(p['surname'], p['firstNames'])
+            print(', '.join([l['locationName'] for l in p['locations']]))
 
         # for p in list(set(persons_with_short_place_names)):
         #     print(p)
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])

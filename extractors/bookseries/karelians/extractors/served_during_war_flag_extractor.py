@@ -7,12 +7,16 @@ class ServedDuringWarFlagExtractor(BaseExtractor):
     extraction_key = 'servedDuringWarFlag'
 
     def __init__(self, cursor_location_depends_on=None, options=None):
-        super(ServedDuringWarFlagExtractor, self).__init__(cursor_location_depends_on, options)
+        super(ServedDuringWarFlagExtractor, self).__init__(
+            cursor_location_depends_on, options
+        )
         self._in_spouse_extractor = options['in_spouse_extractor']
 
         self.OPTIONS = regex.UNICODE
         self.SERVED_IN_WAR_PATTERN = r'(?:palvel(?!uksessa)(?:i|lut|len)){s<=1}'
-        self.REGEX_SERVED_IN_WAR = regex.compile(self.SERVED_IN_WAR_PATTERN, self.OPTIONS)
+        self.REGEX_SERVED_IN_WAR = regex.compile(
+            self.SERVED_IN_WAR_PATTERN, self.OPTIONS
+        )
 
         self._declare_expected_dependency_names(['person'])
 
@@ -26,9 +30,15 @@ class ServedDuringWarFlagExtractor(BaseExtractor):
         """
         should_extract = False
 
-        if self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Female':
+        if (
+            self._in_spouse_extractor
+            and self._deps['person']['name']['gender'] == 'Female'
+        ):
             should_extract = True
-        elif not self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Male':
+        elif (
+            not self._in_spouse_extractor
+            and self._deps['person']['name']['gender'] == 'Male'
+        ):
             should_extract = True
 
         return should_extract
@@ -38,7 +48,9 @@ class ServedDuringWarFlagExtractor(BaseExtractor):
         if self._is_person_male():
             served_during_war = self._check_served_during_war(entry['full_text'])
 
-        return self._add_to_extraction_results(served_during_war, extraction_results, extraction_metadata)
+        return self._add_to_extraction_results(
+            served_during_war, extraction_results, extraction_metadata
+        )
 
     def _check_served_during_war(self, text):
         text = remove_hyphens_from_text(text)

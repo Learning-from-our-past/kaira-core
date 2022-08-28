@@ -1,4 +1,6 @@
-from extractors.bookseries.karelians.nlp.clean_up_replacer import get_siirtokarjalaisten_tie_cleaner
+from extractors.bookseries.karelians.nlp.clean_up_replacer import (
+    get_siirtokarjalaisten_tie_cleaner,
+)
 from extractors.bookseries.karelians.nlp.date_fixer import fix_dates
 
 replacer = get_siirtokarjalaisten_tie_cleaner()

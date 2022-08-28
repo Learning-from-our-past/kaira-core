@@ -10,7 +10,9 @@ class LottaActivityFlagExtractor(BaseExtractor):
     extraction_key = 'lottaActivityFlags'
 
     def __init__(self, cursor_location_depends_on=None, options=None):
-        super(LottaActivityFlagExtractor, self).__init__(cursor_location_depends_on, options)
+        super(LottaActivityFlagExtractor, self).__init__(
+            cursor_location_depends_on, options
+        )
         self._in_spouse_extractor = options['in_spouse_extractor']
 
         lotta_org_pattern = r'(?P<lottaOrg>(?:[Ll]otta\s?(?:S|s)värd|[Ll]ottayhdis|[Ll]ottajärjes)){s<=1}'
@@ -24,7 +26,9 @@ class LottaActivityFlagExtractor(BaseExtractor):
         has to be followed immediately by punctuation or whitespace, so we only
         get words that actually stop with "lotta".
         """
-        lotta_activity_pattern_one = r'(?P<lotta>(?<=[\s.,])\w{0,12}lot(?:ta|tiin)(?:na)?){s<=1}(?=[\s.,!])'
+        lotta_activity_pattern_one = (
+            r'(?P<lotta>(?<=[\s.,])\w{0,12}lot(?:ta|tiin)(?:na)?){s<=1}(?=[\s.,!])'
+        )
 
         """
         The pattern below works similarly to the one above, but instead of
@@ -35,7 +39,7 @@ class LottaActivityFlagExtractor(BaseExtractor):
         that actually start with "lotta".
         """
         lotta_activity_pattern_two = r'(?<=[\s.,])(?P<lotta>lotta){s<=1}\w{0,12}'
-        
+
         """
         Trying to combine these two patterns into one pattern resulted in a
         headache as it caused the regex to match too many false positives and
@@ -53,22 +57,32 @@ class LottaActivityFlagExtractor(BaseExtractor):
 
         regex_options = regex.UNICODE
         self._REGEX_LOTTA_ORGANIZATION = regex.compile(lotta_org_pattern, regex_options)
-        self._REGEX_GENERAL_LOTTA_PATTERN_ONE = regex.compile(lotta_activity_pattern_one, regex_options)
-        self._REGEX_GENERAL_LOTTA_PATTERN_TWO = regex.compile(lotta_activity_pattern_two, regex_options)
+        self._REGEX_GENERAL_LOTTA_PATTERN_ONE = regex.compile(
+            lotta_activity_pattern_one, regex_options
+        )
+        self._REGEX_GENERAL_LOTTA_PATTERN_TWO = regex.compile(
+            lotta_activity_pattern_two, regex_options
+        )
         self._REGEX_LOTTA_WORD = regex.compile(lotta_word_pattern, regex_options)
         self._REGEX_FOOD_LOTTA = regex.compile(food_lotta_pattern, regex_options)
         self._REGEX_OFFICE_LOTTA = regex.compile(office_lotta_pattern, regex_options)
         self._REGEX_NURSE_LOTTA = regex.compile(nurse_lotta_pattern, regex_options)
-        self._REGEX_ANTIAIR_LOTTA = regex.compile(antiair_lotta_pattern, (regex_options | regex.IGNORECASE))
-        self._REGEX_PIKKULOTTA = regex.compile(pikkulotta_pattern, (regex_options | regex.IGNORECASE))
+        self._REGEX_ANTIAIR_LOTTA = regex.compile(
+            antiair_lotta_pattern, (regex_options | regex.IGNORECASE)
+        )
+        self._REGEX_PIKKULOTTA = regex.compile(
+            pikkulotta_pattern, (regex_options | regex.IGNORECASE)
+        )
 
-        self._NO_RESULT = {'lotta': None,
-                           'foodLotta': None,
-                           'officeLotta': None,
-                           'nurseLotta': None,
-                           'antiairLotta': None,
-                           'pikkulotta': None,
-                           'organizationLotta': None}
+        self._NO_RESULT = {
+            'lotta': None,
+            'foodLotta': None,
+            'officeLotta': None,
+            'nurseLotta': None,
+            'antiairLotta': None,
+            'pikkulotta': None,
+            'organizationLotta': None,
+        }
 
         self._word_suffix_length = 4
         self._surroundings_radius = 15
@@ -85,9 +99,15 @@ class LottaActivityFlagExtractor(BaseExtractor):
         """
         is_female = False
 
-        if self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Male':
+        if (
+            self._in_spouse_extractor
+            and self._deps['person']['name']['gender'] == 'Male'
+        ):
             is_female = True
-        elif not self._in_spouse_extractor and self._deps['person']['name']['gender'] == 'Female':
+        elif (
+            not self._in_spouse_extractor
+            and self._deps['person']['name']['gender'] == 'Female'
+        ):
             is_female = True
 
         return is_female
@@ -106,14 +126,18 @@ class LottaActivityFlagExtractor(BaseExtractor):
         else:
             lotta_activity = self._NO_RESULT
 
-        return self._add_to_extraction_results(lotta_activity, extraction_results, extraction_metadata)
+        return self._add_to_extraction_results(
+            lotta_activity, extraction_results, extraction_metadata
+        )
 
     def _extract_lotta_flags(self, text):
-        lotta_flags = {'foodLotta': self._REGEX_FOOD_LOTTA.search(text) is not None,
-                       'officeLotta': self._REGEX_OFFICE_LOTTA.search(text) is not None,
-                       'nurseLotta': self._REGEX_NURSE_LOTTA.search(text) is not None,
-                       'antiairLotta': self._REGEX_ANTIAIR_LOTTA.search(text) is not None,
-                       'pikkulotta': self._REGEX_PIKKULOTTA.search(text) is not None}
+        lotta_flags = {
+            'foodLotta': self._REGEX_FOOD_LOTTA.search(text) is not None,
+            'officeLotta': self._REGEX_OFFICE_LOTTA.search(text) is not None,
+            'nurseLotta': self._REGEX_NURSE_LOTTA.search(text) is not None,
+            'antiairLotta': self._REGEX_ANTIAIR_LOTTA.search(text) is not None,
+            'pikkulotta': self._REGEX_PIKKULOTTA.search(text) is not None,
+        }
 
         lotta = True
         org_lotta = False
@@ -165,10 +189,9 @@ class LottaActivityFlagExtractor(BaseExtractor):
         lotta_matches = self._REGEX_GENERAL_LOTTA_PATTERN_TWO.finditer(text)
 
         for match in lotta_matches:
-            lotta_surroundings = take_sub_str_based_on_start_and_end_and_radius(text,
-                                                                                match.start(),
-                                                                                match.end(),
-                                                                                self._surroundings_radius)
+            lotta_surroundings = take_sub_str_based_on_start_and_end_and_radius(
+                text, match.start(), match.end(), self._surroundings_radius
+            )
             lotta_word = self._find_full_lotta_word_from_string(lotta_surroundings)
             if lotta_word:
                 if is_first_character_lower_case(lotta_word):
@@ -203,7 +226,7 @@ class LottaActivityFlagExtractor(BaseExtractor):
         :return: True or False
         """
         match_string = lotta_match.group('lotta')
-        lotta_ending = match_string[-self._word_suffix_length:]
+        lotta_ending = match_string[-self._word_suffix_length :]
         forbidden_suffices = ('sta', 'ja')
         forbidden_patterns_in_match = ('uotta', 'dotta', 'lohta')
 
@@ -216,12 +239,14 @@ class LottaActivityFlagExtractor(BaseExtractor):
         are present, they are likely to be false positives. (e.g. "vuotta", 
         "kalastaa lohta")
         """
-        if (not check_string_for_substrings(forbidden_suffices, lotta_ending)
-                and not check_string_for_substrings(forbidden_patterns_in_match, match_string)):
-            lotta_surroundings = take_sub_str_based_on_start_and_end_and_radius(text,
-                                                                                lotta_match.start(),
-                                                                                lotta_match.end(),
-                                                                                self._surroundings_radius)
+        if not check_string_for_substrings(
+            forbidden_suffices, lotta_ending
+        ) and not check_string_for_substrings(
+            forbidden_patterns_in_match, match_string
+        ):
+            lotta_surroundings = take_sub_str_based_on_start_and_end_and_radius(
+                text, lotta_match.start(), lotta_match.end(), self._surroundings_radius
+            )
             lotta_word = self._find_full_lotta_word_from_string(lotta_surroundings)
             if lotta_word:
                 permitted_patterns = ('Pikku', 'IV')
@@ -231,7 +256,10 @@ class LottaActivityFlagExtractor(BaseExtractor):
                 surveillance lottas, we have to allow upper case first characters in 
                 some cases. (e.g. "Pikkulotta", "Iv-lotta")
                 """
-                if (is_first_character_lower_case(lotta_word) or
-                        check_string_for_substrings(permitted_patterns, lotta_word, ignore_case=True)):
-                        return True
+                if is_first_character_lower_case(
+                    lotta_word
+                ) or check_string_for_substrings(
+                    permitted_patterns, lotta_word, ignore_case=True
+                ):
+                    return True
         return False

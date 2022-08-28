@@ -16,7 +16,7 @@ class SpouseExtractor(BaseExtractor):
 
         self.PATTERN = r'Puol\.?,?(?P<spousedata>[A-ZÄ-Öa-zä-ö\s\.,\d-]*)(?=(Lapset|poika|tytär|asuinp))'
         self.NAMEPATTERN = r'(?P<name>^[\w\s-]*)'
-        self.OPTIONS = (re.UNICODE | re.IGNORECASE)
+        self.OPTIONS = re.UNICODE | re.IGNORECASE
         self.REQUIRES_MATCH_POSITION = False
         self.SUBSTRING_WIDTH = 100
 
@@ -24,15 +24,24 @@ class SpouseExtractor(BaseExtractor):
         start_position = self.get_starting_position(extraction_metadata)
         result, cursor_location = self._find_spouse(entry, start_position)
 
-        return self._add_to_extraction_results(result, extraction_results, extraction_metadata, cursor_location=cursor_location)
+        return self._add_to_extraction_results(
+            result,
+            extraction_results,
+            extraction_metadata,
+            cursor_location=cursor_location,
+        )
 
     def _find_spouse(self, entry, start_position):
         cursor_location = start_position
         spouse_data = None
 
         try:
-            found_spouse_match = regex_utils.safe_search(self.PATTERN, entry['text'], self.OPTIONS)
-            spouse_data = self._find_spouse_data(found_spouse_match.group('spousedata'), entry)
+            found_spouse_match = regex_utils.safe_search(
+                self.PATTERN, entry['text'], self.OPTIONS
+            )
+            spouse_data = self._find_spouse_data(
+                found_spouse_match.group('spousedata'), entry
+            )
 
             # Dirty fix for inaccuracy in positions which would screw the Location extraction
             cursor_location = found_spouse_match.end() + start_position - 4
@@ -46,11 +55,14 @@ class SpouseExtractor(BaseExtractor):
         spouse_details = None
 
         try:
-            spouse_name_match = regex_utils.safe_search(self.NAMEPATTERN, sub_text, self.OPTIONS)
+            spouse_name_match = regex_utils.safe_search(
+                self.NAMEPATTERN, sub_text, self.OPTIONS
+            )
             spouse_name = spouse_name_match.group('name').strip()
             spouse_name = re.sub(r'\so$', '', spouse_name)
-            spouse_details, metadata = self._find_spouse_details(sub_text[spouse_name_match.end() - 2:],
-                                                                 entry['full_text'])
+            spouse_details, metadata = self._find_spouse_details(
+                sub_text[spouse_name_match.end() - 2 :], entry['full_text']
+            )
             spouse_details = spouse_details['spouse']
 
             return {
@@ -65,4 +77,6 @@ class SpouseExtractor(BaseExtractor):
         return spouse_name, spouse_details
 
     def _find_spouse_details(self, text, full_text):
-        return self._sub_extraction_pipeline.process({'text': text, 'full_text': full_text})
+        return self._sub_extraction_pipeline.process(
+            {'text': text, 'full_text': full_text}
+        )
