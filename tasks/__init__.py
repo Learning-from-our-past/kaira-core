@@ -8,11 +8,27 @@ options_black_formatting = '--skip-string-normalization'
 
 
 @task()
-def code_check(ctx):
+def code_check_flake8(ctx):
     """
-    Run code formatting
+    Run code format check with flake8
+    """
+    ctx.run('flake8 .')
+
+
+@task()
+def code_check_black(ctx):
+    """
+    Run code format check with black
     """
     ctx.run('black . --check {}'.format(options_black_formatting))
+
+
+@task()
+def code_check(ctx):
+    """
+    Run code format check
+    """
+    ctx.run('inv code-check-black && inv code-check-flake8')
 
 
 @task()
