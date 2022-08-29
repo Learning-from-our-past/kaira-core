@@ -10,7 +10,7 @@ with the person entries corresponding to those KairaIDs. This tool is meant
 to be used directly from a CLI. It is possible to utilize this class in your
 code, but it will just take the input in the form of a text file and place the
 output in an .xml file. The constructor contains all the interesting settings
-that need to be configured, after that it's just a call to the function 
+that need to be configured, after that it's just a call to the function
 make_xml_file_from_kairaids.
 
 This script will get both primary people and spouses, as in the case of spouses
@@ -41,8 +41,9 @@ class KairaID2XML:
             self._books.append(self.open_xml_file(book_path))
 
         kairaid_regex_pattern = r'_(?P<book_number>\d)_(?P<entry_number>\d+)'
-        self._kairaid_regex = regex.compile(kairaid_regex_pattern,
-                                            regex.UNICODE | regex.IGNORECASE)
+        self._kairaid_regex = regex.compile(
+            kairaid_regex_pattern, regex.UNICODE | regex.IGNORECASE
+        )
 
     @staticmethod
     def open_xml_file(book_path):
@@ -70,21 +71,22 @@ class KairaID2XML:
             book.append(entry)
 
         output_file = open(self._output_file, 'w', encoding='utf-8')
-        output_file.write(ET.tostring(book,
-                                      encoding='unicode',
-                                      pretty_print=True))
+        output_file.write(ET.tostring(book, encoding='unicode', pretty_print=True))
         output_file.close()
         ids_file.close()
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-input', help='The input file with the KairaIDs.',
-                    type=str)
+parser.add_argument('-input', help='The input file with the KairaIDs.', type=str)
 parser.add_argument('-output', help='The output file to store the XML in.')
-parser.add_argument('-books', nargs='*', help='The books used for finding the entries corresponding to the KairaIDs.')
+parser.add_argument(
+    '-books',
+    nargs='*',
+    help='The books used for finding the entries corresponding to the KairaIDs.',
+)
 args = parser.parse_args()
 
-xml_maker = KairaID2XML(input_file=args.input,
-                        output_file=args.output,
-                        book_paths=args.books)
+xml_maker = KairaID2XML(
+    input_file=args.input, output_file=args.output, book_paths=args.books
+)
 xml_maker.make_xml_file_from_kairaids()

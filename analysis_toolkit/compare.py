@@ -28,13 +28,14 @@ def main(argv):
 
         percentage = round((idx / total) * 100)
 
-        sys.stdout.write("Progress: %d%%  \r" % (percentage))
+        sys.stdout.write('Progress: %d%%  \r' % (percentage))
         sys.stdout.flush()
 
         if bool(diff):
             print(person[0]['primaryPerson']['name'])
             print(idx, diff)
             input('Continue')
+
 
 if __name__ == '__main__':
     main(sys.argv[1:])

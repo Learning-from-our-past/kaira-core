@@ -8,9 +8,10 @@ Format of the csv should be following:
 
 Name1, Name2, ... , region<karelia|other>, latitude, longitude
 
-Basically all columns before column with content "karelia" or "other" are considered as alternative names
-for the place. Empty columns as names are ignored. Latitude and longitude follow region data and should
-be defined. Note that file should not have header row.
+Basically all columns before column with content "karelia" or "other"
+are considered as alternative names for the place. Empty columns as
+names are ignored. Latitude and longitude follow region data and
+should be defined. Note that file should not have header row.
 
 Database can be created with SQL:
 
@@ -55,7 +56,7 @@ def _populate_place(place_data):
     location, created = Location.get_or_create(
         latitude=place_data['latitude'],
         longitude=place_data['longitude'],
-        defaults={'region': place_data['region']}
+        defaults={'region': place_data['region']},
     )
     if not created:
         if location.region != place_data['region']:
@@ -70,10 +71,7 @@ def _populate_place(place_data):
                     place.locationId = location.id
                     place.save()
             except Place.DoesNotExist:
-                Place.create(
-                    name=name,
-                    location=location
-                )
+                Place.create(name=name, location=location)
 
 
 def update_location_db(datasheet_path):
@@ -87,7 +85,7 @@ def update_location_db(datasheet_path):
             'names': names,
             'region': place_data_row[region_idx],
             'latitude': place_data_row[region_idx + 1],
-            'longitude': place_data_row[region_idx + 2]
+            'longitude': place_data_row[region_idx + 2],
         }
 
     place_rows = map(map_to_dict, reader)

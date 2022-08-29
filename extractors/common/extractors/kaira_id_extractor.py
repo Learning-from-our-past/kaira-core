@@ -7,11 +7,7 @@ class KairaIdProvider:
     _children_id_num = 1
     _spouse_id_num = 1
 
-    _allowed_person_types = {
-        'P': 'primary',
-        'S': 'spouse',
-        'C': 'child'
-    }
+    _allowed_person_types = {'P': 'primary', 'S': 'spouse', 'C': 'child'}
 
     def reset(self):
         KairaIdProvider._main_id_num = 1
@@ -26,18 +22,32 @@ class KairaIdProvider:
             KairaIdProvider._children_id_num = 1
             KairaIdProvider._spouse_id_num = 1
 
-            full_id = '{}_{}_{}{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER,
-                                          KairaIdProvider._main_id_num, person_type)
+            full_id = '{}_{}_{}{}'.format(
+                extraction_constants.BOOK_SERIES,
+                extraction_constants.BOOK_NUMBER,
+                KairaIdProvider._main_id_num,
+                person_type,
+            )
             KairaIdProvider._main_id_num += 1
 
         if person_type == 'S':
-            full_id = '{}_{}_{}{}_{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER,
-                                             KairaIdProvider._main_id_num, person_type, KairaIdProvider._spouse_id_num)
+            full_id = '{}_{}_{}{}_{}'.format(
+                extraction_constants.BOOK_SERIES,
+                extraction_constants.BOOK_NUMBER,
+                KairaIdProvider._main_id_num,
+                person_type,
+                KairaIdProvider._spouse_id_num,
+            )
             KairaIdProvider._spouse_id_num += 1
 
         if person_type == 'C':
-            full_id = '{}_{}_{}{}_{}'.format(extraction_constants.BOOK_SERIES, extraction_constants.BOOK_NUMBER,
-                                             KairaIdProvider._main_id_num, person_type, KairaIdProvider._children_id_num)
+            full_id = '{}_{}_{}{}_{}'.format(
+                extraction_constants.BOOK_SERIES,
+                extraction_constants.BOOK_NUMBER,
+                KairaIdProvider._main_id_num,
+                person_type,
+                KairaIdProvider._children_id_num,
+            )
             KairaIdProvider._children_id_num += 1
 
         return full_id
@@ -54,4 +64,6 @@ class KairaIdExtractor(BaseExtractor):
         # Form of the id: <bookseries>_<bookNumber>_<id_num>
         full_id = self._provider.get_new_id()
 
-        return self._add_to_extraction_results(full_id, extraction_results, extraction_metadata)
+        return self._add_to_extraction_results(
+            full_id, extraction_results, extraction_metadata
+        )

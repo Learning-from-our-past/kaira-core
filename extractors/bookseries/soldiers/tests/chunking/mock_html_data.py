@@ -18,16 +18,24 @@ PERSON2 = """
 <p>27.12.39 Kannas, rinta ja käsivarsi; 35 %.&nbsp;Kot 15.5.40 Hki. Sotarvo stm. - Uskottu m,&nbsp;Sotavetliitto j. - Harr kalastus. - Os 19910&nbsp;Tammijärvi.</p><img src="8. Suomen rintamamiehet, 10. divABBYY_OCR_files/8. Suomen rintamamiehet, 10. divABBYY_OCR-3.jpg" style="width:71pt;height:94pt;"/>
 """
 
-TWO_PEOPLE = HTML_CONTAINER.format("""
+TWO_PEOPLE = HTML_CONTAINER.format(
+    """
 <img src="8. Suomen rintamamiehet, 10. divABBYY_OCR_files/8. Suomen rintamamiehet, 10. divABBYY_OCR-1.jpg" style="width:70pt;height:101pt;"/>
 {}
 {}
-""".format(PERSON1, PERSON2))
+""".format(
+        PERSON1, PERSON2
+    )
+)
 
 
-ENTRIES_ACROSS_PAGES = HTML_CONTAINER.format("""
+ENTRIES_ACROSS_PAGES = HTML_CONTAINER.format(
+    """
 <p>141</p>
 {}
 <p>142</p>
 {}
-""".format(PERSON1, PERSON2))
+""".format(
+        PERSON1, PERSON2
+    )
+)

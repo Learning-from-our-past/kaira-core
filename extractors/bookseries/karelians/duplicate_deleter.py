@@ -2,8 +2,10 @@ import datetime
 import regex
 from importlib import util as import_util
 from jellyfish import levenshtein_distance as distance
+
 if import_util.find_spec('ssdeep'):
-    # This package is difficult to install on MacOS so to keep tests etc. from breaking, import it conditionally
+    # This package is difficult to install on MacOS so to keep tests
+    # etc. from breaking, import it conditionally
     import ssdeep
 
 """
@@ -20,11 +22,15 @@ times.
 
 
 class DuplicateDeleter:
-    def __init__(self, duplicate_match_threshold=80, potential_match_threshold=30,
-                 minimum_str_length_for_potential_matches=400,
-                 potential_bday_match_name_distance_threshold=4,
-                 potential_typo_in_name_match_distance_threshold=1,
-                 update_callback=None):
+    def __init__(
+        self,
+        duplicate_match_threshold=80,
+        potential_match_threshold=30,
+        minimum_str_length_for_potential_matches=400,
+        potential_bday_match_name_distance_threshold=4,
+        potential_typo_in_name_match_distance_threshold=1,
+        update_callback=None,
+    ):
         """
         Configure the DuplicateDeleter using the arguments of this constructor.
 
@@ -49,14 +55,25 @@ class DuplicateDeleter:
         self._duplicate_match_threshold = duplicate_match_threshold
         self._potential_match_threshold = potential_match_threshold
         self._min_str_for_potential = minimum_str_length_for_potential_matches
-        self._potential_bday_match_name_distance_threshold = potential_bday_match_name_distance_threshold
-        self._potential_typo_in_name_match_distance_threshold = potential_typo_in_name_match_distance_threshold
+        self._potential_bday_match_name_distance_threshold = (
+            potential_bday_match_name_distance_threshold
+        )
+        self._potential_typo_in_name_match_distance_threshold = (
+            potential_typo_in_name_match_distance_threshold
+        )
         self._unique_entries = {}
         self._potential_matches = []
         self._update_callback_function = update_callback
 
-        birthday_regex_pattern = r'(?:synt)\.?,?(?:\s+)?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|\s+|s)\s?(?P<month>\d{1,2})(?:\.|,|:|\s+|s)?(?:\s+)?-?(?P<year>\d{2,4}))|\s?-(?P<yearOnly>\d{2,4})(?!\.|,|\s|\d)(?=\D\D\D\D\D))'
-        self._BIRTHDAY_REGEX = regex.compile(birthday_regex_pattern, regex.UNICODE | regex.IGNORECASE)
+        birthday_regex_pattern = (
+            r'(?:synt)\.?,?(?:\s+)?(?:(?:(?P<day>\d{1,2})(?:\.|,|:|\s+|s)\s?'
+            r'(?P<month>\d{1,2})(?:\.|,|:|\s+|s)?(?:\s+)?-?'
+            r'(?P<year>\d{2,4}))'
+            r'|\s?-(?P<yearOnly>\d{2,4})(?!\.|,|\s|\d)(?=\D\D\D\D\D))'
+        )
+        self._BIRTHDAY_REGEX = regex.compile(
+            birthday_regex_pattern, regex.UNICODE | regex.IGNORECASE
+        )
 
     def delete_duplicate_persons(self, xml_books):
         """
@@ -76,7 +93,7 @@ class DuplicateDeleter:
         files_without_duplicates = []
 
         for book_id, book in enumerate(xml_books):
-            print('Filtering duplicates in file number {}.'.format(book_id+1))
+            print('Filtering duplicates in file number {}.'.format(book_id + 1))
             unique_entry_id = 0
             files_without_duplicates.append(book)
 
@@ -92,20 +109,27 @@ class DuplicateDeleter:
                     raw = child.find('RAW')
 
                     if len(unique_entry_match['text']) < len(raw.text):
-                        book_of_unique_entry = files_without_duplicates[unique_entry_match['book']]
-                        book_of_unique_entry[unique_entry_match['entry_index']].text = raw.text
+                        book_of_unique_entry = files_without_duplicates[
+                            unique_entry_match['book']
+                        ]
+                        book_of_unique_entry[
+                            unique_entry_match['entry_index']
+                        ].text = raw.text
 
                     files_without_duplicates[book_id].remove(child)
                 else:
                     self._unique_entries[current_entry['unique_key']] = current_entry
                     unique_entry_id += 1
 
-            print('File number {} filtering done.'.format(book_id+1))
+            print('File number {} filtering done.'.format(book_id + 1))
 
         elapsed = datetime.datetime.now() - start_time
-        results_string = '--------------\nFILTERING DONE\n--------------' \
-                         '\nElapsed time: {} s\nDuplicates found: {}'.format(elapsed.seconds,
-                                                                             duplicates_count)
+        results_string = (
+            '--------------\nFILTERING DONE\n--------------'
+            '\nElapsed time: {} s\nDuplicates found: {}'.format(
+                elapsed.seconds, duplicates_count
+            )
+        )
         print(results_string)
         return files_without_duplicates
 
@@ -116,7 +140,11 @@ class DuplicateDeleter:
             if bday_matches.group('yearOnly'):
                 birthday = (None, None, bday_matches.group('yearOnly'))
             else:
-                birthday = (bday_matches.group('day'), bday_matches.group('month'), bday_matches.group('year'))
+                birthday = (
+                    bday_matches.group('day'),
+                    bday_matches.group('month'),
+                    bday_matches.group('year'),
+                )
 
         return birthday
 
@@ -186,9 +214,11 @@ class DuplicateDeleter:
         match = None
         for unique_entry in self._potential_matches:
             name_dist = distance(name, unique_entry['name'])
-            if (birthday == unique_entry['birthday'] and
-                    len('{}{}'.format(unique_entry['text'], text)) > 400 and
-                    name_dist <= self._potential_bday_match_name_distance_threshold):
+            if (
+                birthday == unique_entry['birthday']
+                and len('{}{}'.format(unique_entry['text'], text)) > 400
+                and name_dist <= self._potential_bday_match_name_distance_threshold
+            ):
                 match = unique_entry
             elif name_dist <= self._potential_typo_in_name_match_distance_threshold:
                 match = unique_entry
@@ -208,13 +238,13 @@ class DuplicateDeleter:
         matching_entry = self._match_by_birthday_and_name(current_entry['unique_key'])
 
         if not matching_entry:
-            matching_entry = self._find_fuzzy_match_or_potential_matches(current_entry['hash'])
+            matching_entry = self._find_fuzzy_match_or_potential_matches(
+                current_entry['hash']
+            )
 
         if not matching_entry:
             matching_entry = self._match_by_bday_and_dist_in_potential_matches(
-                current_entry['name'],
-                current_entry['birthday'],
-                current_entry['text']
+                current_entry['name'], current_entry['birthday'], current_entry['text']
             )
             self._potential_matches.clear()
 
@@ -241,7 +271,7 @@ class DuplicateDeleter:
             'hash': ssdeep.hash(raw.text),
             'unique_key': '{}{}'.format(name_processed, birthday),
             'entry_index': entry_id,
-            'book': book_number
+            'book': book_number,
         }
 
         return current_entry

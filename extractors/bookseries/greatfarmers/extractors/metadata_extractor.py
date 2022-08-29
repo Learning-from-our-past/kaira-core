@@ -27,9 +27,11 @@ class MetadataExtractor(BaseExtractor):
             except LocationNotFound:
                 geo = self.geocoder.get_empty_coordinates()
 
-            location = {"locationName": location_name,
-                             "latitude": geo["latitude"],
-                             "longitude": geo["longitude"]}
+            location = {
+                "locationName": location_name,
+                "latitude": geo["latitude"],
+                "longitude": geo["longitude"],
+            }
         except KeyError:
             pass
 
@@ -43,8 +45,15 @@ class MetadataExtractor(BaseExtractor):
             self.metadata_collector.add_error_record('shortEntry', 10)
             short = True
 
-        return self._add_to_extraction_results({KEYS["name"]: name,
-                                                KEYS["approximatePage"]: page,
-                                                KEYS["farmLocation"]: location,
-                                                KEYS["shortentry"]: short,
-                                                KEYS["originalText"]: original_text}, extraction_results, extraction_metadata, 0)
+        return self._add_to_extraction_results(
+            {
+                KEYS["name"]: name,
+                KEYS["approximatePage"]: page,
+                KEYS["farmLocation"]: location,
+                KEYS["shortentry"]: short,
+                KEYS["originalText"]: original_text,
+            },
+            extraction_results,
+            extraction_metadata,
+            0,
+        )

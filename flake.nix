@@ -11,6 +11,7 @@
         nativeBuildInputs = with pkgs; [ 
           python39
           python39Packages.invoke
+          python39Packages.python-lsp-server
           bashInteractive
 
           libffi

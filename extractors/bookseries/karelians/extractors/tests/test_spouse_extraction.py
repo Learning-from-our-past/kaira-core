@@ -3,7 +3,6 @@ from core.pipeline_construction.yaml_parser import YamlParser
 
 
 class TestSpouseExtraction:
-
     @pytest.fixture(autouse=True)
     def spouse_extractor(self, result_map):
         parser = YamlParser(result_map)
@@ -27,16 +26,12 @@ class TestSpouseExtraction:
             'hasSpouse': True,
             'death': None,
             'weddingYear': 1944,
-            'birthData': {
-                'birthDay': 30,
-                'birthMonth': 6,
-                'birthYear': 1919
-            },
+            'birthData': {'birthDay': 30, 'birthMonth': 6, 'birthYear': 1919},
             'birthLocation': {
                 'locationName': 'Testilässä',
                 'region': None,
                 'latitude': None,
-                'longitude': None
+                'longitude': None,
             },
             'profession': {
                 'professionName': 'emäntä',
@@ -47,29 +42,26 @@ class TestSpouseExtraction:
                     'englishName': 'Farm housewife',
                     'manualLabor': True,
                     'occupationCategory': 3,
-                    'socialClassRank': 5
-                }
+                    'socialClassRank': 5,
+                },
             },
             'warData': {
                 'injuredInWarFlag': None,
                 'servedDuringWarFlag': None,
-                'lottaActivityFlags': {'lotta': False,
-                                       'foodLotta': False,
-                                       'officeLotta': False,
-                                       'nurseLotta': False,
-                                       'antiairLotta': False,
-                                       'pikkulotta': False,
-                                       'organizationLotta': False}
+                'lottaActivityFlags': {
+                    'lotta': False,
+                    'foodLotta': False,
+                    'officeLotta': False,
+                    'nurseLotta': False,
+                    'antiairLotta': False,
+                    'pikkulotta': False,
+                    'organizationLotta': False,
+                },
             },
-            'marttaActivityFlag': False
+            'marttaActivityFlag': False,
         }
 
-        assert metadata == {
-            'spouse': {
-                'cursorLocation': 79,
-                'errors': {}
-            }
-        }
+        assert metadata == {'spouse': {'cursorLocation': 79, 'errors': {}}}
 
     def should_return_none_if_spouse_not_available(self, spouse_extractor, result_map):
         spouse_text = 'om. Testi Testisen perikunta. Viljelijä Mies Testinen. Tila sijaitsee Antooran kylässä. Kokonaispinta-ala on 80,67 ha.'

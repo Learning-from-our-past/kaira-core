@@ -1,0 +1,32 @@
+[flake8]
+extend-exclude =
+    .cache,
+    # nix-direnv sets up the environment in this directory
+    .direnv,
+    # python virtualenv for the environment
+    *venv*
+    # soldiers bookseries is not being worked on, ignore
+    extractors/bookseries/soldiers/**
+    # farmers bookseries is not being worked on, ignore
+    extractors/bookseries/farmers/**
+    # greatfarmers bookseries is not being worked on, ignore
+    extractors/bookseries/greatfarmers/**
+
+# 90 is the max line length used by `black`
+max-line-length=90
+
+# Disable line length for test files
+# and line length and indentation checks for test data
+per-file-ignores=
+    **/tests:E501
+    **/test_*:E501,E101
+    **/mock*:E501,E101
+    **/expected*:E501,E101
+    # really long regex in this file, do not want
+    extractors/bookseries/karelians/extractors/birthday_extractor.py:E501
+    # this file needed some borderline hacky imports
+    analysis_toolkit/simple_regex_extractor.py:E402
+
+# E203 (whitespace detection before :) is broken with list slicing
+extend-ignore=E203
+

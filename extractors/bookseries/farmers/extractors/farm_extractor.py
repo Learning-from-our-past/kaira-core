@@ -6,6 +6,7 @@ from extractors.common.extraction_keys import KEYS
 from core.pipeline_construction.base_extractor import BaseExtractor
 from core.utils import text_utils
 
+
 class FarmExtractor(BaseExtractor):
     extraction_key = KEYS['farmDetails']
 
@@ -16,12 +17,14 @@ class FarmExtractor(BaseExtractor):
         self.FIELD_AREA_PATTERN = r"(?:(?:(?:salaojitettua\s){s<=1,i<=1})?peltoa{s<=1}\s?(?P<area1>\d\d?\d?,?\d\d))|(?:(?P<area2>\d\d?\d?,\d\d)\s?ha\s?(?:salaojitettua\s{s<=1,i<=1})?peltoa{s<=1})"
         self.WASTE_AREA_PATTERN = r"(?:joutomaata{s<=1}\s?(?P<area1>\d\d?\d?,?\d\d))|(?:(?P<area2>\d\d?\d?,\d\d)\s?ha\s?joutomaata{s<=1})"
         self.MEADOW_AREA_PATTERN = r"(?:niittyä{s<=1}\s?(?P<area1>\d\d?\d?,?\d\d))|(?:(?P<area1>\d\d?\d?,\d\d)\s?ha\s?niittyä{s<=1})"
-        self.AREA_OPTIONS = (re.UNICODE | re.IGNORECASE)
+        self.AREA_OPTIONS = re.UNICODE | re.IGNORECASE
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         start_position = self.get_starting_position(extraction_metadata)
         result = self._find_areas(entry['text'])
-        return self._add_to_extraction_results(result, extraction_results, extraction_metadata, start_position)
+        return self._add_to_extraction_results(
+            result, extraction_results, extraction_metadata, start_position
+        )
 
     def _find_areas(self, text):
         whole_area = self._get_area(text, self.ALL_AREA_PATTERN)
@@ -35,7 +38,7 @@ class FarmExtractor(BaseExtractor):
             KEYS["forestArea"]: text_utils.float_or_none(forest_area[0]),
             KEYS["fieldArea"]: text_utils.float_or_none(field_area[0]),
             KEYS["wasteArea"]: text_utils.float_or_none(waste_area[0]),
-            KEYS["meadowArea"]: text_utils.float_or_none(meadow_area[0])
+            KEYS["meadowArea"]: text_utils.float_or_none(meadow_area[0]),
         }
 
     def _get_area(self, text, pattern):

@@ -4,7 +4,6 @@ from core.interface.jsonbuilderinterface import ResultJsonBuilderInterface
 
 
 class ResultJsonBuilder(ResultJsonBuilderInterface):
-
     def __init__(self):
         super(ResultJsonBuilder).__init__()
         self._opened_json = None

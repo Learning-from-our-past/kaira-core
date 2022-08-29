@@ -6,9 +6,9 @@ class WarDataExtractor(BaseExtractor):
 
     def _extract(self, entry, extraction_results, extraction_metadata):
         results, metadata = self._extract_war_data(entry)
-        return self._add_to_extraction_results(results,
-                                               extraction_results,
-                                               extraction_metadata)
+        return self._add_to_extraction_results(
+            results, extraction_results, extraction_metadata
+        )
 
     def _extract_war_data(self, entry):
         return self._sub_extraction_pipeline.process(entry)

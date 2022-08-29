@@ -11,10 +11,18 @@ class FarmAreaExtractor(BaseExtractor):
 
     def __init__(self, cursor_location_depends_on=None, options=None):
         super(FarmAreaExtractor, self).__init__(cursor_location_depends_on, options)
-        self.OPTIONS = (regex.UNICODE | regex.IGNORECASE)
-        self.PATTERN_MATCH_PINTAALA_ON = r'(pinta-ala){s<=1}\son\s(?P<area>\d{1,3}(?:,|\.)\d{1,2}|\d{1,3}(?!\s\d))\s?(?P<unit>ha|m|aar)'
-        self.PATTERN_MATCH_AREA_HA_NA = r'(?P<area>(\d{1,3}(?:,|\.)\d{1,3})|(?<!\d\s)\d{1,3}(?!\s\d))(?=\sha(:n|\.n))'
-        self.REGEX_PINTAALA_ON = regex.compile(self.PATTERN_MATCH_PINTAALA_ON, self.OPTIONS)
+        self.OPTIONS = regex.UNICODE | regex.IGNORECASE
+        self.PATTERN_MATCH_PINTAALA_ON = (
+            r'(pinta-ala){s<=1}\son\s(?P<area>\d{1,3}(?:,|\.)'
+            r'\d{1,2}|\d{1,3}(?!\s\d))\s?(?P<unit>ha|m|aar)'
+        )
+        self.PATTERN_MATCH_AREA_HA_NA = (
+            r'(?P<area>(\d{1,3}(?:,|\.)\d{1,3})|'
+            r'(?<!\d\s)\d{1,3}(?!\s\d))(?=\sha(:n|\.n))'
+        )
+        self.REGEX_PINTAALA_ON = regex.compile(
+            self.PATTERN_MATCH_PINTAALA_ON, self.OPTIONS
+        )
         self.REGEX_HA_NA = regex.compile(self.PATTERN_MATCH_AREA_HA_NA, self.OPTIONS)
 
     def _extract(self, entry, extraction_results, extraction_metadata):
@@ -36,4 +44,6 @@ class FarmAreaExtractor(BaseExtractor):
             if matches:
                 area_in_hectares = float(matches.group('area').replace(',', '.'))
 
-        return self._add_to_extraction_results(area_in_hectares, extraction_results, extraction_metadata)
+        return self._add_to_extraction_results(
+            area_in_hectares, extraction_results, extraction_metadata
+        )

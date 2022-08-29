@@ -14,9 +14,10 @@ from conllu import parser
 
 class BookSeries:
     """
-    A class which wraps all logic of the bookseries to a common interface. Gives access to the
-    extraction, chunking etc. operations. Actual implementation of said operations are in plugins. This class
-    just holds references to them.
+    A class which wraps all logic of the bookseries to a common
+    interface. Gives access to the extraction, chunking etc.
+    operations. Actual implementation of said operations are in
+    plugins. This class just holds references to them.
     """
 
     def __init__(self, manifest, update_callback):
@@ -33,9 +34,12 @@ class BookSeries:
         self._custom_convert_xml_to_dict = self._load_custom_xml_conversion_function()
 
     def extract_data(self, xml_stream):
-        self._extractor_pipeline = self._parser.build_pipeline_from_yaml(os.path.join(self._manifest['path'],
-                                                                                      'pipeline_config.yaml'))
-        self._extractor = ProcessData(self._extractor_pipeline, self._extraction_result_map, self._update_callback)
+        self._extractor_pipeline = self._parser.build_pipeline_from_yaml(
+            os.path.join(self._manifest['path'], 'pipeline_config.yaml')
+        )
+        self._extractor = ProcessData(
+            self._extractor_pipeline, self._extraction_result_map, self._update_callback
+        )
 
         self._results = self._extractor.run_extraction(xml_stream)
 
@@ -46,15 +50,26 @@ class BookSeries:
 
             for entry in self._results['entries']:
                 try:
-                    writer.write_entry(entry['extractionResults'][0])    # Leave metadata objects out
+                    writer.write_entry(
+                        entry['extractionResults'][0]
+                    )  # Leave metadata objects out
                 except KeyError as e:
                     raise e
 
             writer.close_json()
 
-    def chunk(self, input_files, output_files, book_numbers, filter_duplicates=False, callback=None):
+    def chunk(
+        self,
+        input_files,
+        output_files,
+        book_numbers,
+        filter_duplicates=False,
+        callback=None,
+    ):
         # Import the chunking implementation from the plugin directory
-        chunking_module = self._load_plugin_module('chunktextfile', self._manifest['chunker'])
+        chunking_module = self._load_plugin_module(
+            'chunktextfile', self._manifest['chunker']
+        )
 
         # And then call the actual implementation in the imported module
         chunking_module.convert_html_file_to_xml(
@@ -63,7 +78,7 @@ class BookSeries:
             output_files,
             book_numbers,
             filter_duplicates,
-            callback
+            callback,
         )
 
     def parse_with_nlp(self, xml_doc, base_path, output_file, clean_up):
@@ -71,7 +86,9 @@ class BookSeries:
         transformed_file_path = run_xml_data_transformation(self, xml_doc, base_path)
 
         print('Running transformed data through fin-dep-parser...')
-        nlp_data_file = parse_through_fdp_and_output_file(transformed_file_path, base_path)
+        nlp_data_file = parse_through_fdp_and_output_file(
+            transformed_file_path, base_path
+        )
         if clean_up:
             os.remove(transformed_file_path)
 
@@ -86,17 +103,23 @@ class BookSeries:
         """
         Transforms a book's entries to prepare them for fin-dep-parser.
 
-        If the quality of the text being parsed by the fin-dep-parser is not perfect, it
-        may need some clean up that will help the parser better cope with the text without
-        making errors. Any errors in the text could have bigconsequences to how the parser
-        interprets an entire sentence. Simple clean-up can improve it considerably so it
-        does not confuse the NLP parser.
+        If the quality of the text being parsed by the
+        fin-dep-parser is not perfect, it may need some clean up
+        that will help the parser better cope with the text without
+        making errors. Any errors in the text could have big
+        consequences to how the parser interprets an entire sentence.
+        Simple clean-up can improve it considerably so it does not
+        confuse the NLP parser.
 
-        The data is placed in a .txt file with comments that keep the entries clearly separated
-        from each other. It takes a while to start the parser and doing so for each entry
-        individually is unfeasible, so we want to process them all in one go.
-        :param xml_doc: An XML document opened with e.g. lxml.etree.parse
-        :return: String containing path to outputted file with transformed text
+        The data is placed in a .txt file with comments that keep
+        the entries clearly separated from each other. It takes a
+        while to start the parser and doing so for each entry
+        individually is unfeasible, so we want to process them all
+        in one go.
+        :param xml_doc: An XML document opened with
+        e.g. lxml.etree.parse
+        :return: String containing path to outputted file with
+        transformed text
         """
         xml_root = xml_doc.getroot()
 
@@ -104,7 +127,7 @@ class BookSeries:
         for idx, child in enumerate(xml_root):
             raw = child.find('RAW')
             entry = self._clean_up_entry_for_nlp(raw)
-            entry = '###C: {{\'entry_num\': {}}}\n{}'.format(idx, entry)
+            entry = "###C: {{'entry_num': {}}}\n{}".format(idx, entry)
             transformed_data.append(entry)
 
         return transformed_data
@@ -125,8 +148,10 @@ class BookSeries:
         if self._custom_convert_xml_to_dict is not None:
             return self._custom_convert_xml_to_dict(person_element)
 
-        person_entry = {**person_element.attrib,
-                        'text': person_element.find('RAW').text}
+        person_entry = {
+            **person_element.attrib,
+            'text': person_element.find('RAW').text,
+        }
 
         conllu_data = BookSeries._get_conllu_data_from_xml(person_element)
         if conllu_data is not None:
@@ -164,14 +189,15 @@ class BookSeries:
     def _load_clean_up_function(self):
         clean_up_module_path = self._manifest.get('nlp_clean_up', None)
         if clean_up_module_path is not None:
-            return self._load_plugin_module('clean_up', clean_up_module_path).clean_up_entry
+            return self._load_plugin_module(
+                'clean_up', clean_up_module_path
+            ).clean_up_entry
         return None
 
     def _load_plugin_module(self, module_name, file):
-        module_spec = import_util.spec_from_file_location(module_name,
-                                                          os.path.join(
-                                                              self._manifest['path'],
-                                                              file))
+        module_spec = import_util.spec_from_file_location(
+            module_name, os.path.join(self._manifest['path'], file)
+        )
         module = import_util.module_from_spec(module_spec)
         module_spec.loader.exec_module(module)
         return module
@@ -195,5 +221,7 @@ class BookSeries:
         xml_to_dict_module_path = self._manifest.get('xml_to_dict', None)
         if xml_to_dict_module_path is None:
             return None
-        xml_conversion_module = self._load_plugin_module('xml_to_dict', xml_to_dict_module_path)
+        xml_conversion_module = self._load_plugin_module(
+            'xml_to_dict', xml_to_dict_module_path
+        )
         return xml_conversion_module.convert_xml_to_dict

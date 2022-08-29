@@ -3,7 +3,9 @@ import regex
 import argparse
 import shutil
 import sys
-import os, inspect
+import os
+import inspect
+
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
@@ -12,7 +14,7 @@ from core.utils.text_utils import remove_hyphens_from_text, remove_spaces_from_t
 """
 Run an "extraction" test using regex and get information about what kind of
 strings the regex matched and the frequency of each match. This should be used
-from a CLI, and if you are doing that, you can run the file with the --help 
+from a CLI, and if you are doing that, you can run the file with the --help
 option to get instructions on usage.
 """
 
@@ -27,18 +29,29 @@ def callback(b_num, current, max):
     console_width = int(shutil.get_terminal_size()[0] / 2)
     bar_width = console_width - len(progress_bar)
     bar_fill = round(percentage * bar_width / 100)
-    progress_bar = progress_bar_str.format(progress_bar, '#' * bar_fill, '-' * (bar_width - bar_fill))
+    progress_bar = progress_bar_str.format(
+        progress_bar, '#' * bar_fill, '-' * (bar_width - bar_fill)
+    )
     sys.stdout.write(progress_bar)
     sys.stdout.flush()
 
 
 def open_xml_file(book_path):
-        xml_doc = ET.parse('{}'.format(book_path))
-        return xml_doc.getroot()
+    xml_doc = ET.parse('{}'.format(book_path))
+    return xml_doc.getroot()
 
 
 class SimpleRegexExtractor:
-    def __init__(self, book_paths=None, extractor_regex=None, remove_whitespace=False, remove_hyphens=False, update_callback=None, display_texts=None, ignore_case=False):
+    def __init__(
+        self,
+        book_paths=None,
+        extractor_regex=None,
+        remove_whitespace=False,
+        remove_hyphens=False,
+        update_callback=None,
+        display_texts=None,
+        ignore_case=False,
+    ):
         if book_paths is None:
             print('Book paths have to be specified!')
             sys.exit(1)
@@ -54,12 +67,14 @@ class SimpleRegexExtractor:
 
         self._update_callback = update_callback
 
-        self._options = {'remove_whitespace': remove_whitespace,
-                         'remove_hyphens': remove_hyphens,
-                         'display_texts': display_texts}
+        self._options = {
+            'remove_whitespace': remove_whitespace,
+            'remove_hyphens': remove_hyphens,
+            'display_texts': display_texts,
+        }
 
         if ignore_case:
-            regex_options = (regex.UNICODE | regex.IGNORECASE)
+            regex_options = regex.UNICODE | regex.IGNORECASE
         else:
             regex_options = regex.UNICODE
 
@@ -100,7 +115,9 @@ class SimpleRegexExtractor:
             print('')
 
         regex_total = 0
-        for word in sorted(self._extracted_words, key=self._extracted_words.get, reverse=True):
+        for word in sorted(
+            self._extracted_words, key=self._extracted_words.get, reverse=True
+        ):
             if self._extracted_words[word] > 0:
                 regex_total += self._extracted_words[word]
                 print('  {:>5}:{:>25}'.format(self._extracted_words[word], word))
@@ -119,23 +136,37 @@ class SimpleRegexExtractor:
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('regex', help='The regular expression to use for extraction.',
-                    type=str)
-parser.add_argument('-books', nargs='*', help='The input file to look at.',
-                    type=str)
-parser.add_argument('--hyphens', action='store_true', help='Specify this to remove hyphens from text.')
-parser.add_argument('--spaces', action='store_true', help='Specify this to remove spaces from text.')
-parser.add_argument('--display-text', action='store_true', help='Whether to show the texts with matches at the end.')
-parser.add_argument('--ignore-case', action='store_true', help='Whether to ignore case in regex matches.')
+parser.add_argument(
+    'regex', help='The regular expression to use for extraction.', type=str
+)
+parser.add_argument('-books', nargs='*', help='The input file to look at.', type=str)
+parser.add_argument(
+    '--hyphens', action='store_true', help='Specify this to remove hyphens from text.'
+)
+parser.add_argument(
+    '--spaces', action='store_true', help='Specify this to remove spaces from text.'
+)
+parser.add_argument(
+    '--display-text',
+    action='store_true',
+    help='Whether to show the texts with matches at the end.',
+)
+parser.add_argument(
+    '--ignore-case',
+    action='store_true',
+    help='Whether to ignore case in regex matches.',
+)
 
 args = parser.parse_args()
 
-r = SimpleRegexExtractor(book_paths=args.books,
-                         extractor_regex=args.regex,
-                         remove_hyphens=args.hyphens,
-                         remove_whitespace=args.spaces,
-                         update_callback=callback,
-                         display_texts=args.display_text,
-                         ignore_case=args.ignore_case)
+r = SimpleRegexExtractor(
+    book_paths=args.books,
+    extractor_regex=args.regex,
+    remove_hyphens=args.hyphens,
+    remove_whitespace=args.spaces,
+    update_callback=callback,
+    display_texts=args.display_text,
+    ignore_case=args.ignore_case,
+)
 r.find_frequencies_for_regex()
 print('regex: {}'.format(args.regex))

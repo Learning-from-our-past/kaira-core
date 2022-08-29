@@ -10,9 +10,11 @@ class OwnerExtractor(CommonOwnerExtractor):
         if options is None:
             options = {}
 
-        options.update({
-            'OWNER_YEAR_PATTERN': r"om(?:\.|,)\s?vuodesta\s(?P<year>\d\d\d\d)",
-            'OWNER_NAME_PATTERN': r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt"
-        })
+        options.update(
+            {
+                'OWNER_YEAR_PATTERN': r"om(?:\.|,)\s?vuodesta\s(?P<year>\d\d\d\d)",
+                'OWNER_NAME_PATTERN': r"(?P<name>[A-ZÄ-Öa-zä-ö -]+(?:o\.s\.)?[A-ZÄ-Öa-zä-ö -]+)(?:\.|,)\ssynt",
+            }
+        )
 
         super(OwnerExtractor, self).__init__(cursor_location_depends_on, options)

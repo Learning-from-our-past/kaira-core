@@ -1,7 +1,4 @@
-
-
 class MetadataCollector:
-
     def __init__(self):
         self._metadata_attributes = {'errors': {}}
 

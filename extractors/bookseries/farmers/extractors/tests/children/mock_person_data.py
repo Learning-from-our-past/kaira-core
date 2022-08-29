@@ -5,27 +5,29 @@ CHILDREN_TEXTS = [
     "Edellinen omistaja oli Testi Henkilo vuosina 1946—65."
 ]
 
-TWINS_AND_EXTRA_INFO_CHILDREN = ", om. vuodesta 1963 Lapsi ja Testi Testikäs. Isännyyttä on vuodesta 1928 lähtien hoitanut Lapsi Testikäs, " \
-        "synt. 14. 1. 1897 ja emäntä Nainen Naisekas o.s. Testinen, synt. 31. 7. 1896. Lapset:Ester -15, Jenny -24, kaksoset Edith ja Toivo -27, " \
-        "joka on tilan toinen omistaja, Hilma -28, Sirkka -29, Tyyne -32, Heikki -33, joka on tilan toinen omistaja sekä Martta -36. " \
-        "Edelliset omistajat olivat Edellinen ja Edellinenvaimo Testikäs vuosina 1928—63."
+TWINS_AND_EXTRA_INFO_CHILDREN = (
+    ", om. vuodesta 1963 Lapsi ja Testi Testikäs. Isännyyttä on vuodesta 1928 lähtien hoitanut Lapsi Testikäs, "
+    "synt. 14. 1. 1897 ja emäntä Nainen Naisekas o.s. Testinen, synt. 31. 7. 1896. Lapset:Ester -15, Jenny -24, kaksoset Edith ja Toivo -27, "
+    "joka on tilan toinen omistaja, Hilma -28, Sirkka -29, Tyyne -32, Heikki -33, joka on tilan toinen omistaja sekä Martta -36. "
+    "Edelliset omistajat olivat Edellinen ja Edellinenvaimo Testikäs vuosina 1928—63."
+)
 EXPECTED_CHILDREN = [
     {
         "birthYear": 1937,
         "gender": "Female",
         "name": "Maija Sanelma",
-        "kairaId": 'testbook_1_1C_1'
+        "kairaId": 'testbook_1_1C_1',
     },
     {
         "birthYear": 1939,
         "gender": "Male",
         "name": "Raimo Juhani",
-        "kairaId": 'testbook_1_1C_2'
+        "kairaId": 'testbook_1_1C_2',
     },
     {
         "birthYear": 1942,
         "gender": "Male",
         "name": "Pentti Kaarlo Kalevi",
-        "kairaId": 'testbook_1_1C_3'
-    }
+        "kairaId": 'testbook_1_1C_3',
+    },
 ]

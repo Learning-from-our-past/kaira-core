@@ -4,7 +4,6 @@ from core.pipeline_construction.extraction_pipeline import ExtractionPipeline
 
 
 class YamlParser:
-
     def __init__(self, extraction_results_map):
         self._extraction_results_map = extraction_results_map
         yaml.add_constructor('!Extractor', self._extractor_constructor)
@@ -19,8 +18,11 @@ class YamlParser:
         extractor_module = importlib.import_module(extractor_params['module'])
         extractor_class = getattr(extractor_module, extractor_params['class_name'])
 
-        cursor_location_dependence = extractor_params['cursor_location_depend_on'] if 'cursor_location_depend_on' in \
-                                                                                      extractor_params else None
+        cursor_location_dependence = (
+            extractor_params['cursor_location_depend_on']
+            if 'cursor_location_depend_on' in extractor_params
+            else None
+        )
         options = extractor_params['options'] if 'options' in extractor_params else None
         extractor = extractor_class(cursor_location_dependence, options)
 

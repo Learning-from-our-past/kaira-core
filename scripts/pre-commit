@@ -1,0 +1,53 @@
+#!/bin/sh
+
+RED=$(tput setaf 1)
+YELLOW=$(tput setaf 3)
+GREEN=$(tput setaf 2)
+CYAN=$(tput setaf 6)
+NORMAL=$(tput sgr0)
+
+if ! command -v invoke &> /dev/null
+then
+  printf "${RED}× ERROR: ${CYAN}invoke${RED} not found.${NORMAL}\n"
+  printf "Is your virtualenv active and have you installed the requirements?\n"
+  exit 1
+fi
+
+if ! command -v black &> /dev/null
+then
+  printf "${RED}× ERROR: ${CYAN}black${RED} not found.${NORMAL}\n"
+  printf "Is your virtualenv active and have you installed the requirements?\n"
+  exit 1
+fi
+
+if ! command -v flake8 &> /dev/null
+then
+  printf "${RED}× ERROR: ${CYAN}flake8${RED} not found.${NORMAL}\n"
+  printf "Is your virtualenv active and have you installed the requirements?\n"
+  exit 1
+fi
+
+inv code-check-black
+
+if [ $? -ne 0 ]; then
+  printf "\n${CYAN}black${YELLOW} code check exited with a non-zero status code.\n"
+  printf "${NORMAL}Consider formatting your files: ${CYAN}inv code-format${NORMAL}\n"
+  exit 1
+fi
+
+printf "\n${GREEN}✓ ${CYAN}black${GREEN} code check successful.${NORMAL}\n"
+printf "Proceeding to ${CYAN}flake8${NORMAL} format check.\n"
+
+inv code-check-flake8
+
+if [ $? -ne 0 ]; then
+  printf "\n${CYAN}flake8${YELLOW} code check exited with a non-zero status code.${NORMAL}\n"
+  printf "Please fix the issues. For a list of errors, run ${CYAN}inv code-check-flake8${NORMAL}\n"
+  exit 1
+fi
+
+printf "\n${GREEN}✓ ${CYAN}flake8${GREEN} code check successful.${NORMAL}\n"
+printf "Proceeding to commit.\n\n"
+
+exit 0
+

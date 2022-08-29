@@ -3,22 +3,62 @@ import re
 import regex
 from core.utils import regex_utils
 
-# This is a selection of unicode codes for characters that all look more or less like hyphens
-unicode_hyphens = [0x002D, 0x007E, 0x058A, 0x05BE, 0x1400, 0x1806,
-                   0x2010, 0x2011, 0x2012, 0x2013, 0x2014, 0x2015,
-                   0x2053, 0x207B, 0x208B, 0x2212, 0x2E17, 0x2E3A,
-                   0x2E3B, 0x30A0, 0xFE32, 0xFE58, 0xFE63, 0xFF0D]
+# This is a selection of unicode codes for characters that all look
+# more or less like hyphens
+unicode_hyphens = [
+    0x002D,
+    0x007E,
+    0x058A,
+    0x05BE,
+    0x1400,
+    0x1806,
+    0x2010,
+    0x2011,
+    0x2012,
+    0x2013,
+    0x2014,
+    0x2015,
+    0x2053,
+    0x207B,
+    0x208B,
+    0x2212,
+    0x2E17,
+    0x2E3A,
+    0x2E3B,
+    0x30A0,
+    0xFE32,
+    0xFE58,
+    0xFE63,
+    0xFF0D,
+]
 hyphen_regex_pattern = '|'.join(map(chr, unicode_hyphens))
-unicode_spaces = [0x0020, 0x00A0, 0x180E, 0x2000, 0x2001, 0x2002,
-                  0x2003, 0x2004, 0x2005, 0x2006, 0x2007, 0x2008,
-                  0x2009, 0x200A, 0x200B, 0x202F, 0x205F, 0x3000,
-                  0xFEFF]
+unicode_spaces = [
+    0x0020,
+    0x00A0,
+    0x180E,
+    0x2000,
+    0x2001,
+    0x2002,
+    0x2003,
+    0x2004,
+    0x2005,
+    0x2006,
+    0x2007,
+    0x2008,
+    0x2009,
+    0x200A,
+    0x200B,
+    0x202F,
+    0x205F,
+    0x3000,
+    0xFEFF,
+]
 spaces_regex_pattern = '|'.join(map(chr, unicode_spaces))
 
 
 def take_sub_str_based_on_pos(text, start, width=None):
     if width is not None:
-        t = text[start:(start+width)]
+        t = text[start : (start + width)]
     else:
         t = text[start:]
     return t
@@ -61,7 +101,7 @@ def int_or_none(value):
 
 def float_or_none(value):
     try:
-        value = value.replace('\w', '')
+        value = value.replace(r'\w', '')
         return float(value.replace(',', '.'))
     except (TypeError, ValueError, AttributeError):
         return None
@@ -87,6 +127,7 @@ class RegexListReplacer:
     Used to modify strings by running a list of regular expressions accompanied
     by replacement strings.
     """
+
     def __init__(self, patterns):
         """
         :param patterns: A list of tuples. The first element of each tuple should be a
@@ -107,5 +148,7 @@ class RegexListReplacer:
             if flags is None:
                 string = regex.sub(regex_pattern, replacement_pattern, string)
             else:
-                string = regex.sub(regex_pattern, replacement_pattern, string, flags=flags)
+                string = regex.sub(
+                    regex_pattern, replacement_pattern, string, flags=flags
+                )
         return string

@@ -14,10 +14,13 @@ If you use Nix, then you can install most dependencies easily with [`nix-direnv`
 
 ### No Nix
 
+The codebase has been formatted with `black` and reformatted for compliance with PEP8. The reformattings resulted in two commits that changed a lot of lines, which in turn can make it unnecessarily challenging to use `git blame` (and `blame` integration in IDEs) to peek into the history of the project. However, there is a way around this challenge: the hashes of the reformatting commits are in `.git-blame-ignore-revs`. To configure `git` to use that file when using `git blame`: `git config blame.ignoreRevsFile .git-blame-ignore-revs`.
+
 ```
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+cp scripts/pre-commit .git/hooks
 ```
 
 If you wish to chunk the html files with duplicate filtering, you will also need ssdeep. Installation of ssdeep is

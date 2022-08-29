@@ -1,6 +1,8 @@
-from peewee import *
+from peewee import SqliteDatabase, TextField, Model, ForeignKeyField
 
-database_connection = SqliteDatabase('support_datasheets/location.db', threadlocals=True)
+database_connection = SqliteDatabase(
+    'support_datasheets/location.db', threadlocals=True
+)
 database_connection.connect()
 
 
@@ -15,10 +17,9 @@ class Location(Model):
 
 class Place(Model):
     name = TextField()
-    location = ForeignKeyField(db_column='locationId', null=True, rel_model=Location, to_field='id')
+    location = ForeignKeyField(
+        db_column='locationId', null=True, rel_model=Location, to_field='id'
+    )
 
     class Meta:
         database = database_connection
-
-
-

@@ -23,6 +23,5 @@ def should_clear_result_map_after_extracting_one_entry():
 
 
 class MockPipeline:
-
     def process(self, entry):
         return {'data': entry}
