@@ -253,7 +253,7 @@ def nlp_setup(ctx):
     ctx.run('rm -rf {}/.git'.format(npp_dir))
     ctx.run('rm -rf {}/.gitignore'.format(npp_dir))
     ctx.run('cd {}; pip install -r requirements.txt'.format(npp_dir))
-    ctx.run("cd {}; python3 fetch_models.py fi_tdt_dia".format(npp_dir))
+    ctx.run('cd {}; python3 fetch_models.py fi_tdt_dia'.format(npp_dir))
 
 
 @task(

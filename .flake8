@@ -11,6 +11,8 @@ extend-exclude =
     extractors/bookseries/farmers/**
     # greatfarmers bookseries is not being worked on, ignore
     extractors/bookseries/greatfarmers/**
+     # long lines and double quotes ""
+    dependencies/neural-parser-pipeline/**
 
 # 90 is the max line length used by `black`
 max-line-length=90
@@ -26,6 +28,7 @@ per-file-ignores=
     extractors/bookseries/karelians/extractors/birthday_extractor.py:E501
     # this file needed some borderline hacky imports
     analysis_toolkit/simple_regex_extractor.py:E402
+
 
 # E203 (whitespace detection before :) is broken with list slicing
 extend-ignore=E203
