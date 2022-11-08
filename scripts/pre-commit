@@ -6,22 +6,25 @@ GREEN=$(tput setaf 2)
 CYAN=$(tput setaf 6)
 NORMAL=$(tput sgr0)
 
-if ! command -v invoke &> /dev/null
-then
+command -v invoke &> /dev/null
+
+if [ $? -ne 0 ]; then
   printf "${RED}× ERROR: ${CYAN}invoke${RED} not found.${NORMAL}\n"
   printf "Is your virtualenv active and have you installed the requirements?\n"
   exit 1
 fi
 
-if ! command -v black &> /dev/null
-then
+command -v black &> /dev/null
+
+if [ $? -ne 0 ]; then
   printf "${RED}× ERROR: ${CYAN}black${RED} not found.${NORMAL}\n"
   printf "Is your virtualenv active and have you installed the requirements?\n"
   exit 1
 fi
 
-if ! command -v flake8 &> /dev/null
-then
+command -v flake8 &> /dev/null
+
+if [ $? -ne 0 ]; then
   printf "${RED}× ERROR: ${CYAN}flake8${RED} not found.${NORMAL}\n"
   printf "Is your virtualenv active and have you installed the requirements?\n"
   exit 1

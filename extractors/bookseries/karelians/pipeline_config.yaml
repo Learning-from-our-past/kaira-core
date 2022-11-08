@@ -12,6 +12,11 @@ pipeline:
       class_name: "ImageExtractor"
     }
 
+  - !Extractor {
+      module: "extractors.bookseries.karelians.extractors.religion_extractor",
+      class_name: "ReligionExtractor"
+    }
+
   - !Extractor &FormerSurname {
       module: "extractors.bookseries.karelians.extractors.original_family_extractor",
       class_name: "FormerSurnameExtractor",
