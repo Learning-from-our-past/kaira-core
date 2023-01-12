@@ -22,7 +22,7 @@ mypy-extensions==0.4.3
 nltk==3.2.2
 pathspec==0.9.0
 pbr==3.0.1
-peewee==2.10.2
+peewee==3.14.10
 platformdirs==2.5.2
 py==1.4.32
 pycmd==1.2
