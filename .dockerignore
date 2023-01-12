@@ -1,0 +1,15 @@
+.cache/
+.circleci/
+.idea/
+analysis_toolkit/
+core/
+dependencies/
+docs/
+extractors/
+kaira-venv/
+material/
+support_datasheets/
+tasks/
+tests/
+venv/
+
