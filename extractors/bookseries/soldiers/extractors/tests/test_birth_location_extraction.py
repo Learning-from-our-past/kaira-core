@@ -8,7 +8,7 @@ from extractors.bookseries.soldiers.extractors.birthlocation_extractor import (
 
 
 class TestSoldierBirthLocationExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def location_extractor(self, th):
         return th.setup_extractor(BirthLocationExtractor(BirthdayExtractor, None))
 

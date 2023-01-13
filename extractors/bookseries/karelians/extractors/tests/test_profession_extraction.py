@@ -5,7 +5,7 @@ from extractors.bookseries.karelians.extractors.profession_extractor import (
 
 
 class TestProfessionExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def profession_extractor(self, th):
         return th.setup_extractor(ProfessionExtractor(None, None))
 

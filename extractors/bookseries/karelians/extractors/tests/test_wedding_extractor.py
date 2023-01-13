@@ -5,7 +5,7 @@ from extractors.bookseries.karelians.extractors.wedding_extractor import (
 
 
 class TestWeddingExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def extractor(self, th):
         return th.setup_extractor(WeddingExtractor(None, None))
 

@@ -5,7 +5,7 @@ from extractors.bookseries.soldiers.extractors.birthday_extractor import (
 
 
 class TestSoldierBirthdayExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def birthday_extractor(self, th):
         return th.setup_extractor(BirthdayExtractor(None, {'remove_spaces': False}))
 

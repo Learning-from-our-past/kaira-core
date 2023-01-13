@@ -3,7 +3,7 @@ from core.utils.sex_extract import Sex
 
 
 class TestOwnerExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def owner_extractor(self, th):
         Sex.load_names()
         return th.build_pipeline_from_yaml(OWNER_EXTRACTOR_CONFIG)

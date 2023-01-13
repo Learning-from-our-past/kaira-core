@@ -135,7 +135,7 @@ class TestMigrationParser:
 
 
 class TestFinnishLocationExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def finnish_extractor(self, th):
         return th.setup_extractor(FinnishLocationsExtractor(None, None))
 
@@ -221,7 +221,7 @@ class TestFinnishLocationExtraction:
 
 
 class TestKarelianLocationExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def karelian_extractor(self, th):
         return th.setup_extractor(KarelianLocationsExtractor(None, None))
 

@@ -8,7 +8,7 @@ from extractors.bookseries.karelians.extractors.birthday_extractor import (
 
 
 class TestBirthDayLocation:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def location_extractor(self, th):
         return th.setup_extractor(BirthdayLocationExtractor(BirthdayExtractor, None))
 
@@ -46,7 +46,7 @@ class TestBirthDayLocation:
 
 
 class TestBirthDayExtractor:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def mock_entries(self):
         return [
             {

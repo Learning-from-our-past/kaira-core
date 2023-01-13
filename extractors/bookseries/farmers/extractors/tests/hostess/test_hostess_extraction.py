@@ -6,7 +6,7 @@ from extractors.bookseries.farmers.extractors.tests.hostess.mock_person_data imp
 
 
 class TestHostessExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def hostess_extractor(self, th):
         return th.build_pipeline_from_yaml(HOSTESS_EXTRACTOR_CONFIG)
 
