@@ -16,7 +16,7 @@ class Location(Model):
 class Place(Model):
     name = TextField()
     location = ForeignKeyField(
-        db_column='locationId', null=True, model=Location, to_field='id'
+        column_name='locationId', null=True, model=Location, field='id'
     )
 
     class Meta:
