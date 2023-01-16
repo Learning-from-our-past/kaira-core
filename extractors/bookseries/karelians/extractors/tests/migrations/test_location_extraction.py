@@ -408,7 +408,7 @@ class TestMigrationRouteExtractor:
     ):
         # Set up a case where place Mordor is listed in text as place in Karelia while in reality its region should
         # be "other". Region is fixed by retrieving it from geo db along with coordinates
-        with test_geo_db.bind():
+        with test_geo_db.bind_ctx((Place, Location)):
             other_location = Location.get(Location.region == 'other')
             mock_other_place = Place(name='Mordor', location=other_location.id)
             mock_other_place.save()
