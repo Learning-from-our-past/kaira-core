@@ -27,7 +27,7 @@ def find_available_bookseries_from_directory(directory_path):
     manifest_files = [
         open(file, encoding='utf8') for file in glob.iglob(manifest_glob_pattern)
     ]
-    manifests = [yaml.load(file) for file in manifest_files]
+    manifests = [yaml.load(file, Loader=yaml.FullLoader) for file in manifest_files]
 
     # Store path to the extractor plugin directory to the manifest object
     for (manifest, manifest_file) in zip(manifests, manifest_files):
