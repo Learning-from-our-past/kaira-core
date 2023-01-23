@@ -39,7 +39,7 @@ class TestPlaceNameNormalizationWithManualLists:
 
 
 class TestPlaceNameNormalizationWithPlaceList:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def metadata_collector(self):
         return MetadataCollector()
 
@@ -119,7 +119,7 @@ class TestPlaceNameNormalizationWithPlaceList:
 
 
 class TestNormalizePlaceUtilityFunction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def metadata_collector(self):
         return MetadataCollector()
 

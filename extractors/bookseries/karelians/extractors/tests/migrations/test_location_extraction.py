@@ -15,7 +15,6 @@ from extractors.bookseries.karelians.extractors.tests.migrations.mock_person_dat
     LOCATION_TEXTS_WITH_ROUVA_WORD,
     LOCATION_TEXTS_WITH_INCORRECT_REGION,
 )
-from playhouse.test_utils import test_database
 from core.utils.geo.dbhandler import Place, Location
 
 
@@ -136,7 +135,7 @@ class TestMigrationParser:
 
 
 class TestFinnishLocationExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def finnish_extractor(self, th):
         return th.setup_extractor(FinnishLocationsExtractor(None, None))
 
@@ -222,7 +221,7 @@ class TestFinnishLocationExtraction:
 
 
 class TestKarelianLocationExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def karelian_extractor(self, th):
         return th.setup_extractor(KarelianLocationsExtractor(None, None))
 
@@ -409,7 +408,7 @@ class TestMigrationRouteExtractor:
     ):
         # Set up a case where place Mordor is listed in text as place in Karelia while in reality its region should
         # be "other". Region is fixed by retrieving it from geo db along with coordinates
-        with test_database(test_geo_db, (Place, Location), create_tables=False):
+        with test_geo_db.bind_ctx((Place, Location)):
             other_location = Location.get(Location.region == 'other')
             mock_other_place = Place(name='Mordor', location=other_location.id)
             mock_other_place.save()

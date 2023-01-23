@@ -5,7 +5,7 @@ from extractors.common.extractors.previous_marriages_flag_extractor import (
 
 
 class TestPreviousMarriagesFlag:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def extractor(self, th):
         return th.setup_extractor(PreviousMarriagesFlagExtractor(None, None))
 

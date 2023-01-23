@@ -134,7 +134,7 @@ class TestFarmExtraction:
 
 
 class TestFarmAreaExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def farm_area_extractor(self, th):
         return th.setup_extractor(FarmAreaExtractor(None, None))
 

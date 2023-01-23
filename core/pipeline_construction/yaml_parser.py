@@ -38,11 +38,11 @@ class YamlParser:
 
     def _parse_config(self, path):
         file = open(path, encoding='utf8')
-        loaded = yaml.load(file)
+        loaded = yaml.load(file, Loader=yaml.FullLoader)
         return loaded
 
     def _parse_config_from_string(self, config):
-        loaded = yaml.load(config)
+        loaded = yaml.load(config, Loader=yaml.FullLoader)
         return loaded
 
     def build_pipeline_from_yaml(self, yaml_path):

@@ -7,7 +7,7 @@ from extractors.bookseries.farmers.extractors.tests.children.mock_person_data im
 
 
 class TestChildrenExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def child_extractor(self, th):
         return th.setup_extractor(ChildExtractor(None, None))
 

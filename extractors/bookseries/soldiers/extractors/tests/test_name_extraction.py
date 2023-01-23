@@ -3,7 +3,7 @@ from extractors.bookseries.soldiers.extractors.name_extractor import NameExtract
 
 
 class TestSoldierNameExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def name_extractor(self, th):
         return th.setup_extractor(NameExtractor(None, None))
 

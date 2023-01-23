@@ -8,7 +8,7 @@ from core.pipeline_construction.dependency_resolver import ExtractorResultsMap
 
 
 class TestBaseExtractor:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def extractor(self):
         extractor = MockExtractor()
         extractor.set_extraction_results_map(ExtractorResultsMap())

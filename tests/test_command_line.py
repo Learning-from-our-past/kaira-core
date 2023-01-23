@@ -8,7 +8,7 @@ from lxml import etree
 
 class TestCommandLineSmoke:
     class TestExtraction:
-        @pytest.yield_fixture(autouse=True)
+        @pytest.fixture(autouse=True)
         def json_test_dir(self):
             path = './temp/json_export_tests'
             if not os.path.exists(path):
@@ -146,7 +146,7 @@ class TestCommandLineSmoke:
             assert results.returncode == 1
 
     class TestHtmlToXmlConversion:
-        @pytest.yield_fixture(autouse=True)
+        @pytest.fixture(autouse=True)
         def xml_test_dir(self):
             path = './temp/xml_export_tests'
             if not os.path.exists(path):
@@ -266,7 +266,7 @@ class TestCommandLineSmoke:
             assert len(xml_document) == 2
 
     class TestNLPTagging:
-        @pytest.yield_fixture(autouse=True)
+        @pytest.fixture(autouse=True)
         def xml_test_dir(self):
             path = './temp/nlp_tagging_tests'
             if not os.path.exists(path):

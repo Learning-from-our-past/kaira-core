@@ -5,7 +5,7 @@ from extractors.bookseries.karelians.extractors.martta_activity_flag_extractor i
 
 
 class TestMarttaActivityFlagExtraction:
-    @pytest.yield_fixture(autouse=True)
+    @pytest.fixture(autouse=True)
     def extractor(self):
         return MarttaActivityFlagExtractor(None, {'in_spouse_extractor': False})
 
