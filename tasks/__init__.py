@@ -242,19 +242,18 @@ def nlp_setup(ctx):
     The base repository URL is https://github.com/TurkuNLP/Finnish-dep-parser
     We are using our own repository which contains fixes to make FDP work on Mac OS X.
     """
-    branch_name = 'turkunlp-updates'
-    repository_url = 'https://github.com/Learning-from-our-past/Finnish-dep-parser.git'
-    fdp_dir = 'dependencies/fin-dep-parser'
+    branch_name = 'master'
+    repository_url = 'https://github.com/TurkuNLP/Turku-neural-parser-pipeline.git'
+    npp_dir = 'dependencies/neural-parser-pipeline'
     ctx.run(
-        'git clone -b {} --depth=1 {} {}'.format(branch_name, repository_url, fdp_dir)
+        'git clone -b {} --depth=1 {} {}'.format(
+            branch_name, repository_url, npp_dir
+        )  # python3 fetch_models.py fi_tdt_dia
     )
-    ctx.run('rm -rf {}/.git'.format(fdp_dir))
-    ctx.run('rm -rf {}/.gitignore'.format(fdp_dir))
-    ctx.run('cd {}; ./install.sh'.format(fdp_dir))
-    print(
-        'Please specify the Python 2 interpreter in {}/init.sh '
-        'if it is not "python2".'.format(fdp_dir)
-    )
+    ctx.run('rm -rf {}/.git'.format(npp_dir))
+    ctx.run('rm -rf {}/.gitignore'.format(npp_dir))
+    ctx.run('cd {}; pip install -r requirements.txt'.format(npp_dir))
+    ctx.run('cd {}; python3 fetch_models.py fi_tdt_dia'.format(npp_dir))
 
 
 @task(
